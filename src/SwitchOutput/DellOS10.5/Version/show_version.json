@@ -1,0 +1,12 @@
+{
+  "OS": {
+    "Name": "Dell SmartFabric OS10 Enterprise",
+    "Copyright": "Copyright (c) 1999-2024 by Dell Inc. All Rights Reserved.",
+    "Version": "10.5.6.1",
+    "BuildVersion": "10.5.6.1.100",
+    "BuildTime": "2024-01-29T01:32:18+0000",
+    "SystemType": "S5248F-ON",
+    "Architecture": "x86_64",
+    "UpTime": "48 weeks 21:15:01"
+  }
+}

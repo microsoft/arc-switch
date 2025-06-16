@@ -1,0 +1,112 @@
+{
+    "sfp_data": [
+        {
+            "sfp": "SFP1/1/52",
+            "id": 24,
+            "ext_id": 1,
+            "connector": 35,
+            "transceiver_code": 0,
+            "encoding": 3,
+            "br_nominal": 0,
+            "length": {
+                "sfm_km": 0,
+                "om3_2m": 0,
+                "om2_1m": 0,
+                "om1_1m": 0,
+                "copper_1m": 1
+            },
+            "vendor_rev": "3030",
+            "laser_wavelength": "0nm",
+            "tunable_wavelength": "0.0nm",
+            "check_code_base": 166,
+            "serial_extended_id": {
+                "options": 0,
+                "br_max": 0,
+                "br_min": 0,
+                "vendor_sn": "C2310769090-1",
+                "datecode": "231120",
+                "check_code_ext": 0
+            },
+            "diagnostics": {
+                "rx_power_measurement_type": 0,
+                "thresholds": {
+                    "temp_high_alarm": "0.0C",
+                    "voltage_high_alarm": "0.0V",
+                    "bias_high_alarm": "0.0mA",
+                    "tx_power_high_alarm": "0.000000 dBm",
+                    "rx_power_high_alarm": "0.000000 dBm",
+                    "temp_low_alarm": "0.0C",
+                    "voltage_low_alarm": "0.0V",
+                    "bias_low_alarm": "0.0mA",
+                    "tx_power_low_alarm": "0.000000 dBm",
+                    "rx_power_low_alarm": "0.000000 dBm",
+                    "temp_high_warning": "0.0C",
+                    "voltage_high_warning": "0.0V",
+                    "bias_high_warning": "0.0mA",
+                    "tx_power_high_warning": "0.000000 dBm",
+                    "rx_power_high_warning": "0.000000 dBm",
+                    "temp_low_warning": "0.0C",
+                    "voltage_low_warning": "0.0V",
+                    "bias_low_warning": "0.0mA",
+                    "tx_power_low_warning": "0.000000 dBm",
+                    "rx_power_low_warning": "0.000000 dBm"
+                },
+                "flags": {
+                    "temp_high_alarm": false,
+                    "voltage_high_alarm": false,
+                    "temp_low_alarm": false,
+                    "voltage_low_alarm": false,
+                    "temp_high_warning": false,
+                    "voltage_high_warning": false,
+                    "temp_low_warning": false,
+                    "voltage_low_warning": false
+                },
+                "current": {
+                    "temperature": "0.0C",
+                    "voltage": "0.0V",
+                    "rate_select_state": false
+                }
+            },
+            "channels": [
+                {
+                    "channel": 0,
+                    "tx_bias_current": "0.0mA",
+                    "tx_power": "0.000000 dBm",
+                    "rx_power": "no power",
+                    "flags": {
+                        "bias_high_alarm": false,
+                        "rx_power_high_alarm": false,
+                        "rx_los_state": false,
+                        "tx_fault_state": false,
+                        "tx_disable_state": false,
+                        "bias_low_alarm": false,
+                        "rx_power_low_alarm": false,
+                        "bias_high_warning": false,
+                        "rx_power_high_warning": false,
+                        "bias_low_warning": false,
+                        "rx_power_low_warning": false
+                    }
+                },
+                {
+                    "channel": 1,
+                    "tx_bias_current": "0.0mA",
+                    "tx_power": "0.000000 dBm",
+                    "rx_power": "0.000000 dBm",
+                    "flags": {
+                        "bias_high_alarm": false,
+                        "rx_power_high_alarm": false,
+                        "rx_los_state": false,
+                        "tx_fault_state": false,
+                        "tx_disable_state": false,
+                        "bias_low_alarm": false,
+                        "rx_power_low_alarm": false,
+                        "bias_high_warning": false,
+                        "rx_power_high_warning": false,
+                        "bias_low_warning": false,
+                        "rx_power_low_warning": false
+                    }
+                }
+            ]
+        }
+    ]
+}
