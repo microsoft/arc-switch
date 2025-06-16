@@ -1,0 +1,10 @@
+{
+    "hostname": "",
+    "local_port_id": "ethernet1/1/52",
+    "remote_system_name": "s46r23b-Rack01-TOR-2",
+    "remote_port_id": "ethernet1/1/52",
+    "remote_chassis_id": "0c:29:ef:c3:0b:20",
+    "remote_port_description": "ethernet1/1/52",
+    "remote_mtu": "9216",
+    "timestamp": "2025-05-13T17:09:39.0000000Z"
+}

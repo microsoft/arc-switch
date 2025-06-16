@@ -1,0 +1,12 @@
+Syslog 
+| where ProcessName contains "LLDPNeighbor"
+| where EventTime between ( datetime(2025-5-13 17:09:39) .. datetime(2025-5-13 17:09:40) )
+| extend syslogItems = parse_json(SyslogMessage)
+| project 
+    EventTime = EventTime,
+    Switch = Computer,
+    S_Port = tostring(syslogItems.local_port_id),
+    D_Device = tostring(syslogItems.remote_system_name),
+    D_Port = tostring(syslogItems.remote_port_id),
+    D_Desc = tostring(syslogItems.remote_port_description),
+    D_MTU = tostring(syslogItems.remote_mtu)
