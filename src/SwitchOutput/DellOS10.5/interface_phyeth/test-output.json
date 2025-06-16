@@ -1,0 +1,2492 @@
+[
+    {
+        "sfp": "1/1/1",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "220406",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/2",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "220406",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/3",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "220406",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/4",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "220406",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/5",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "220406",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/6",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "220406",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/7",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 35,
+        "transceiver_code": 0,
+        "encoding": 6,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "180314",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/8",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "220406",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/25",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 34,
+        "transceiver_code": 0,
+        "encoding": 1,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "230824",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/26",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 34,
+        "transceiver_code": 0,
+        "encoding": 1,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "230824",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/27",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 34,
+        "transceiver_code": 0,
+        "encoding": 1,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "230824",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/28",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 34,
+        "transceiver_code": 0,
+        "encoding": 1,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "230824",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/38",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "220209",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/39",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 2048,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "231102",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/40",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 33,
+        "transceiver_code": 0,
+        "encoding": 0,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 2048,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "231102",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/43",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 34,
+        "transceiver_code": 0,
+        "encoding": 1,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "230824",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/47",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 7,
+        "transceiver_code": 0,
+        "encoding": 6,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 26,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "230706",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/48",
+        "id": 3,
+        "ext_id": 0,
+        "connector": 7,
+        "transceiver_code": 0,
+        "encoding": 6,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 26,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "230706",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/49",
+        "id": 24,
+        "ext_id": 0,
+        "connector": 35,
+        "transceiver_code": 0,
+        "encoding": 3,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "231120",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 1,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 2,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 3,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 4,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 5,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 6,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 7,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/50",
+        "id": 24,
+        "ext_id": 0,
+        "connector": 35,
+        "transceiver_code": 0,
+        "encoding": 3,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "231120",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 1,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 2,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 3,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 4,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 5,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 6,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 7,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/51",
+        "id": 24,
+        "ext_id": 0,
+        "connector": 35,
+        "transceiver_code": 0,
+        "encoding": 3,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "231120",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 1,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 2,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 3,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 4,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 5,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 6,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 7,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    },
+    {
+        "sfp": "1/1/52",
+        "id": 24,
+        "ext_id": 0,
+        "connector": 35,
+        "transceiver_code": 0,
+        "encoding": 3,
+        "br_nominal": 0,
+        "length": {
+            "sfm_km": 0,
+            "om3_2m": 0,
+            "om2_1m": 0,
+            "om1_1m": 0,
+            "copper_1m": 0
+        },
+        "vendor_rev": "",
+        "laser_wavelength": "",
+        "tunable_wavelength": "",
+        "check_code_base": 0,
+        "serial_extended_id": {
+            "options": 0,
+            "br_max": 0,
+            "br_min": 0,
+            "vendor_sn": "",
+            "datecode": "231120",
+            "check_code_ext": 0
+        },
+        "diagnostics": {
+            "rx_power_measurement_type": 0,
+            "thresholds": {
+                "temp_high_alarm": "",
+                "voltage_high_alarm": "",
+                "bias_high_alarm": "",
+                "tx_power_high_alarm": "",
+                "rx_power_high_alarm": "",
+                "temp_low_alarm": "",
+                "voltage_low_alarm": "",
+                "bias_low_alarm": "",
+                "tx_power_low_alarm": "",
+                "rx_power_low_alarm": "",
+                "temp_high_warning": "",
+                "voltage_high_warning": "",
+                "bias_high_warning": "",
+                "tx_power_high_warning": "",
+                "rx_power_high_warning": "",
+                "temp_low_warning": "",
+                "voltage_low_warning": "",
+                "bias_low_warning": "",
+                "tx_power_low_warning": "",
+                "rx_power_low_warning": ""
+            },
+            "flags": {
+                "temp_high_alarm": false,
+                "voltage_high_alarm": false,
+                "temp_low_alarm": false,
+                "voltage_low_alarm": false,
+                "temp_high_warning": false,
+                "voltage_high_warning": false,
+                "temp_low_warning": false,
+                "voltage_low_warning": false
+            },
+            "current": {
+                "temperature": "",
+                "voltage": "",
+                "rate_select_state": false
+            }
+        },
+        "channels": [
+            {
+                "channel": 0,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 1,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 2,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 3,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 4,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 5,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 6,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            },
+            {
+                "channel": 7,
+                "tx_bias_current": "",
+                "tx_power": "",
+                "rx_power": "",
+                "flags": {
+                    "bias_high_alarm": false,
+                    "rx_power_high_alarm": false,
+                    "rx_los_state": false,
+                    "tx_fault_state": false,
+                    "tx_disable_state": false,
+                    "bias_low_alarm": false,
+                    "rx_power_low_alarm": false,
+                    "bias_high_warning": false,
+                    "rx_power_high_warning": false,
+                    "bias_low_warning": false,
+                    "rx_power_low_warning": false
+                }
+            }
+        ]
+    }
+]

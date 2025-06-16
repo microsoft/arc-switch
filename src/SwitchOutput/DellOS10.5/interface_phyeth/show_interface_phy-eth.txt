@@ -1,0 +1,2206 @@
+
+! ========================================================================
+! Started saving show command output at 12/05, 2025, 22:39:21 for command:
+! show interface phy-eth | save show_interface_phy-eth.txt
+! ========================================================================
+  
+SFP is  present SFP1/1/1 Serial Base ID fields
+SFP1/1/1 Id                = 3
+SFP1/1/1 Ext Id            = 4
+SFP1/1/1 Connector         = 33
+SFP1/1/1 Transceiver Code  = 0
+SFP1/1/1 Encoding          = 0
+SFP1/1/1 BR nominal        = 255
+SFP1/1/1 Length(SFM) Km    = 0
+SFP1/1/1 Length(OM3) 2m    = 0
+SFP1/1/1 Length(OM2) 1m    = 0
+SFP1/1/1 Length(OM1) 1m    = 0
+SFP1/1/1 Length(copper) 1m = 3
+SFP1/1/1 Vendor Rev        = 3031
+SFP1/1/1 Laser wavelength  = 256nm
+SFP1/1/1 Tunable wavelength= 256.0nm
+SFP1/1/1 Check code base   = 0
+SFP1/1/1 Serial Extended ID fields
+SFP1/1/1 Options           = 0
+SFP1/1/1 BR max            = 0
+SFP1/1/1 BR min            = 0
+SFP1/1/1 Vendor SN         = USS3000000783769
+SFP1/1/1 Datecode          = 220406
+SFP1/1/1 CheckCodeExt      = 0
+
+SFP1/1/1 Diagnostic Information
+=================================================================
+SFP1/1/1 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/1 Temp High Alarm threshold     = 0.0C
+SFP1/1/1 Voltage High Alarm threshold  = 0.0V
+SFP1/1/1 Bias High Alarm threshold     = 0.0mA
+SFP1/1/1 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/1 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/1 Temp Low Alarm threshold      = 0.0C
+SFP1/1/1 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/1 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/1 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/1 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/1 Temp High Warning threshold     = 0.0C
+SFP1/1/1 Voltage High Warning threshold  = 0.0V
+SFP1/1/1 Bias High Warning threshold     = 0.0mA
+SFP1/1/1 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/1 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/1 Temp Low Warning threshold      = 0.0C
+SFP1/1/1 Voltage Low Warning threshold   = 0.0V
+SFP1/1/1 Bias Low Warning threshold      = 0.0mA
+SFP1/1/1 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/1 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/1 Temp High Alarm flag       =  False 
+SFP1/1/1 Voltage High Alarm flag    =  False 
+SFP1/1/1 Temp Low Alarm flag        =  False 
+SFP1/1/1 Voltage Low Alarm flag     =  False 
+SFP1/1/1 Temp High Warning flag     =  False 
+SFP1/1/1 Voltage High Warning flag  =  False 
+SFP1/1/1 Temp Low Warning flag      =  False 
+SFP1/1/1 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/1 Temperature                = 0.0C
+SFP1/1/1 Voltage                    = 0.0V
+SFP1/1/1 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/2 Serial Base ID fields
+SFP1/1/2 Id                = 3
+SFP1/1/2 Ext Id            = 4
+SFP1/1/2 Connector         = 33
+SFP1/1/2 Transceiver Code  = 0
+SFP1/1/2 Encoding          = 0
+SFP1/1/2 BR nominal        = 255
+SFP1/1/2 Length(SFM) Km    = 0
+SFP1/1/2 Length(OM3) 2m    = 0
+SFP1/1/2 Length(OM2) 1m    = 0
+SFP1/1/2 Length(OM1) 1m    = 0
+SFP1/1/2 Length(copper) 1m = 3
+SFP1/1/2 Vendor Rev        = 3031
+SFP1/1/2 Laser wavelength  = 256nm
+SFP1/1/2 Tunable wavelength= 256.0nm
+SFP1/1/2 Check code base   = 0
+SFP1/1/2 Serial Extended ID fields
+SFP1/1/2 Options           = 0
+SFP1/1/2 BR max            = 0
+SFP1/1/2 BR min            = 0
+SFP1/1/2 Vendor SN         = USS3000000783710
+SFP1/1/2 Datecode          = 220406
+SFP1/1/2 CheckCodeExt      = 0
+
+SFP1/1/2 Diagnostic Information
+=================================================================
+SFP1/1/2 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/2 Temp High Alarm threshold     = 0.0C
+SFP1/1/2 Voltage High Alarm threshold  = 0.0V
+SFP1/1/2 Bias High Alarm threshold     = 0.0mA
+SFP1/1/2 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/2 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/2 Temp Low Alarm threshold      = 0.0C
+SFP1/1/2 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/2 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/2 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/2 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/2 Temp High Warning threshold     = 0.0C
+SFP1/1/2 Voltage High Warning threshold  = 0.0V
+SFP1/1/2 Bias High Warning threshold     = 0.0mA
+SFP1/1/2 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/2 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/2 Temp Low Warning threshold      = 0.0C
+SFP1/1/2 Voltage Low Warning threshold   = 0.0V
+SFP1/1/2 Bias Low Warning threshold      = 0.0mA
+SFP1/1/2 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/2 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/2 Temp High Alarm flag       =  False 
+SFP1/1/2 Voltage High Alarm flag    =  False 
+SFP1/1/2 Temp Low Alarm flag        =  False 
+SFP1/1/2 Voltage Low Alarm flag     =  False 
+SFP1/1/2 Temp High Warning flag     =  False 
+SFP1/1/2 Voltage High Warning flag  =  False 
+SFP1/1/2 Temp Low Warning flag      =  False 
+SFP1/1/2 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/2 Temperature                = 0.0C
+SFP1/1/2 Voltage                    = 0.0V
+SFP1/1/2 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/3 Serial Base ID fields
+SFP1/1/3 Id                = 3
+SFP1/1/3 Ext Id            = 4
+SFP1/1/3 Connector         = 33
+SFP1/1/3 Transceiver Code  = 0
+SFP1/1/3 Encoding          = 0
+SFP1/1/3 BR nominal        = 255
+SFP1/1/3 Length(SFM) Km    = 0
+SFP1/1/3 Length(OM3) 2m    = 0
+SFP1/1/3 Length(OM2) 1m    = 0
+SFP1/1/3 Length(OM1) 1m    = 0
+SFP1/1/3 Length(copper) 1m = 3
+SFP1/1/3 Vendor Rev        = 3031
+SFP1/1/3 Laser wavelength  = 256nm
+SFP1/1/3 Tunable wavelength= 256.0nm
+SFP1/1/3 Check code base   = 0
+SFP1/1/3 Serial Extended ID fields
+SFP1/1/3 Options           = 0
+SFP1/1/3 BR max            = 0
+SFP1/1/3 BR min            = 0
+SFP1/1/3 Vendor SN         = USS3000000783740
+SFP1/1/3 Datecode          = 220406
+SFP1/1/3 CheckCodeExt      = 0
+
+SFP1/1/3 Diagnostic Information
+=================================================================
+SFP1/1/3 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/3 Temp High Alarm threshold     = 0.0C
+SFP1/1/3 Voltage High Alarm threshold  = 0.0V
+SFP1/1/3 Bias High Alarm threshold     = 0.0mA
+SFP1/1/3 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/3 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/3 Temp Low Alarm threshold      = 0.0C
+SFP1/1/3 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/3 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/3 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/3 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/3 Temp High Warning threshold     = 0.0C
+SFP1/1/3 Voltage High Warning threshold  = 0.0V
+SFP1/1/3 Bias High Warning threshold     = 0.0mA
+SFP1/1/3 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/3 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/3 Temp Low Warning threshold      = 0.0C
+SFP1/1/3 Voltage Low Warning threshold   = 0.0V
+SFP1/1/3 Bias Low Warning threshold      = 0.0mA
+SFP1/1/3 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/3 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/3 Temp High Alarm flag       =  False 
+SFP1/1/3 Voltage High Alarm flag    =  False 
+SFP1/1/3 Temp Low Alarm flag        =  False 
+SFP1/1/3 Voltage Low Alarm flag     =  False 
+SFP1/1/3 Temp High Warning flag     =  False 
+SFP1/1/3 Voltage High Warning flag  =  False 
+SFP1/1/3 Temp Low Warning flag      =  False 
+SFP1/1/3 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/3 Temperature                = 0.0C
+SFP1/1/3 Voltage                    = 0.0V
+SFP1/1/3 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/4 Serial Base ID fields
+SFP1/1/4 Id                = 3
+SFP1/1/4 Ext Id            = 4
+SFP1/1/4 Connector         = 33
+SFP1/1/4 Transceiver Code  = 0
+SFP1/1/4 Encoding          = 0
+SFP1/1/4 BR nominal        = 255
+SFP1/1/4 Length(SFM) Km    = 0
+SFP1/1/4 Length(OM3) 2m    = 0
+SFP1/1/4 Length(OM2) 1m    = 0
+SFP1/1/4 Length(OM1) 1m    = 0
+SFP1/1/4 Length(copper) 1m = 3
+SFP1/1/4 Vendor Rev        = 3031
+SFP1/1/4 Laser wavelength  = 256nm
+SFP1/1/4 Tunable wavelength= 256.0nm
+SFP1/1/4 Check code base   = 0
+SFP1/1/4 Serial Extended ID fields
+SFP1/1/4 Options           = 0
+SFP1/1/4 BR max            = 0
+SFP1/1/4 BR min            = 0
+SFP1/1/4 Vendor SN         = USS3000000783767
+SFP1/1/4 Datecode          = 220406
+SFP1/1/4 CheckCodeExt      = 0
+
+SFP1/1/4 Diagnostic Information
+=================================================================
+SFP1/1/4 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/4 Temp High Alarm threshold     = 0.0C
+SFP1/1/4 Voltage High Alarm threshold  = 0.0V
+SFP1/1/4 Bias High Alarm threshold     = 0.0mA
+SFP1/1/4 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/4 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/4 Temp Low Alarm threshold      = 0.0C
+SFP1/1/4 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/4 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/4 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/4 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/4 Temp High Warning threshold     = 0.0C
+SFP1/1/4 Voltage High Warning threshold  = 0.0V
+SFP1/1/4 Bias High Warning threshold     = 0.0mA
+SFP1/1/4 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/4 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/4 Temp Low Warning threshold      = 0.0C
+SFP1/1/4 Voltage Low Warning threshold   = 0.0V
+SFP1/1/4 Bias Low Warning threshold      = 0.0mA
+SFP1/1/4 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/4 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/4 Temp High Alarm flag       =  False 
+SFP1/1/4 Voltage High Alarm flag    =  False 
+SFP1/1/4 Temp Low Alarm flag        =  False 
+SFP1/1/4 Voltage Low Alarm flag     =  False 
+SFP1/1/4 Temp High Warning flag     =  False 
+SFP1/1/4 Voltage High Warning flag  =  False 
+SFP1/1/4 Temp Low Warning flag      =  False 
+SFP1/1/4 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/4 Temperature                = 0.0C
+SFP1/1/4 Voltage                    = 0.0V
+SFP1/1/4 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/5 Serial Base ID fields
+SFP1/1/5 Id                = 3
+SFP1/1/5 Ext Id            = 4
+SFP1/1/5 Connector         = 33
+SFP1/1/5 Transceiver Code  = 0
+SFP1/1/5 Encoding          = 0
+SFP1/1/5 BR nominal        = 255
+SFP1/1/5 Length(SFM) Km    = 0
+SFP1/1/5 Length(OM3) 2m    = 0
+SFP1/1/5 Length(OM2) 1m    = 0
+SFP1/1/5 Length(OM1) 1m    = 0
+SFP1/1/5 Length(copper) 1m = 3
+SFP1/1/5 Vendor Rev        = 3031
+SFP1/1/5 Laser wavelength  = 256nm
+SFP1/1/5 Tunable wavelength= 256.0nm
+SFP1/1/5 Check code base   = 0
+SFP1/1/5 Serial Extended ID fields
+SFP1/1/5 Options           = 0
+SFP1/1/5 BR max            = 0
+SFP1/1/5 BR min            = 0
+SFP1/1/5 Vendor SN         = USS3000000783772
+SFP1/1/5 Datecode          = 220406
+SFP1/1/5 CheckCodeExt      = 0
+
+SFP1/1/5 Diagnostic Information
+=================================================================
+SFP1/1/5 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/5 Temp High Alarm threshold     = 0.0C
+SFP1/1/5 Voltage High Alarm threshold  = 0.0V
+SFP1/1/5 Bias High Alarm threshold     = 0.0mA
+SFP1/1/5 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/5 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/5 Temp Low Alarm threshold      = 0.0C
+SFP1/1/5 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/5 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/5 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/5 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/5 Temp High Warning threshold     = 0.0C
+SFP1/1/5 Voltage High Warning threshold  = 0.0V
+SFP1/1/5 Bias High Warning threshold     = 0.0mA
+SFP1/1/5 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/5 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/5 Temp Low Warning threshold      = 0.0C
+SFP1/1/5 Voltage Low Warning threshold   = 0.0V
+SFP1/1/5 Bias Low Warning threshold      = 0.0mA
+SFP1/1/5 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/5 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/5 Temp High Alarm flag       =  False 
+SFP1/1/5 Voltage High Alarm flag    =  False 
+SFP1/1/5 Temp Low Alarm flag        =  False 
+SFP1/1/5 Voltage Low Alarm flag     =  False 
+SFP1/1/5 Temp High Warning flag     =  False 
+SFP1/1/5 Voltage High Warning flag  =  False 
+SFP1/1/5 Temp Low Warning flag      =  False 
+SFP1/1/5 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/5 Temperature                = 0.0C
+SFP1/1/5 Voltage                    = 0.0V
+SFP1/1/5 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/6 Serial Base ID fields
+SFP1/1/6 Id                = 3
+SFP1/1/6 Ext Id            = 4
+SFP1/1/6 Connector         = 33
+SFP1/1/6 Transceiver Code  = 0
+SFP1/1/6 Encoding          = 0
+SFP1/1/6 BR nominal        = 255
+SFP1/1/6 Length(SFM) Km    = 0
+SFP1/1/6 Length(OM3) 2m    = 0
+SFP1/1/6 Length(OM2) 1m    = 0
+SFP1/1/6 Length(OM1) 1m    = 0
+SFP1/1/6 Length(copper) 1m = 3
+SFP1/1/6 Vendor Rev        = 3031
+SFP1/1/6 Laser wavelength  = 256nm
+SFP1/1/6 Tunable wavelength= 256.0nm
+SFP1/1/6 Check code base   = 0
+SFP1/1/6 Serial Extended ID fields
+SFP1/1/6 Options           = 0
+SFP1/1/6 BR max            = 0
+SFP1/1/6 BR min            = 0
+SFP1/1/6 Vendor SN         = USS3000000783707
+SFP1/1/6 Datecode          = 220406
+SFP1/1/6 CheckCodeExt      = 0
+
+SFP1/1/6 Diagnostic Information
+=================================================================
+SFP1/1/6 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/6 Temp High Alarm threshold     = 0.0C
+SFP1/1/6 Voltage High Alarm threshold  = 0.0V
+SFP1/1/6 Bias High Alarm threshold     = 0.0mA
+SFP1/1/6 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/6 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/6 Temp Low Alarm threshold      = 0.0C
+SFP1/1/6 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/6 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/6 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/6 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/6 Temp High Warning threshold     = 0.0C
+SFP1/1/6 Voltage High Warning threshold  = 0.0V
+SFP1/1/6 Bias High Warning threshold     = 0.0mA
+SFP1/1/6 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/6 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/6 Temp Low Warning threshold      = 0.0C
+SFP1/1/6 Voltage Low Warning threshold   = 0.0V
+SFP1/1/6 Bias Low Warning threshold      = 0.0mA
+SFP1/1/6 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/6 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/6 Temp High Alarm flag       =  False 
+SFP1/1/6 Voltage High Alarm flag    =  False 
+SFP1/1/6 Temp Low Alarm flag        =  False 
+SFP1/1/6 Voltage Low Alarm flag     =  False 
+SFP1/1/6 Temp High Warning flag     =  False 
+SFP1/1/6 Voltage High Warning flag  =  False 
+SFP1/1/6 Temp Low Warning flag      =  False 
+SFP1/1/6 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/6 Temperature                = 0.0C
+SFP1/1/6 Voltage                    = 0.0V
+SFP1/1/6 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/7 Serial Base ID fields
+SFP1/1/7 Id                = 3
+SFP1/1/7 Ext Id            = 4
+SFP1/1/7 Connector         = 35
+SFP1/1/7 Transceiver Code  = 0
+SFP1/1/7 Encoding          = 6
+SFP1/1/7 BR nominal        = 255
+SFP1/1/7 Length(SFM) Km    = 0
+SFP1/1/7 Length(OM3) 2m    = 0
+SFP1/1/7 Length(OM2) 1m    = 0
+SFP1/1/7 Length(OM1) 1m    = 0
+SFP1/1/7 Length(copper) 1m = 3
+SFP1/1/7 Vendor Rev        = 4130
+SFP1/1/7 Laser wavelength  = 256nm
+SFP1/1/7 Tunable wavelength= 256.0nm
+SFP1/1/7 Check code base   = 0
+SFP1/1/7 Serial Extended ID fields
+SFP1/1/7 Options           = 0
+SFP1/1/7 BR max            = 0
+SFP1/1/7 BR min            = 0
+SFP1/1/7 Vendor SN         = CN07720683E18E8
+SFP1/1/7 Datecode          = 180314
+SFP1/1/7 CheckCodeExt      = 0
+
+SFP1/1/7 Diagnostic Information
+=================================================================
+SFP1/1/7 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/7 Temp High Alarm threshold     = 0.0C
+SFP1/1/7 Voltage High Alarm threshold  = 0.0V
+SFP1/1/7 Bias High Alarm threshold     = 0.0mA
+SFP1/1/7 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/7 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/7 Temp Low Alarm threshold      = 0.0C
+SFP1/1/7 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/7 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/7 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/7 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/7 Temp High Warning threshold     = 0.0C
+SFP1/1/7 Voltage High Warning threshold  = 0.0V
+SFP1/1/7 Bias High Warning threshold     = 0.0mA
+SFP1/1/7 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/7 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/7 Temp Low Warning threshold      = 0.0C
+SFP1/1/7 Voltage Low Warning threshold   = 0.0V
+SFP1/1/7 Bias Low Warning threshold      = 0.0mA
+SFP1/1/7 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/7 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/7 Temp High Alarm flag       =  False 
+SFP1/1/7 Voltage High Alarm flag    =  False 
+SFP1/1/7 Temp Low Alarm flag        =  False 
+SFP1/1/7 Voltage Low Alarm flag     =  False 
+SFP1/1/7 Temp High Warning flag     =  False 
+SFP1/1/7 Voltage High Warning flag  =  False 
+SFP1/1/7 Temp Low Warning flag      =  False 
+SFP1/1/7 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/7 Temperature                = 0.0C
+SFP1/1/7 Voltage                    = 0.0V
+SFP1/1/7 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/8 Serial Base ID fields
+SFP1/1/8 Id                = 3
+SFP1/1/8 Ext Id            = 4
+SFP1/1/8 Connector         = 33
+SFP1/1/8 Transceiver Code  = 0
+SFP1/1/8 Encoding          = 0
+SFP1/1/8 BR nominal        = 255
+SFP1/1/8 Length(SFM) Km    = 0
+SFP1/1/8 Length(OM3) 2m    = 0
+SFP1/1/8 Length(OM2) 1m    = 0
+SFP1/1/8 Length(OM1) 1m    = 0
+SFP1/1/8 Length(copper) 1m = 3
+SFP1/1/8 Vendor Rev        = 3031
+SFP1/1/8 Laser wavelength  = 256nm
+SFP1/1/8 Tunable wavelength= 256.0nm
+SFP1/1/8 Check code base   = 0
+SFP1/1/8 Serial Extended ID fields
+SFP1/1/8 Options           = 0
+SFP1/1/8 BR max            = 0
+SFP1/1/8 BR min            = 0
+SFP1/1/8 Vendor SN         = USS3000000783741
+SFP1/1/8 Datecode          = 220406
+SFP1/1/8 CheckCodeExt      = 0
+
+SFP1/1/8 Diagnostic Information
+=================================================================
+SFP1/1/8 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/8 Temp High Alarm threshold     = 0.0C
+SFP1/1/8 Voltage High Alarm threshold  = 0.0V
+SFP1/1/8 Bias High Alarm threshold     = 0.0mA
+SFP1/1/8 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/8 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/8 Temp Low Alarm threshold      = 0.0C
+SFP1/1/8 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/8 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/8 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/8 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/8 Temp High Warning threshold     = 0.0C
+SFP1/1/8 Voltage High Warning threshold  = 0.0V
+SFP1/1/8 Bias High Warning threshold     = 0.0mA
+SFP1/1/8 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/8 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/8 Temp Low Warning threshold      = 0.0C
+SFP1/1/8 Voltage Low Warning threshold   = 0.0V
+SFP1/1/8 Bias Low Warning threshold      = 0.0mA
+SFP1/1/8 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/8 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/8 Temp High Alarm flag       =  False 
+SFP1/1/8 Voltage High Alarm flag    =  False 
+SFP1/1/8 Temp Low Alarm flag        =  False 
+SFP1/1/8 Voltage Low Alarm flag     =  False 
+SFP1/1/8 Temp High Warning flag     =  False 
+SFP1/1/8 Voltage High Warning flag  =  False 
+SFP1/1/8 Temp Low Warning flag      =  False 
+SFP1/1/8 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/8 Temperature                = 0.0C
+SFP1/1/8 Voltage                    = 0.0V
+SFP1/1/8 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+SFP is  present SFP1/1/25 Serial Base ID fields
+SFP1/1/25 Id                = 3
+SFP1/1/25 Ext Id            = 4
+SFP1/1/25 Connector         = 34
+SFP1/1/25 Transceiver Code  = 0
+SFP1/1/25 Encoding          = 1
+SFP1/1/25 BR nominal        = 13
+SFP1/1/25 Length(SFM) Km    = 0
+SFP1/1/25 Length(OM3) 2m    = 0
+SFP1/1/25 Length(OM2) 1m    = 0
+SFP1/1/25 Length(OM1) 1m    = 0
+SFP1/1/25 Length(copper) 1m = 100
+SFP1/1/25 Vendor Rev        = 312E
+SFP1/1/25 Laser wavelength  = 0nm
+SFP1/1/25 Tunable wavelength= 0.0nm
+SFP1/1/25 Check code base   = 0
+SFP1/1/25 Serial Extended ID fields
+SFP1/1/25 Options           = 0
+SFP1/1/25 BR max            = 0
+SFP1/1/25 BR min            = 0
+SFP1/1/25 Vendor SN         = C2308498181
+SFP1/1/25 Datecode          = 230824
+SFP1/1/25 CheckCodeExt      = 0
+
+SFP1/1/25 Diagnostic Information
+=================================================================
+SFP1/1/25 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/25 Temp High Alarm threshold     = 0.0C
+SFP1/1/25 Voltage High Alarm threshold  = 0.0V
+SFP1/1/25 Bias High Alarm threshold     = 0.0mA
+SFP1/1/25 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/25 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/25 Temp Low Alarm threshold      = 0.0C
+SFP1/1/25 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/25 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/25 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/25 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/25 Temp High Warning threshold     = 0.0C
+SFP1/1/25 Voltage High Warning threshold  = 0.0V
+SFP1/1/25 Bias High Warning threshold     = 0.0mA
+SFP1/1/25 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/25 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/25 Temp Low Warning threshold      = 0.0C
+SFP1/1/25 Voltage Low Warning threshold   = 0.0V
+SFP1/1/25 Bias Low Warning threshold      = 0.0mA
+SFP1/1/25 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/25 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/25 Temp High Alarm flag       =  True 
+SFP1/1/25 Voltage High Alarm flag    =  True 
+SFP1/1/25 Temp Low Alarm flag        =  False 
+SFP1/1/25 Voltage Low Alarm flag     =  False 
+SFP1/1/25 Temp High Warning flag     =  False 
+SFP1/1/25 Voltage High Warning flag  =  False 
+SFP1/1/25 Temp Low Warning flag      =  False 
+SFP1/1/25 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/25 Temperature                = 0.0C
+SFP1/1/25 Voltage                    = 0.0V
+SFP1/1/25 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/26 Serial Base ID fields
+SFP1/1/26 Id                = 3
+SFP1/1/26 Ext Id            = 4
+SFP1/1/26 Connector         = 34
+SFP1/1/26 Transceiver Code  = 0
+SFP1/1/26 Encoding          = 1
+SFP1/1/26 BR nominal        = 13
+SFP1/1/26 Length(SFM) Km    = 0
+SFP1/1/26 Length(OM3) 2m    = 0
+SFP1/1/26 Length(OM2) 1m    = 0
+SFP1/1/26 Length(OM1) 1m    = 0
+SFP1/1/26 Length(copper) 1m = 100
+SFP1/1/26 Vendor Rev        = 312E
+SFP1/1/26 Laser wavelength  = 0nm
+SFP1/1/26 Tunable wavelength= 0.0nm
+SFP1/1/26 Check code base   = 0
+SFP1/1/26 Serial Extended ID fields
+SFP1/1/26 Options           = 0
+SFP1/1/26 BR max            = 0
+SFP1/1/26 BR min            = 0
+SFP1/1/26 Vendor SN         = C2308498180
+SFP1/1/26 Datecode          = 230824
+SFP1/1/26 CheckCodeExt      = 0
+
+SFP1/1/26 Diagnostic Information
+=================================================================
+SFP1/1/26 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/26 Temp High Alarm threshold     = 0.0C
+SFP1/1/26 Voltage High Alarm threshold  = 0.0V
+SFP1/1/26 Bias High Alarm threshold     = 0.0mA
+SFP1/1/26 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/26 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/26 Temp Low Alarm threshold      = 0.0C
+SFP1/1/26 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/26 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/26 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/26 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/26 Temp High Warning threshold     = 0.0C
+SFP1/1/26 Voltage High Warning threshold  = 0.0V
+SFP1/1/26 Bias High Warning threshold     = 0.0mA
+SFP1/1/26 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/26 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/26 Temp Low Warning threshold      = 0.0C
+SFP1/1/26 Voltage Low Warning threshold   = 0.0V
+SFP1/1/26 Bias Low Warning threshold      = 0.0mA
+SFP1/1/26 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/26 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/26 Temp High Alarm flag       =  True 
+SFP1/1/26 Voltage High Alarm flag    =  True 
+SFP1/1/26 Temp Low Alarm flag        =  False 
+SFP1/1/26 Voltage Low Alarm flag     =  False 
+SFP1/1/26 Temp High Warning flag     =  False 
+SFP1/1/26 Voltage High Warning flag  =  False 
+SFP1/1/26 Temp Low Warning flag      =  False 
+SFP1/1/26 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/26 Temperature                = 0.0C
+SFP1/1/26 Voltage                    = 0.0V
+SFP1/1/26 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/27 Serial Base ID fields
+SFP1/1/27 Id                = 3
+SFP1/1/27 Ext Id            = 4
+SFP1/1/27 Connector         = 34
+SFP1/1/27 Transceiver Code  = 0
+SFP1/1/27 Encoding          = 1
+SFP1/1/27 BR nominal        = 13
+SFP1/1/27 Length(SFM) Km    = 0
+SFP1/1/27 Length(OM3) 2m    = 0
+SFP1/1/27 Length(OM2) 1m    = 0
+SFP1/1/27 Length(OM1) 1m    = 0
+SFP1/1/27 Length(copper) 1m = 100
+SFP1/1/27 Vendor Rev        = 312E
+SFP1/1/27 Laser wavelength  = 0nm
+SFP1/1/27 Tunable wavelength= 0.0nm
+SFP1/1/27 Check code base   = 0
+SFP1/1/27 Serial Extended ID fields
+SFP1/1/27 Options           = 0
+SFP1/1/27 BR max            = 0
+SFP1/1/27 BR min            = 0
+SFP1/1/27 Vendor SN         = C2308498178
+SFP1/1/27 Datecode          = 230824
+SFP1/1/27 CheckCodeExt      = 0
+
+SFP1/1/27 Diagnostic Information
+=================================================================
+SFP1/1/27 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/27 Temp High Alarm threshold     = 0.0C
+SFP1/1/27 Voltage High Alarm threshold  = 0.0V
+SFP1/1/27 Bias High Alarm threshold     = 0.0mA
+SFP1/1/27 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/27 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/27 Temp Low Alarm threshold      = 0.0C
+SFP1/1/27 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/27 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/27 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/27 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/27 Temp High Warning threshold     = 0.0C
+SFP1/1/27 Voltage High Warning threshold  = 0.0V
+SFP1/1/27 Bias High Warning threshold     = 0.0mA
+SFP1/1/27 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/27 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/27 Temp Low Warning threshold      = 0.0C
+SFP1/1/27 Voltage Low Warning threshold   = 0.0V
+SFP1/1/27 Bias Low Warning threshold      = 0.0mA
+SFP1/1/27 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/27 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/27 Temp High Alarm flag       =  True 
+SFP1/1/27 Voltage High Alarm flag    =  True 
+SFP1/1/27 Temp Low Alarm flag        =  False 
+SFP1/1/27 Voltage Low Alarm flag     =  False 
+SFP1/1/27 Temp High Warning flag     =  False 
+SFP1/1/27 Voltage High Warning flag  =  False 
+SFP1/1/27 Temp Low Warning flag      =  False 
+SFP1/1/27 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/27 Temperature                = 0.0C
+SFP1/1/27 Voltage                    = 0.0V
+SFP1/1/27 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/28 Serial Base ID fields
+SFP1/1/28 Id                = 3
+SFP1/1/28 Ext Id            = 4
+SFP1/1/28 Connector         = 34
+SFP1/1/28 Transceiver Code  = 0
+SFP1/1/28 Encoding          = 1
+SFP1/1/28 BR nominal        = 13
+SFP1/1/28 Length(SFM) Km    = 0
+SFP1/1/28 Length(OM3) 2m    = 0
+SFP1/1/28 Length(OM2) 1m    = 0
+SFP1/1/28 Length(OM1) 1m    = 0
+SFP1/1/28 Length(copper) 1m = 100
+SFP1/1/28 Vendor Rev        = 312E
+SFP1/1/28 Laser wavelength  = 0nm
+SFP1/1/28 Tunable wavelength= 0.0nm
+SFP1/1/28 Check code base   = 0
+SFP1/1/28 Serial Extended ID fields
+SFP1/1/28 Options           = 0
+SFP1/1/28 BR max            = 0
+SFP1/1/28 BR min            = 0
+SFP1/1/28 Vendor SN         = C2308498179
+SFP1/1/28 Datecode          = 230824
+SFP1/1/28 CheckCodeExt      = 0
+
+SFP1/1/28 Diagnostic Information
+=================================================================
+SFP1/1/28 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/28 Temp High Alarm threshold     = 0.0C
+SFP1/1/28 Voltage High Alarm threshold  = 0.0V
+SFP1/1/28 Bias High Alarm threshold     = 0.0mA
+SFP1/1/28 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/28 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/28 Temp Low Alarm threshold      = 0.0C
+SFP1/1/28 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/28 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/28 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/28 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/28 Temp High Warning threshold     = 0.0C
+SFP1/1/28 Voltage High Warning threshold  = 0.0V
+SFP1/1/28 Bias High Warning threshold     = 0.0mA
+SFP1/1/28 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/28 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/28 Temp Low Warning threshold      = 0.0C
+SFP1/1/28 Voltage Low Warning threshold   = 0.0V
+SFP1/1/28 Bias Low Warning threshold      = 0.0mA
+SFP1/1/28 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/28 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/28 Temp High Alarm flag       =  True 
+SFP1/1/28 Voltage High Alarm flag    =  True 
+SFP1/1/28 Temp Low Alarm flag        =  False 
+SFP1/1/28 Voltage Low Alarm flag     =  False 
+SFP1/1/28 Temp High Warning flag     =  False 
+SFP1/1/28 Voltage High Warning flag  =  False 
+SFP1/1/28 Temp Low Warning flag      =  False 
+SFP1/1/28 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/28 Temperature                = 0.0C
+SFP1/1/28 Voltage                    = 0.0V
+SFP1/1/28 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+SFP is  present SFP1/1/38 Serial Base ID fields
+SFP1/1/38 Id                = 3
+SFP1/1/38 Ext Id            = 4
+SFP1/1/38 Connector         = 33
+SFP1/1/38 Transceiver Code  = 0
+SFP1/1/38 Encoding          = 0
+SFP1/1/38 BR nominal        = 255
+SFP1/1/38 Length(SFM) Km    = 0
+SFP1/1/38 Length(OM3) 2m    = 0
+SFP1/1/38 Length(OM2) 1m    = 0
+SFP1/1/38 Length(OM1) 1m    = 0
+SFP1/1/38 Length(copper) 1m = 3
+SFP1/1/38 Vendor Rev        = 410
+SFP1/1/38 Laser wavelength  = 0nm
+SFP1/1/38 Tunable wavelength= 0.0nm
+SFP1/1/38 Check code base   = 0
+SFP1/1/38 Serial Extended ID fields
+SFP1/1/38 Options           = 0
+SFP1/1/38 BR max            = 0
+SFP1/1/38 BR min            = 0
+SFP1/1/38 Vendor SN         = APF2604018R
+SFP1/1/38 Datecode          = 220209
+SFP1/1/38 CheckCodeExt      = 0
+
+SFP1/1/38 Diagnostic Information
+=================================================================
+SFP1/1/38 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/38 Temp High Alarm threshold     = 0.0C
+SFP1/1/38 Voltage High Alarm threshold  = 0.0V
+SFP1/1/38 Bias High Alarm threshold     = 0.0mA
+SFP1/1/38 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/38 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/38 Temp Low Alarm threshold      = 0.0C
+SFP1/1/38 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/38 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/38 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/38 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/38 Temp High Warning threshold     = 0.0C
+SFP1/1/38 Voltage High Warning threshold  = 0.0V
+SFP1/1/38 Bias High Warning threshold     = 0.0mA
+SFP1/1/38 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/38 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/38 Temp Low Warning threshold      = 0.0C
+SFP1/1/38 Voltage Low Warning threshold   = 0.0V
+SFP1/1/38 Bias Low Warning threshold      = 0.0mA
+SFP1/1/38 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/38 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/38 Temp High Alarm flag       =  False 
+SFP1/1/38 Voltage High Alarm flag    =  False 
+SFP1/1/38 Temp Low Alarm flag        =  False 
+SFP1/1/38 Voltage Low Alarm flag     =  False 
+SFP1/1/38 Temp High Warning flag     =  False 
+SFP1/1/38 Voltage High Warning flag  =  False 
+SFP1/1/38 Temp Low Warning flag      =  False 
+SFP1/1/38 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/38 Temperature                = 0.0C
+SFP1/1/38 Voltage                    = 0.0V
+SFP1/1/38 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/39 Serial Base ID fields
+SFP1/1/39 Id                = 3
+SFP1/1/39 Ext Id            = 4
+SFP1/1/39 Connector         = 33
+SFP1/1/39 Transceiver Code  = 19
+SFP1/1/39 Encoding          = 0
+SFP1/1/39 BR nominal        = 255
+SFP1/1/39 Length(SFM) Km    = 0
+SFP1/1/39 Length(OM3) 2m    = 0
+SFP1/1/39 Length(OM2) 1m    = 0
+SFP1/1/39 Length(OM1) 1m    = 0
+SFP1/1/39 Length(copper) 1m = 1
+SFP1/1/39 Vendor Rev        = 3031
+SFP1/1/39 Laser wavelength  = 256nm
+SFP1/1/39 Tunable wavelength= 256.0nm
+SFP1/1/39 Check code base   = 0
+SFP1/1/39 Serial Extended ID fields
+SFP1/1/39 Options           = 2048
+SFP1/1/39 BR max            = 0
+SFP1/1/39 BR min            = 0
+SFP1/1/39 Vendor SN         = C2310769140-1
+SFP1/1/39 Datecode          = 231102
+SFP1/1/39 CheckCodeExt      = 0
+
+SFP1/1/39 Diagnostic Information
+=================================================================
+SFP1/1/39 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/39 Temp High Alarm threshold     = 0.0C
+SFP1/1/39 Voltage High Alarm threshold  = 0.0V
+SFP1/1/39 Bias High Alarm threshold     = 0.0mA
+SFP1/1/39 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/39 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/39 Temp Low Alarm threshold      = 0.0C
+SFP1/1/39 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/39 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/39 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/39 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/39 Temp High Warning threshold     = 0.0C
+SFP1/1/39 Voltage High Warning threshold  = 0.0V
+SFP1/1/39 Bias High Warning threshold     = 0.0mA
+SFP1/1/39 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/39 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/39 Temp Low Warning threshold      = 0.0C
+SFP1/1/39 Voltage Low Warning threshold   = 0.0V
+SFP1/1/39 Bias Low Warning threshold      = 0.0mA
+SFP1/1/39 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/39 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/39 Temp High Alarm flag       =  False 
+SFP1/1/39 Voltage High Alarm flag    =  False 
+SFP1/1/39 Temp Low Alarm flag        =  False 
+SFP1/1/39 Voltage Low Alarm flag     =  False 
+SFP1/1/39 Temp High Warning flag     =  False 
+SFP1/1/39 Voltage High Warning flag  =  False 
+SFP1/1/39 Temp Low Warning flag      =  False 
+SFP1/1/39 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/39 Temperature                = 0.0C
+SFP1/1/39 Voltage                    = 0.0V
+SFP1/1/39 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/40 Serial Base ID fields
+SFP1/1/40 Id                = 3
+SFP1/1/40 Ext Id            = 4
+SFP1/1/40 Connector         = 33
+SFP1/1/40 Transceiver Code  = 19
+SFP1/1/40 Encoding          = 0
+SFP1/1/40 BR nominal        = 255
+SFP1/1/40 Length(SFM) Km    = 0
+SFP1/1/40 Length(OM3) 2m    = 0
+SFP1/1/40 Length(OM2) 1m    = 0
+SFP1/1/40 Length(OM1) 1m    = 0
+SFP1/1/40 Length(copper) 1m = 1
+SFP1/1/40 Vendor Rev        = 3031
+SFP1/1/40 Laser wavelength  = 256nm
+SFP1/1/40 Tunable wavelength= 256.0nm
+SFP1/1/40 Check code base   = 0
+SFP1/1/40 Serial Extended ID fields
+SFP1/1/40 Options           = 2048
+SFP1/1/40 BR max            = 0
+SFP1/1/40 BR min            = 0
+SFP1/1/40 Vendor SN         = C2310769161-2
+SFP1/1/40 Datecode          = 231102
+SFP1/1/40 CheckCodeExt      = 0
+
+SFP1/1/40 Diagnostic Information
+=================================================================
+SFP1/1/40 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/40 Temp High Alarm threshold     = 0.0C
+SFP1/1/40 Voltage High Alarm threshold  = 0.0V
+SFP1/1/40 Bias High Alarm threshold     = 0.0mA
+SFP1/1/40 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/40 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/40 Temp Low Alarm threshold      = 0.0C
+SFP1/1/40 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/40 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/40 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/40 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/40 Temp High Warning threshold     = 0.0C
+SFP1/1/40 Voltage High Warning threshold  = 0.0V
+SFP1/1/40 Bias High Warning threshold     = 0.0mA
+SFP1/1/40 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/40 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/40 Temp Low Warning threshold      = 0.0C
+SFP1/1/40 Voltage Low Warning threshold   = 0.0V
+SFP1/1/40 Bias Low Warning threshold      = 0.0mA
+SFP1/1/40 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/40 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/40 Temp High Alarm flag       =  False 
+SFP1/1/40 Voltage High Alarm flag    =  False 
+SFP1/1/40 Temp Low Alarm flag        =  False 
+SFP1/1/40 Voltage Low Alarm flag     =  False 
+SFP1/1/40 Temp High Warning flag     =  False 
+SFP1/1/40 Voltage High Warning flag  =  False 
+SFP1/1/40 Temp Low Warning flag      =  False 
+SFP1/1/40 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/40 Temperature                = 0.0C
+SFP1/1/40 Voltage                    = 0.0V
+SFP1/1/40 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  mA
+SFP Tx power                   =  no power
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+SFP is  present SFP1/1/43 Serial Base ID fields
+SFP1/1/43 Id                = 3
+SFP1/1/43 Ext Id            = 4
+SFP1/1/43 Connector         = 34
+SFP1/1/43 Transceiver Code  = 0
+SFP1/1/43 Encoding          = 1
+SFP1/1/43 BR nominal        = 13
+SFP1/1/43 Length(SFM) Km    = 0
+SFP1/1/43 Length(OM3) 2m    = 0
+SFP1/1/43 Length(OM2) 1m    = 0
+SFP1/1/43 Length(OM1) 1m    = 0
+SFP1/1/43 Length(copper) 1m = 100
+SFP1/1/43 Vendor Rev        = 312E
+SFP1/1/43 Laser wavelength  = 0nm
+SFP1/1/43 Tunable wavelength= 0.0nm
+SFP1/1/43 Check code base   = 0
+SFP1/1/43 Serial Extended ID fields
+SFP1/1/43 Options           = 0
+SFP1/1/43 BR max            = 0
+SFP1/1/43 BR min            = 0
+SFP1/1/43 Vendor SN         = C2308498185
+SFP1/1/43 Datecode          = 230824
+SFP1/1/43 CheckCodeExt      = 0
+
+SFP1/1/43 Diagnostic Information
+=================================================================
+SFP1/1/43 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/43 Temp High Alarm threshold     = 0.0C
+SFP1/1/43 Voltage High Alarm threshold  = 0.0V
+SFP1/1/43 Bias High Alarm threshold     = 0.0mA
+SFP1/1/43 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/43 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/43 Temp Low Alarm threshold      = 0.0C
+SFP1/1/43 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/43 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/43 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/43 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/43 Temp High Warning threshold     = 0.0C
+SFP1/1/43 Voltage High Warning threshold  = 0.0V
+SFP1/1/43 Bias High Warning threshold     = 0.0mA
+SFP1/1/43 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/43 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/43 Temp Low Warning threshold      = 0.0C
+SFP1/1/43 Voltage Low Warning threshold   = 0.0V
+SFP1/1/43 Bias Low Warning threshold      = 0.0mA
+SFP1/1/43 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/43 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/43 Temp High Alarm flag       =  True 
+SFP1/1/43 Voltage High Alarm flag    =  True 
+SFP1/1/43 Temp Low Alarm flag        =  False 
+SFP1/1/43 Voltage Low Alarm flag     =  False 
+SFP1/1/43 Temp High Warning flag     =  False 
+SFP1/1/43 Voltage High Warning flag  =  False 
+SFP1/1/43 Temp Low Warning flag      =  False 
+SFP1/1/43 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/43 Temperature                = 0.0C
+SFP1/1/43 Voltage                    = 0.0V
+SFP1/1/43 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+SFP is  present SFP1/1/47 Serial Base ID fields
+SFP1/1/47 Id                = 3
+SFP1/1/47 Ext Id            = 4
+SFP1/1/47 Connector         = 7
+SFP1/1/47 Transceiver Code  = 0
+SFP1/1/47 Encoding          = 6
+SFP1/1/47 BR nominal        = 103
+SFP1/1/47 Length(SFM) Km    = 0
+SFP1/1/47 Length(OM3) 2m    = 0
+SFP1/1/47 Length(OM2) 1m    = 30
+SFP1/1/47 Length(OM1) 1m    = 15
+SFP1/1/47 Length(copper) 1m = 0
+SFP1/1/47 Vendor Rev        = 410
+SFP1/1/47 Laser wavelength  = 850nm
+SFP1/1/47 Tunable wavelength= 850.0nm
+SFP1/1/47 Check code base   = 0
+SFP1/1/47 Serial Extended ID fields
+SFP1/1/47 Options           = 26
+SFP1/1/47 BR max            = 0
+SFP1/1/47 BR min            = 0
+SFP1/1/47 Vendor SN         = F2130422773
+SFP1/1/47 Datecode          = 230706
+SFP1/1/47 CheckCodeExt      = 0
+
+SFP1/1/47 Diagnostic Information
+=================================================================
+SFP1/1/47 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/47 Temp High Alarm threshold     = 0.0C
+SFP1/1/47 Voltage High Alarm threshold  = 0.0V
+SFP1/1/47 Bias High Alarm threshold     = 0.0mA
+SFP1/1/47 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/47 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/47 Temp Low Alarm threshold      = 0.0C
+SFP1/1/47 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/47 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/47 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/47 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/47 Temp High Warning threshold     = 0.0C
+SFP1/1/47 Voltage High Warning threshold  = 0.0V
+SFP1/1/47 Bias High Warning threshold     = 0.0mA
+SFP1/1/47 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/47 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/47 Temp Low Warning threshold      = 0.0C
+SFP1/1/47 Voltage Low Warning threshold   = 0.0V
+SFP1/1/47 Bias Low Warning threshold      = 0.0mA
+SFP1/1/47 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/47 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/47 Temp High Alarm flag       =  False 
+SFP1/1/47 Voltage High Alarm flag    =  False 
+SFP1/1/47 Temp Low Alarm flag        =  False 
+SFP1/1/47 Voltage Low Alarm flag     =  False 
+SFP1/1/47 Temp High Warning flag     =  False 
+SFP1/1/47 Voltage High Warning flag  =  False 
+SFP1/1/47 Temp Low Warning flag      =  False 
+SFP1/1/47 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/47 Temperature                = 33.769C
+SFP1/1/47 Voltage                    = 3.422V
+SFP1/1/47 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  6.072mA
+SFP Tx power                   =  -1.663430 dBm
+SFP Rx power                   =  -2.069084 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/48 Serial Base ID fields
+SFP1/1/48 Id                = 3
+SFP1/1/48 Ext Id            = 4
+SFP1/1/48 Connector         = 7
+SFP1/1/48 Transceiver Code  = 0
+SFP1/1/48 Encoding          = 6
+SFP1/1/48 BR nominal        = 103
+SFP1/1/48 Length(SFM) Km    = 0
+SFP1/1/48 Length(OM3) 2m    = 0
+SFP1/1/48 Length(OM2) 1m    = 30
+SFP1/1/48 Length(OM1) 1m    = 15
+SFP1/1/48 Length(copper) 1m = 0
+SFP1/1/48 Vendor Rev        = 410
+SFP1/1/48 Laser wavelength  = 850nm
+SFP1/1/48 Tunable wavelength= 850.0nm
+SFP1/1/48 Check code base   = 0
+SFP1/1/48 Serial Extended ID fields
+SFP1/1/48 Options           = 26
+SFP1/1/48 BR max            = 0
+SFP1/1/48 BR min            = 0
+SFP1/1/48 Vendor SN         = F2130422772
+SFP1/1/48 Datecode          = 230706
+SFP1/1/48 CheckCodeExt      = 0
+
+SFP1/1/48 Diagnostic Information
+=================================================================
+SFP1/1/48 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/48 Temp High Alarm threshold     = 0.0C
+SFP1/1/48 Voltage High Alarm threshold  = 0.0V
+SFP1/1/48 Bias High Alarm threshold     = 0.0mA
+SFP1/1/48 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/48 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/48 Temp Low Alarm threshold      = 0.0C
+SFP1/1/48 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/48 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/48 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/48 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/48 Temp High Warning threshold     = 0.0C
+SFP1/1/48 Voltage High Warning threshold  = 0.0V
+SFP1/1/48 Bias High Warning threshold     = 0.0mA
+SFP1/1/48 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/48 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/48 Temp Low Warning threshold      = 0.0C
+SFP1/1/48 Voltage Low Warning threshold   = 0.0V
+SFP1/1/48 Bias Low Warning threshold      = 0.0mA
+SFP1/1/48 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/48 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/48 Temp High Alarm flag       =  False 
+SFP1/1/48 Voltage High Alarm flag    =  False 
+SFP1/1/48 Temp Low Alarm flag        =  False 
+SFP1/1/48 Voltage Low Alarm flag     =  False 
+SFP1/1/48 Temp High Warning flag     =  False 
+SFP1/1/48 Voltage High Warning flag  =  False 
+SFP1/1/48 Temp Low Warning flag      =  False 
+SFP1/1/48 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/48 Temperature                = 32.132C
+SFP1/1/48 Voltage                    = 3.408V
+SFP1/1/48 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  6.03mA
+SFP Tx power                   =  -1.942953 dBm
+SFP Rx power                   =  -1.611509 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/49 Serial Base ID fields
+SFP1/1/49 Id                = 24
+SFP1/1/49 Ext Id            = 1
+SFP1/1/49 Connector         = 35
+SFP1/1/49 Transceiver Code  = 0
+SFP1/1/49 Encoding          = 3
+SFP1/1/49 BR nominal        = 0
+SFP1/1/49 Length(SFM) Km    = 0
+SFP1/1/49 Length(OM3) 2m    = 0
+SFP1/1/49 Length(OM2) 1m    = 0
+SFP1/1/49 Length(OM1) 1m    = 0
+SFP1/1/49 Length(copper) 1m = 1
+SFP1/1/49 Vendor Rev        = 3030
+SFP1/1/49 Laser wavelength  = 0nm
+SFP1/1/49 Tunable wavelength= 0.0nm
+SFP1/1/49 Check code base   = 168
+SFP1/1/49 Serial Extended ID fields
+SFP1/1/49 Options           = 0
+SFP1/1/49 BR max            = 0
+SFP1/1/49 BR min            = 0
+SFP1/1/49 Vendor SN         = C2310769082-2
+SFP1/1/49 Datecode          = 231120
+SFP1/1/49 CheckCodeExt      = 0
+
+SFP1/1/49 Diagnostic Information
+=================================================================
+SFP1/1/49 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/49 Temp High Alarm threshold     = 0.0C
+SFP1/1/49 Voltage High Alarm threshold  = 0.0V
+SFP1/1/49 Bias High Alarm threshold     = 0.0mA
+SFP1/1/49 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/49 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/49 Temp Low Alarm threshold      = 0.0C
+SFP1/1/49 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/49 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/49 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/49 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/49 Temp High Warning threshold     = 0.0C
+SFP1/1/49 Voltage High Warning threshold  = 0.0V
+SFP1/1/49 Bias High Warning threshold     = 0.0mA
+SFP1/1/49 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/49 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/49 Temp Low Warning threshold      = 0.0C
+SFP1/1/49 Voltage Low Warning threshold   = 0.0V
+SFP1/1/49 Bias Low Warning threshold      = 0.0mA
+SFP1/1/49 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/49 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/49 Temp High Alarm flag       =  False 
+SFP1/1/49 Voltage High Alarm flag    =  False 
+SFP1/1/49 Temp Low Alarm flag        =  False 
+SFP1/1/49 Voltage Low Alarm flag     =  False 
+SFP1/1/49 Temp High Warning flag     =  False 
+SFP1/1/49 Voltage High Warning flag  =  False 
+SFP1/1/49 Temp Low Warning flag      =  False 
+SFP1/1/49 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/49 Temperature                = 0.0C
+SFP1/1/49 Voltage                    = 0.0V
+SFP1/1/49 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  1
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  2
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  3
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  4
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  5
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  6
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  7
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/50 Serial Base ID fields
+SFP1/1/50 Id                = 24
+SFP1/1/50 Ext Id            = 1
+SFP1/1/50 Connector         = 35
+SFP1/1/50 Transceiver Code  = 0
+SFP1/1/50 Encoding          = 3
+SFP1/1/50 BR nominal        = 0
+SFP1/1/50 Length(SFM) Km    = 0
+SFP1/1/50 Length(OM3) 2m    = 0
+SFP1/1/50 Length(OM2) 1m    = 0
+SFP1/1/50 Length(OM1) 1m    = 0
+SFP1/1/50 Length(copper) 1m = 1
+SFP1/1/50 Vendor Rev        = 3030
+SFP1/1/50 Laser wavelength  = 0nm
+SFP1/1/50 Tunable wavelength= 0.0nm
+SFP1/1/50 Check code base   = 168
+SFP1/1/50 Serial Extended ID fields
+SFP1/1/50 Options           = 0
+SFP1/1/50 BR max            = 0
+SFP1/1/50 BR min            = 0
+SFP1/1/50 Vendor SN         = C2310769082-2
+SFP1/1/50 Datecode          = 231120
+SFP1/1/50 CheckCodeExt      = 0
+
+SFP1/1/50 Diagnostic Information
+=================================================================
+SFP1/1/50 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/50 Temp High Alarm threshold     = 0.0C
+SFP1/1/50 Voltage High Alarm threshold  = 0.0V
+SFP1/1/50 Bias High Alarm threshold     = 0.0mA
+SFP1/1/50 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/50 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/50 Temp Low Alarm threshold      = 0.0C
+SFP1/1/50 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/50 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/50 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/50 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/50 Temp High Warning threshold     = 0.0C
+SFP1/1/50 Voltage High Warning threshold  = 0.0V
+SFP1/1/50 Bias High Warning threshold     = 0.0mA
+SFP1/1/50 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/50 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/50 Temp Low Warning threshold      = 0.0C
+SFP1/1/50 Voltage Low Warning threshold   = 0.0V
+SFP1/1/50 Bias Low Warning threshold      = 0.0mA
+SFP1/1/50 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/50 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/50 Temp High Alarm flag       =  False 
+SFP1/1/50 Voltage High Alarm flag    =  False 
+SFP1/1/50 Temp Low Alarm flag        =  False 
+SFP1/1/50 Voltage Low Alarm flag     =  False 
+SFP1/1/50 Temp High Warning flag     =  False 
+SFP1/1/50 Voltage High Warning flag  =  False 
+SFP1/1/50 Temp Low Warning flag      =  False 
+SFP1/1/50 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/50 Temperature                = 0.0C
+SFP1/1/50 Voltage                    = 0.0V
+SFP1/1/50 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  1
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  2
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  3
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  4
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  5
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  6
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  7
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/51 Serial Base ID fields
+SFP1/1/51 Id                = 24
+SFP1/1/51 Ext Id            = 1
+SFP1/1/51 Connector         = 35
+SFP1/1/51 Transceiver Code  = 0
+SFP1/1/51 Encoding          = 3
+SFP1/1/51 BR nominal        = 0
+SFP1/1/51 Length(SFM) Km    = 0
+SFP1/1/51 Length(OM3) 2m    = 0
+SFP1/1/51 Length(OM2) 1m    = 0
+SFP1/1/51 Length(OM1) 1m    = 0
+SFP1/1/51 Length(copper) 1m = 1
+SFP1/1/51 Vendor Rev        = 3030
+SFP1/1/51 Laser wavelength  = 0nm
+SFP1/1/51 Tunable wavelength= 0.0nm
+SFP1/1/51 Check code base   = 166
+SFP1/1/51 Serial Extended ID fields
+SFP1/1/51 Options           = 0
+SFP1/1/51 BR max            = 0
+SFP1/1/51 BR min            = 0
+SFP1/1/51 Vendor SN         = C2310769090-1
+SFP1/1/51 Datecode          = 231120
+SFP1/1/51 CheckCodeExt      = 0
+
+SFP1/1/51 Diagnostic Information
+=================================================================
+SFP1/1/51 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/51 Temp High Alarm threshold     = 0.0C
+SFP1/1/51 Voltage High Alarm threshold  = 0.0V
+SFP1/1/51 Bias High Alarm threshold     = 0.0mA
+SFP1/1/51 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/51 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/51 Temp Low Alarm threshold      = 0.0C
+SFP1/1/51 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/51 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/51 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/51 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/51 Temp High Warning threshold     = 0.0C
+SFP1/1/51 Voltage High Warning threshold  = 0.0V
+SFP1/1/51 Bias High Warning threshold     = 0.0mA
+SFP1/1/51 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/51 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/51 Temp Low Warning threshold      = 0.0C
+SFP1/1/51 Voltage Low Warning threshold   = 0.0V
+SFP1/1/51 Bias Low Warning threshold      = 0.0mA
+SFP1/1/51 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/51 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/51 Temp High Alarm flag       =  False 
+SFP1/1/51 Voltage High Alarm flag    =  False 
+SFP1/1/51 Temp Low Alarm flag        =  False 
+SFP1/1/51 Voltage Low Alarm flag     =  False 
+SFP1/1/51 Temp High Warning flag     =  False 
+SFP1/1/51 Voltage High Warning flag  =  False 
+SFP1/1/51 Temp Low Warning flag      =  False 
+SFP1/1/51 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/51 Temperature                = 0.0C
+SFP1/1/51 Voltage                    = 0.0V
+SFP1/1/51 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  1
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  2
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  3
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  4
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  5
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  6
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  7
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+SFP is  present SFP1/1/52 Serial Base ID fields
+SFP1/1/52 Id                = 24
+SFP1/1/52 Ext Id            = 1
+SFP1/1/52 Connector         = 35
+SFP1/1/52 Transceiver Code  = 0
+SFP1/1/52 Encoding          = 3
+SFP1/1/52 BR nominal        = 0
+SFP1/1/52 Length(SFM) Km    = 0
+SFP1/1/52 Length(OM3) 2m    = 0
+SFP1/1/52 Length(OM2) 1m    = 0
+SFP1/1/52 Length(OM1) 1m    = 0
+SFP1/1/52 Length(copper) 1m = 1
+SFP1/1/52 Vendor Rev        = 3030
+SFP1/1/52 Laser wavelength  = 0nm
+SFP1/1/52 Tunable wavelength= 0.0nm
+SFP1/1/52 Check code base   = 166
+SFP1/1/52 Serial Extended ID fields
+SFP1/1/52 Options           = 0
+SFP1/1/52 BR max            = 0
+SFP1/1/52 BR min            = 0
+SFP1/1/52 Vendor SN         = C2310769090-1
+SFP1/1/52 Datecode          = 231120
+SFP1/1/52 CheckCodeExt      = 0
+
+SFP1/1/52 Diagnostic Information
+=================================================================
+SFP1/1/52 Rx Power Measurement type     = 0
+=================================================================
+SFP1/1/52 Temp High Alarm threshold     = 0.0C
+SFP1/1/52 Voltage High Alarm threshold  = 0.0V
+SFP1/1/52 Bias High Alarm threshold     = 0.0mA
+SFP1/1/52 Tx power High Alarm threshold = 0.000000 dBm
+SFP1/1/52 Rx power High Alarm threshold = 0.000000 dBm
+SFP1/1/52 Temp Low Alarm threshold      = 0.0C
+SFP1/1/52 Voltage Low Alarm threshold   = 0.0V
+SFP1/1/52 Bias Low Alarm threshold      = 0.0mA
+SFP1/1/52 Tx power Low Alarm threshold  = 0.000000 dBm
+SFP1/1/52 Rx power Low Alarm threshold  = 0.000000 dBm
+===============================================================
+SFP1/1/52 Temp High Warning threshold     = 0.0C
+SFP1/1/52 Voltage High Warning threshold  = 0.0V
+SFP1/1/52 Bias High Warning threshold     = 0.0mA
+SFP1/1/52 Tx power High Warning threshold = 0.000000 dBm
+SFP1/1/52 Rx power High Warning threshold = 0.000000 dBm
+SFP1/1/52 Temp Low Warning threshold      = 0.0C
+SFP1/1/52 Voltage Low Warning threshold   = 0.0V
+SFP1/1/52 Bias Low Warning threshold      = 0.0mA
+SFP1/1/52 Tx power Low Warning threshold  = 0.000000 dBm
+SFP1/1/52 Rx power Low Warning threshold  = 0.000000 dBm
+==================================================================
+SFP1/1/52 Temp High Alarm flag       =  False 
+SFP1/1/52 Voltage High Alarm flag    =  False 
+SFP1/1/52 Temp Low Alarm flag        =  False 
+SFP1/1/52 Voltage Low Alarm flag     =  False 
+SFP1/1/52 Temp High Warning flag     =  False 
+SFP1/1/52 Voltage High Warning flag  =  False 
+SFP1/1/52 Temp Low Warning flag      =  False 
+SFP1/1/52 Voltage Low Warning flag   =  False 
+====================================================================
+SFP1/1/52 Temperature                = 0.0C
+SFP1/1/52 Voltage                    = 0.0V
+SFP1/1/52 Rate select state          = false
+====================================================================
+SFP Channel                    =  0
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  no power
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  1
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  2
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  3
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  4
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  5
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  6
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+====================================================================
+SFP Channel                    =  7
+SFP Tx Bias Current            =  0.0mA
+SFP Tx power                   =  0.000000 dBm
+SFP Rx power                   =  0.000000 dBm
+SFP Bias High Alarm flag       =  False 
+SFP Rx power High Alarm flag   =  False 
+SFP Rx LOS state               =  False
+SFP Tx fault state             =  False
+SFP Tx disable state           =  False
+SFP Bias Low Alarm flag        =  False 
+SFP Rx power Low Alarm flag    =  False 
+SFP Bias High Warning flag     =  False 
+SFP Rx power High Warning flag =  False 
+SFP Bias Low Warning flag      =  False 
+SFP Rx power Low Warning flag  =  False 
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+Pluggable optics cannot be read or is not present
+
+
