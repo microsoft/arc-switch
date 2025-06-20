@@ -1,0 +1,12 @@
+{
+    "devices": [
+        {
+            "name": "SwitchExample",
+            "ip": "192.168.1.1",
+            "port": 161,
+            "version": "v2c",
+            "community": "public",
+            "timeout": 5
+        }
+    ]
+}
