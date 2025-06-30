@@ -322,4 +322,4 @@ The library provides robust error handling:
 
 ## Thread Safety
 
-The library is designed to be thread-safe for concurrent use across goroutines.
+The library is designed to be thread-safe for concurrent use across goroutines, except for the `Statistics` counters, which are not protected by mutexes or atomic operations and may result in data races if accessed concurrently. If you require accurate statistics in concurrent scenarios, ensure to add synchronization (e.g., mutex or atomic operations) around statistics updates.

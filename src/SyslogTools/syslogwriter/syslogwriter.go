@@ -113,7 +113,11 @@ func (w *Writer) WriteEntryWithVerbose(jsonEntry string, verbose bool) error {
 
 	w.stats.SuccessEntries++
 	if verbose {
-		fmt.Printf("Successfully logged entry: %s\n", entry[:min(100, len(entry))]+"...")
+		display := entry
+		if len(entry) > 100 {
+			display = entry[:100] + "..."
+		}
+		fmt.Printf("Successfully logged entry: %s\n", display)
 	}
 
 	return nil

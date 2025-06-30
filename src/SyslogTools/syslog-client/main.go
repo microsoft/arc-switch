@@ -13,6 +13,8 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/arc-switch/syslogwriter"
 )
 
 // CommonFields represents the required fields that all JSON entries must have
@@ -310,72 +312,16 @@ func main() {
 		os.Exit(1)
 	}
 	
-	// Parse syslog priority
-	var sysPriority syslog.Priority
-	switch strings.ToLower(*priority) {
-	case "emerg", "emergency":
-		sysPriority = syslog.LOG_EMERG
-	case "alert":
-		sysPriority = syslog.LOG_ALERT
-	case "crit", "critical":
-		sysPriority = syslog.LOG_CRIT
-	case "err", "error":
-		sysPriority = syslog.LOG_ERR
-	case "warning", "warn":
-		sysPriority = syslog.LOG_WARNING
-	case "notice":
-		sysPriority = syslog.LOG_NOTICE
-	case "info":
-		sysPriority = syslog.LOG_INFO
-	case "debug":
-		sysPriority = syslog.LOG_DEBUG
-	default:
+	// Parse syslog priority using syslogwriter package
+	sysPriority, err := syslogwriter.ParseSyslogPriority(*priority)
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: Invalid priority level: %s\n", *priority)
 		os.Exit(1)
 	}
-	
-	// Parse syslog facility
-	var sysFacility syslog.Priority
-	switch strings.ToLower(*facility) {
-	case "local0":
-		sysFacility = syslog.LOG_LOCAL0
-	case "local1":
-		sysFacility = syslog.LOG_LOCAL1
-	case "local2":
-		sysFacility = syslog.LOG_LOCAL2
-	case "local3":
-		sysFacility = syslog.LOG_LOCAL3
-	case "local4":
-		sysFacility = syslog.LOG_LOCAL4
-	case "local5":
-		sysFacility = syslog.LOG_LOCAL5
-	case "local6":
-		sysFacility = syslog.LOG_LOCAL6
-	case "local7":
-		sysFacility = syslog.LOG_LOCAL7
-	case "user":
-		sysFacility = syslog.LOG_USER
-	case "mail":
-		sysFacility = syslog.LOG_MAIL
-	case "daemon":
-		sysFacility = syslog.LOG_DAEMON
-	case "auth":
-		sysFacility = syslog.LOG_AUTH
-	case "syslog":
-		sysFacility = syslog.LOG_SYSLOG
-	case "lpr":
-		sysFacility = syslog.LOG_LPR
-	case "news":
-		sysFacility = syslog.LOG_NEWS
-	case "uucp":
-		sysFacility = syslog.LOG_UUCP
-	case "cron":
-		sysFacility = syslog.LOG_CRON
-	case "authpriv":
-		sysFacility = syslog.LOG_AUTHPRIV
-	case "ftp":
-		sysFacility = syslog.LOG_FTP
-	default:
+
+	// Parse syslog facility using syslogwriter package
+	sysFacility, err := syslogwriter.ParseSyslogFacility(*facility)
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: Invalid facility: %s\n", *facility)
 		os.Exit(1)
 	}
@@ -403,7 +349,6 @@ func main() {
 	
 	// Create syslog writer (skip in test mode)
 	var writer *SyslogWriter
-	var err error
 	
 	if !*testMode {
 		writer, err = NewSyslogWriter(config)
