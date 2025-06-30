@@ -1,0 +1,136 @@
+RR1-S46-R14-93180hl-22-1a# show  policy-map  
+
+
+  Type qos policy-maps
+  ====================
+
+  policy-map type qos AZS_SERVICES 
+    class  RDMA
+      set qos-group 3
+    class  CLUSTER
+      set qos-group 7
+  policy-map type qos default-mpls-in-policy 
+    class  c-dflt-mpls-qosgrp1
+      set qos-group 1
+    class  c-dflt-mpls-qosgrp2
+      set qos-group 2
+    class  c-dflt-mpls-qosgrp3
+      set qos-group 3
+    class  c-dflt-mpls-qosgrp4
+      set qos-group 4
+    class  c-dflt-mpls-qosgrp5
+      set qos-group 5
+    class  c-dflt-mpls-qosgrp6
+      set qos-group 6
+    class  c-dflt-mpls-qosgrp7
+      set qos-group 7
+    class  class-default
+      set qos-group 0
+  policy-map type qos default-ndb-out-policy 
+    class  class-ndb-default
+      police cir 0 bps conform transmit violate drop 
+  policy-map type qos default-vxlan-in-policy 
+    class  class-default
+
+  Type queuing policy-maps
+  ========================
+
+  policy-map type queuing QOS_EGRESS_PORT 
+    class type queuing c-out-8q-q3
+      bandwidth remaining percent 50
+      random-detect minimum-threshold 300 kbytes maximum-threshold 300 kbytes drop-probability 100 weight 0 ecn
+    class type queuing c-out-8q-q-default
+      bandwidth remaining percent 48
+    class type queuing c-out-8q-q1
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q2
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q4
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q7
+      bandwidth percent 2 
+    class type queuing c-out-8q-q6
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q5
+      bandwidth remaining percent 0
+  policy-map type queuing default-out-policy 
+    class type queuing c-out-q3
+      priority level 1
+    class type queuing c-out-q2
+      bandwidth remaining percent 0
+    class type queuing c-out-q1
+      bandwidth remaining percent 0
+    class type queuing c-out-q-default
+      bandwidth remaining percent 100
+  policy-map type queuing default-8q-out-policy 
+    class type queuing c-out-8q-q7
+      priority level 1
+    class type queuing c-out-8q-q6
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q5
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q4
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q3
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q2
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q1
+      bandwidth remaining percent 0
+    class type queuing c-out-8q-q-default
+      bandwidth remaining percent 100
+
+  Type network-qos policy-maps
+  ============================
+  policy-map type network-qos QOS_NETWORK
+    class type network-qos c-8q-nq3
+      match qos-group 3
+      pause pfc-cos 3
+      mtu 9216
+    class type network-qos c-8q-nq7
+      match qos-group 7
+      mtu 9216
+    class type network-qos c-8q-nq-default
+      match qos-group 0
+      mtu 9216
+  policy-map type network-qos jumbo-queuing
+    class type network-qos class-default
+      mtu 9216
+  policy-map type network-qos default-nq-policy
+    class type network-qos c-nq3
+      match qos-group 3
+      mtu 1500
+    class type network-qos c-nq2
+      match qos-group 2
+      mtu 1500
+    class type network-qos c-nq1
+      match qos-group 1
+      mtu 1500
+    class type network-qos c-nq-default
+      match qos-group 0
+      mtu 1500
+  policy-map type network-qos default-8q-nq-policy
+    class type network-qos c-8q-nq7
+      match qos-group 7
+      mtu 1500
+    class type network-qos c-8q-nq6
+      match qos-group 6
+      mtu 1500
+    class type network-qos c-8q-nq5
+      match qos-group 5
+      mtu 1500
+    class type network-qos c-8q-nq4
+      match qos-group 4
+      mtu 1500
+    class type network-qos c-8q-nq3
+      match qos-group 3
+      mtu 1500
+    class type network-qos c-8q-nq2
+      match qos-group 2
+      mtu 1500
+    class type network-qos c-8q-nq1
+      match qos-group 1
+      mtu 1500
+    class type network-qos c-8q-nq-default
+      match qos-group 0
+      mtu 1500

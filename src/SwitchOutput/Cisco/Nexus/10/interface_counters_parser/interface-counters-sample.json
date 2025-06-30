@@ -1,0 +1,53 @@
+[
+    {
+        "data_type": "interface_counters",
+        "timestamp": "2024-01-15T10:30:00Z",
+        "date": "2024-01-15",
+        "interface_name": "Eth1/1",
+        "interface_type": "ethernet",
+        "in_octets": 205027653248,
+        "in_ucast_pkts": 650373664,
+        "in_mcast_pkts": 2262324,
+        "in_bcast_pkts": 68097,
+        "out_octets": 3195383643785,
+        "out_ucast_pkts": 2314463086,
+        "out_mcast_pkts": 365931965,
+        "out_bcast_pkts": 53571839,
+        "has_ingress_data": true,
+        "has_egress_data": true
+    },
+    {
+        "data_type": "interface_counters",
+        "timestamp": "2024-01-15T10:30:00Z",
+        "date": "2024-01-15",
+        "interface_name": "Po50",
+        "interface_type": "port-channel",
+        "in_octets": 125621796156,
+        "in_ucast_pkts": 1648254276,
+        "in_mcast_pkts": 1525201,
+        "in_bcast_pkts": 10,
+        "out_octets": 2804643442,
+        "out_ucast_pkts": 23654519,
+        "out_mcast_pkts": 1525193,
+        "out_bcast_pkts": 14,
+        "has_ingress_data": true,
+        "has_egress_data": true
+    },
+    {
+        "data_type": "interface_counters",
+        "timestamp": "2024-01-15T10:30:00Z",
+        "date": "2024-01-15",
+        "interface_name": "Vlan1",
+        "interface_type": "vlan",
+        "in_octets": 0,
+        "in_ucast_pkts": 0,
+        "in_mcast_pkts": -1,
+        "in_bcast_pkts": -1,
+        "out_octets": 0,
+        "out_ucast_pkts": 0,
+        "out_mcast_pkts": -1,
+        "out_bcast_pkts": -1,
+        "has_ingress_data": true,
+        "has_egress_data": true
+    }
+]

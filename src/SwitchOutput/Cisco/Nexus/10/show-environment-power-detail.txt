@@ -1,0 +1,53 @@
+RR1-S46-R14-93180hl-22-1a# show environment power detail 
+Power Supply:
+Voltage: 12 Volts
+Power                      Actual             Actual        Total
+Supply    Model            Output             Input        Capacity     Status
+                           (Watts )           (Watts )     (Watts )
+-------  ----------  ---------------  ------  ----------  --------------------
+1        NXA-PAC-500W-PE        79 W               89 W       500 W      Ok
+2        NXA-PAC-500W-PE        79 W               90 W       500 W      Ok
+
+
+Power Usage Summary:
+--------------------
+Power Supply redundancy mode (configured)                PS-Redundant
+Power Supply redundancy mode (operational)               PS-Redundant
+
+Total Power Capacity (based on configured mode)             500.00 W
+Total Grid-A (first half of PS slots) Power Capacity        500.00 W
+Total Grid-B (second half of PS slots) Power Capacity       500.00 W
+Total Power of all Inputs (cumulative)                     1000.00 W
+Total Power Output (actual draw)                            158.00 W
+Total Power Input (actual draw)                             179.00 W
+Total Power Allocated (budget)                                N/A   
+Total Power Available for additional modules                  N/A   
+
+
+Power Usage details:
+--------------------
+Power reserved for Supervisor(s):                             N/A   
+Power reserved for Fabric, SC Module(s):                      N/A   
+Power reserved for Fan Module(s):                             N/A   
+Total power reserved for Sups,SCs,Fabrics,Fans:               N/A   
+
+Are all inlet cords connected: Yes
+
+Power supply details:
+---------------------
+PS_1 total capacity:     500 W   Voltage:12V
+
+Pin:89.00W  Vin:207.00V    Iin:0.44A    Pout:79.00W    Vout:12.08V    Iout:6.62A
+
+Cord connected to 220V AC
+Software-Alarm: No
+Hardware alarm_bits 
+
+PS_2 total capacity:     500 W   Voltage:12V
+
+Pin:90.00W  Vin:208.00V    Iin:0.44A    Pout:79.25W    Vout:12.06V    Iout:6.62A
+
+Cord connected to 220V AC
+Software-Alarm: No
+Hardware alarm_bits 
+

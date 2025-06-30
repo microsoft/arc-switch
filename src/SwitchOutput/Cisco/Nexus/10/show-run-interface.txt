@@ -1,0 +1,970 @@
+RR1-S46-R14-93180hl-22-1a# show run interface 
+
+!Command: show running-config interface
+!Running configuration last done at: Mon Mar  3 11:56:19 2025
+!Time: Tue Jun 24 11:02:16 2025
+
+version 10.3(4a) Bios:version 05.47 
+
+interface Vlan1
+  no ip redirects
+  no ipv6 redirects
+
+interface Vlan6
+  description HNV_PA
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.71.129.2/25
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 6 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.71.129.1
+
+interface Vlan7
+  description Management
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.160.2/24
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 7 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.160.1
+  ip dhcp relay address 100.71.83.125 
+  ip dhcp relay address 100.71.83.124 
+  ip dhcp relay address 100.71.83.123 
+  ip dhcp relay address 100.71.83.122 
+  ip dhcp relay address 100.71.83.121 
+  ip dhcp relay address 100.71.83.120 
+  ip dhcp relay address 100.71.83.119 
+  ip dhcp relay address 100.71.83.118 
+
+interface Vlan99
+  no ip redirects
+  no ipv6 redirects
+
+interface Vlan125
+  description Rack01-BMCMgmt
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.71.83.95/26
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 125 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.71.83.65
+
+interface Vlan201
+  description Tenant_1
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.161.2/24
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 201 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.161.1
+
+interface Vlan301
+  description Logical_Tenant_1
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.162.2/25
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 301 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.162.1
+
+interface Vlan401
+  description DHCP_Tenant_1
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.162.130/25
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 401 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.162.129
+  ip dhcp relay address 100.71.83.126 
+  ip dhcp relay address 10.10.43.48 
+  ip dhcp relay address 10.10.42.48 
+
+interface Vlan501
+  description L3_Forwarding_1
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.2/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 501 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.1
+
+interface Vlan502
+  description L3_Forwarding_2
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.18/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 502 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.17
+
+interface Vlan503
+  description L3_Forwarding_3
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.34/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 503 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.33
+
+interface Vlan504
+  description L3_Forwarding_4
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.50/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 504 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.49
+
+interface Vlan505
+  description L3_Forwarding_5
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.66/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 505 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.65
+
+interface Vlan506
+  description L3_Forwarding_6
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.82/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 506 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.81
+
+interface Vlan507
+  description L3_Forwarding_7
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.98/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 507 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.97
+
+interface Vlan508
+  description L3_Forwarding_8
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.114/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 508 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.113
+
+interface Vlan509
+  description L3_Forwarding_9
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.130/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 509 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.129
+
+interface Vlan510
+  description L3_Forwarding_10
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.146/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 510 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.145
+
+interface Vlan511
+  description L3_Forwarding_11
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.162/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 511 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.161
+
+interface Vlan512
+  description L3_Forwarding_12
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.178/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 512 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.177
+
+interface Vlan513
+  description L3_Forwarding_13
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.194/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 513 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.193
+
+interface Vlan514
+  description L3_Forwarding_14
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.210/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 514 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.209
+
+interface Vlan515
+  description L3_Forwarding_15
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.226/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 515 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.225
+
+interface Vlan516
+  description L3_Forwarding_16
+  no shutdown
+  mtu 9216
+  no ip redirects
+  ip address 100.69.163.242/28
+  no ipv6 redirects
+  hsrp version 2
+  hsrp 516 
+    priority 150 forwarding-threshold lower 1 upper 150
+    ip 100.69.163.241
+
+interface Vlan711
+  description Storage_1
+  no shutdown
+  no ip redirects
+  no ipv6 redirects
+
+interface Vlan712
+  description Storage_2
+  no shutdown
+  no ip redirects
+  no ipv6 redirects
+
+interface port-channel50
+  description VPC:iBGPTOR1:PO50
+  priority-flow-control mode on
+  logging event port link-status
+  mtu 9216
+  service-policy type qos input AZS_SERVICES
+  ip address 100.71.83.17/30
+
+interface port-channel101
+  description VPC:MLAG_PEER:PO101
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  priority-flow-control mode on
+  spanning-tree port type network
+  logging event port link-status
+  vpc peer-link
+
+interface port-channel102
+  description VPC:TOR1BMC:PO102
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 125
+  spanning-tree port type network
+  logging event port link-status
+  vpc 102
+
+interface Tunnel1
+  ip address 2.1.1.1/31
+  tunnel source loopback0
+  tunnel destination 10.10.35.140
+  description Tunnel_To_WANSIM
+  mtu 8000
+  no shutdown
+
+interface Ethernet1/1
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/2
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/3
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/4
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/5
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/6
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/7
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/8
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/9
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/10
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/11
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/12
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/13
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/14
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/15
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  priority-flow-control mode off
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/16
+  description Compute NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 7
+  switchport trunk allowed vlan 6-7,201,301,401,501-516
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  no shutdown
+
+interface Ethernet1/17
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/18
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/19
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/20
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/21
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/22
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/23
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/24
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/25
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/26
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/27
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/28
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/29
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/30
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/31
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/32
+  description Storage NIC1
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 711-712
+  priority-flow-control mode on send-tlv
+  spanning-tree port type edge trunk
+  mtu 9216
+  no logging event port link-status
+  service-policy type qos input AZS_SERVICES
+  no shutdown
+
+interface Ethernet1/33
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/34
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/35
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/36
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/37
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/38
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/39
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/40
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/41
+  description MLAG Heartbeat and iBGP TOR1-TOR2
+  no cdp enable
+  priority-flow-control mode on
+  mtu 9216
+  logging event port link-status
+  channel-group 50
+  no shutdown
+
+interface Ethernet1/42
+  description MLAG Heartbeat and iBGP TOR1-TOR2
+  no cdp enable
+  priority-flow-control mode on
+  mtu 9216
+  logging event port link-status
+  channel-group 50
+  no shutdown
+
+interface Ethernet1/43
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/44
+  description L2 connection to TOR1-BMC
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 125
+  logging event port link-status
+  channel-group 102
+  no shutdown
+
+interface Ethernet1/45
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/46
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/47
+  description P2P_Rack00/B2_To_Rack01/Tor1
+  no cdp enable
+  mtu 9216
+  no ip redirects
+  ip address 100.71.83.10/30
+  no ipv6 redirects
+  no shutdown
+
+interface Ethernet1/48
+  description P2P_Rack00/B1_To_Rack01/Tor1
+  no cdp enable
+  mtu 9216
+  no ip redirects
+  ip address 100.71.83.2/30
+  no ipv6 redirects
+  no shutdown
+
+interface Ethernet1/49
+  description L2 MLAG_PEER
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  priority-flow-control mode on
+  logging event port link-status
+  channel-group 101 mode active
+  no shutdown
+
+interface Ethernet1/50
+  description L2 MLAG_PEER
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  priority-flow-control mode on
+  logging event port link-status
+  channel-group 101 mode active
+  no shutdown
+
+interface Ethernet1/51
+  description L2 MLAG_PEER
+  no cdp enable
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  priority-flow-control mode on
+  logging event port link-status
+  channel-group 101 mode active
+  no shutdown
+
+interface Ethernet1/52
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/53
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface Ethernet1/54
+  description Unused_Port_Ethernet
+  no cdp enable
+  switchport
+  switchport access vlan 2
+  spanning-tree port type edge
+  mtu 9216
+  no logging event port link-status
+
+interface mgmt0
+  description use the BMCMgmt switch virtual interface
+  vrf member management
+  no ip redirects
+  no ipv6 redirects
+
+interface loopback0
+  description Loopback_Rack01/Tor1
+  ip address 100.71.83.20/32
+

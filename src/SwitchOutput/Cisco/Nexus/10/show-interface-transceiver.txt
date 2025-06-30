@@ -1,0 +1,898 @@
+RR1-S46-R14-93180hl-22-1a# show interface transceiver details  | no
+Ethernet1/1
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF241007Y4
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/2
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF24100DR8
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/3
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF241005C4
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/4
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF2410019F
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/5
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF2411072D
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/6
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF241106LC
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/7
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF241000GA
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/8
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF241104JT
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/9
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF2411048V
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/10
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF24100684
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/11
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF241105PG
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/12
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF241002FJ
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/13
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF241104YV
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/14
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF2411051W
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/15
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF2411058N
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/16
+    transceiver is present
+    type is SFP-H25GB-CU3M
+    name is CISCO-AMPHENOL
+    part number is NDCCGJ-C403
+    revision is A
+    serial number is APF241104VT
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 3 m
+    cable type is CA-S
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1792-01
+    cisco product id is SFP-H25G-CU3M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/17
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19333716263A
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   34.22 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.26 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.76 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.45 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -1.89 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/18
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19333718563B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   35.45 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.75 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.77 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -2.60 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/19
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19333716163A
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   35.12 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.80 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.77 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -2.16 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/20
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332716163B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   36.31 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.71 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.68 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -3.08 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/21
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19333712863A
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   36.64 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.26 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.74 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -2.09 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -2.15 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/22
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19333714463B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   36.25 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.72 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.70 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -1.68 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/23
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332713763B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   35.45 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.77 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.45 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -2.44 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/24
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332712663A
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   37.98 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.72 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.77 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -1.91 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/25
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332716663B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   37.17 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.72 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -3.06 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -1.36 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/26
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332717663B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   38.68 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.77 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -2.18 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -2.54 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/27
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332710763B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   35.44 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.70 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.60 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -1.81 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/28
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332717563B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   36.97 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.28 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.78 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.73 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -1.09 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/29
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332713663A
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   36.49 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.65 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.70 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -2.78 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/30
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332717763B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   36.05 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.28 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.59 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -2.89 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -1.72 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/31
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332717263B
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   34.75 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.27 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.72 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.93 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -3.39 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/32
+    transceiver is present
+    type is 10Gbase-SR
+    name is Siemon
+    part number is S1S10F-V05.0M13
+    revision is A
+    serial number is 19332718263A
+    nominal bitrate is 10300 MBit/sec
+    cisco id is 3
+    cisco extended id number is 4
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   35.04 C        80.00 C    -10.00 C     75.00 C       -5.00 C
+  Voltage        3.28 V         3.60 V      3.00 V      3.50 V        3.10 V
+  Current        6.72 mA       15.00 mA     0.00 mA    12.00 mA       0.00 mA
+  Tx Power      -1.53 dBm       0.99 dBm   -8.32 dBm    0.00 dBm     -7.79 dBm
+  Rx Power      -2.02 dBm       0.99 dBm  -10.91 dBm    0.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/33
+    transceiver is not present
+
+Ethernet1/34
+    transceiver is not present
+
+Ethernet1/35
+    transceiver is not present
+
+Ethernet1/36
+    transceiver is not present
+
+Ethernet1/37
+    transceiver is not present
+
+Ethernet1/38
+    transceiver is not present
+
+Ethernet1/39
+    transceiver is not present
+
+Ethernet1/40
+    transceiver is not present
+
+Ethernet1/41
+    transceiver is present
+    type is SFP-H25GB-CU1M
+    name is CISCO-AMPHENOL
+    part number is NDCCGF-C401
+    revision is A
+    serial number is APF24100D9V
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 1 m
+    cable type is CA-N
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1790-01
+    cisco product id is SFP-H25G-CU1M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/42
+    transceiver is present
+    type is SFP-H25GB-CU1M
+    name is CISCO-AMPHENOL
+    part number is NDCCGF-C401
+    revision is A
+    serial number is APF24100DH8
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 1 m
+    cable type is CA-N
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1790-01
+    cisco product id is SFP-H25G-CU1M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/43
+    transceiver is not present
+
+Ethernet1/44
+    transceiver is present
+    type is SFP-H25GB-CU1M
+    name is CISCO-AMPHENOL
+    part number is NDCCGF-C401
+    revision is A
+    serial number is APF24100DN0
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 1 m
+    cable type is CA-N
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 37-1790-01
+    cisco product id is SFP-H25G-CU1M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/45
+    transceiver is not present
+
+Ethernet1/46
+    transceiver is not present
+
+Ethernet1/47
+    transceiver is present
+    type is 10Gbase-SR
+    name is CISCO-AVAGO
+    part number is SFBR-709SMZ-CS1
+    revision is G4.1
+    serial number is AVD22439F6Y
+    nominal bitrate is 10300 MBit/sec
+    Link length supported for 50/125um OM2 fiber is 82 m
+    Link length supported for 62.5/125um fiber is 26 m
+    Link length supported for 50/125um OM3 fiber is 300 m
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 10-2415-03
+    cisco product id is SFP-10G-SR
+    cisco version id is V03
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   28.52 C        75.00 C     -5.00 C     70.00 C        0.00 C
+  Voltage        3.29 V         3.63 V      2.97 V      3.46 V        3.13 V
+  Current        6.70 mA       10.50 mA     2.50 mA    10.50 mA       2.50 mA
+  Tx Power      -2.29 dBm       1.69 dBm  -11.30 dBm   -1.30 dBm     -7.30 dBm
+  Rx Power      -2.49 dBm       1.99 dBm  -13.97 dBm   -1.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/48
+    transceiver is present
+    type is 10Gbase-SR
+    name is CISCO-AVAGO
+    part number is SFBR-709SMZ-CS1
+    revision is G4.1
+    serial number is AVD22439F7K
+    nominal bitrate is 10300 MBit/sec
+    Link length supported for 50/125um OM2 fiber is 82 m
+    Link length supported for 62.5/125um fiber is 26 m
+    Link length supported for 50/125um OM3 fiber is 300 m
+    cisco id is 3
+    cisco extended id number is 4
+    cisco part number is 10-2415-03
+    cisco product id is SFP-10G-SR
+    cisco version id is V03
+
+           SFP Detail Diagnostics Information (internal calibration)
+  ----------------------------------------------------------------------------
+                Current              Alarms                  Warnings
+                Measurement     High        Low         High          Low
+  ----------------------------------------------------------------------------
+  Temperature   29.40 C        75.00 C     -5.00 C     70.00 C        0.00 C
+  Voltage        3.31 V         3.63 V      2.97 V      3.46 V        3.13 V
+  Current        7.14 mA       10.50 mA     2.50 mA    10.50 mA       2.50 mA
+  Tx Power      -2.29 dBm       1.69 dBm  -11.30 dBm   -1.30 dBm     -7.30 dBm
+  Rx Power      -2.13 dBm       1.99 dBm  -13.97 dBm   -1.00 dBm     -9.91 dBm
+  Transmit Fault Count = 0
+  ----------------------------------------------------------------------------
+  Note: ++  high-alarm; +  high-warning; --  low-alarm; -  low-warning
+
+Ethernet1/49
+    transceiver is present
+    type is QSFP-100G-CR4
+    name is CISCO-AMPHENOL
+    part number is NDAAFF-C401
+    revision is A 
+    serial number is APF23490GPW-A
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 1 m
+    cisco id is 17
+    cisco extended id number is 16
+    cisco part number is 37-1666-01
+    cisco product id is QSFP-100G-CU1M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/50
+    transceiver is present
+    type is QSFP-100G-CR4
+    name is CISCO-AMPHENOL
+    part number is NDAAFF-C401
+    revision is A 
+    serial number is APF23490GR9-A
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 1 m
+    cisco id is 17
+    cisco extended id number is 16
+    cisco part number is 37-1666-01
+    cisco product id is QSFP-100G-CU1M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/51
+    transceiver is present
+    type is QSFP-100G-CR4
+    name is CISCO-AMPHENOL
+    part number is NDAAFF-C401
+    revision is A 
+    serial number is APF231902C8-B
+    nominal bitrate is 25500 MBit/sec
+    Link length supported for copper is 1 m
+    cisco id is 17
+    cisco extended id number is 16
+    cisco part number is 37-1666-01
+    cisco product id is QSFP-100G-CU1M
+    cisco version id is V01
+
+DOM is not supported
+
+Ethernet1/52
+    transceiver is not present
+
+Ethernet1/53
+    transceiver is not present
+
+Ethernet1/54
+    transceiver is not present
+

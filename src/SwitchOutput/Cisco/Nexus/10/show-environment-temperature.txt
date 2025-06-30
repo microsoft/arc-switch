@@ -1,0 +1,10 @@
+RR1-S46-R14-93180hl-22-1a# show environment temperature 
+Temperature:
+--------------------------------------------------------------------
+Module   Sensor        MajorThresh   MinorThres   CurTemp     Status
+                       (Celsius)     (Celsius)    (Celsius)         
+--------------------------------------------------------------------
+1        FRONT           80              70          28         Ok             
+1        BACK            70              42          26         Ok             
+1        CPU             90              80          42         Ok             
+1        Homewood        110             90          43         Ok 

@@ -1,0 +1,13 @@
+RR1-S46-R14-93180hl-22-1a# show environment fan 
+Fan:
+---------------------------------------------------------------------------
+Fan             Model                Hw     Direction       Status
+---------------------------------------------------------------------------
+Fan1(sys_fan1)  NXA-FAN-30CFM-F      --     back-to-front   Ok 
+Fan2(sys_fan2)  NXA-FAN-30CFM-F      --     back-to-front   Ok 
+Fan3(sys_fan3)  NXA-FAN-30CFM-F      --     back-to-front   Ok 
+Fan4(sys_fan4)  NXA-FAN-30CFM-F      --     back-to-front   Ok 
+Fan_in_PS1      --                   --     back-to-front   Ok
+Fan_in_PS2      --                   --     back-to-front   Ok
+Fan Zone Speed: Zone 1: 0xb3
+Fan Air Filter : NotSupported

@@ -1,0 +1,167 @@
+RR1-S46-R14-93180hl-22-1a# show ip route |no
+IP Route Table for VRF "default"
+'*' denotes best ucast next-hop
+'**' denotes best mcast next-hop
+'[x/y]' denotes [preference/metric]
+'%<string>' in via output denotes VRF <string>
+
+0.0.0.0/0, ubest/mbest: 2/0
+    *via 100.71.83.1, [20/0], 14w1d, bgp-65238, external, tag 64846
+    *via 100.71.83.9, [20/0], 14w1d, bgp-65238, external, tag 64846
+2.1.1.0/31, ubest/mbest: 1/0, attached
+    *via 2.1.1.1, Tunnel1, [0/0], 37w6d, direct
+2.1.1.1/32, ubest/mbest: 1/0, attached
+    *via 2.1.1.1, Tunnel1, [0/0], 37w6d, local
+100.69.160.0/24, ubest/mbest: 1/0, attached
+    *via 100.69.160.2, Vlan7, [0/0], 37w6d, direct
+100.69.160.1/32, ubest/mbest: 1/0, attached
+    *via 100.69.160.1, Vlan7, [0/0], 37w6d, hsrp
+100.69.160.2/32, ubest/mbest: 1/0, attached
+    *via 100.69.160.2, Vlan7, [0/0], 37w6d, local
+100.69.161.0/24, ubest/mbest: 1/0, attached
+    *via 100.69.161.2, Vlan201, [0/0], 37w6d, direct
+100.69.161.1/32, ubest/mbest: 1/0, attached
+    *via 100.69.161.1, Vlan201, [0/0], 37w6d, hsrp
+100.69.161.2/32, ubest/mbest: 1/0, attached
+    *via 100.69.161.2, Vlan201, [0/0], 37w6d, local
+100.69.162.0/25, ubest/mbest: 1/0, attached
+    *via 100.69.162.2, Vlan301, [0/0], 37w6d, direct
+100.69.162.1/32, ubest/mbest: 1/0, attached
+    *via 100.69.162.1, Vlan301, [0/0], 37w6d, hsrp
+100.69.162.2/32, ubest/mbest: 1/0, attached
+    *via 100.69.162.2, Vlan301, [0/0], 37w6d, local
+100.69.162.128/25, ubest/mbest: 1/0, attached
+    *via 100.69.162.130, Vlan401, [0/0], 37w6d, direct
+100.69.162.129/32, ubest/mbest: 1/0, attached
+    *via 100.69.162.129, Vlan401, [0/0], 37w6d, hsrp
+100.69.162.130/32, ubest/mbest: 1/0, attached
+    *via 100.69.162.130, Vlan401, [0/0], 37w6d, local
+100.69.163.0/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.2, Vlan501, [0/0], 37w6d, direct
+100.69.163.1/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.1, Vlan501, [0/0], 37w6d, hsrp
+100.69.163.2/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.2, Vlan501, [0/0], 37w6d, local
+100.69.163.16/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.18, Vlan502, [0/0], 37w6d, direct
+100.69.163.17/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.17, Vlan502, [0/0], 37w6d, hsrp
+100.69.163.18/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.18, Vlan502, [0/0], 37w6d, local
+100.69.163.32/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.34, Vlan503, [0/0], 37w6d, direct
+100.69.163.33/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.33, Vlan503, [0/0], 37w6d, hsrp
+100.69.163.34/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.34, Vlan503, [0/0], 37w6d, local
+100.69.163.48/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.50, Vlan504, [0/0], 37w6d, direct
+100.69.163.49/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.49, Vlan504, [0/0], 37w6d, hsrp
+100.69.163.50/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.50, Vlan504, [0/0], 37w6d, local
+100.69.163.64/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.66, Vlan505, [0/0], 37w6d, direct
+100.69.163.65/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.65, Vlan505, [0/0], 37w6d, hsrp
+100.69.163.66/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.66, Vlan505, [0/0], 37w6d, local
+100.69.163.80/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.82, Vlan506, [0/0], 37w6d, direct
+100.69.163.81/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.81, Vlan506, [0/0], 37w6d, hsrp
+100.69.163.82/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.82, Vlan506, [0/0], 37w6d, local
+100.69.163.96/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.98, Vlan507, [0/0], 37w6d, direct
+100.69.163.97/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.97, Vlan507, [0/0], 37w6d, hsrp
+100.69.163.98/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.98, Vlan507, [0/0], 37w6d, local
+100.69.163.112/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.114, Vlan508, [0/0], 37w6d, direct
+100.69.163.113/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.113, Vlan508, [0/0], 37w6d, hsrp
+100.69.163.114/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.114, Vlan508, [0/0], 37w6d, local
+100.69.163.128/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.130, Vlan509, [0/0], 37w6d, direct
+100.69.163.129/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.129, Vlan509, [0/0], 37w6d, hsrp
+100.69.163.130/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.130, Vlan509, [0/0], 37w6d, local
+100.69.163.144/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.146, Vlan510, [0/0], 37w6d, direct
+100.69.163.145/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.145, Vlan510, [0/0], 37w6d, hsrp
+100.69.163.146/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.146, Vlan510, [0/0], 37w6d, local
+100.69.163.160/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.162, Vlan511, [0/0], 37w6d, direct
+100.69.163.161/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.161, Vlan511, [0/0], 37w6d, hsrp
+100.69.163.162/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.162, Vlan511, [0/0], 37w6d, local
+100.69.163.176/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.178, Vlan512, [0/0], 37w6d, direct
+100.69.163.177/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.177, Vlan512, [0/0], 37w6d, hsrp
+100.69.163.178/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.178, Vlan512, [0/0], 37w6d, local
+100.69.163.192/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.194, Vlan513, [0/0], 37w6d, direct
+100.69.163.193/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.193, Vlan513, [0/0], 37w6d, hsrp
+100.69.163.194/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.194, Vlan513, [0/0], 37w6d, local
+100.69.163.208/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.210, Vlan514, [0/0], 37w6d, direct
+100.69.163.209/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.209, Vlan514, [0/0], 37w6d, hsrp
+100.69.163.210/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.210, Vlan514, [0/0], 37w6d, local
+100.69.163.224/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.226, Vlan515, [0/0], 37w6d, direct
+100.69.163.225/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.225, Vlan515, [0/0], 37w6d, hsrp
+100.69.163.226/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.226, Vlan515, [0/0], 37w6d, local
+100.69.163.240/28, ubest/mbest: 1/0, attached
+    *via 100.69.163.242, Vlan516, [0/0], 37w6d, direct
+100.69.163.241/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.241, Vlan516, [0/0], 37w6d, hsrp
+100.69.163.242/32, ubest/mbest: 1/0, attached
+    *via 100.69.163.242, Vlan516, [0/0], 37w6d, local
+100.71.83.0/30, ubest/mbest: 1/0, attached
+    *via 100.71.83.2, Eth1/48, [0/0], 14w1d, direct
+100.71.83.2/32, ubest/mbest: 1/0, attached
+    *via 100.71.83.2, Eth1/48, [0/0], 14w1d, local
+100.71.83.4/30, ubest/mbest: 1/0
+    *via 100.71.83.18, [200/0], 14w1d, bgp-65238, internal, tag 65238
+100.71.83.8/30, ubest/mbest: 1/0, attached
+    *via 100.71.83.10, Eth1/47, [0/0], 14w1d, direct
+100.71.83.10/32, ubest/mbest: 1/0, attached
+    *via 100.71.83.10, Eth1/47, [0/0], 14w1d, local
+100.71.83.12/30, ubest/mbest: 1/0
+    *via 100.71.83.18, [200/0], 14w1d, bgp-65238, internal, tag 65238
+100.71.83.16/30, ubest/mbest: 1/0, attached
+    *via 100.71.83.17, Po50, [0/0], 37w6d, direct
+100.71.83.17/32, ubest/mbest: 1/0, attached
+    *via 100.71.83.17, Po50, [0/0], 37w6d, local
+100.71.83.20/32, ubest/mbest: 2/0, attached
+    *via 100.71.83.20, Lo0, [0/0], 37w6d, local
+    *via 100.71.83.20, Lo0, [0/0], 37w6d, direct
+100.71.83.21/32, ubest/mbest: 1/0
+    *via 100.71.83.18, [200/0], 37w6d, bgp-65238, internal, tag 65238
+100.71.83.64/26, ubest/mbest: 1/0, attached
+    *via 100.71.83.95, Vlan125, [0/0], 37w6d, direct
+100.71.83.65/32, ubest/mbest: 1/0, attached
+    *via 100.71.83.65, Vlan125, [0/0], 37w6d, hsrp
+100.71.83.95/32, ubest/mbest: 1/0, attached
+    *via 100.71.83.95, Vlan125, [0/0], 37w6d, local
+100.71.129.0/25, ubest/mbest: 1/0, attached
+    *via 100.71.129.2, Vlan6, [0/0], 37w6d, direct
+100.71.129.1/32, ubest/mbest: 1/0, attached
+    *via 100.71.129.1, Vlan6, [0/0], 37w6d, hsrp
+100.71.129.2/32, ubest/mbest: 1/0, attached
+    *via 100.71.129.2, Vlan6, [0/0], 37w6d, local
