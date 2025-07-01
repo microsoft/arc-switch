@@ -1,15 +1,15 @@
 RR1-S46-R14-93180hl-22-1a# show inventory all 
 NAME: "Chassis",  DESCR: "Nexus9000 C93180YC-FX Chassis"         
-PID: N9K-C93180YC-FX     ,  VID: V04 ,  SN: FDO24121E9M          
+PID: N9K-C93180YC-FX     ,  VID: V04 ,  SN: FKE24000X1A          
 
 NAME: "Slot 1",  DESCR: "48x10/25G/32G + 6x40/100G Ethernet/FC Module"
-PID: N9K-C93180YC-FX     ,  VID: V04 ,  SN: FDO24121E9M          
+PID: N9K-C93180YC-FX     ,  VID: V04 ,  SN: FKE24000X1A          
 
 NAME: "Power Supply 1",  DESCR: "Nexus9000 C93180YC-FX Chassis Power Supply"
-PID: NXA-PAC-500W-PE     ,  VID: V01 ,  SN: LIT241527GN          
+PID: NXA-PAC-500W-PE     ,  VID: V01 ,  SN: ABC24001X2B          
 
 NAME: "Power Supply 2",  DESCR: "Nexus9000 C93180YC-FX Chassis Power Supply"
-PID: NXA-PAC-500W-PE     ,  VID: V01 ,  SN: LIT24152562          
+PID: NXA-PAC-500W-PE     ,  VID: V01 ,  SN: ABC24001X3C          
 
 NAME: "Fan 1",  DESCR: "Nexus9000 C93180YC-FX Chassis Fan Module"
 PID: NXA-FAN-30CFM-F     ,  VID: V01 ,  SN: N/A                  
@@ -24,121 +24,121 @@ NAME: "Fan 4",  DESCR: "Nexus9000 C93180YC-FX Chassis Fan Module"
 PID: NXA-FAN-30CFM-F     ,  VID: V01 ,  SN: N/A                  
 
 NAME: Ethernet1/1,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF241007Y4          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A1B          
 
 NAME: Ethernet1/2,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF24100DR8          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A2C          
 
 NAME: Ethernet1/3,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF241005C4          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A3D          
 
 NAME: Ethernet1/4,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF2410019F          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A4E          
 
 NAME: Ethernet1/5,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF2411072D          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A5F          
 
 NAME: Ethernet1/6,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF241106LC          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A6G          
 
 NAME: Ethernet1/7,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF241000GA          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A7H          
 
 NAME: Ethernet1/8,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF241104JT          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A8J          
 
 NAME: Ethernet1/9,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF2411048V          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A9K          
 
 NAME: Ethernet1/10,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF24100684          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001B1L          
 
 NAME: Ethernet1/11,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF241105PG          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001B2M          
 
 NAME: Ethernet1/12,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF241002FJ          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001B3N          
 
 NAME: Ethernet1/13,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF241104YV          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001B4P          
 
 NAME: Ethernet1/14,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF2411051W          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001B5Q          
 
 NAME: Ethernet1/15,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF2411058N          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001B6R          
 
 NAME: Ethernet1/16,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: APF241104VT          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001B7S          
 
 NAME: Ethernet1/17,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19333716263A         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678901A         
 
 NAME: Ethernet1/18,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19333718563B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678902B         
 
 NAME: Ethernet1/19,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19333716163A         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678903A         
 
 NAME: Ethernet1/20,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332716163B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678904B         
 
 NAME: Ethernet1/21,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19333712863A         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678905A         
 
 NAME: Ethernet1/22,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19333714463B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678906B         
 
 NAME: Ethernet1/23,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332713763B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678907B         
 
 NAME: Ethernet1/24,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332712663A         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678908A         
 
 NAME: Ethernet1/25,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332716663B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678909B         
 
 NAME: Ethernet1/26,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332717663B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678910B         
 
 NAME: Ethernet1/27,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332710763B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678911B         
 
 NAME: Ethernet1/28,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332717563B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678912B         
 
 NAME: Ethernet1/29,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332713663A         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678913A         
 
 NAME: Ethernet1/30,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332717763B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678914B         
 
 NAME: Ethernet1/31,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332717263B         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678915B         
 
 NAME: Ethernet1/32,  DESCR: Siemon                                  
-PID:                     ,  VID: S1S10F-V05.0M13,  SN: 19332718263A         
+PID:                     ,  VID: S1S10F-V05.0M13,  SN: 12345678916A         
 
 NAME: Ethernet1/41,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU1M       ,  VID: NDCCGF-C401,  SN: APF24100D9V          
+PID: SFP-H25G-CU1M       ,  VID: NDCCGF-C401,  SN: XYZ24001C1T          
 
 NAME: Ethernet1/42,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU1M       ,  VID: NDCCGF-C401,  SN: APF24100DH8          
+PID: SFP-H25G-CU1M       ,  VID: NDCCGF-C401,  SN: XYZ24001C2U          
 
 NAME: Ethernet1/44,  DESCR: CISCO-AMPHENOL                          
-PID: SFP-H25G-CU1M       ,  VID: NDCCGF-C401,  SN: APF24100DN0          
+PID: SFP-H25G-CU1M       ,  VID: NDCCGF-C401,  SN: XYZ24001C4V          
 
 NAME: Ethernet1/47,  DESCR: CISCO-AVAGO                             
-PID: SFP-10G-SR          ,  VID: SFBR-709SMZ-CS1,  SN: AVD22439F6Y          
+PID: SFP-10G-SR          ,  VID: SFBR-709SMZ-CS1,  SN: DEF24001X7W          
 
 NAME: Ethernet1/48,  DESCR: CISCO-AVAGO                             
-PID: SFP-10G-SR          ,  VID: SFBR-709SMZ-CS1,  SN: AVD22439F7K          
+PID: SFP-10G-SR          ,  VID: SFBR-709SMZ-CS1,  SN: DEF24001X8X          
 
 NAME: Ethernet1/49,  DESCR: CISCO-AMPHENOL                          
-PID: QSFP-100G-CU1M      ,  VID: NDAAFF-C401,  SN: APF23490GPW-A        
+PID: QSFP-100G-CU1M      ,  VID: NDAAFF-C401,  SN: MNO24001Y9A-X        
 
 NAME: Ethernet1/50,  DESCR: CISCO-AMPHENOL                          
-PID: QSFP-100G-CU1M      ,  VID: NDAAFF-C401,  SN: APF23490GR9-A        
+PID: QSFP-100G-CU1M      ,  VID: NDAAFF-C401,  SN: MNO24001Z1B-Y        
 
 NAME: Ethernet1/51,  DESCR: CISCO-AMPHENOL                          
-PID: QSFP-100G-CU1M      ,  VID: NDAAFF-C401,  SN: APF231902C8-B        
+PID: QSFP-100G-CU1M      ,  VID: NDAAFF-C401,  SN: MNO24001Z2C-Z        
