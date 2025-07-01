@@ -70,17 +70,37 @@ This file provides guidelines for GitHub Copilot and other AI assistants when he
 
 All tools must output data in JSON format with standardized fields for consistency and interoperability.
 
-#### Common Required Fields
+#### Standardized JSON Structure
 
-Every tool output must include these required fields:
+Every parser tool must use this exact structure for all output records:
+
+```json
+{
+  "data_type": "",
+  "timestamp": "",
+  "date": "",
+  "message": {
+    // Parser-specific JSON data goes here
+  }
+}
+```
+
+#### Required Fields
+
+Every tool output must include these four required fields:
 
 - `data_type`: String identifying the type of data (e.g., "interface_counters", "cisco_nexus_mac_table", "lldp_neighbors")
 - `timestamp`: Full timestamp in ISO 8601 format (e.g., "2024-01-15T10:30:00Z") for machine parsing
 - `date`: Date in ISO format (YYYY-MM-DD) for easy filtering and sorting
+- `message`: JSON object containing all parser-specific data fields
 
-#### Tool-Specific Fields
+#### Message Field Structure
 
-Beyond the common required fields, each tool will have its own unique fields relevant to the data being processed.
+All parser-specific data must be contained within the `message` field as a JSON object. This provides:
+- Consistent top-level structure across all parsers
+- Clear separation between metadata and data
+- Compatibility with the syslogwriter library
+- Easier processing and validation
 
 #### Example: Cisco Nexus MAC Table Parser
 
@@ -89,22 +109,24 @@ Beyond the common required fields, each tool will have its own unique fields rel
   "data_type": "cisco_nexus_mac_table",
   "timestamp": "2024-06-23T17:05:01Z",
   "date": "2024-06-23",
-  "primary_entry": true,
-  "gateway_mac": false,
-  "routed_mac": false,
-  "overlay_mac": false,
-  "vlan": "7",
-  "mac_address": "02ec.a004.0000",
-  "type": "dynamic",
-  "age": "NA",
-  "secure": "F",
-  "ntfy": "F",
-  "port": "Eth1/1",
-  "vpc_peer_link": false
+  "message": {
+    "primary_entry": true,
+    "gateway_mac": false,
+    "routed_mac": false,
+    "overlay_mac": false,
+    "vlan": "7",
+    "mac_address": "02ec.a004.0000",
+    "type": "dynamic",
+    "age": "NA",
+    "secure": "F",
+    "ntfy": "F",
+    "port": "Eth1/1",
+    "vpc_peer_link": false
+  }
 }
 ```
 
-**Tool-Specific Fields for MAC Table Parser:**
+**Message Fields for MAC Table Parser:**
 
 - `primary_entry`: Boolean indicating if this is a primary entry
 - `gateway_mac`: Boolean indicating if this is a gateway MAC
@@ -126,22 +148,24 @@ Beyond the common required fields, each tool will have its own unique fields rel
   "data_type": "interface_counters",
   "timestamp": "2024-01-15T10:30:00Z",
   "date": "2024-01-15",
-  "interface_name": "Eth1/1",
-  "interface_type": "ethernet",
-  "in_octets": 205027653248,
-  "in_ucast_pkts": 650373664,
-  "in_mcast_pkts": 2262324,
-  "in_bcast_pkts": 68097,
-  "out_octets": 3195383643785,
-  "out_ucast_pkts": 2314463086,
-  "out_mcast_pkts": 365931965,
-  "out_bcast_pkts": 53571839,
-  "has_ingress_data": true,
-  "has_egress_data": true
+  "message": {
+    "interface_name": "Eth1/1",
+    "interface_type": "ethernet",
+    "in_octets": 205027653248,
+    "in_ucast_pkts": 650373664,
+    "in_mcast_pkts": 2262324,
+    "in_bcast_pkts": 68097,
+    "out_octets": 3195383643785,
+    "out_ucast_pkts": 2314463086,
+    "out_mcast_pkts": 365931965,
+    "out_bcast_pkts": 53571839,
+    "has_ingress_data": true,
+    "has_egress_data": true
+  }
 }
 ```
 
-**Tool-Specific Fields for Interface Counters Parser:**
+**Message Fields for Interface Counters Parser:**
 
 - `interface_name`: Interface identifier (e.g., "Eth1/1", "Po50", "Vlan1")
 - `interface_type`: Type category ("ethernet", "port-channel", "vlan", "management", "tunnel")
@@ -155,6 +179,63 @@ Beyond the common required fields, each tool will have its own unique fields rel
 - `out_bcast_pkts`: Egress broadcast packets counter (-1 if unavailable)
 - `has_ingress_data`: Boolean indicating if ingress counters are available
 - `has_egress_data`: Boolean indicating if egress counters are available
+
+#### Integration with SyslogWriter
+
+All parsers should be designed to work with the standardized syslogwriter library located in `src/SyslogTools/syslogwriter/`. This library expects the exact JSON structure defined above:
+
+```go
+import "github.com/arc-switch/syslogwriter"
+
+// Initialize syslog writer
+writer, err := syslogwriter.NewWithDefaults("parser-name")
+if err != nil {
+    log.Fatal(err)
+}
+defer writer.Close()
+
+// Create standardized JSON structure
+entry := map[string]interface{}{
+    "data_type": "your_parser_type",
+    "timestamp": time.Now().Format(time.RFC3339),
+    "date": time.Now().Format("2006-01-02"),
+    "message": map[string]interface{}{
+        // Your parser-specific fields here
+        "field1": "value1",
+        "field2": 12345,
+    },
+}
+
+// Convert to JSON and write to syslog
+jsonData, err := json.Marshal(entry)
+if err != nil {
+    log.Printf("Failed to marshal entry: %v", err)
+    return
+}
+
+if err := writer.WriteEntry(string(jsonData)); err != nil {
+    log.Printf("Failed to write to syslog: %v", err)
+}
+```
+
+#### Validation Requirements
+
+When creating new parsers, ensure:
+
+1. **Structure Compliance**: Always use the four required fields (data_type, timestamp, date, message)
+2. **Field Validation**: Validate that all required fields are present and non-empty
+3. **Message Content**: All parser-specific data goes in the message field only
+4. **JSON Validity**: Ensure output is valid JSON and can be parsed
+5. **Syslog Compatibility**: Test integration with the syslogwriter library
+
+#### Parser Development Guidelines
+
+- Use consistent data_type naming: `vendor_device_data_type` (e.g., "cisco_nexus_mac_table")
+- Include comprehensive error handling for malformed input
+- Provide verbose output options for debugging
+- Document all message field structures in the parser's README
+- Include sample input and output files for testing
+- Write unit tests that validate JSON structure compliance
 
 ### Project Structure
 

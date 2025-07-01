@@ -35,7 +35,7 @@ func main() {
     defer writer.Close()
 
     // Write a JSON entry
-    jsonEntry := `{"data_type":"test_entry","timestamp":"06/24/2025 10:00:01 AM","date":"06/24/2025","message":"Hello World"}`
+    jsonEntry := `{"data_type":"interface_counters","timestamp":"07/01/2025 10:00:01 AM","date":"07/01/2025","message":{"interface":"eth0","status":"up"}}`
     if err := writer.WriteEntry(jsonEntry); err != nil {
         log.Printf("Failed to write entry: %v", err)
     }
@@ -56,82 +56,40 @@ Configuration for the syslog writer:
 
 ```go
 type Config struct {
-    Priority     syslog.Priority  // Combined facility and priority
-    Tag          string           // Syslog tag
-    Facility     string           // Facility name (for reference)
-    UseSystemd   bool            // Whether systemd is detected
-    MaxEntrySize int             // Maximum entry size in bytes
+    Tag          string  // Syslog tag
+    MaxEntrySize int     // Maximum entry size in bytes
+    Verbose      bool    // Enable verbose logging
 }
 ```
 
-#### Statistics
-
-Processing statistics:
-
-```go
-type Statistics struct {
-    TotalEntries     int
-    SuccessEntries   int
-    FailedEntries    int
-    TruncatedEntries int
-    StartTime        time.Time
-}
-```
+**Note:** The library now uses hardcoded facility (local0) and priority (LOG_INFO) for simplified operation.
 
 ### Functions
 
 #### Creating Writers
 
 ```go
-// Create with custom configuration
-func New(config *Config) (*Writer, error)
+// Create with custom parameters
+func New(tag string, maxEntrySize int, verbose bool) (*Writer, error)
 
-// Create with defaults (local0, info priority, 4096 max size)
+// Create with defaults (4096 max size, no verbose output)
 func NewWithDefaults(tag string) (*Writer, error)
 ```
 
 #### Writing Entries
 
 ```go
-// Write single entry
+// Write single entry (uses global verbose setting from config)
 func (w *Writer) WriteEntry(jsonEntry string) error
-
-// Write single entry with verbose output
-func (w *Writer) WriteEntryWithVerbose(jsonEntry string, verbose bool) error
-
-// Write multiple entries
-func (w *Writer) WriteEntries(jsonEntries []string) error
-
-// Write from io.Reader (file, stdin, etc.)
-func (w *Writer) WriteFromReader(reader io.Reader) error
 ```
 
 #### Utility Functions
 
 ```go
-// Validate entry without writing
-func (w *Writer) ValidateEntry(jsonEntry string) error
-
-// Get processing statistics
-func (w *Writer) GetStatistics() *Statistics
-
-// Reset statistics
-func (w *Writer) ResetStatistics()
-
 // Close the writer
 func (w *Writer) Close() error
-```
 
-#### Helper Functions
-
-```go
-// Parse priority string to syslog.Priority
-func ParseSyslogPriority(priority string) (syslog.Priority, error)
-
-// Parse facility string to syslog.Priority
-func ParseSyslogFacility(facility string) (syslog.Priority, error)
-
-// Detect if systemd is available
+// Detect if systemd is available (utility function)
 func DetectSystemLogger() bool
 ```
 
@@ -154,7 +112,7 @@ func main() {
     }
     defer writer.Close()
 
-    jsonEntry := `{"data_type":"system_event","timestamp":"06/24/2025 10:00:01 AM","date":"06/24/2025","event":"startup","status":"success"}`
+    jsonEntry := `{"data_type":"system_event","timestamp":"07/01/2025 10:00:01 AM","date":"07/01/2025","message":{"event":"startup","status":"success"}}`
     
     if err := writer.WriteEntry(jsonEntry); err != nil {
         log.Printf("Error: %v", err)
@@ -169,72 +127,54 @@ package main
 
 import (
     "log"
-    "log/syslog"
     "github.com/arc-switch/syslogwriter"
 )
 
 func main() {
-    // Parse facility and priority
-    facility, _ := syslogwriter.ParseSyslogFacility("local1")
-    priority, _ := syslogwriter.ParseSyslogPriority("warning")
-    
-    config := &syslogwriter.Config{
-        Priority:     facility | priority,
-        Tag:          "network-monitor",
-        Facility:     "local1",
-        UseSystemd:   syslogwriter.DetectSystemLogger(),
-        MaxEntrySize: 8192,
-    }
-
-    writer, err := syslogwriter.New(config)
+    // Create writer with custom settings
+    writer, err := syslogwriter.New("network-monitor", 8192, true) // verbose enabled
     if err != nil {
         log.Fatal(err)
     }
     defer writer.Close()
 
-    // Write multiple entries
-    entries := []string{
-        `{"data_type":"interface_status","timestamp":"06/24/2025 10:00:01 AM","date":"06/24/2025","interface":"eth0","status":"up"}`,
-        `{"data_type":"interface_status","timestamp":"06/24/2025 10:00:02 AM","date":"06/24/2025","interface":"eth1","status":"down"}`,
+    // Write entry with verbose output enabled
+    jsonEntry := `{"data_type":"interface_status","timestamp":"07/01/2025 10:00:01 AM","date":"07/01/2025","message":{"interface":"eth0","status":"up"}}`
+    
+    if err := writer.WriteEntry(jsonEntry); err != nil {
+        log.Printf("Error: %v", err)
     }
-
-    if err := writer.WriteEntries(entries); err != nil {
-        log.Printf("Some entries failed: %v", err)
-    }
-
-    // Print statistics
-    stats := writer.GetStatistics()
-    log.Printf("Processed %d entries, %d successful, %d failed", 
-        stats.TotalEntries, stats.SuccessEntries, stats.FailedEntries)
 }
 ```
 
-### Processing from File
+### Processing Multiple Entries
 
 ```go
 package main
 
 import (
+    "encoding/json"
     "log"
-    "os"
     "github.com/arc-switch/syslogwriter"
 )
 
 func main() {
-    writer, err := syslogwriter.NewWithDefaults("file-processor")
+    writer, err := syslogwriter.NewWithDefaults("batch-processor")
     if err != nil {
         log.Fatal(err)
     }
     defer writer.Close()
 
-    file, err := os.Open("data.json")
-    if err != nil {
-        log.Fatal(err)
+    // Process multiple entries individually
+    entries := []string{
+        `{"data_type":"network_event","timestamp":"07/01/2025 10:00:01 AM","date":"07/01/2025","message":{"event":"connection_opened","port":80}}`,
+        `{"data_type":"network_event","timestamp":"07/01/2025 10:00:02 AM","date":"07/01/2025","message":{"event":"connection_closed","port":80}}`,
     }
-    defer file.Close()
 
-    if err := writer.WriteFromReaderWithVerbose(file, true); err != nil {
-        log.Printf("Processing completed with errors: %v", err)
+    for i, entry := range entries {
+        if err := writer.WriteEntry(entry); err != nil {
+            log.Printf("Failed to write entry %d: %v", i, err)
+        }
     }
 }
 ```
@@ -255,12 +195,10 @@ import (
 )
 
 type MACEntry struct {
-    DataType   string `json:"data_type"`
-    Timestamp  string `json:"timestamp"`
-    Date       string `json:"date"`
-    VLAN       string `json:"vlan"`
-    MACAddress string `json:"mac_address"`
-    Port       string `json:"port"`
+    DataType   string                 `json:"data_type"`
+    Timestamp  string                 `json:"timestamp"`
+    Date       string                 `json:"date"`
+    Message    map[string]interface{} `json:"message"`
 }
 
 func main() {
@@ -274,12 +212,14 @@ func main() {
     // Parse MAC addresses (your existing logic here)
     macEntries := []MACEntry{
         {
-            DataType:   "cisco_nexus_mac_table",
-            Timestamp:  time.Now().Format("01/02/2006 03:04:05 PM"),
-            Date:       time.Now().Format("01/02/2006"),
-            VLAN:       "100",
-            MACAddress: "00:50:56:c0:00:08",
-            Port:       "Eth1/1",
+            DataType:  "cisco_nexus_mac_table",
+            Timestamp: time.Now().Format("01/02/2006 03:04:05 PM"),
+            Date:      time.Now().Format("01/02/2006"),
+            Message: map[string]interface{}{
+                "vlan":        "100",
+                "mac_address": "00:50:56:c0:00:08",
+                "port":        "Eth1/1",
+            },
         },
         // ... more entries
     }
@@ -297,29 +237,56 @@ func main() {
         }
     }
 
-    // Print statistics
-    stats := writer.GetStatistics()
-    fmt.Printf("Logged %d MAC table entries\n", stats.SuccessEntries)
+    log.Printf("Processed %d MAC table entries", len(macEntries))
 }
 ```
 
 ## Required JSON Fields
 
-All JSON entries must contain:
+All JSON entries must contain these four required fields:
 
-- `data_type`: Data type identifier (can serve as tag identifier)
-- `timestamp`: Full timestamp with date and time  
+- `data_type`: Data type identifier (can serve as tag identifier)  
+- `timestamp`: Full timestamp with date and time
 - `date`: Date in MM/DD/YYYY format
+- `message`: JSON object containing parser-specific data (structure varies by parser)
+
+### Message Field Structure
+
+The `message` field must be a JSON object and will contain parser-specific data. For example:
+
+```json
+{
+  "data_type": "interface_counters",
+  "timestamp": "2024-01-15T10:30:00Z", 
+  "date": "2024-01-15",
+  "message": {
+    "interface": "eth0",
+    "counters": {
+      "rx_packets": 12345,
+      "tx_packets": 67890
+    }
+  }
+}
+```
+
+## Features
+
+- **Simplified API**: Easy-to-use interface with hardcoded facility (local0) and priority (LOG_INFO)
+- **Single Entry Writing**: Focused on single JSON entry processing
+- **Automatic Validation**: Validates required JSON fields before writing
+- **Size Management**: Automatic truncation of oversized entries
+- **Verbose Logging**: Optional verbose output for debugging
+- **Cross-Platform**: Works on Linux systems with syslog support
 
 ## Error Handling
 
 The library provides robust error handling:
 
 - Validates JSON format and required fields
-- Continues processing on individual entry failures
-- Tracks detailed statistics
+- Returns detailed error messages for debugging
 - Truncates oversized entries automatically
+- Continues operation on validation failures
 
 ## Thread Safety
 
-The library is designed to be thread-safe for concurrent use across goroutines, except for the `Statistics` counters, which are not protected by mutexes or atomic operations and may result in data races if accessed concurrently. If you require accurate statistics in concurrent scenarios, ensure to add synchronization (e.g., mutex or atomic operations) around statistics updates.
+The library is designed to be thread-safe for concurrent use across goroutines. The simplified design eliminates previous race conditions around statistics tracking.

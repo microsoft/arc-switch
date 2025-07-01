@@ -2,26 +2,21 @@ package syslogwriter
 
 import (
 	"encoding/json"
-	"log/syslog"
 	"strings"
 	"testing"
-	"time"
 )
 
 // Test data
-var validJSONEntry = `{"data_type":"test_data","timestamp":"2024-01-01T12:00:00Z","date":"2024-01-01","message":"test message"}`
+var validJSONEntry = `{"data_type":"interface_counters","timestamp":"2024-01-15T10:30:00Z","date":"2024-01-15","message":{"interface":"eth0","counters":{"rx_packets":12345,"tx_packets":67890}}}`
 
 // Test validation without requiring syslog
 func TestValidateEntryStandalone(t *testing.T) {
 	// Create a mock writer for validation testing
 	writer := &Writer{
 		config: &Config{
-			Priority:     syslog.LOG_LOCAL0 | syslog.LOG_INFO,
 			Tag:          "test",
 			MaxEntrySize: 4096,
-		},
-		stats: &Statistics{
-			StartTime: time.Now(),
+			Verbose:      false,
 		},
 	}
 
@@ -44,25 +39,31 @@ func TestValidateEntryStandalone(t *testing.T) {
 		},
 		{
 			name:      "missing data_type",
-			jsonEntry: `{"timestamp":"2024-01-01T12:00:00Z","date":"2024-01-01"}`,
+			jsonEntry: `{"timestamp":"2024-01-15T10:30:00Z","date":"2024-01-15","message":{"test":"data"}}`,
 			wantErr:   true,
 			errMsg:    "missing required field: data_type",
 		},
 		{
 			name:      "missing timestamp",
-			jsonEntry: `{"data_type":"test","date":"2024-01-01"}`,
+			jsonEntry: `{"data_type":"interface_counters","date":"2024-01-15","message":{"test":"data"}}`,
 			wantErr:   true,
 			errMsg:    "missing required field: timestamp",
 		},
 		{
 			name:      "missing date",
-			jsonEntry: `{"data_type":"test","timestamp":"2024-01-01T12:00:00Z"}`,
+			jsonEntry: `{"data_type":"interface_counters","timestamp":"2024-01-15T10:30:00Z","message":{"test":"data"}}`,
 			wantErr:   true,
 			errMsg:    "missing required field: date",
 		},
 		{
+			name:      "missing message",
+			jsonEntry: `{"data_type":"interface_counters","timestamp":"2024-01-15T10:30:00Z","date":"2024-01-15"}`,
+			wantErr:   true,
+			errMsg:    "missing required field: message",
+		},
+		{
 			name:      "empty data_type",
-			jsonEntry: `{"data_type":"","timestamp":"2024-01-01T12:00:00Z","date":"2024-01-01"}`,
+			jsonEntry: `{"data_type":"","timestamp":"2024-01-15T10:30:00Z","date":"2024-01-15","message":{"test":"data"}}`,
 			wantErr:   true,
 			errMsg:    "missing required field: data_type",
 		},
@@ -70,7 +71,7 @@ func TestValidateEntryStandalone(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := writer.ValidateEntry(tt.jsonEntry)
+			err := writer.validateEntry(tt.jsonEntry)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ValidateEntry() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -82,75 +83,13 @@ func TestValidateEntryStandalone(t *testing.T) {
 	}
 }
 
-func TestParseSyslogPriority(t *testing.T) {
-	tests := []struct {
-		name     string
-		priority string
-		expected syslog.Priority
-		wantErr  bool
-	}{
-		{"emergency", "emerg", syslog.LOG_EMERG, false},
-		{"alert", "alert", syslog.LOG_ALERT, false},
-		{"critical", "crit", syslog.LOG_CRIT, false},
-		{"error", "err", syslog.LOG_ERR, false},
-		{"warning", "warning", syslog.LOG_WARNING, false},
-		{"notice", "notice", syslog.LOG_NOTICE, false},
-		{"info", "info", syslog.LOG_INFO, false},
-		{"debug", "debug", syslog.LOG_DEBUG, false},
-		{"invalid", "invalid", 0, true},
-		{"case insensitive", "INFO", syslog.LOG_INFO, false},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result, err := ParseSyslogPriority(tt.priority)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ParseSyslogPriority() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !tt.wantErr && result != tt.expected {
-				t.Errorf("ParseSyslogPriority() = %v, want %v", result, tt.expected)
-			}
-		})
-	}
-}
-
-func TestParseSyslogFacility(t *testing.T) {
-	tests := []struct {
-		name     string
-		facility string
-		expected syslog.Priority
-		wantErr  bool
-	}{
-		{"local0", "local0", syslog.LOG_LOCAL0, false},
-		{"local1", "local1", syslog.LOG_LOCAL1, false},
-		{"user", "user", syslog.LOG_USER, false},
-		{"mail", "mail", syslog.LOG_MAIL, false},
-		{"daemon", "daemon", syslog.LOG_DAEMON, false},
-		{"invalid", "invalid", 0, true},
-		{"case insensitive", "LOCAL0", syslog.LOG_LOCAL0, false},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result, err := ParseSyslogFacility(tt.facility)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ParseSyslogFacility() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !tt.wantErr && result != tt.expected {
-				t.Errorf("ParseSyslogFacility() = %v, want %v", result, tt.expected)
-			}
-		})
-	}
-}
-
 func TestCommonFields(t *testing.T) {
 	// Test that CommonFields struct works correctly with JSON
 	cf := CommonFields{
-		DataType:  "test_type",
-		Timestamp: "2024-01-01T12:00:00Z",
-		Date:      "2024-01-01",
+		DataType:  "interface_counters",
+		Timestamp: "2024-01-15T10:30:00Z",
+		Date:      "2024-01-15",
+		Message:   map[string]interface{}{"interface": "eth0", "status": "up"},
 	}
 
 	jsonData, err := json.Marshal(cf)
@@ -164,8 +103,13 @@ func TestCommonFields(t *testing.T) {
 		t.Fatalf("Failed to unmarshal CommonFields: %v", err)
 	}
 
-	if cf != cf2 {
-		t.Errorf("CommonFields round-trip failed: %+v != %+v", cf, cf2)
+	if cf.DataType != cf2.DataType || cf.Timestamp != cf2.Timestamp || cf.Date != cf2.Date {
+		t.Errorf("CommonFields round-trip failed for basic fields: %+v != %+v", cf, cf2)
+	}
+	
+	// Check message field separately since maps can't be directly compared
+	if cf2.Message == nil {
+		t.Error("Message field should not be nil after round-trip")
 	}
 }
 
@@ -201,13 +145,61 @@ func TestIntegrationWithSyslog(t *testing.T) {
 	if err != nil {
 		t.Errorf("WriteEntry() failed: %v", err)
 	}
+}
 
-	// Check statistics
-	stats := writer.GetStatistics()
-	if stats.TotalEntries != 1 {
-		t.Errorf("TotalEntries = %v, want 1", stats.TotalEntries)
+func TestMessageFieldValidation(t *testing.T) {
+	writer := &Writer{
+		config: &Config{
+			Tag:          "test",
+			MaxEntrySize: 4096,
+			Verbose:      false,
+		},
 	}
-	if stats.SuccessEntries != 1 {
-		t.Errorf("SuccessEntries = %v, want 1", stats.SuccessEntries)
+
+	tests := []struct {
+		name      string
+		jsonEntry string
+		wantErr   bool
+		errMsg    string
+	}{
+		{
+			name:      "message with object",
+			jsonEntry: `{"data_type":"interface_counters","timestamp":"2024-01-15T10:30:00Z","date":"2024-01-15","message":{"interface":"eth0","counters":{"rx":12345,"tx":67890}}}`,
+			wantErr:   false,
+		},
+		{
+			name:      "message with array",
+			jsonEntry: `{"data_type":"interface_list","timestamp":"2024-01-15T10:30:00Z","date":"2024-01-15","message":["eth0","eth1","eth2"]}`,
+			wantErr:   false,
+		},
+		{
+			name:      "message with string",
+			jsonEntry: `{"data_type":"system_log","timestamp":"2024-01-15T10:30:00Z","date":"2024-01-15","message":"System startup completed"}`,
+			wantErr:   false,
+		},
+		{
+			name:      "message with number",
+			jsonEntry: `{"data_type":"metric","timestamp":"2024-01-15T10:30:00Z","date":"2024-01-15","message":42}`,
+			wantErr:   false,
+		},
+		{
+			name:      "message with null",
+			jsonEntry: `{"data_type":"test","timestamp":"2024-01-15T10:30:00Z","date":"2024-01-15","message":null}`,
+			wantErr:   true,
+			errMsg:    "missing required field: message",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := writer.validateEntry(tt.jsonEntry)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("validateEntry() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if tt.wantErr && !strings.Contains(err.Error(), tt.errMsg) {
+				t.Errorf("validateEntry() error = %v, want error containing %v", err, tt.errMsg)
+			}
+		})
 	}
 }
