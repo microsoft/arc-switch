@@ -99,7 +99,11 @@ func (sw *SyslogWriter) WriteEntry(jsonEntry string, verbose bool) error {
 	
 	sw.stats.SuccessEntries++
 	if verbose {
-		fmt.Printf("Successfully logged JSON entry: %s\n", entry[:min(100, len(entry))]+"...")
+		if len(entry) > 100 {
+			fmt.Printf("Successfully logged JSON entry: %s\n", entry[:100]+"...")
+		} else {
+			fmt.Printf("Successfully logged JSON entry: %s\n", entry)
+		}
 	}
 	
 	return nil
