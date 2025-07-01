@@ -323,10 +323,4 @@ func ParseSyslogFacility(facility string) (syslog.Priority, error) {
 	}
 }
 
-// min returns the minimum of two integers
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
+// Removed unused `min` function to reduce dead code.
