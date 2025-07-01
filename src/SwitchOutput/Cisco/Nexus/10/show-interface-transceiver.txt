@@ -1,11 +1,11 @@
-RR1-S46-R14-93180hl-22-1a# show interface transceiver details  | no
+CONTOSO-DC1-TOR-01# show interface transceiver details  | no
 Ethernet1/1
     transceiver is present
     type is SFP-H25GB-CU3M
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF241007Y4
+    serial number is XYZ24001A1A
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -23,7 +23,7 @@ Ethernet1/2
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF24100DR8
+    serial number is XYZ24001A1B
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -41,7 +41,7 @@ Ethernet1/3
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF241005C4
+    serial number is XYZ24001A1C
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -59,7 +59,7 @@ Ethernet1/4
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF2410019F
+    serial number is XYZ24001A1D
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -77,7 +77,7 @@ Ethernet1/5
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF2411072D
+    serial number is XYZ24001A1E
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -95,7 +95,7 @@ Ethernet1/6
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF241106LC
+    serial number is XYZ24001A1F
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -113,7 +113,7 @@ Ethernet1/7
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF241000GA
+    serial number is XYZ24001A1G
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -131,7 +131,7 @@ Ethernet1/8
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF241104JT
+    serial number is XYZ24001A1H
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -149,7 +149,7 @@ Ethernet1/9
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF2411048V
+    serial number is XYZ24001A1J
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -167,7 +167,7 @@ Ethernet1/10
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF24100684
+    serial number is XYZ24001A1K
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -185,7 +185,7 @@ Ethernet1/11
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF241105PG
+    serial number is XYZ24001A1L
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -203,7 +203,7 @@ Ethernet1/12
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF241002FJ
+    serial number is XYZ24001A1M
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -221,7 +221,7 @@ Ethernet1/13
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF241104YV
+    serial number is XYZ24001A1N
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -239,7 +239,7 @@ Ethernet1/14
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF2411051W
+    serial number is XYZ24001A1P
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -257,7 +257,7 @@ Ethernet1/15
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF2411058N
+    serial number is XYZ24001A1Q
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -275,7 +275,7 @@ Ethernet1/16
     name is CISCO-AMPHENOL
     part number is NDCCGJ-C403
     revision is A
-    serial number is APF241104VT
+    serial number is XYZ24001A1R
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 3 m
     cable type is CA-S
@@ -293,7 +293,7 @@ Ethernet1/17
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19333716263A
+    serial number is SIM24001B1A
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -318,7 +318,7 @@ Ethernet1/18
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19333718563B
+    serial number is SIM24001B1B
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -343,7 +343,7 @@ Ethernet1/19
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19333716163A
+    serial number is SIM24001B1C
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -368,7 +368,7 @@ Ethernet1/20
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332716163B
+    serial number is SIM24001B1D
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -393,7 +393,7 @@ Ethernet1/21
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19333712863A
+    serial number is SIM24001B1E
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -418,7 +418,7 @@ Ethernet1/22
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19333714463B
+    serial number is SIM24001B1F
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -443,7 +443,7 @@ Ethernet1/23
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332713763B
+    serial number is SIM24001B1G
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -468,7 +468,7 @@ Ethernet1/24
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332712663A
+    serial number is SIM24001B1H
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -493,7 +493,7 @@ Ethernet1/25
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332716663B
+    serial number is SIM24001B1J
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -518,7 +518,7 @@ Ethernet1/26
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332717663B
+    serial number is SIM24001B1K
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -543,7 +543,7 @@ Ethernet1/27
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332710763B
+    serial number is SIM24001B1L
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -568,7 +568,7 @@ Ethernet1/28
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332717563B
+    serial number is SIM24001B1M
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -593,7 +593,7 @@ Ethernet1/29
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332713663A
+    serial number is SIM24001B1N
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -618,7 +618,7 @@ Ethernet1/30
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332717763B
+    serial number is SIM24001B1P
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -643,7 +643,7 @@ Ethernet1/31
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332717263B
+    serial number is SIM24001B1Q
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -668,7 +668,7 @@ Ethernet1/32
     name is Siemon
     part number is S1S10F-V05.0M13
     revision is A
-    serial number is 19332718263A
+    serial number is SIM24001B1R
     nominal bitrate is 10300 MBit/sec
     cisco id is 3
     cisco extended id number is 4
@@ -717,7 +717,7 @@ Ethernet1/41
     name is CISCO-AMPHENOL
     part number is NDCCGF-C401
     revision is A
-    serial number is APF24100D9V
+    serial number is XYZ24002C1A
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 1 m
     cable type is CA-N
@@ -735,7 +735,7 @@ Ethernet1/42
     name is CISCO-AMPHENOL
     part number is NDCCGF-C401
     revision is A
-    serial number is APF24100DH8
+    serial number is XYZ24002C1B
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 1 m
     cable type is CA-N
@@ -756,7 +756,7 @@ Ethernet1/44
     name is CISCO-AMPHENOL
     part number is NDCCGF-C401
     revision is A
-    serial number is APF24100DN0
+    serial number is XYZ24002C1C
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 1 m
     cable type is CA-N
@@ -780,7 +780,7 @@ Ethernet1/47
     name is CISCO-AVAGO
     part number is SFBR-709SMZ-CS1
     revision is G4.1
-    serial number is AVD22439F6Y
+    serial number is AVG24001D1A
     nominal bitrate is 10300 MBit/sec
     Link length supported for 50/125um OM2 fiber is 82 m
     Link length supported for 62.5/125um fiber is 26 m
@@ -811,7 +811,7 @@ Ethernet1/48
     name is CISCO-AVAGO
     part number is SFBR-709SMZ-CS1
     revision is G4.1
-    serial number is AVD22439F7K
+    serial number is AVG24001D1B
     nominal bitrate is 10300 MBit/sec
     Link length supported for 50/125um OM2 fiber is 82 m
     Link length supported for 62.5/125um fiber is 26 m
@@ -842,7 +842,7 @@ Ethernet1/49
     name is CISCO-AMPHENOL
     part number is NDAAFF-C401
     revision is A 
-    serial number is APF23490GPW-A
+    serial number is XYZ23003Q1A-A
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 1 m
     cisco id is 17
@@ -859,7 +859,7 @@ Ethernet1/50
     name is CISCO-AMPHENOL
     part number is NDAAFF-C401
     revision is A 
-    serial number is APF23490GR9-A
+    serial number is XYZ23003Q1B-A
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 1 m
     cisco id is 17
@@ -876,7 +876,7 @@ Ethernet1/51
     name is CISCO-AMPHENOL
     part number is NDAAFF-C401
     revision is A 
-    serial number is APF231902C8-B
+    serial number is XYZ23003Q1C-B
     nominal bitrate is 25500 MBit/sec
     Link length supported for copper is 1 m
     cisco id is 17

@@ -1,4 +1,4 @@
-RR1-S46-R14-93180hl-22-1a# show run interface 
+CONTOSO-DC1-TOR-01# show run interface 
 
 !Command: show running-config interface
 !Running configuration last done at: Mon Mar  3 11:56:19 2025
@@ -15,32 +15,32 @@ interface Vlan6
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.71.129.2/25
+  ip address 192.168.101.2/25
   no ipv6 redirects
   hsrp version 2
   hsrp 6 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.71.129.1
+    ip 192.168.101.1
 
 interface Vlan7
   description Management
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.160.2/24
+  ip address 192.168.1.2/24
   no ipv6 redirects
   hsrp version 2
   hsrp 7 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.160.1
-  ip dhcp relay address 100.71.83.125 
-  ip dhcp relay address 100.71.83.124 
-  ip dhcp relay address 100.71.83.123 
-  ip dhcp relay address 100.71.83.122 
-  ip dhcp relay address 100.71.83.121 
-  ip dhcp relay address 100.71.83.120 
-  ip dhcp relay address 100.71.83.119 
-  ip dhcp relay address 100.71.83.118 
+    ip 192.168.1.1
+  ip dhcp relay address 192.168.100.125 
+  ip dhcp relay address 192.168.100.124 
+  ip dhcp relay address 192.168.100.123 
+  ip dhcp relay address 192.168.100.122 
+  ip dhcp relay address 192.168.100.121 
+  ip dhcp relay address 192.168.100.120 
+  ip dhcp relay address 192.168.100.119 
+  ip dhcp relay address 192.168.100.118 
 
 interface Vlan99
   no ip redirects
@@ -51,49 +51,49 @@ interface Vlan125
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.71.83.95/26
+  ip address 192.168.100.95/26
   no ipv6 redirects
   hsrp version 2
   hsrp 125 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.71.83.65
+    ip 192.168.100.65
 
 interface Vlan201
   description Tenant_1
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.161.2/24
+  ip address 192.168.2.2/24
   no ipv6 redirects
   hsrp version 2
   hsrp 201 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.161.1
+    ip 192.168.2.1
 
 interface Vlan301
   description Logical_Tenant_1
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.162.2/25
+  ip address 192.168.3.2/25
   no ipv6 redirects
   hsrp version 2
   hsrp 301 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.162.1
+    ip 192.168.3.1
 
 interface Vlan401
   description DHCP_Tenant_1
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.162.130/25
+  ip address 192.168.3.130/25
   no ipv6 redirects
   hsrp version 2
   hsrp 401 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.162.129
-  ip dhcp relay address 100.71.83.126 
+    ip 192.168.3.129
+  ip dhcp relay address 192.168.100.126 
   ip dhcp relay address 10.10.43.48 
   ip dhcp relay address 10.10.42.48 
 
@@ -102,192 +102,192 @@ interface Vlan501
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.2/28
+  ip address 192.168.4.2/28
   no ipv6 redirects
   hsrp version 2
   hsrp 501 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.1
+    ip 192.168.4.1
 
 interface Vlan502
   description L3_Forwarding_2
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.18/28
+  ip address 192.168.4.18/28
   no ipv6 redirects
   hsrp version 2
   hsrp 502 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.17
+    ip 192.168.4.17
 
 interface Vlan503
   description L3_Forwarding_3
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.34/28
+  ip address 192.168.4.34/28
   no ipv6 redirects
   hsrp version 2
   hsrp 503 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.33
+    ip 192.168.4.33
 
 interface Vlan504
   description L3_Forwarding_4
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.50/28
+  ip address 192.168.4.50/28
   no ipv6 redirects
   hsrp version 2
   hsrp 504 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.49
+    ip 192.168.4.49
 
 interface Vlan505
   description L3_Forwarding_5
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.66/28
+  ip address 192.168.4.66/28
   no ipv6 redirects
   hsrp version 2
   hsrp 505 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.65
+    ip 192.168.4.65
 
 interface Vlan506
   description L3_Forwarding_6
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.82/28
+  ip address 192.168.4.82/28
   no ipv6 redirects
   hsrp version 2
   hsrp 506 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.81
+    ip 192.168.4.81
 
 interface Vlan507
   description L3_Forwarding_7
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.98/28
+  ip address 192.168.4.98/28
   no ipv6 redirects
   hsrp version 2
   hsrp 507 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.97
+    ip 192.168.4.97
 
 interface Vlan508
   description L3_Forwarding_8
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.114/28
+  ip address 192.168.4.114/28
   no ipv6 redirects
   hsrp version 2
   hsrp 508 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.113
+    ip 192.168.4.113
 
 interface Vlan509
   description L3_Forwarding_9
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.130/28
+  ip address 192.168.4.130/28
   no ipv6 redirects
   hsrp version 2
   hsrp 509 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.129
+    ip 192.168.4.129
 
 interface Vlan510
   description L3_Forwarding_10
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.146/28
+  ip address 192.168.4.146/28
   no ipv6 redirects
   hsrp version 2
   hsrp 510 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.145
+    ip 192.168.4.145
 
 interface Vlan511
   description L3_Forwarding_11
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.162/28
+  ip address 192.168.4.162/28
   no ipv6 redirects
   hsrp version 2
   hsrp 511 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.161
+    ip 192.168.4.161
 
 interface Vlan512
   description L3_Forwarding_12
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.178/28
+  ip address 192.168.4.178/28
   no ipv6 redirects
   hsrp version 2
   hsrp 512 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.177
+    ip 192.168.4.177
 
 interface Vlan513
   description L3_Forwarding_13
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.194/28
+  ip address 192.168.4.194/28
   no ipv6 redirects
   hsrp version 2
   hsrp 513 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.193
+    ip 192.168.4.193
 
 interface Vlan514
   description L3_Forwarding_14
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.210/28
+  ip address 192.168.4.210/28
   no ipv6 redirects
   hsrp version 2
   hsrp 514 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.209
+    ip 192.168.4.209
 
 interface Vlan515
   description L3_Forwarding_15
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.226/28
+  ip address 192.168.4.226/28
   no ipv6 redirects
   hsrp version 2
   hsrp 515 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.225
+    ip 192.168.4.225
 
 interface Vlan516
   description L3_Forwarding_16
   no shutdown
   mtu 9216
   no ip redirects
-  ip address 100.69.163.242/28
+  ip address 192.168.4.242/28
   no ipv6 redirects
   hsrp version 2
   hsrp 516 
     priority 150 forwarding-threshold lower 1 upper 150
-    ip 100.69.163.241
+    ip 192.168.4.241
 
 interface Vlan711
   description Storage_1
@@ -307,7 +307,7 @@ interface port-channel50
   logging event port link-status
   mtu 9216
   service-policy type qos input AZS_SERVICES
-  ip address 100.71.83.17/30
+  ip address 192.168.100.17/30
 
 interface port-channel101
   description VPC:MLAG_PEER:PO101
@@ -329,7 +329,7 @@ interface port-channel102
   vpc 102
 
 interface Tunnel1
-  ip address 2.1.1.1/31
+  ip address 172.16.0.1/31
   tunnel source loopback0
   tunnel destination 10.10.35.140
   description Tunnel_To_WANSIM
@@ -885,7 +885,7 @@ interface Ethernet1/47
   no cdp enable
   mtu 9216
   no ip redirects
-  ip address 100.71.83.10/30
+  ip address 192.168.100.10/30
   no ipv6 redirects
   no shutdown
 
@@ -894,7 +894,7 @@ interface Ethernet1/48
   no cdp enable
   mtu 9216
   no ip redirects
-  ip address 100.71.83.2/30
+  ip address 192.168.100.2/30
   no ipv6 redirects
   no shutdown
 
@@ -966,5 +966,5 @@ interface mgmt0
 
 interface loopback0
   description Loopback_Rack01/Tor1
-  ip address 100.71.83.20/32
+  ip address 192.168.100.20/32
 

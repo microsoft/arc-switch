@@ -1,11 +1,11 @@
-RR1-S46-R14-93180hl-22-1a# show lldp neighbors detail
+CONTOSO-DC1-TOR-01# show lldp neighbors detail
 Capability codes:
   (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device
   (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other
 Device ID            Local Intf      Hold-time  Capability  Port ID  
 
-Chassis id: 0c42.a11c.d5a0
-Port id: 0c42.a11c.d59e
+Chassis id: 1111.2222.3301
+Port id: 1111.2222.3301
 Local Port id: Eth1/1
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -25,8 +25,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.e2c8
-Port id: 0c42.a11c.e2c6
+Chassis id: 1111.2222.3302
+Port id: 1111.2222.3302
 Local Port id: Eth1/2
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -46,8 +46,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.e140
-Port id: 0c42.a11c.e13e
+Chassis id: 1111.2222.3303
+Port id: 1111.2222.3303
 Local Port id: Eth1/3
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -67,8 +67,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.d5e8
-Port id: 0c42.a11c.d5e6
+Chassis id: 1111.2222.3304
+Port id: 1111.2222.3304
 Local Port id: Eth1/4
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -88,8 +88,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.e2e0
-Port id: 0c42.a11c.e2de
+Chassis id: 1111.2222.3305
+Port id: 1111.2222.3305
 Local Port id: Eth1/5
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -109,8 +109,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.c690
-Port id: 0c42.a11c.c68e
+Chassis id: 1111.2222.3306
+Port id: 1111.2222.3306
 Local Port id: Eth1/6
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -130,8 +130,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.8d30
-Port id: 0c42.a11c.8d2e
+Chassis id: 1111.2222.3307
+Port id: 1111.2222.3307
 Local Port id: Eth1/7
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -151,8 +151,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.e4a0
-Port id: 0c42.a11c.e49e
+Chassis id: 1111.2222.3308
+Port id: 1111.2222.3308
 Local Port id: Eth1/8
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -172,8 +172,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.e138
-Port id: 0c42.a11c.e136
+Chassis id: 1111.2222.3309
+Port id: 1111.2222.3309
 Local Port id: Eth1/9
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -193,8 +193,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.91d0
-Port id: 0c42.a11c.91ce
+Chassis id: 1111.2222.3310
+Port id: 1111.2222.3310
 Local Port id: Eth1/10
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -214,8 +214,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.e470
-Port id: 0c42.a11c.e46e
+Chassis id: 1111.2222.3311
+Port id: 1111.2222.3311
 Local Port id: Eth1/11
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -235,8 +235,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.7de8
-Port id: 0c42.a11c.7de6
+Chassis id: 1111.2222.3312
+Port id: 1111.2222.3312
 Local Port id: Eth1/12
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -256,8 +256,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.e110
-Port id: 0c42.a11c.e10e
+Chassis id: 1111.2222.3313
+Port id: 1111.2222.3313
 Local Port id: Eth1/13
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -277,8 +277,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.b1d0
-Port id: 0c42.a11c.b1ce
+Chassis id: 1111.2222.3314
+Port id: 1111.2222.3314
 Local Port id: Eth1/14
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -298,8 +298,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.e278
-Port id: 0c42.a11c.e276
+Chassis id: 1111.2222.3315
+Port id: 1111.2222.3315
 Local Port id: Eth1/15
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -319,8 +319,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a11c.e120
-Port id: 0c42.a11c.e11e
+Chassis id: 1111.2222.3316
+Port id: 1111.2222.3316
 Local Port id: Eth1/16
 Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
 System Name: null
@@ -340,8 +340,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a18c.d97e
-Port id: 0c42.a18c.d97c
+Chassis id: 2222.3333.4417
+Port id: 2222.3333.4417
 Local Port id: Eth1/17
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -361,8 +361,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a18c.d5de
-Port id: 0c42.a18c.d5dc
+Chassis id: 2222.3333.4418
+Port id: 2222.3333.4418
 Local Port id: Eth1/18
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -382,8 +382,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.062a
-Port id: 0c42.a17e.0628
+Chassis id: 2222.3333.4419
+Port id: 2222.3333.4419
 Local Port id: Eth1/19
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -403,8 +403,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.10fa
-Port id: 0c42.a17e.10f8
+Chassis id: 2222.3333.4420
+Port id: 2222.3333.4420
 Local Port id: Eth1/20
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -424,8 +424,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a18c.d60e
-Port id: 0c42.a18c.d60c
+Chassis id: 2222.3333.4421
+Port id: 2222.3333.4421
 Local Port id: Eth1/21
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -445,8 +445,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.0fba
-Port id: 0c42.a17e.0fb8
+Chassis id: 2222.3333.4422
+Port id: 2222.3333.4422
 Local Port id: Eth1/22
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -466,8 +466,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.0ffa
-Port id: 0c42.a17e.0ff8
+Chassis id: 2222.3333.4423
+Port id: 2222.3333.4423
 Local Port id: Eth1/23
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -487,8 +487,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.0dca
-Port id: 0c42.a17e.0dc8
+Chassis id: 2222.3333.4424
+Port id: 2222.3333.4424
 Local Port id: Eth1/24
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -508,8 +508,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.0fda
-Port id: 0c42.a17e.0fd8
+Chassis id: 2222.3333.4425
+Port id: 2222.3333.4425
 Local Port id: Eth1/25
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -529,8 +529,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a18c.d5d6
-Port id: 0c42.a18c.d5d4
+Chassis id: 2222.3333.4426
+Port id: 2222.3333.4426
 Local Port id: Eth1/26
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -550,8 +550,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a18c.d566
-Port id: 0c42.a18c.d564
+Chassis id: 2222.3333.4427
+Port id: 2222.3333.4427
 Local Port id: Eth1/27
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -571,8 +571,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.0e3a
-Port id: 0c42.a17e.0e38
+Chassis id: 2222.3333.4428
+Port id: 2222.3333.4428
 Local Port id: Eth1/28
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -592,8 +592,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 043f.72f8.1c68
-Port id: 043f.72f8.1c66
+Chassis id: 2222.3333.4429
+Port id: 2222.3333.4429
 Local Port id: Eth1/29
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -613,8 +613,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.101a
-Port id: 0c42.a17e.1018
+Chassis id: 2222.3333.4430
+Port id: 2222.3333.4430
 Local Port id: Eth1/30
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -634,8 +634,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.10d2
-Port id: 0c42.a17e.10d0
+Chassis id: 2222.3333.4431
+Port id: 2222.3333.4431
 Local Port id: Eth1/31
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -655,8 +655,8 @@ Status : not advertised
 Link agg ID : 0
 
 
-Chassis id: 0c42.a17e.10c2
-Port id: 0c42.a17e.10c0
+Chassis id: 2222.3333.4432
+Port id: 2222.3333.4432
 Local Port id: Eth1/32
 Port Description: ConnectX-5, 100G/50G/40G/25G/10G/1G QSFP
 System Name: null
@@ -680,14 +680,14 @@ Chassis id: 2416.9d9f.08b0
 Port id: Ethernet1/41
 Local Port id: Eth1/41
 Port Description: MLAG Heartbeat and iBGP TOR1-TOR2
-System Name: RR1-S46-R14-93180hl-22-1b.azs1.Microsoft.local
+System Name: CONTOSO-DC1-TOR-01.contoso.local
 System Description: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
 TAC support: http://www.cisco.com/tac
 Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
 Time remaining: 117 seconds
 System Capabilities: B, R
 Enabled Capabilities: B, R
-Management Address: 2416.9d9f.08b0
+Management Address: 1234.5678.90ab
 Management Address IPV6: not advertised
 Vlan ID: not advertised
 Max Frame Size: 9216
@@ -703,14 +703,14 @@ Chassis id: 2416.9d9f.08b1
 Port id: Ethernet1/42
 Local Port id: Eth1/42
 Port Description: MLAG Heartbeat and iBGP TOR1-TOR2
-System Name: RR1-S46-R14-93180hl-22-1b.azs1.Microsoft.local
+System Name: CONTOSO-DC1-TOR-01.contoso.local
 System Description: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
 TAC support: http://www.cisco.com/tac
 Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
 Time remaining: 117 seconds
 System Capabilities: B, R
 Enabled Capabilities: B, R
-Management Address: 2416.9d9f.08b1
+Management Address: 1234.5678.90ac
 Management Address IPV6: not advertised
 Vlan ID: not advertised
 Max Frame Size: 9216
@@ -726,14 +726,14 @@ Chassis id: ac7a.56c3.c9aa
 Port id: Ethernet1/51
 Local Port id: Eth1/44
 Port Description: L2 connection to TOR-BMC
-System Name: RR1-S46-R14-9348bmc-22-1.azs1.Microsoft.local
+System Name: CONTOSO-DC1-BMC-01.contoso.local
 System Description: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
 TAC support: http://www.cisco.com/tac
 Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
 Time remaining: 94 seconds
 System Capabilities: B, R
 Enabled Capabilities: B, R
-Management Address: ac7a.56c3.c9aa
+Management Address: 1234.5678.90ad
 Management Address IPV6: not advertised
 Vlan ID: 1
 Max Frame Size: 1500
@@ -748,8 +748,8 @@ Link agg ID : 102
 Chassis id: 689e.0baf.916a
 Port id: Ethernet1/12/3
 Local Port id: Eth1/47
-Port Description: INFRA:PTP:rr1-s46-r14-93180hl-22-1a:Eth1/47:HL
-System Name: RR1-S46-R01-9336ssp-1b.corp.microsoft.com
+Port Description: INFRA:PTP:Uplink-to-Spine:Eth1/47:HL
+System Name: CONTOSO-DC1-SPINE-01.contoso.com
 System Description: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
 TAC support: http://www.cisco.com/tac
 Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
@@ -757,7 +757,7 @@ Time remaining: 91 seconds
 System Capabilities: B, R
 Enabled Capabilities: B, R
 Management Address: not advertised
-Management Address IPV6: 2001:4898:e0:2::546:1002
+Management Address IPV6: 2001:db8:1234:5678::1001
 Vlan ID: not advertised
 Max Frame Size: 9100
 Vlan Name TLV:
@@ -771,8 +771,8 @@ Link agg ID : 0
 Chassis id: 7864.a052.706e
 Port id: Ethernet1/12/3
 Local Port id: Eth1/48
-Port Description: INFRA:PTP:rr1-s46-r14-93180hl-22-1a:Eth1/48:HL
-System Name: RR1-S46-R01-9336ssp-1a.corp.microsoft.com
+Port Description: INFRA:PTP:Uplink-to-Spine:Eth1/48:HL
+System Name: CONTOSO-DC1-SPINE-02.contoso.com
 System Description: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
 TAC support: http://www.cisco.com/tac
 Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
@@ -780,7 +780,7 @@ Time remaining: 115 seconds
 System Capabilities: B, R
 Enabled Capabilities: B, R
 Management Address: not advertised
-Management Address IPV6: 2001:4898:e0:2::546:1010
+Management Address IPV6: 2001:db8:1234:5678::1010
 Vlan ID: not advertised
 Max Frame Size: 9100
 Vlan Name TLV:
@@ -795,14 +795,14 @@ Chassis id: 2416.9d9f.08b8
 Port id: Ethernet1/49
 Local Port id: Eth1/49
 Port Description: L2 MLAG_PEER
-System Name: RR1-S46-R14-93180hl-22-1b.azs1.Microsoft.local
+System Name: CONTOSO-DC1-TOR-01.contoso.local
 System Description: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
 TAC support: http://www.cisco.com/tac
 Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
 Time remaining: 117 seconds
 System Capabilities: B, R
 Enabled Capabilities: B, R
-Management Address: 2416.9d9f.08b8
+Management Address: 1234.5678.90ae
 Management Address IPV6: not advertised
 Vlan ID: 99
 Max Frame Size: 1500
@@ -821,14 +821,14 @@ Chassis id: 2416.9d9f.08bc
 Port id: Ethernet1/50
 Local Port id: Eth1/50
 Port Description: L2 MLAG_PEER
-System Name: RR1-S46-R14-93180hl-22-1b.azs1.Microsoft.local
+System Name: CONTOSO-DC1-TOR-01.contoso.local
 System Description: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
 TAC support: http://www.cisco.com/tac
 Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
 Time remaining: 117 seconds
 System Capabilities: B, R
 Enabled Capabilities: B, R
-Management Address: 2416.9d9f.08bc
+Management Address: 1234.5678.90af
 Management Address IPV6: not advertised
 Vlan ID: 99
 Max Frame Size: 1500
@@ -847,14 +847,14 @@ Chassis id: 2416.9d9f.08c0
 Port id: Ethernet1/51
 Local Port id: Eth1/51
 Port Description: L2 MLAG_PEER
-System Name: RR1-S46-R14-93180hl-22-1b.azs1.Microsoft.local
+System Name: CONTOSO-DC1-TOR-01.contoso.local
 System Description: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
 TAC support: http://www.cisco.com/tac
 Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
 Time remaining: 117 seconds
 System Capabilities: B, R
 Enabled Capabilities: B, R
-Management Address: 2416.9d9f.08c0
+Management Address: 1234.5678.90b0
 Management Address IPV6: not advertised
 Vlan ID: 99
 Max Frame Size: 1500

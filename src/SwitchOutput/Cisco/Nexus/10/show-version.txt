@@ -1,4 +1,4 @@
-RR1-S46-R14-93180hl-22-1a# show version 
+CONTOSO-DC1-TOR-01# show version 
 Cisco Nexus Operating System (NX-OS) Software
 TAC support: http://www.cisco.com/tac
 Copyright (C) 2002-2023, Cisco and/or its affiliates.
@@ -29,8 +29,8 @@ Software
 Hardware
   cisco Nexus9000 C93180YC-FX Chassis 
   Intel(R) Xeon(R) CPU D-1528 @ 1.90GHz with 24544600 kB of memory.
-  Processor Board ID FDO24121E9M
-  Device name: RR1-S46-R14-93180hl-22-1a
+  Processor Board ID FKE24000X1A
+  Device name: CONTOSO-DC1-TOR-01
   bootflash:  115805708 kB
 
 Kernel uptime is 264 day(s), 19 hour(s), 10 minute(s), 47 second(s)

@@ -1,4 +1,4 @@
-RR1-S46-R14-93180hl-22-1a# show inventory all 
+CONTOSO-DC1-TOR-01# show inventory all 
 NAME: "Chassis",  DESCR: "Nexus9000 C93180YC-FX Chassis"         
 PID: N9K-C93180YC-FX     ,  VID: V04 ,  SN: FKE24000X1A          
 

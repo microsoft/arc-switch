@@ -1,4 +1,4 @@
-RR1-S46-R14-93180hl-22-1a# show environment power detail 
+CONTOSO-DC1-TOR-01# show environment power detail 
 Power Supply:
 Voltage: 12 Volts
 Power                      Actual             Actual        Total

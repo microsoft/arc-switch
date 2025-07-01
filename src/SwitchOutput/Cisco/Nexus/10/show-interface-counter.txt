@@ -1,4 +1,4 @@
-RR1-S46-R14-93180hl-22-1a# show interface counters 
+CONTOSO-DC1-TOR-01# show interface counters 
 
 ----------------------------------------------------------------------------------
 Port                                     InOctets                      InUcastPkts

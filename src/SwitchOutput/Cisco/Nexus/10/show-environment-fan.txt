@@ -1,4 +1,4 @@
-RR1-S46-R14-93180hl-22-1a# show environment fan 
+CONTOSO-DC1-TOR-01# show environment fan 
 Fan:
 ---------------------------------------------------------------------------
 Fan             Model                Hw     Direction       Status
