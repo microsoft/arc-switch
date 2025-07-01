@@ -49,9 +49,9 @@ func TestParseARP(t *testing.T) {
 		"100.71.83.13":  {"689e.0baf.913b", "ethernet", false},
 	}
 
-	entryMap := make(map[string]ARPTableEntry)
+	entryMap := make(map[string]StandardEntry)
 	for _, entry := range entries {
-		entryMap[entry.IPAddress] = entry
+		entryMap[entry.Message.IPAddress] = entry
 	}
 
 	for ip, expected := range expectedEntries {
@@ -61,16 +61,16 @@ func TestParseARP(t *testing.T) {
 			continue
 		}
 
-		if entry.MACAddress != expected.macAddress {
-			t.Errorf("For IP %s, expected MAC %s, got %s", ip, expected.macAddress, entry.MACAddress)
+		if entry.Message.MACAddress != expected.macAddress {
+			t.Errorf("For IP %s, expected MAC %s, got %s", ip, expected.macAddress, entry.Message.MACAddress)
 		}
 
-		if entry.InterfaceType != expected.interfaceType {
-			t.Errorf("For IP %s, expected interface type %s, got %s", ip, expected.interfaceType, entry.InterfaceType)
+		if entry.Message.InterfaceType != expected.interfaceType {
+			t.Errorf("For IP %s, expected interface type %s, got %s", ip, expected.interfaceType, entry.Message.InterfaceType)
 		}
 
-		if entry.CFSoESync != expected.cfsoeSync {
-			t.Errorf("For IP %s, expected CFSoESync %v, got %v", ip, expected.cfsoeSync, entry.CFSoESync)
+		if entry.Message.CFSoESync != expected.cfsoeSync {
+			t.Errorf("For IP %s, expected CFSoESync %v, got %v", ip, expected.cfsoeSync, entry.Message.CFSoESync)
 		}
 
 		// Verify data type is set correctly
@@ -178,13 +178,13 @@ func TestJSONOutput(t *testing.T) {
 		}
 
 		// Test that we can unmarshal back
-		var unmarshaled ARPTableEntry
+		var unmarshaled StandardEntry
 		err = json.Unmarshal(jsonData, &unmarshaled)
 		if err != nil {
 			t.Errorf("Failed to unmarshal JSON: %v", err)
 		}
 
-		if unmarshaled.IPAddress != entry.IPAddress {
+		if unmarshaled.Message.IPAddress != entry.Message.IPAddress {
 			t.Errorf("JSON round-trip failed for IP address")
 		}
 	}

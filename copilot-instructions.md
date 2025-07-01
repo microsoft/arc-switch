@@ -236,6 +236,31 @@ When creating new parsers, ensure:
 - Document all message field structures in the parser's README
 - Include sample input and output files for testing
 - Write unit tests that validate JSON structure compliance
+- **Test parser output with the validation script**: Use `./validate-parser-output.sh` to verify compliance with the standardized JSON structure
+
+#### Output Validation
+
+The project includes a validation script at the root level (`validate-parser-output.sh`) that verifies parser outputs conform to the standardized JSON structure. This script supports multiple JSON formats:
+
+- Single JSON object (compact or pretty-printed)
+- JSON array containing multiple objects  
+- Concatenated JSON objects (newline-separated)
+- Live parser output via stdin
+
+**Usage examples:**
+```bash
+# Validate a parser output file
+./validate-parser-output.sh parser-output.json
+
+# Validate live parser output
+./parser -input data.txt | ./validate-parser-output.sh
+
+# Test your parser's compliance
+cd src/SwitchOutput/Cisco/Nexus/10/ip_arp_parser
+./ip_arp_parser -input ../show-ip-arp.txt | /workspaces/arc-switch2/validate-parser-output.sh
+```
+
+**Always run the validation script on your parser output before committing code.**
 
 ### Project Structure
 

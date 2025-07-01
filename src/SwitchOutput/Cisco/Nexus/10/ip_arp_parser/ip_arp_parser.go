@@ -12,11 +12,16 @@ import (
 	"time"
 )
 
+// StandardEntry represents the standardized JSON structure for syslog compatibility
+type StandardEntry struct {
+	DataType  string      `json:"data_type"`  // Identifies the type of data
+	Timestamp string      `json:"timestamp"`  // Timestamp when the data was processed
+	Date      string      `json:"date"`       // Date when the data was processed
+	Message   ARPTableEntry `json:"message"`  // ARP-specific data
+}
+
 // ARPTableEntry represents a single entry in the Cisco Nexus IP ARP table
 type ARPTableEntry struct {
-	DataType             string `json:"data_type"`                        // Identifies the type of data for KQL queries
-	Timestamp            string `json:"timestamp"`                        // Timestamp when the data was processed
-	Date                 string `json:"date"`                             // Date when the data was processed
 	IPAddress            string `json:"ip_address"`                       // IP address
 	Age                  string `json:"age"`                              // Age (format: HH:MM:SS or decimal seconds)
 	MACAddress           string `json:"mac_address"`                      // MAC address
@@ -47,16 +52,16 @@ type Command struct {
 }
 
 // parseARP parses the IP ARP table output and emits each entry as JSON
-func parseARP(input string) ([]ARPTableEntry, error) {
+func parseARP(input string) ([]StandardEntry, error) {
 	scanner := bufio.NewScanner(strings.NewReader(input))
 	
 	// Get current timestamp
 	now := time.Now()
-	// Windows/.NET format: MM/dd/yyyy hh:mm:ss tt
-	timestamp := now.Format("01/02/2006 03:04:05 PM")
-	date := now.Format("01/02/2006") // MM/dd/yyyy format
+	// ISO 8601 format for timestamp
+	timestamp := now.Format(time.RFC3339)
+	date := now.Format("2006-01-02") // ISO format
 	
-	var entries []ARPTableEntry
+	var entries []StandardEntry
 	
 	// Read until we find the table headers
 	foundHeader := false
@@ -95,7 +100,13 @@ func parseARP(input string) ([]ARPTableEntry, error) {
 		if foundHeader {
 			entry := parseARPLine(line, timestamp, date)
 			if entry != nil {
-				entries = append(entries, *entry)
+				standardEntry := StandardEntry{
+					DataType:  "cisco_nexus_arp_entry",
+					Timestamp: timestamp,
+					Date:      date,
+					Message:   *entry,
+				}
+				entries = append(entries, standardEntry)
 			}
 		}
 	}
@@ -120,9 +131,6 @@ func parseARPLine(line, timestamp, date string) *ARPTableEntry {
 	}
 	
 	entry := &ARPTableEntry{
-		DataType:    "cisco_nexus_arp_entry",
-		Timestamp:   timestamp,
-		Date:        date,
 		IPAddress:   matches[1],
 		Age:         matches[2],
 		MACAddress:  matches[3],
@@ -183,44 +191,6 @@ func parseFlags(entry *ARPTableEntry, flags string) {
 	if strings.Contains(flags, "D") {
 		entry.StaticDownInterface = true
 	}
-}
-
-// loadCommandConfig loads the commands configuration from commands.json
-func loadCommandConfig() (*CommandConfig, error) {
-	file, err := os.Open("commands.json")
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var config CommandConfig
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&config)
-	if err != nil {
-		return nil, err
-	}
-
-	return &config, nil
-}
-
-// findCommand finds a command by name in the configuration
-func findCommand(config *CommandConfig, name string) *Command {
-	for _, cmd := range config.Commands {
-		if cmd.Name == name {
-			return &cmd
-		}
-	}
-	return nil
-}
-
-// executeVSHCommand executes a command via VSH (Virtual Shell)
-func executeVSHCommand(command string) (string, error) {
-	cmd := exec.Command("vsh", "-c", command)
-	output, err := cmd.Output()
-	if err != nil {
-		return "", fmt.Errorf("failed to execute vsh command '%s': %v", command, err)
-	}
-	return string(output), nil
 }
 
 // loadCommandsFromFile loads the commands configuration from a JSON file

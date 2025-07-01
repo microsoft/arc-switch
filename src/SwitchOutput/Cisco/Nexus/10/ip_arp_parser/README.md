@@ -113,19 +113,42 @@ Address         Age       MAC Address     Interface       Flags
 
 ## Output Format
 
-Each ARP entry produces a JSON object with the following fields:
+The parser outputs JSON Lines format with a standardized structure compatible with the syslogwriter library. Each ARP entry produces a JSON object with the following structure:
 
-### Core Fields
+### Standardized Structure
+
+```json
+{
+  "data_type": "cisco_nexus_arp_entry",
+  "timestamp": "2025-07-01T22:55:29Z",
+  "date": "2025-07-01",
+  "message": {
+    // ARP-specific fields here
+  }
+}
+```
+
+### Required Fields
+
 - `data_type`: Always "cisco_nexus_arp_entry"
-- `timestamp`: Processing timestamp (MM/dd/yyyy hh:mm:ss tt format)
-- `date`: Processing date (MM/dd/yyyy format)
+- `timestamp`: Processing timestamp in ISO 8601 format (e.g., "2025-07-01T22:55:29Z")
+- `date`: Processing date in ISO format (YYYY-MM-DD)
+- `message`: JSON object containing all ARP-specific data
+
+### Message Fields
+
+The `message` field contains all ARP-specific data:
+
+#### Core ARP Data
+
 - `ip_address`: IP address from ARP entry
 - `age`: Age of the entry (HH:MM:SS or decimal seconds)
 - `mac_address`: MAC address in Cisco format (xxxx.xxxx.xxxx)
 - `interface`: Interface name (e.g., Vlan201, Ethernet1/47, port-channel50)
 - `interface_type`: Categorized interface type (vlan, ethernet, port-channel, management, tunnel, loopback, other)
 
-### Flag Fields (only present when true)
+#### Flag Fields (only present when true)
+
 - `non_active_fhrp`: * flag - Adjacencies learnt on non-active FHRP router
 - `cfsoe_sync`: + flag - Adjacencies synced via CFSoE
 - `throttled_glean`: # flag - Adjacencies Throttled for Glean
@@ -134,14 +157,15 @@ Each ARP entry produces a JSON object with the following fields:
 - `re_originated_peer_sync`: RO flag - Re-Originated Peer Sync Entry
 - `static_down_interface`: D flag - Static Adjacencies attached to down interface
 
-### Additional Fields
+#### Additional Fields
+
 - `flags_raw`: Raw flags field for debugging (optional)
 
 ## Sample Output
 
 ```json
-{"data_type":"cisco_nexus_arp_entry","timestamp":"06/30/2025 10:30:45 AM","date":"06/30/2025","ip_address":"100.69.161.1","age":"00:17:58","mac_address":"0000.0c9f.f0c9","interface":"Vlan201","interface_type":"vlan"}
-{"data_type":"cisco_nexus_arp_entry","timestamp":"06/30/2025 10:30:45 AM","date":"06/30/2025","ip_address":"100.69.161.75","age":"00:03:39","mac_address":"02ec.a040.0001","interface":"Vlan201","cfsoe_sync":true,"interface_type":"vlan","flags_raw":"+"}
+{"data_type":"cisco_nexus_arp_entry","timestamp":"2025-07-01T22:55:29Z","date":"2025-07-01","message":{"ip_address":"192.168.2.1","age":"00:17:58","mac_address":"1111.1111.0001","interface":"Vlan201","interface_type":"vlan"}}
+{"data_type":"cisco_nexus_arp_entry","timestamp":"2025-07-01T22:55:29Z","date":"2025-07-01","message":{"ip_address":"192.168.2.200","age":"00:03:46","mac_address":"2222.a0c0.0001","interface":"Vlan201","cfsoe_sync":true,"interface_type":"vlan","flags_raw":"+"}}
 ```
 
 ## Building
@@ -188,6 +212,25 @@ The parser automatically categorizes interfaces based on naming patterns:
 - `Tunnel*` → tunnel
 - `Loopbook*` → loopback
 - Others → other
+
+## Validation
+
+To validate that the parser output conforms to the standardized JSON structure, use the project's validation script:
+
+```bash
+# Validate parser output
+./ip_arp_parser -input show-ip-arp.txt | /workspaces/arc-switch2/validate-parser-output.sh
+
+# Or validate a saved output file
+./ip_arp_parser -input show-ip-arp.txt -output arp-results.json
+/workspaces/arc-switch2/validate-parser-output.sh arp-results.json
+```
+
+The validation script checks for:
+- Presence of all required fields (`data_type`, `timestamp`, `date`, `message`)
+- Correct timestamp format (ISO 8601)
+- Correct date format (YYYY-MM-DD)
+- Valid JSON structure
 
 ## Compatibility
 
