@@ -1,0 +1,8 @@
+{
+    "data_type": "test_entry",
+    "timestamp": "2025-01-15T12:00:00Z",
+    "date": "2025-01-15",
+    "message": {
+        "test": "value"
+    }
+}

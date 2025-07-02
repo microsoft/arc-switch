@@ -1,0 +1,39 @@
+{
+    "data_type": "test_entry",
+    "timestamp": "06/24/2025 10:00:01 AM",
+    "date": "06/24/2025",
+    "message": "Test message 1",
+    "priority": "info"
+}
+{
+    "data_type": "network_device",
+    "timestamp": "06/24/2025 10:00:02 AM",
+    "date": "06/24/2025",
+    "device": "router-01",
+    "status": "online",
+    "ip": "192.168.1.1"
+}
+{
+    "data_type": "system_health",
+    "timestamp": "06/24/2025 10:00:03 AM",
+    "date": "06/24/2025",
+    "cpu_usage": "25%",
+    "memory_usage": "60%",
+    "disk_usage": "40%"
+}
+{
+    "data_type": "user_activity",
+    "timestamp": "06/24/2025 10:00:04 AM",
+    "date": "06/24/2025",
+    "user": "admin",
+    "action": "login",
+    "source_ip": "10.0.0.5"
+}
+{
+    "data_type": "application_log",
+    "timestamp": "06/24/2025 10:00:05 AM",
+    "date": "06/24/2025",
+    "app": "web-server",
+    "level": "warning",
+    "message": "High response time detected"
+}

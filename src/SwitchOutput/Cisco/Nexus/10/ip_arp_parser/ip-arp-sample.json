@@ -1,0 +1,50 @@
+{
+    "data_type": "cisco_nexus_arp_entry",
+    "timestamp": "2025-07-01T22:58:25Z",
+    "date": "2025-07-01",
+    "message": {
+        "ip_address": "192.168.2.1",
+        "age": "00:17:58",
+        "mac_address": "1111.1111.0001",
+        "interface": "Vlan201",
+        "interface_type": "vlan"
+    }
+}
+{
+    "data_type": "cisco_nexus_arp_entry",
+    "timestamp": "2025-06-30T10:30:45Z",
+    "date": "2025-06-30",
+    "message": {
+        "ip_address": "100.69.161.75",
+        "age": "00:03:39",
+        "mac_address": "02ec.a040.0001",
+        "interface": "Vlan201",
+        "cfsoe_sync": true,
+        "interface_type": "vlan",
+        "flags_raw": "+"
+    }
+}
+{
+    "data_type": "cisco_nexus_arp_entry",
+    "timestamp": "2025-06-30T10:30:45Z",
+    "date": "2025-06-30",
+    "message": {
+        "ip_address": "100.71.83.17",
+        "age": "00:16:49",
+        "mac_address": "5ca6.2dbb.64a7",
+        "interface": "port-channel50",
+        "interface_type": "port-channel"
+    }
+}
+{
+    "data_type": "cisco_nexus_arp_entry",
+    "timestamp": "2025-06-30T10:30:45Z",
+    "date": "2025-06-30",
+    "message": {
+        "ip_address": "100.71.83.13",
+        "age": "00:18:12",
+        "mac_address": "689e.0baf.913b",
+        "interface": "Ethernet1/47",
+        "interface_type": "ethernet"
+    }
+}
