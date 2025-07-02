@@ -49,10 +49,10 @@ func TestRunClishOutput(t *testing.T) {
 	// Example: Find the first primary entry in VLAN 7
 	foundPrimary := false
 	for _, entry := range entries {
-		if entry.PrimaryEntry && entry.VLAN == "7" {
+		if entry.Message.PrimaryEntry && entry.Message.VLAN == "7" {
 			foundPrimary = true
-			if entry.Type != "dynamic" {
-				t.Errorf("Expected Type to be 'dynamic', got %q", entry.Type)
+			if entry.Message.Type != "dynamic" {
+				t.Errorf("Expected Type to be 'dynamic', got %q", entry.Message.Type)
 			}
 			break
 		}
@@ -65,20 +65,20 @@ func TestRunClishOutput(t *testing.T) {
 	// Check timestamp formats
 	firstEntry := entries[0]
 	
-	// Check timestamp format MM/dd/yyyy hh:mm:ss tt (Windows/.NET format)
-	tsRegex := `^\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2} [AP]M$`
+	// Check timestamp format ISO 8601
+	tsRegex := `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$`
 	if match, err := regexp.MatchString(tsRegex, firstEntry.Timestamp); err != nil {
 		t.Errorf("Error checking timestamp format: %v", err)
 	} else if !match {
-		t.Errorf("Timestamp not in expected format. Got: %s", firstEntry.Timestamp)
+		t.Errorf("Timestamp not in expected ISO 8601 format. Got: %s", firstEntry.Timestamp)
 	}
 	
-	// Check date format MM/dd/yyyy
-	dateRegex := `^\d{2}/\d{2}/\d{4}$`
+	// Check date format YYYY-MM-DD
+	dateRegex := `^\d{4}-\d{2}-\d{2}$`
 	if match, err := regexp.MatchString(dateRegex, firstEntry.Date); err != nil {
 		t.Errorf("Error checking date format: %v", err)
 	} else if !match {
-		t.Errorf("Date not in expected format. Got: %s", firstEntry.Date)
+		t.Errorf("Date not in expected YYYY-MM-DD format. Got: %s", firstEntry.Date)
 	}
 	
 	fmt.Printf("Successfully parsed %d MAC address table entries from mock clish output\n", len(entries))
@@ -107,10 +107,10 @@ func TestParseMAC(t *testing.T) {
 	// Example: Find the first primary entry in VLAN 7
 	foundPrimary := false
 	for _, entry := range entries {
-		if entry.PrimaryEntry && entry.VLAN == "7" {
+		if entry.Message.PrimaryEntry && entry.Message.VLAN == "7" {
 			foundPrimary = true
-			if entry.Type != "dynamic" {
-				t.Errorf("Expected Type to be 'dynamic', got %q", entry.Type)
+			if entry.Message.Type != "dynamic" {
+				t.Errorf("Expected Type to be 'dynamic', got %q", entry.Message.Type)
 			}
 			break
 		}
@@ -123,9 +123,9 @@ func TestParseMAC(t *testing.T) {
 	// Check for Gateway MAC entries
 	foundGateway := false
 	for _, entry := range entries {
-		if entry.GatewayMAC {
+		if entry.Message.GatewayMAC {
 			foundGateway = true
-			if !entry.RoutedMAC {
+			if !entry.Message.RoutedMAC {
 				t.Error("Gateway MAC entry should have RoutedMAC set to true")
 			}
 			break
@@ -287,7 +287,7 @@ func TestIntegratedCommandExecution(t *testing.T) {
 	// Check a specific entry to ensure proper parsing
 	foundPrimary := false
 	for _, entry := range entries {
-		if entry.PrimaryEntry && entry.VLAN == "7" {
+		if entry.Message.PrimaryEntry && entry.Message.VLAN == "7" {
 			foundPrimary = true
 			break
 		}
@@ -300,12 +300,12 @@ func TestIntegratedCommandExecution(t *testing.T) {
 	// Check timestamp formats
 	firstEntry := entries[0]
 	
-	// Check timestamp format MM/dd/yyyy hh:mm:ss tt (Windows/.NET format)
-	tsRegex := `^\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2} [AP]M$`
+	// Check timestamp format ISO 8601
+	tsRegex := `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$`
 	if match, err := regexp.MatchString(tsRegex, firstEntry.Timestamp); err != nil {
 		t.Errorf("Error checking timestamp format: %v", err)
 	} else if !match {
-		t.Errorf("Timestamp not in expected format. Got: %s", firstEntry.Timestamp)
+		t.Errorf("Timestamp not in expected ISO 8601 format. Got: %s", firstEntry.Timestamp)
 	}
 	
 	fmt.Printf("Successfully executed integrated command flow with %d parsed entries\n", len(entries))

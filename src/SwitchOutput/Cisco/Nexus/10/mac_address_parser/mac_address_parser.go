@@ -12,11 +12,16 @@ import (
 	"time"
 )
 
-// MacTableEntry represents a single entry in the Cisco Nexus MAC address table
-type MacTableEntry struct {
-	DataType     string `json:"data_type"`                  // Identifies the type of data for KQL queries
-	Timestamp    string `json:"timestamp"`                  // Timestamp when the data was processed
-	Date         string `json:"date"`                       // Date when the data was processed
+// StandardizedEntry represents the standardized JSON structure
+type StandardizedEntry struct {
+	DataType  string        `json:"data_type"`  // Always "cisco_nexus_mac_table"
+	Timestamp string        `json:"timestamp"`  // ISO 8601 timestamp
+	Date      string        `json:"date"`       // Date in YYYY-MM-DD format
+	Message   MacTableData  `json:"message"`    // MAC table-specific data
+}
+
+// MacTableData represents the MAC table data within the message field
+type MacTableData struct {
 	PrimaryEntry bool   `json:"primary_entry"`              // * indicates primary entry
 	GatewayMAC   bool   `json:"gateway_mac"`                // G indicates Gateway MAC
 	RoutedMAC    bool   `json:"routed_mac"`                 // (R) indicates Routed MAC
@@ -36,13 +41,13 @@ type MacTableEntry struct {
 }
 
 // parseMAC parses the MAC address table output and emits each entry as JSON
-func parseMAC(input string) ([]MacTableEntry, error) {
+func parseMAC(input string) ([]StandardizedEntry, error) {
 	scanner := bufio.NewScanner(strings.NewReader(input))
-		// Get current timestamp
+	// Get current timestamp
 	now := time.Now()
-	// Windows/.NET format: MM/dd/yyyy hh:mm:ss tt
-	timestamp := now.Format("01/02/2006 03:04:05 PM")
-	date := now.Format("01/02/2006") // MM/dd/yyyy format
+	// ISO 8601 format
+	timestamp := now.Format(time.RFC3339)
+	date := now.Format("2006-01-02") // YYYY-MM-DD format
 	
 	// Read until we find the table headers
 	foundHeader := false
@@ -63,7 +68,7 @@ func parseMAC(input string) ([]MacTableEntry, error) {
 	// MAC table entry line pattern
 	entryPattern := regexp.MustCompile(`^([*+GCO]?)?\s*([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+(.+)$`)
 	
-	var entries []MacTableEntry
+	var entries []StandardizedEntry
 	
 	// Parse each line of the table
 	for scanner.Scan() {
@@ -91,26 +96,29 @@ func parseMAC(input string) ([]MacTableEntry, error) {
 				// Check for special flags in the port field
 		routedMAC := strings.Contains(port, "(R)")
 		port = strings.TrimSuffix(strings.TrimSuffix(port, "(R)"), " ")
-				entry := MacTableEntry{
-			DataType:     "cisco_nexus_mac_table",          // Identifier for KQL queries
-			Timestamp:    timestamp,
-			Date:         date,
-			PrimaryEntry: strings.Contains(prefix, "*"),
-			GatewayMAC:   strings.Contains(prefix, "G"),
-			RoutedMAC:    routedMAC,
-			OverlayMAC:   strings.Contains(prefix, "O"),
-			VLAN:         vlan,
-			MACAddress:   macAddress,
-			Type:         entryType,
-			Age:          age,
-			Secure:       secure,
-			NTFY:         ntfy,
-			Port:         port,
-			VPCPeerLink:  strings.Contains(prefix, "+"),
-			ControlPlane: strings.Contains(prefix, "C"),
-			VSAN:         strings.Contains(prefix, "~"),
-			TrueFlag:     false, // Will be set if specifically indicated
-			FalseFlag:    false, // Will be set if specifically indicated
+		
+		entry := StandardizedEntry{
+			DataType:  "cisco_nexus_mac_table",
+			Timestamp: timestamp,
+			Date:      date,
+			Message: MacTableData{
+				PrimaryEntry: strings.Contains(prefix, "*"),
+				GatewayMAC:   strings.Contains(prefix, "G"),
+				RoutedMAC:    routedMAC,
+				OverlayMAC:   strings.Contains(prefix, "O"),
+				VLAN:         vlan,
+				MACAddress:   macAddress,
+				Type:         entryType,
+				Age:          age,
+				Secure:       secure,
+				NTFY:         ntfy,
+				Port:         port,
+				VPCPeerLink:  strings.Contains(prefix, "+"),
+				ControlPlane: strings.Contains(prefix, "C"),
+				VSAN:         strings.Contains(prefix, "~"),
+				TrueFlag:     false, // Will be set if specifically indicated
+				FalseFlag:    false, // Will be set if specifically indicated
+			},
 		}
 		
 		entries = append(entries, entry)

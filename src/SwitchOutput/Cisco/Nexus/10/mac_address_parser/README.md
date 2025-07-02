@@ -96,26 +96,44 @@ go build -o mac_address_parser mac_address_parser.go
 
 ## JSON Output Format
 
-Each MAC address table entry is output as a JSON object with the following fields:
+Each MAC address table entry is output as a JSON object with the following standardized structure:
 
 ```json
 {
-  "data_type": "cisco_nexus_mac_table",     // Identifies the type of data for KQL queries
-  "timestamp": "06/23/2025 03:04:05 PM",    // Timestamp in Windows/.NET format
-  "date": "06/23/2025",                     // Date in MM/dd/yyyy format
-  "primary_entry": true,                    // * indicates primary entry
-  "gateway_mac": false,                     // G indicates Gateway MAC
-  "routed_mac": false,                      // (R) indicates Routed MAC
-  "overlay_mac": false,                     // O indicates Overlay MAC
-  "vlan": "7",                              // VLAN ID
-  "mac_address": "02ec.a004.0000",          // MAC address
-  "type": "dynamic",                        // Type of entry (dynamic, static, etc.)
-  "age": "NA",                              // Age (seconds since last seen)
-  "secure": "F",                            // Secure flag (T/F)
-  "ntfy": "F",                              // NTFY flag (T/F)
-  "port": "Eth1/1",                         // Port identifier
-  "vpc_peer_link": false                    // + indicates primary entry using vPC Peer-Link
+  "data_type": "cisco_nexus_mac_table",     // Always "cisco_nexus_mac_table" for this parser
+  "timestamp": "2025-01-11T15:04:05Z",      // ISO 8601 timestamp
+  "date": "2025-01-11",                     // Date in YYYY-MM-DD format
+  "message": {                              // All MAC table-specific data is nested here
+    "primary_entry": true,                  // * indicates primary entry
+    "gateway_mac": false,                   // G indicates Gateway MAC
+    "routed_mac": false,                    // (R) indicates Routed MAC
+    "overlay_mac": false,                   // O indicates Overlay MAC
+    "vlan": "7",                            // VLAN ID
+    "mac_address": "02ec.a004.0000",        // MAC address
+    "type": "dynamic",                      // Type of entry (dynamic, static, etc.)
+    "age": "NA",                            // Age (seconds since last seen)
+    "secure": "F",                          // Secure flag (T/F)
+    "ntfy": "F",                            // NTFY flag (T/F)
+    "port": "Eth1/1",                       // Port identifier
+    "vpc_peer_link": false                  // + indicates primary entry using vPC Peer-Link
+  }
 }
+```
+
+## Validation
+
+To validate the output format, you can use the validation script:
+
+```bash
+REPO_ROOT=$(git rev-parse --show-toplevel)
+VAL_PARSER=$(find "$REPO_ROOT" -name "validate-parser-output.sh")
+
+# Generate output and validate it
+./mac_address_parser -input show-mac-address-table.txt | $VAL_PARSER
+
+# Or validate a saved file
+./mac_address_parser -input show-mac-address-table.txt -output mac-table.json
+$VAL_PARSER mac-table.json
 ```
 
 ## Commands JSON Format
@@ -177,16 +195,23 @@ The `data_type` field enables easy filtering in Azure Log Analytics or other sys
 | where data_type == "cisco_nexus_mac_table"
 
 // Find all MAC addresses on a specific VLAN
-| where data_type == "cisco_nexus_mac_table" and vlan == "7"
+| where data_type == "cisco_nexus_mac_table" and message.vlan == "7"
 
 // Get MAC address distribution by port
 | where data_type == "cisco_nexus_mac_table"
-| summarize count() by port
+| summarize count() by tostring(message.port)
 | order by count_ desc
 
 // Find gateway MACs
-| where data_type == "cisco_nexus_mac_table" and gateway_mac == true
+| where data_type == "cisco_nexus_mac_table" and message.gateway_mac == true
 
 // Find entries from a specific date
-| where data_type == "cisco_nexus_mac_table" and date == "06/23/2025"
+| where data_type == "cisco_nexus_mac_table" and date == "2025-01-11"
+
+// Find primary entries using vPC Peer-Link
+| where data_type == "cisco_nexus_mac_table" and message.vpc_peer_link == true
+
+// Show MAC address types distribution
+| where data_type == "cisco_nexus_mac_table"
+| summarize count() by tostring(message.type)
 ```
