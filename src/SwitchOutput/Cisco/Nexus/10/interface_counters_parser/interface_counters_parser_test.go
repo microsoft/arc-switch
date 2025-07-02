@@ -53,7 +53,7 @@ func TestParseCounterValue(t *testing.T) {
 
 func TestParseInterfaceCounters(t *testing.T) {
 	// Sample input data
-	sampleInput := `RR1-S46-R14-93180hl-22-1a# show interface counters 
+	sampleInput := `CONTOSO-TOR1# show interface counters 
 
 ----------------------------------------------------------------------------------
 Port                                     InOctets                      InUcastPkts
@@ -149,13 +149,25 @@ Vlan1                                     --                                --`
 	}
 
 	// Find specific interfaces and test their values
-	interfaceMap := make(map[string]InterfaceCounters)
-	for _, iface := range interfaces {
-		interfaceMap[iface.InterfaceName] = iface
+	interfaceMap := make(map[string]StandardizedEntry)
+	for _, entry := range interfaces {
+		interfaceMap[entry.Message.InterfaceName] = entry
 	}
 
 	// Test Eth1/1
-	if eth1, exists := interfaceMap["Eth1/1"]; exists {
+	if eth1Entry, exists := interfaceMap["Eth1/1"]; exists {
+		eth1 := eth1Entry.Message
+		// Check standardized fields
+		if eth1Entry.DataType != "cisco_nexus_interface_counters" {
+			t.Errorf("Eth1/1 data_type: expected 'cisco_nexus_interface_counters', got '%s'", eth1Entry.DataType)
+		}
+		if eth1Entry.Timestamp == "" {
+			t.Errorf("Eth1/1 timestamp should not be empty")
+		}
+		if eth1Entry.Date == "" {
+			t.Errorf("Eth1/1 date should not be empty")
+		}
+		// Check message fields
 		if eth1.InterfaceType != "ethernet" {
 			t.Errorf("Eth1/1 interface type: expected 'ethernet', got '%s'", eth1.InterfaceType)
 		}
@@ -176,7 +188,8 @@ Vlan1                                     --                                --`
 	}
 
 	// Test Po50 (port-channel)
-	if po50, exists := interfaceMap["Po50"]; exists {
+	if po50Entry, exists := interfaceMap["Po50"]; exists {
+		po50 := po50Entry.Message
 		if po50.InterfaceType != "port-channel" {
 			t.Errorf("Po50 interface type: expected 'port-channel', got '%s'", po50.InterfaceType)
 		}
@@ -188,7 +201,8 @@ Vlan1                                     --                                --`
 	}
 
 	// Test Vlan1 (should have -- values converted to -1)
-	if vlan1, exists := interfaceMap["Vlan1"]; exists {
+	if vlan1Entry, exists := interfaceMap["Vlan1"]; exists {
+		vlan1 := vlan1Entry.Message
 		if vlan1.InterfaceType != "vlan" {
 			t.Errorf("Vlan1 interface type: expected 'vlan', got '%s'", vlan1.InterfaceType)
 		}
@@ -203,7 +217,8 @@ Vlan1                                     --                                --`
 	}
 
 	// Test mgmt0 (management interface)
-	if mgmt0, exists := interfaceMap["mgmt0"]; exists {
+	if mgmt0Entry, exists := interfaceMap["mgmt0"]; exists {
+		mgmt0 := mgmt0Entry.Message
 		if mgmt0.InterfaceType != "management" {
 			t.Errorf("mgmt0 interface type: expected 'management', got '%s'", mgmt0.InterfaceType)
 		}
@@ -218,7 +233,7 @@ Vlan1                                     --                                --`
 	}
 
 	// Test JSON unmarshaling
-	var unmarshaledInterfaces []InterfaceCounters
+	var unmarshaledInterfaces []StandardizedEntry
 	err = json.Unmarshal(jsonData, &unmarshaledInterfaces)
 	if err != nil {
 		t.Errorf("Failed to unmarshal JSON: %v", err)

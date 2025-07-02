@@ -13,11 +13,16 @@ import (
 	"time"
 )
 
-// InterfaceCounters represents a single interface with all its counter metrics
-type InterfaceCounters struct {
-	DataType       string `json:"data_type"`                  // Identifies the type of data for KQL queries
-	Timestamp      string `json:"timestamp"`                  // Timestamp when the data was processed
-	Date           string `json:"date"`                       // Date when the data was processed
+// StandardizedEntry represents the standardized JSON structure
+type StandardizedEntry struct {
+	DataType  string                 `json:"data_type"`  // Always "cisco_nexus_interface_counters"
+	Timestamp string                 `json:"timestamp"`  // ISO 8601 timestamp
+	Date      string                 `json:"date"`       // Date in YYYY-MM-DD format
+	Message   InterfaceCountersData  `json:"message"`    // Interface counters-specific data
+}
+
+// InterfaceCountersData represents the interface counters data within the message field
+type InterfaceCountersData struct {
 	InterfaceName  string `json:"interface_name"`             // Interface name (e.g., Eth1/1, Po50, Vlan1, mgmt0, Tunnel1)
 	InterfaceType  string `json:"interface_type"`             // Type of interface (ethernet, port-channel, vlan, management, tunnel)
 	
@@ -85,9 +90,9 @@ func parseCounterValue(value string) int64 {
 }
 
 // parseInterfaceCounters parses the show interface counters output
-func parseInterfaceCounters(content string) []InterfaceCounters {
-	var interfaces []InterfaceCounters
-	interfaceMap := make(map[string]*InterfaceCounters)
+func parseInterfaceCounters(content string) []StandardizedEntry {
+	var interfaces []StandardizedEntry
+	interfaceMap := make(map[string]*InterfaceCountersData)
 	
 	lines := strings.Split(content, "\n")
 	currentSection := ""
@@ -130,10 +135,7 @@ func parseInterfaceCounters(content string) []InterfaceCounters {
 			
 			// Get or create interface entry
 			if _, exists := interfaceMap[interfaceName]; !exists {
-				interfaceMap[interfaceName] = &InterfaceCounters{
-					DataType:       "interface_counters",
-					Timestamp:      timestamp.Format(time.RFC3339),
-					Date:           timestamp.Format("2006-01-02"),
+				interfaceMap[interfaceName] = &InterfaceCountersData{
 					InterfaceName:  interfaceName,
 					InterfaceType:  parseInterfaceType(interfaceName),
 					InOctets:       -1,
@@ -185,10 +187,16 @@ func parseInterfaceCounters(content string) []InterfaceCounters {
 	}
 	
 	// Convert map to slice and filter out interfaces with no data
-	for _, iface := range interfaceMap {
+	for _, ifaceData := range interfaceMap {
 		// Only include interfaces that have at least some counter data
-		if iface.HasIngressData || iface.HasEgressData {
-			interfaces = append(interfaces, *iface)
+		if ifaceData.HasIngressData || ifaceData.HasEgressData {
+			entry := StandardizedEntry{
+				DataType:  "cisco_nexus_interface_counters",
+				Timestamp: timestamp.Format(time.RFC3339),
+				Date:      timestamp.Format("2006-01-02"),
+				Message:   *ifaceData,
+			}
+			interfaces = append(interfaces, entry)
 		}
 	}
 	
@@ -267,7 +275,6 @@ func main() {
 	}
 
 	var content string
-	var err error
 
 	// Determine input source
 	if *inputFile != "" {
@@ -324,22 +331,36 @@ func main() {
 	interfaces := parseInterfaceCounters(content)
 	fmt.Fprintf(os.Stderr, "Found %d interfaces with counter data\n", len(interfaces))
 
-	// Convert to JSON
-	jsonData, err := json.MarshalIndent(interfaces, "", "  ")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error marshaling to JSON: %v\n", err)
-		os.Exit(1)
-	}
-
-	// Output results
+	// Output results as individual JSON objects (one per line)
 	if *outputFile != "" {
-		err = os.WriteFile(*outputFile, jsonData, 0644)
+		file, err := os.Create(*outputFile)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error writing output file: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Error creating output file: %v\n", err)
 			os.Exit(1)
+		}
+		defer file.Close()
+
+		for _, entry := range interfaces {
+			jsonData, err := json.Marshal(entry)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error marshaling entry to JSON: %v\n", err)
+				os.Exit(1)
+			}
+			_, err = file.Write(append(jsonData, '\n'))
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error writing to output file: %v\n", err)
+				os.Exit(1)
+			}
 		}
 		fmt.Fprintf(os.Stderr, "Interface counters data written to %s\n", *outputFile)
 	} else {
-		fmt.Println(string(jsonData))
+		for _, entry := range interfaces {
+			jsonData, err := json.Marshal(entry)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error marshaling entry to JSON: %v\n", err)
+				os.Exit(1)
+			}
+			fmt.Println(string(jsonData))
+		}
 	}
 }

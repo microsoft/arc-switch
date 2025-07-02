@@ -7,7 +7,8 @@ This tool parses Cisco Nexus `show interface counters` output and converts it to
 - **Dual Input Modes**: Parse from input file or execute commands directly on switch
 - **Comprehensive Metrics**: Captures all interface counter metrics (ingress/egress octets, unicast/multicast/broadcast packets)
 - **Interface Classification**: Automatically categorizes interfaces by type (ethernet, port-channel, vlan, management, tunnel)
-- **JSON Output**: Structured JSON format with proper data types and metadata
+- **Standardized JSON Output**: Uses the project's standardized JSON structure compatible with syslogwriter
+- **JSON Lines Format**: Each interface produces a separate JSON object for streaming/logging compatibility
 - **Error Handling**: Robust parsing with proper handling of unavailable counters and malformed data
 - **CLI Integration**: Uses `vsh` for direct switch communication
 
@@ -55,27 +56,69 @@ The tool expects standard Cisco Nexus `show interface counters` output, which in
 
 ## Output Format
 
-Each interface is represented as a JSON object with the following structure:
+The parser outputs JSON Lines format with a standardized structure compatible with the syslogwriter library. Each interface produces a JSON object with the following structure:
+
+### Standardized Structure
 
 ```json
 {
-  "data_type": "interface_counters",
-  "timestamp": "2024-01-15T10:30:00Z",
-  "date": "2024-01-15",
-  "interface_name": "Eth1/1",
+  "data_type": "cisco_nexus_interface_counters",
+  "timestamp": "2025-07-01T23:45:57Z",
+  "date": "2025-07-01",
+  "message": {
+    // Interface-specific fields here
+  }
+}
+```
+
+### Required Fields
+
+- `data_type`: Always "cisco_nexus_interface_counters"
+- `timestamp`: Processing timestamp in ISO 8601 format (e.g., "2025-07-01T23:45:57Z")
+- `date`: Processing date in ISO format (YYYY-MM-DD)
+- `message`: JSON object containing all interface counter data
+
+### Message Fields
+
+The `message` field contains all interface-specific data:
+
+```json
+{
+  "interface_name": "Eth1/29",
   "interface_type": "ethernet",
-  "in_octets": 205027653248,
-  "in_ucast_pkts": 650373664,
-  "in_mcast_pkts": 2262324,
-  "in_bcast_pkts": 68097,
-  "out_octets": 3195383643785,
-  "out_ucast_pkts": 2314463086,
-  "out_mcast_pkts": 365931965,
-  "out_bcast_pkts": 53571839,
+  "in_octets": 5049641112717,
+  "in_ucast_pkts": 6489292847,
+  "in_mcast_pkts": 963320,
+  "in_bcast_pkts": 490562,
+  "out_octets": 5095780391460,
+  "out_ucast_pkts": 6593171948,
+  "out_mcast_pkts": 10233218,
+  "out_bcast_pkts": 6452477,
   "has_ingress_data": true,
   "has_egress_data": true
 }
 ```
+
+#### Core Fields
+
+- `interface_name`: Interface name (e.g., Eth1/29, Po50, Vlan125, mgmt0, Tunnel1)
+- `interface_type`: Categorized interface type (ethernet, port-channel, vlan, management, tunnel, unknown)
+
+#### Counter Fields
+
+- `in_octets`: Ingress octets
+- `in_ucast_pkts`: Ingress unicast packets  
+- `in_mcast_pkts`: Ingress multicast packets
+- `in_bcast_pkts`: Ingress broadcast packets
+- `out_octets`: Egress octets
+- `out_ucast_pkts`: Egress unicast packets
+- `out_mcast_pkts`: Egress multicast packets
+- `out_bcast_pkts`: Egress broadcast packets
+
+#### Status Fields
+
+- `has_ingress_data`: True if ingress counters are available
+- `has_egress_data`: True if egress counters are available
 
 ## Interface Types
 
@@ -126,26 +169,46 @@ Eth1/2                               144387970112                        2777412
 ### Sample Output
 
 ```json
-[
-  {
-    "data_type": "interface_counters",
-    "timestamp": "2024-01-15T10:30:00Z",
-    "date": "2024-01-15",
-    "interface_name": "Eth1/1",
+{
+  "data_type": "cisco_nexus_interface_counters",
+  "timestamp": "2025-07-01T23:45:57Z",
+  "date": "2025-07-01",
+  "message": {
+    "interface_name": "Eth1/29",
     "interface_type": "ethernet",
-    "in_octets": 205027653248,
-    "in_ucast_pkts": 650373664,
-    "in_mcast_pkts": 2262324,
-    "in_bcast_pkts": 68097,
-    "out_octets": 3195383643785,
-    "out_ucast_pkts": 2314463086,
-    "out_mcast_pkts": 365931965,
-    "out_bcast_pkts": 53571839,
+    "in_octets": 5049641112717,
+    "in_ucast_pkts": 6489292847,
+    "in_mcast_pkts": 963320,
+    "in_bcast_pkts": 490562,
+    "out_octets": 5095780391460,
+    "out_ucast_pkts": 6593171948,
+    "out_mcast_pkts": 10233218,
+    "out_bcast_pkts": 6452477,
     "has_ingress_data": true,
     "has_egress_data": true
   }
-]
+}
 ```
+
+## Validation
+
+To validate that the parser output conforms to the standardized JSON structure, use the project's validation script:
+
+```bash
+# Validate parser output
+./interface_counters_parser -input show-interface-counter.txt | /workspaces/arc-switch2/validate-parser-output.sh
+
+# Or validate a saved output file
+./interface_counters_parser -input show-interface-counter.txt -output interface-results.json
+/workspaces/arc-switch2/validate-parser-output.sh interface-results.json
+```
+
+The validation script checks for:
+
+- Presence of all required fields (`data_type`, `timestamp`, `date`, `message`)
+- Correct timestamp format (ISO 8601)
+- Correct date format (YYYY-MM-DD)
+- Valid JSON structure
 
 ## Error Handling
 
