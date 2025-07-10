@@ -39,5 +39,5 @@ go.work.sum
 .DS_Store
 Thumbs.db
 .azure
-src\GCService_Linux*
-src\ExtensionService_Linux*
+src/GCService_Linux**/*
+src/ExtensionService_Linux**/*
