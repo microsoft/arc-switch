@@ -38,3 +38,6 @@ go.work.sum
 # OS files
 .DS_Store
 Thumbs.db
+.azure
+src\GCService_Linux*
+src\ExtensionService_Linux*
