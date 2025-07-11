@@ -1,0 +1,327 @@
+#! /bin/sh
+
+#
+# Helper functions for EXT service control (Linux-specific)
+#
+# This script can be "sourced" (if sourcing with the "functions" qualifer),
+# which may be used by the service control scripts. This allows for deeper
+# control of the process at a low level.
+#
+# Otherwise (this is the normal case), invoke this with one of the following
+# options:
+#
+#    start:    Start the EXT service via the service control manager
+#    stop:     Stop the EXT service via the service control manager
+#    restart:  Restart the EXT service via the service control manager
+#
+
+DSC_HOME_PATH="$PWD"
+GC_EXE_PATH="$DSC_HOME_PATH/gc_linux_service"
+SERVICE_TEMP_FOLDER_PATH="$DSC_HOME_PATH/service_temp"
+
+SERVICE_SCRIPTS_FOLDER_PATH="$DSC_HOME_PATH/service_scripts"
+SERVICE_CONTROLLER_PATH="$SERVICE_SCRIPTS_FOLDER_PATH/ext_service_controller"
+PID_FILE_PATH="$SERVICE_TEMP_FOLDER_PATH/dsc.pid"
+
+SYSTEM_SERVICE_CONTROLLER=""
+
+verify_privileges()
+{
+    if [ `id -u` -ne 0 ]; then
+        echo "Must have root privileges for this operation" >& 2
+        exit 1
+    fi
+}
+
+get_system_service_controller() {
+    if [ ! -z $SYSTEM_SERVICE_CONTROLLER ]; then
+        return
+    fi
+
+    COMM_OUTPUT=$(cat /proc/1/comm)
+
+    if [[ $COMM_OUTPUT = *"systemd"* ]]; then
+        SYSTEM_SERVICE_CONTROLLER="systemd"
+    elif [[ $COMM_OUTPUT = *"init"* ]]; then
+        SYSTEM_SERVICE_CONTROLLER="upstart"
+    else
+        print_error "Unexpected system service controller. Expected system service controllers are systemd and upstart."
+        exit 1
+    fi
+
+    echo "Service controller is $SYSTEM_SERVICE_CONTROLLER."
+}
+
+is_dsc_running()
+{
+    verify_privileges
+    INIT_SYSTEM=$(ps -p 1 -o comm=)
+
+    # If systemd lives here, then we have a systemd unit file
+    if pidof systemd 1> /dev/null 2> /dev/null; then
+        echo "Getting status via systemd"
+        if /bin/systemctl status extd 2>/dev/null | grep "Active:.*(running)"; then
+            echo "EXT service is running"
+            return 1
+        fi
+    elif [ -x /sbin/initctl -a -f /etc/init/extd.conf ]; then
+        echo "Getting status via initctl"
+        if /sbin/initctl status extd 2>/dev/null | grep "start/"; then 
+            echo "EXT service is running"
+            return 1
+        fi
+    elif [ -x /bin/systemctl ]; then
+        echo "Getting status via systemctl"
+        if /bin/systemctl status extd 2>/dev/null | grep "Active:.*(running)"; then 
+            echo "EXT service is running"
+            return 1
+        fi
+    elif [ -x /sbin/service ]; then
+        echo "Getting status via system service"
+        if /sbin/service extd status 2>/dev/null | grep "start/"; then
+            echo "EXT service is running"
+            return 1
+        fi
+    elif [ -x /usr/sbin/service ]; then
+        echo "Getting status via usr system service"
+        if /usr/sbin/service extd status 2>/dev/null | grep "start/"; then
+            echo "EXT service is running"
+            return 1
+        fi
+    elif [ -x /usr/sbin/invoke-rc.d ]; then
+        echo "Getting status via invoke-rc"
+        if /usr/sbin/invoke-rc.d extd status 2>/dev/null | grep "start/"; then
+            echo "EXT service is running"
+            return 1
+        fi
+    else
+        get_system_service_controller
+        case "$SYSTEM_SERVICE_CONTROLLER" in
+        "systemd")
+            echo "Getting status via systemd"
+            if /bin/systemctl status extd 2>/dev/null | grep "Active:.*(running)"; then
+                echo "EXT service is running"
+                return 1
+            fi
+            ;;
+        "upstart")
+            echo "Getting status via initctl"
+            if [ -x /sbin/initctl -a -f /etc/init/extd.conf ]; then
+                if /sbin/initctl status extd 2>/dev/null | grep "start/"; then
+                    echo "EXT service is running"
+                    return 1
+                fi
+            fi
+            elif [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
+                echo "Getting status via init.d"
+                if /etc/init.d/extd status 2>/dev/null | grep -E "running|start/"; then
+                    echo "EXT service is running"
+                    return 1
+                fi
+            fi
+            ;;
+        *) echo "Unrecognized system service controller to retrieve EXT service status."
+            ;;
+        esac
+    fi
+
+    echo "EXT service is not running."
+    return 0
+}
+
+wait_until_dsc_stops()
+{
+    # Required parameter: Number of seconds to wait for agent to stop
+    if [ -z "$1" -o "$1" -le 0 ]; then
+        echo "Function \"wait_until_dsc_stops\" called with invalid parameter"
+        exit 1
+    fi
+
+    COUNTER=$(( $1 * 2 )) # Since we sleep 0.5 seconds, compute number of seconds
+    while [ $COUNTER -gt 0 ]; do
+        is_dsc_running && return $?
+        COUNTER=$(( $COUNTER - 1 ))
+        sleep 0.5
+    done
+
+    # One final try for accurate return status (just return status from the call)
+    is_dsc_running
+}
+
+#
+# Normal usage functions (used by everything except service control scripts)
+#
+
+start_dsc()
+{   
+    #commenting is_dsc_running since extension/child processors aren't aware of extd status.
+    #when extd is inactive is_dsc_running still returns active. we need to look for a fix.
+    #is_dsc_running
+
+    echo "STARTING EXT"
+
+    # If systemd lives here, then we have a systemd unit file
+    if pidof systemd 1> /dev/null 2> /dev/null; then
+        /bin/systemctl start extd
+    else
+        if [ -x /sbin/initctl -a -f /etc/init/extd.conf ]; then
+            /sbin/initctl start extd 
+        elif [ -x /bin/systemctl ]; then
+            /bin/systemctl start extd
+        elif [ -x /sbin/service ]; then
+            /sbin/service extd start
+        elif [ -x /usr/sbin/service ]; then
+            /usr/sbin/service extd start
+        elif [ -x /usr/sbin/invoke-rc.d ]; then
+            /usr/sbin/invoke-rc.d extd start
+        else
+            get_system_service_controller
+            case "$SYSTEM_SERVICE_CONTROLLER" in
+            "systemd")
+                /bin/systemctl start extd
+                ;;
+            "upstart")
+                if [ -x /sbin/initctl -a -f /etc/init/extd.conf ]; then
+                    /sbin/initctl start extd
+                elif [ -f /etc/init.d/extd.conf ]; then
+                    /etc/init.d/extd start
+                fi
+                ;;
+            *) echo "Unrecognized system service controller to start EXT service." 1>&2
+                exit 1
+                ;;
+            esac
+        fi
+    fi
+}
+
+stop_dsc()
+{
+    is_dsc_running 
+    if [ $? -ne 0 ]; then
+        echo "STOPPING EXT"
+        if pidof systemd 1> /dev/null 2> /dev/null; then
+            /bin/systemctl stop extd
+        else
+            if [ -x /sbin/initctl -a -f /etc/init/extd.conf ]; then
+                /sbin/initctl stop extd 
+            elif [ -x /bin/systemctl ]; then
+                /bin/systemctl stop extd
+            elif [ -x /sbin/service ]; then
+                /sbin/service extd stop
+            elif [ -x /usr/sbin/service ]; then
+                /usr/sbin/service extd stop
+            elif [ -x /usr/sbin/invoke-rc.d ]; then
+                /usr/sbin/invoke-rc.d extd stop
+            else
+                get_system_service_controller
+                case "$SYSTEM_SERVICE_CONTROLLER" in
+                "systemd")
+                    /bin/systemctl stop extd
+                    ;;
+                "upstart")
+                    if [ -x /sbin/initctl -a -f /etc/init/extd.conf ]; then
+                        /sbin/initctl stop extd
+                    elif [ -f /etc/init.d/extd.conf ]; then
+                        /etc/init.d/extd stop
+                    fi
+                    ;;
+                *) echo "Unrecognized system service controller to stop EXT service." 1>&2
+                    exit 1
+                    ;;
+                esac
+            fi
+        fi
+    fi
+}
+
+restart_dsc()
+{
+    # Debian 8 and later special handling
+    if [ -x /usr/bin/lsb_release -a -x /bin/systemctl ]; then
+        distro=`lsb_release -i | awk -F":" '{ print $2 }' | sed -e 's/^[[:space:]]*//'`
+        if [ "${distro}" = "Debian" ]; then
+            distro_version=`lsb_release -r | awk -F":" '{ print $2 }'`
+            version_match=`echo ${distro_version} '>= 8' | bc -l`
+            if [ "${version_match}" = "1" ]; then
+                /bin/systemctl restart extd
+                return
+            fi
+        fi
+    fi
+
+    is_dsc_running
+    if [ $? -eq 0 ]; then
+        start_dsc
+        return
+    fi
+
+    if [ -f $SERVICE_SCRIPTS_FOLDER_PATH/ext_disable_service_control ]; then
+        stop_dsc
+        start_dsc
+        return 0
+    fi
+
+    # If systemd lives here, then we have a systemd unit file
+    if pidof systemd 1> /dev/null 2> /dev/null; then
+        /bin/systemctl restart extd
+    else
+        if [ -x /sbin/initctl -a -f /etc/init/extd.conf ]; then
+            /sbin/initctl restart extd 
+        elif [ -x /bin/systemctl ]; then
+            /bin/systemctl restart extd
+        elif [ -x /sbin/service ]; then
+            /sbin/service extd restart
+        elif [ -x /usr/sbin/service ]; then
+            /usr/sbin/service extd restart
+        elif [ -x /bin/systemctl ]; then
+            /bin/systemctl restart extd
+        elif [ -x /usr/sbin/invoke-rc.d ]; then
+            /usr/sbin/invoke-rc.d extd restart
+        else
+            get_system_service_controller
+            case "$SYSTEM_SERVICE_CONTROLLER" in
+            "systemd")
+                /bin/systemctl restart extd
+                ;;
+            "upstart")
+                if [ -x /sbin/initctl -a -f /etc/init/extd.conf ]; then
+                    /sbin/initctl restart extd
+                elif [ -f /etc/init.d/extd.conf ]; then
+                    /etc/init.d/extd restart
+                fi
+                ;;
+            *) echo "Unrecognized system service controller to restart EXT service." 1>&2
+                exit 1
+                ;;
+            esac
+        fi
+    fi
+}
+
+case "$1" in
+    functions)
+        ;;
+
+    is-running)
+        is_dsc_running
+        exit $?
+        ;;
+
+    start)
+        start_dsc
+        ;;
+
+    stop)
+        stop_dsc
+        ;;
+
+    restart)
+        restart_dsc
+        ;;
+
+    *)
+        echo "Unknown parameter : $1" 1>&2
+        exit 1
+        ;;
+esac
