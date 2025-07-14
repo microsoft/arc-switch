@@ -32,11 +32,12 @@ print_error() {
 }
 
 check_result() {
+    echo "check_result() - Entered"
     if [ $1 -ne 0 ]; then
         print_error $2
         exit $1
     fi
-}
+    echo "check_result() - Exit"
 
 get_system_service_controller() {
     if [ ! -z $SYSTEM_SERVICE_CONTROLLER ]; then
@@ -58,6 +59,7 @@ get_system_service_controller() {
 }
 
 resolve_systemd_paths() {
+    echo "resolve_systemd_paths() - Entered"
     local UNIT_DIR_LIST="/usr/lib/systemd/system /lib/systemd/system"
 
     # Be sure systemctl lives where we expect it to
@@ -76,6 +78,7 @@ resolve_systemd_paths() {
 
     # Didn't find unit directory, that's fatal
     print_error "FATAL: Unable to resolve systemd unit directory"
+    echo "resolve_systemd_paths() - Exit 1"
     exit 1
 }
 
@@ -108,6 +111,7 @@ install_systemd_service() {
 }
 
 create_upstart_config_file() {
+    echo "create_upstart_config_file() - Entered"
     # Remove any old temp upstart configuration file that may exist
     if [ -f $EXT_UPSTART_TEMP_FILE_PATH ]; then # /opt/GC_Ext/GC/service_temp/extd.upstart
         rm -f $EXT_UPSTART_TEMP_FILE_PATH
@@ -123,9 +127,11 @@ create_upstart_config_file() {
 
     # Set the new temp upstart configuration file to the correct permissions
     chmod 644 $EXT_UPSTART_TEMP_FILE_PATH;
+    echo "create_upstart_config_file() - Exit"
 }
 
 install_upstart_service() {
+    echo "install_upstart_service() - Entered"
     INIT_SYSTEM=$(ps -p 1 -o comm=)
     if [ -x /sbin/initctl -a -f /etc/init/networking.conf ]; then
         # If we have /sbin/initctl, we have upstart.
@@ -159,9 +165,11 @@ install_upstart_service() {
         print_error "Upstart service controller does not have control of the networking service."
         exit 1
     fi
+    echo "install_upstart_service() - Exit"
 }
 
-install_gc_service() {
+install_gc_service() { 
+    echo "install_gc_service() - Entered"
 
     # Set the EXT service controller to be executable
     #           /opt/GC_Ext/GC/service_scripts/ext_service_controller
@@ -181,6 +189,7 @@ install_gc_service() {
             install_systemd_service
             ;;
         "upstart")
+            echo "install_gc_service() - Using upstart service controller"
             install_upstart_service
             ;;
         *) echo "Unrecognized system service controller to configure EXTD service."
@@ -188,9 +197,11 @@ install_gc_service() {
             ;;
         esac
     fi
+    echo "install_gc_service() - Exit"
 }
 
 install_gc() {
+    echo "install_gc() - Entered"
     chown root $GC_EXE_PATH
     check_result $? "Setting owner of gc_linux_service file failed"
 
@@ -214,11 +225,16 @@ EOF
     check_result $? "Changing ownership of extension sockets directory failed"
 
     install_gc_service
+    echo "install_gc() - Exit"
 }
 
 create_guest_config_folder() {
+    echo "create_guest_config_folder() - Entered"
     mkdir -p "/var/lib/GuestConfig"
     chmod 700 "/var/lib/GuestConfig"
+    echo "Created guest config data directory at /var/lib/GuestConfig"
+
+    echo "create_guest_config_folder() - Exit"
 }
 
 create_guest_config_folder
