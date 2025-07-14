@@ -145,7 +145,7 @@ create_upstart_config_file() {
     cat $EXT_UPSTART_SOURCE_FILE_PATH | sed "s@<GC_EXE_PATH>@$GC_EXE_PATH@g" > $EXT_UPSTART_TEMP_FILE_PATH;
 
     # test if <GC_EXE_PATH> was replaced correctly
-    if ! grep -q "$GC_EXE_PATH" "$EXT_UPSTART_TEMP_FILE_PATH"; then
+    if ! grep -q "<GC_EXE_PATH>" "$EXT_UPSTART_TEMP_FILE_PATH"; then
         print_error "Failed to replace <GC_EXE_PATH> in $EXT_UPSTART_TEMP_FILE_PATH"
         exit 1
     fi
@@ -178,8 +178,8 @@ install_upstart_service() {
         echo "install_upstart_service() - Found sysvinit service controller..."
         create_upstart_config_file
         #      /opt/GC_Ext/GC/service_temp/extd.upstart
-        echo "install_upstart_service() - Copy $SERVICE_SCRIPTS_FOLDER_PATH/extd_initd.upstart to /etc/init.d/extd.conf"
-        cp -f "$SERVICE_SCRIPTS_FOLDER_PATH/extd_initd.upstart" /etc/init.d/extd.conf
+        echo "install_upstart_service() - Copy $EXT_UPSTART_TEMP_FILE_PATH to /etc/init.d/extd.conf"
+        cp -f "$EXT_UPSTART_TEMP_FILE_PATH" /etc/init.d/extd.conf
         echo "install_upstart_service() - Setting up init.d service for extd"
         
         chmod 755 /etc/init.d/extd.conf
