@@ -138,9 +138,9 @@ create_upstart_config_file() {
 
 
     echo "create_upstart_config_file() - Replacing exe file path in upstart configuration file"
-    echo "create_upstart_config_file() - Source file path: $EXT_UPSTART_SOURCE_FILE_PATH"
-    echo "create_upstart_config_file() - Temp file path: $EXT_UPSTART_TEMP_FILE_PATH"
-    echo "create_upstart_config_file() - GC_EXE_PATH: $GC_EXE_PATH"
+    echo "create_upstart_config_file() - Source file path: EXT_UPSTART_SOURCE_FILE_PATH=$EXT_UPSTART_SOURCE_FILE_PATH"
+    echo "create_upstart_config_file() - Temp file path: EXT_UPSTART_TEMP_FILE_PATH=$EXT_UPSTART_TEMP_FILE_PATH"
+    echo "create_upstart_config_file() - GC_EXE_PATH=$GC_EXE_PATH"
     cat $EXT_UPSTART_SOURCE_FILE_PATH | sed "s@<GC_EXE_PATH>@$GC_EXE_PATH@g" > $EXT_UPSTART_TEMP_FILE_PATH;
 
     # Set the new temp upstart configuration file to the correct permissions
