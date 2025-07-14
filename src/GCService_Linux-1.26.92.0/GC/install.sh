@@ -132,6 +132,9 @@ check_linux_distro() {
         elif [[ $VERSION_OUTPUT = *"Mariner"* ]]; then
             LINUX_DISTRO="Mariner"
             MIN_SUPPORTED_DISTRO_VERSION="2.0"
+        elif [[ $VERSION_OUTPUT = *"nxos"* ]]; then
+            LINUX_DISTRO="NXOS"
+            MIN_SUPPORTED_DISTRO_VERSION="10.0"
         else
             print_error "Unexpected Linux distribution. Expected Linux distributions include only Ubuntu, Red Hat, SUSE, CentOS, and Debian."
             # Exit with error code 51 (The extension is not supported on this OS)
