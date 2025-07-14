@@ -20,6 +20,7 @@ EXT_SYSTEMD_TEMP_FILE_PATH="$SERVICE_TEMP_FOLDER_PATH/$EXT_SYSTEMD_FILE_NAME" # 
 
 EXT_UPSTART_FILE_NAME="$EXT_SERVICE_NAME.upstart"
 EXT_UPSTART_SOURCE_FILE_PATH="$SERVICE_SCRIPTS_FOLDER_PATH/$EXT_UPSTART_FILE_NAME" # /opt/GC_Ext/GC/service_scripts/extd.upstart
+EXT_UPSTART_SOURCE_FILE_INITD_PATH="$SERVICE_SCRIPTS_FOLDER_PATH/extd_initd.upstart" # /opt/GC_Ext/GC/service_scripts/extd_initd.upstart
 EXT_UPSTART_TEMP_FILE_PATH="$SERVICE_TEMP_FOLDER_PATH/$EXT_UPSTART_FILE_NAME" # /opt/GC_Ext/GC/service_temp/extd.upstart
 
 SYSTEMD_UNIT_DIR=""
@@ -112,6 +113,7 @@ install_systemd_service() {
 }
 
 create_upstart_config_file() {
+    INIT_SYSTEM=$(ps -p 1 -o comm=)
     echo "create_upstart_config_file() - Entered"
     # Remove any old temp upstart configuration file that may exist
     if [ -f $EXT_UPSTART_TEMP_FILE_PATH ]; then # /opt/GC_Ext/GC/service_temp/extd.upstart
@@ -124,9 +126,20 @@ create_upstart_config_file() {
 
     # Replace the exe file path in the upstart configuration file
     #  /opt/GC_Ext/GC/service_scripts/extd.upstart    /opt/GC_Ext/GC/gc_linux_service   /opt/GC_Ext/GC/service_temp/extd.upstart
+
+    # if systemV use EXT_UPSTART_SOURCE_FILE_INITD_PATH
+    if [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
+        EXT_UPSTART_SOURCE_FILE_PATH="$EXT_UPSTART_SOURCE_FILE_INITD_PATH"
+    fi
+
+    echo "create_upstart_config_file() - Replacing exe file path in upstart configuration file"
+    echo "create_upstart_config_file() - Source file path: $EXT_UPSTART_SOURCE_FILE_PATH"
+    echo "create_upstart_config_file() - Temp file path: $EXT_UPSTART_TEMP_FILE_PATH"
+    echo "create_upstart_config_file() - GC_EXE_PATH: $GC_EXE_PATH"
     cat $EXT_UPSTART_SOURCE_FILE_PATH | sed "s@<GC_EXE_PATH>@$GC_EXE_PATH@g" > $EXT_UPSTART_TEMP_FILE_PATH;
 
     # Set the new temp upstart configuration file to the correct permissions
+    echo "create_upstart_config_file() - Setting permissions for temp upstart configuration file: $EXT_UPSTART_TEMP_FILE_PATH"
     chmod 644 $EXT_UPSTART_TEMP_FILE_PATH;
     echo "create_upstart_config_file() - Exit"
 }
@@ -134,6 +147,7 @@ create_upstart_config_file() {
 install_upstart_service() {
     echo "install_upstart_service() - Entered"
     INIT_SYSTEM=$(ps -p 1 -o comm=)
+    echo "install_upstart_service() - INIT_SYSTEM is $INIT_SYSTEM"
     if [ -x /sbin/initctl -a -f /etc/init/networking.conf ]; then
         # If we have /sbin/initctl, we have upstart.
         # Note that the upstart script requires networking,
@@ -149,15 +163,20 @@ install_upstart_service() {
         initctl reload-configuration
         echo "Service configured through upstart service controller."
     elif [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
-        echo "Found sysvinit service controller..."
+        echo "install_upstart_service() - Found sysvinit service controller..."
         create_upstart_config_file
         #      /opt/GC_Ext/GC/service_temp/extd.upstart
+        echo "install_upstart_service() - Copy $SERVICE_SCRIPTS_FOLDER_PATH/extd_initd.upstart to /etc/init.d/extd.conf"
         cp -f "$SERVICE_SCRIPTS_FOLDER_PATH/extd_initd.upstart" /etc/init.d/extd.conf
-        chmod 644 /etc/init.d/extd.conf
+        echo "install_upstart_service() - Setting up init.d service for extd"
+        
+        chmod 755 /etc/init.d/extd.conf
         # create symlink to /etc/rc3.d and rc5.d
+        echo "Creating symlinks for init.d service in /etc/rc3.d and /etc/rc5.d"
         ln -sf /etc/init.d/extd.conf /etc/rc3.d/S99extd
         ln -sf /etc/init.d/extd.conf /etc/rc5.d/S99extd
         # create symlink to  rc0.d, rc1.d, rc2.d, rc6.d
+        echo "Creating symlinks for init.d service in /etc/rc0.d, /etc/rc1.d, /etc/rc2.d, and /etc/rc6.d"
         ln -sf /etc/init.d/extd.conf /etc/rc0.d/K01extd
         ln -sf /etc/init.d/extd.conf /etc/rc1.d/K01extd
         ln -sf /etc/init.d/extd.conf /etc/rc2.d/K01extd
