@@ -22,6 +22,7 @@ EXT_UPSTART_FILE_NAME="$EXT_SERVICE_NAME.upstart"
 EXT_UPSTART_SOURCE_FILE_PATH="$SERVICE_SCRIPTS_FOLDER_PATH/$EXT_UPSTART_FILE_NAME" # /opt/GC_Ext/GC/service_scripts/extd.upstart
 EXT_UPSTART_SOURCE_FILE_INITD_PATH="$SERVICE_SCRIPTS_FOLDER_PATH/extd_initd.upstart" # /opt/GC_Ext/GC/service_scripts/extd_initd.upstart
 EXT_UPSTART_TEMP_FILE_PATH="$SERVICE_TEMP_FOLDER_PATH/$EXT_UPSTART_FILE_NAME" # /opt/GC_Ext/GC/service_temp/extd.upstart
+EXT_UPSTART_TEMP_FILE_INITD_PATH="$SERVICE_TEMP_FOLDER_PATH/extd_initd.upstart" # /opt/GC_Ext/GC/service_temp/extd_initd.upstart
 
 SYSTEMD_UNIT_DIR=""
 SYSTEM_SERVICE_CONTROLLER=""
@@ -115,6 +116,13 @@ install_systemd_service() {
 create_upstart_config_file() {
     INIT_SYSTEM=$(ps -p 1 -o comm=)
     echo "create_upstart_config_file() - Entered"
+
+    # if systemV use EXT_UPSTART_SOURCE_FILE_INITD_PATH
+    if [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
+        EXT_UPSTART_SOURCE_FILE_PATH="$EXT_UPSTART_SOURCE_FILE_INITD_PATH"
+        EXT_UPSTART_TEMP_FILE_PATH=$EXT_UPSTART_TEMP_FILE_INITD_PATH
+    fi
+
     # Remove any old temp upstart configuration file that may exist
     if [ -f $EXT_UPSTART_TEMP_FILE_PATH ]; then # /opt/GC_Ext/GC/service_temp/extd.upstart
         rm -f $EXT_UPSTART_TEMP_FILE_PATH
@@ -127,10 +135,7 @@ create_upstart_config_file() {
     # Replace the exe file path in the upstart configuration file
     #  /opt/GC_Ext/GC/service_scripts/extd.upstart    /opt/GC_Ext/GC/gc_linux_service   /opt/GC_Ext/GC/service_temp/extd.upstart
 
-    # if systemV use EXT_UPSTART_SOURCE_FILE_INITD_PATH
-    if [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
-        EXT_UPSTART_SOURCE_FILE_PATH="$EXT_UPSTART_SOURCE_FILE_INITD_PATH"
-    fi
+
 
     echo "create_upstart_config_file() - Replacing exe file path in upstart configuration file"
     echo "create_upstart_config_file() - Source file path: $EXT_UPSTART_SOURCE_FILE_PATH"
