@@ -38,6 +38,7 @@ check_result() {
         exit $1
     fi
     echo "check_result() - Exit"
+}
 
 get_system_service_controller() {
     if [ ! -z $SYSTEM_SERVICE_CONTROLLER ]; then
