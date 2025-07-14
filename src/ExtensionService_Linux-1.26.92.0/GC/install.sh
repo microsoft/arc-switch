@@ -120,7 +120,7 @@ create_upstart_config_file() {
     # if systemV use EXT_UPSTART_SOURCE_FILE_INITD_PATH
     if [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
         EXT_UPSTART_SOURCE_FILE_PATH="$EXT_UPSTART_SOURCE_FILE_INITD_PATH"
-        EXT_UPSTART_TEMP_FILE_PATH=$EXT_UPSTART_TEMP_FILE_INITD_PATH
+        EXT_UPSTART_TEMP_FILE_PATH="$EXT_UPSTART_TEMP_FILE_INITD_PATH"
     fi
 
     # Remove any old temp upstart configuration file that may exist
