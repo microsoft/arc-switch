@@ -261,6 +261,8 @@ create_upstart_config_file() {
     if [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
         GC_UPSTART_SOURCE_FILE_PATH="$GC_INITD_UPSTART_SOURCE_FILE_INITD_PATH"
         GC_UPSTART_TEMP_FILE_PATH="$GC_INITD_UPSTART_TEMP_FILE_INITD_PATH"
+        echo "create_upstart_config_file(): Updated - GC_UPSTART_SOURCE_FILE_PATH to $GC_UPSTART_SOURCE_FILE_PATH"
+        echo "create_upstart_config_file(): Updated - GC_UPSTART_TEMP_FILE_PATH to $GC_UPSTART_TEMP_FILE_PATH"
     fi
 
     # Remove any old temp upstart configuration file that may exist
@@ -273,6 +275,7 @@ create_upstart_config_file() {
     fi
 
     # Replace the exe file path in the upstart configuration file
+    echo "create_upstart_config_file(): Replacing <GC_EXE_PATH> in $GC_UPSTART_SOURCE_FILE_PATH with $GC_EXE_PATH"
     cat $GC_UPSTART_SOURCE_FILE_PATH | sed "s@<GC_EXE_PATH>@$GC_EXE_PATH@g" > $GC_UPSTART_TEMP_FILE_PATH;
 
     # Set the new temp upstart configuration file to the correct permissions  
