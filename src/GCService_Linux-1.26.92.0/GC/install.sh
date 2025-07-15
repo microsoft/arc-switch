@@ -257,10 +257,10 @@ install_systemd_service() {
 create_upstart_config_file() {
 
     INIT_SYSTEM=$(ps -p 1 -o comm=)
-    # if systemV use EXT_UPSTART_SOURCE_FILE_INITD_PATH
+    # if systemV use GC_INITD_UPSTART_SOURCE_FILE_INITD_PATH
     if [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
-        GC_UPSTART_SOURCE_FILE_PATH="$EXT_UPSTART_SOURCE_FILE_INITD_PATH"
-        GC_UPSTART_TEMP_FILE_PATH="$EXT_UPSTART_TEMP_FILE_INITD_PATH"
+        GC_UPSTART_SOURCE_FILE_PATH="$GC_INITD_UPSTART_SOURCE_FILE_INITD_PATH"
+        GC_UPSTART_TEMP_FILE_PATH="$GC_INITD_UPSTART_TEMP_FILE_INITD_PATH"
     fi
 
     # Remove any old temp upstart configuration file that may exist
