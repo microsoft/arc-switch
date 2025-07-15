@@ -175,16 +175,8 @@ install_upstart_service() {
         echo "install_upstart_service() - Setting up init.d service for extd"
         
         chmod 755 /etc/init.d/extd.conf
-        # create symlink to /etc/rc3.d and rc5.d
-        echo "Creating symlinks for init.d service in /etc/rc3.d and /etc/rc5.d"
-        ln -sf /etc/init.d/extd.conf /etc/rc3.d/S99extd
-        ln -sf /etc/init.d/extd.conf /etc/rc5.d/S99extd
-        # create symlink to  rc0.d, rc1.d, rc2.d, rc6.d
-        echo "Creating symlinks for init.d service in /etc/rc0.d, /etc/rc1.d, /etc/rc2.d, and /etc/rc6.d"
-        ln -sf /etc/init.d/extd.conf /etc/rc0.d/K01extd
-        ln -sf /etc/init.d/extd.conf /etc/rc1.d/K01extd
-        ln -sf /etc/init.d/extd.conf /etc/rc2.d/K01extd
-        ln -sf /etc/init.d/extd.conf /etc/rc6.d/K01extd
+        update-rc.d extd.conf start 99 2 3 4 5 . stop 01 0 1 6 .
+        echo "Service configured through sysvinit service controller."
     else
         print_error "Upstart service controller does not have control of the networking service."
         exit 1

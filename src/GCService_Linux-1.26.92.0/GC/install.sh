@@ -22,6 +22,11 @@ GC_UPSTART_FILE_NAME="$GC_SERVICE_NAME.upstart"
 GC_UPSTART_SOURCE_FILE_PATH="$SERVICE_SCRIPTS_FOLDER_PATH/$GC_UPSTART_FILE_NAME"
 GC_UPSTART_TEMP_FILE_PATH="$SERVICE_TEMP_FOLDER_PATH/$GC_UPSTART_FILE_NAME"
 
+GC_INITD_UPSTART_FILE_NAME="$GC_SERVICE_NAME.initd.upstart"
+GC_INITD_UPSTART_SOURCE_FILE_INITD_PATH="$SERVICE_SCRIPTS_FOLDER_PATH/$GC_INITD_UPSTART_FILE_NAME"
+GC_INITD_UPSTART_TEMP_FILE_INITD_PATH="$SERVICE_TEMP_FOLDER_PATH/$GC_INITD_UPSTART_FILE_NAME"
+
+
 POWERSHELL_CONFIG_PATH="$GC_HOME_PATH/powershell.config.json"
 
 SYSTEMD_UNIT_DIR=""
@@ -250,6 +255,14 @@ install_systemd_service() {
 }
 
 create_upstart_config_file() {
+
+    INIT_SYSTEM=$(ps -p 1 -o comm=)
+    # if systemV use EXT_UPSTART_SOURCE_FILE_INITD_PATH
+    if [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
+        GC_UPSTART_SOURCE_FILE_PATH="$EXT_UPSTART_SOURCE_FILE_INITD_PATH"
+        GC_UPSTART_TEMP_FILE_PATH="$EXT_UPSTART_TEMP_FILE_INITD_PATH"
+    fi
+
     # Remove any old temp upstart configuration file that may exist
     if [ -f $GC_UPSTART_TEMP_FILE_PATH ]; then
         rm -f $GC_UPSTART_TEMP_FILE_PATH
@@ -267,6 +280,7 @@ create_upstart_config_file() {
 }
 
 install_upstart_service() {
+    INIT_SYSTEM=$(ps -p 1 -o comm=)
     if [ -x /sbin/initctl -a -f /etc/init/networking.conf ]; then
         # If we have /sbin/initctl, we have upstart.
         # Note that the upstart script requires networking,
@@ -279,6 +293,16 @@ install_upstart_service() {
         # initctl registers it with upstart
         initctl reload-configuration
         echo "Service configured through upstart service controller."
+    elif [ "$INIT_SYSTEM" = "init" ] || [ "$INIT_SYSTEM" = "sysvinit" ]; then
+        # If we have sysvinit, we can use the init.d script.
+        echo "Found sysvinit service controller..."
+        create_upstart_config_file
+        cp -f $GC_UPSTART_TEMP_FILE_PATH /etc/init.d/gcad
+        chmod 755 /etc/init.d/gcad
+        
+        # Register the service with sysvinit
+        update-rc.d gcad defaults
+        echo "Service configured through sysvinit service controller."
     else
         print_error "Upstart service controller does not have control of the networking service."
         exit 1

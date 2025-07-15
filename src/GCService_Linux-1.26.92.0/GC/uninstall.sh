@@ -84,6 +84,15 @@ uninstall_upstart_service() {
     initctl reload-configuration
 }
 
+uninstall_init_daemon_service() {
+    SERVICE=$1
+    echo "Unconfiguring ${SERVICE} (init.d) service ..."
+    if [ -f /etc/init.d/${SERVICE} ]; then
+        update-rc.d ${SERVICE} remove
+        rm -f /etc/init.d/${SERVICE}
+    fi
+}
+
 remove_service() {
     SERVICE=$1
     SERVICE_CONTROLLER_PATH_LOCAL=$2
@@ -111,7 +120,14 @@ remove_service() {
             uninstall_systemd_service $SERVICE
             ;;
         "upstart")
-            uninstall_upstart_service $SERVICE
+            if [ -f /etc/init/${SERVICE}.conf ]; then
+                uninstall_upstart_service $SERVICE
+            elif [ -f /etc/init.d/${SERVICE} ]; then
+                uninstall_init_daemon_service $SERVICE
+            else
+                echo "Unrecognized upstart service: ${SERVICE}"
+                exit 1
+            fi
             ;;
         *) echo "Unrecognized system service controller to unregister ${SERVICE} service."
             exit 1
@@ -129,8 +145,8 @@ remove_gc_service() {
     return 0
 }
 
-is_gcd_running()
-{
+is_gcd_running() {
+    
     if [ `id -u` -ne 0 ]; then
         echo "Must have root privileges for this operation" >& 2
         exit 1
@@ -184,10 +200,18 @@ is_gcd_running()
             fi
             ;;
         "upstart")
-            echo "Getting status via initctl"
-            if /sbin/initctl status gcd 2>/dev/null | grep "start/"; then 
-                echo "GC service is running"
-                return 1
+            if [ -f /etc/init/gcd.conf ]; then
+                echo "Getting status via initctl"
+                if /sbin/initctl status gcd 2>/dev/null | grep "start/"; then 
+                    echo "GC service is running"
+                    return 1
+                fi
+            elif [ -f /etc/init.d/gcd ]; then
+                echo "Getting status via init.d"
+                if /etc/init.d/gcd status 2>/dev/null | grep "start/"; then 
+                    echo "GC service is running"
+                    return 1
+                fi
             fi
             ;;
         *) echo "Unrecognized system service controller to retrieve GC service status."
