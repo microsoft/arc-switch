@@ -145,7 +145,7 @@ create_upstart_config_file() {
     cat $EXT_UPSTART_SOURCE_FILE_PATH | sed "s@<GC_EXE_PATH>@$GC_EXE_PATH@g" > $EXT_UPSTART_TEMP_FILE_PATH;
 
     # test if <GC_EXE_PATH> was replaced correctly
-    if ! grep -q "<GC_EXE_PATH>" "$EXT_UPSTART_TEMP_FILE_PATH"; then
+    if ! grep -q "$GC_EXE_PATH" "$EXT_UPSTART_TEMP_FILE_PATH"; then
         print_error "Failed to replace <GC_EXE_PATH> in $EXT_UPSTART_TEMP_FILE_PATH"
         exit 1
     fi
