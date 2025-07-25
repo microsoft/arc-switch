@@ -52,8 +52,13 @@ case "$1" in
                 ;;               
             R) 
                 echo -n "Starting Arc GC: "
-                daemon $EXE_PATH
-                RETVAL=$?
+                if command -v daemon >/dev/null 2>&1; then
+                    daemon $EXE_PATH
+                    RETVAL=$?
+                else
+                    nohup $EXE_PATH >/dev/null 2>&1 &
+                    RETVAL=$?
+                fi
                 echo
                 ;;
             S) 
@@ -76,9 +81,26 @@ case "$1" in
                 ;;
             R)
                 echo -n "Shutting down Arc GC: "
-                $EXE_PATH > /dev/null 2>&1
-                RETVAL=$?
-                if [ $RETVAL -eq 0 ]; then echo_success; else echo_failure; fi
+                if command -v killproc >/dev/null 2>&1; then
+                    killproc $EXE_PATH
+                    RETVAL=$?
+                elif command -v pkill >/dev/null 2>&1; then
+                    pkill -f $EXE_PATH
+                    RETVAL=$?
+                else
+                    PID=$(pidof $EXE_PATH)
+                    if [ -n "$PID" ]; then
+                        kill $PID
+                        RETVAL=$?
+                    else
+                        RETVAL=1
+                    fi
+                fi
+                if [ $RETVAL -eq 0 ]; then
+                    echo_success
+                else
+                    echo_failure
+                fi
                 echo
                 ;;
             S)
@@ -107,8 +129,18 @@ case "$1" in
                 RETVAL=$?
                 ;;
             R)
-                status $EXE_PATH
-                RETVAL=$?
+                if command -v status >/dev/null 2>&1; then
+                    status $EXE_PATH
+                    RETVAL=$?
+                else
+                    if pidof $EXE_PATH >/dev/null 2>&1; then
+                        echo "$EXE_PATH is running"
+                        RETVAL=0
+                    else
+                        echo "$EXE_PATH is not running"
+                        RETVAL=3
+                    fi
+                fi
                 ;;
             S)
                 checkproc -p $PIDFILE $EXE_PATH
