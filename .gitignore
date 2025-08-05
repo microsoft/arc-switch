@@ -17,8 +17,14 @@
 # Output of build tools
 bin/
 
+# Output of build tools
+bin/
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Go module files
+go.sum
 
 # Go module files
 go.sum
@@ -38,3 +44,16 @@ go.work.sum
 # OS files
 .DS_Store
 Thumbs.db
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+.azure
+src/GCService_Linux**/*
+src/ExtensionService_Linux**/*
+src/ARC-Installer/**/*

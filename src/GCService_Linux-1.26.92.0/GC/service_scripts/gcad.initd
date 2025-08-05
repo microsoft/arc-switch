@@ -1,0 +1,157 @@
+#!/bin/bash
+##
+# Copyright (c) Microsoft Corporation.  All rights reserved.
+#
+# Contains settings for the Arc GC service.
+#
+#
+
+### BEGIN INIT INFO
+# Provides:          gcad
+# Required-Start:    $network
+# Required-Stop:     $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Arc GC Server
+# Description:       Arc GC Server
+### END INIT INFO
+
+EXE_PATH=<GC_EXE_PATH>
+
+test -x $EXE_PATH || { echo "$EXE_PATH not installed";
+    if [ "$1" = "stop" ]; then exit 0;
+    else exit 5; fi; }
+
+# PID File
+NAME=$(basename $EXE_PATH)
+PIDFILE=/var/run/$NAME.pid
+
+if [ -f /etc/init.d/functions ]; then
+    INIT_STYLE=R      # INIT_STYLE uses R/S/D for its representative platform RedHat/SuSE/Debian 
+    . /etc/init.d/functions
+elif [ -f /etc/rc.status ]; then
+    INIT_STYLE=S
+    . /etc/rc.status && rc_reset
+elif [ -f /lib/lsb/init-functions ]; then
+    INIT_STYLE=D
+    . /lib/lsb/init-functions
+else
+    echo -n "Could not source init functions."
+    exit 1
+fi
+
+RETVAL=0
+case "$1" in
+     start)
+        case $INIT_STYLE in
+            D) 
+                log_begin_msg "Starting Arc GC: "
+                start-stop-daemon --start --quiet --pidfile $PIDFILE --name "gcad" --startas $EXE_PATH
+                RETVAL=$?
+                log_end_msg $RETVAL
+                ;;               
+            R) 
+                echo -n "Starting Arc GC: "
+                if command -v daemon >/dev/null 2>&1; then
+                    daemon $EXE_PATH
+                    RETVAL=$?
+                else
+                    nohup $EXE_PATH >/dev/null 2>&1 &
+                    RETVAL=$?
+                fi
+                echo
+                ;;
+            S) 
+                . /etc/sysconfig/language
+                unset LC_ALL
+                LC_CTYPE="$RC_LANG"; export LC_CTYPE
+                echo -n "Starting Arc GC: "
+                startproc -p $PIDFILE $EXE_PATH
+                rc_status -v
+                ;;
+            *)  exit 1   ;;
+        esac  ;;
+     stop)
+        case $INIT_STYLE in
+            D)
+                log_begin_msg "Shutting down Arc GC: "
+                $EXE_PATH > /dev/null 2>&1
+                RETVAL=$?
+                log_end_msg $RETVAL
+                ;;
+            R)
+                echo -n "Shutting down Arc GC: "
+                if command -v killproc >/dev/null 2>&1; then
+                    killproc $EXE_PATH
+                    RETVAL=$?
+                elif command -v pkill >/dev/null 2>&1; then
+                    pkill -f $EXE_PATH
+                    RETVAL=$?
+                else
+                    PID=$(pidof $EXE_PATH)
+                    if [ -n "$PID" ]; then
+                        kill $PID
+                        RETVAL=$?
+                    else
+                        RETVAL=1
+                    fi
+                fi
+                if [ $RETVAL -eq 0 ]; then
+                    echo_success
+                else
+                    echo_failure
+                fi
+                echo
+                ;;
+            S)
+                echo -n "Shutting down Arc GC: "
+                $EXE_PATH > /dev/null 2>&1
+                killproc -p $PIDFILE $EXE_PATH
+                rc_status -v
+                ;;
+            *)  exit 1    ;;
+        esac
+        ;;
+     restart)
+        $0 stop
+        $0 start
+        case $INIT_STYLE in
+            S)   rc_status  ;;
+          D|R)   RETVAL=$?  ;;
+            *)   exit 1     ;;
+        esac
+        ;;
+     status)
+        echo -n "Checking for service Arc GC "
+        case $INIT_STYLE in
+            D)
+                status_of_proc $EXE_PATH
+                RETVAL=$?
+                ;;
+            R)
+                if command -v status >/dev/null 2>&1; then
+                    status $EXE_PATH
+                    RETVAL=$?
+                else
+                    if pidof $EXE_PATH >/dev/null 2>&1; then
+                        echo "$EXE_PATH is running"
+                        RETVAL=0
+                    else
+                        echo "$EXE_PATH is not running"
+                        RETVAL=3
+                    fi
+                fi
+                ;;
+            S)
+                checkproc -p $PIDFILE $EXE_PATH
+                rc_status -v
+                ;;
+            *)  exit 1    ;;
+        esac
+        ;;
+     *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
+if [ $INIT_STYLE == S ]; then rc_exit; else exit $RETVAL; fi
