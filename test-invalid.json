@@ -1,0 +1,8 @@
+{
+    "data_type": "test_entry",
+    "timestamp": "invalid-timestamp",
+    "date": "2025-01-15",
+    "message": {
+        "test": "value"
+    }
+}
