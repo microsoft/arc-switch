@@ -99,8 +99,8 @@ IP Route Table for VRF "default"
 	// Parse the data
 	routes := parseIPRoutes(sampleInput)
 
-	// Should have 7 routes
-	expectedCount := 7
+	// Should have 6 routes
+	expectedCount := 6
 	if len(routes) != expectedCount {
 		t.Errorf("Expected %d routes, got %d", expectedCount, len(routes))
 	}

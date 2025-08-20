@@ -1,22 +1,22 @@
-# Cisco Nexus Interface Counters Parser
+# Cisco Nexus Class Map Parser
 
-This tool parses Cisco Nexus `show interface counters` output and converts it to structured JSON format for monitoring and analysis.
+This tool parses Cisco Nexus `show class-map` output and converts it to structured JSON format for QoS policy analysis and monitoring.
 
 ## Features
 
 - **Dual Input Modes**: Parse from input file or execute commands directly on switch
-- **Comprehensive Metrics**: Captures all interface counter metrics (ingress/egress octets, unicast/multicast/broadcast packets)
-- **Interface Classification**: Automatically categorizes interfaces by type (ethernet, port-channel, vlan, management, tunnel)
+- **Comprehensive Class Map Data**: Captures all class map types (QoS, queuing, network-qos) with match conditions
+- **Multi-type Support**: Handles different class map types and match criteria
 - **Standardized JSON Output**: Uses the project's standardized JSON structure compatible with syslogwriter
-- **JSON Lines Format**: Each interface produces a separate JSON object for streaming/logging compatibility
-- **Error Handling**: Robust parsing with proper handling of unavailable counters and malformed data
+- **JSON Lines Format**: Each class map produces a separate JSON object for streaming/logging compatibility
+- **Error Handling**: Robust parsing with proper handling of descriptions and multiple match rules
 - **CLI Integration**: Uses `vsh` for direct switch communication
 
 ## Installation
 
 ```bash
 # Build the binary
-go build -o interface_counters_parser interface_counters_parser.go
+go build -o class_map_parser class_map_parser.go
 ```
 
 ## Usage
@@ -24,129 +24,133 @@ go build -o interface_counters_parser interface_counters_parser.go
 ### Parse from Input File
 
 ```bash
-# Parse interface counters from a text file
-./interface_counters_parser -input show-interface-counter.txt -output output.json
+# Parse class map data from a text file
+./class_map_parser -input show-class-map.txt -output output.json
 
 # Parse and output to stdout
-./interface_counters_parser -input show-interface-counter.txt
+./class_map_parser -input show-class-map.txt
 ```
 
 ### Get Data Directly from Switch
 
 ```bash
 # Execute commands on switch using commands.json
-./interface_counters_parser -commands ../commands.json -output output.json
+./class_map_parser -commands ../commands.json -output output.json
 ```
 
 ### Command Line Options
 
-- `-input <file>`: Input file containing `show interface counters` output
+- `-input <file>`: Input file containing `show class-map` output
 - `-output <file>`: Output file for JSON data (optional, defaults to stdout)
 - `-commands <file>`: Commands JSON file (used when no input file is specified)
 - `-help`: Show help message
 
 ## Input Format
 
-The tool expects standard Cisco Nexus `show interface counters` output, which includes multiple sections:
+The tool expects standard Cisco Nexus `show class-map` output organized in sections:
 
-1. **InOctets and InUcastPkts**: Ingress octets and unicast packets
-2. **InMcastPkts and InBcastPkts**: Ingress multicast and broadcast packets  
-3. **OutOctets and OutUcastPkts**: Egress octets and unicast packets
-4. **OutMcastPkts and OutBcastPkts**: Egress multicast and broadcast packets
+- **Type qos class-maps**: QoS classification maps
+- **Type queuing class-maps**: Queue management maps
+- **Type network-qos class-maps**: Network QoS maps
+
+Each class map entry includes:
+- Class map declaration with type and match mode
+- Optional description
+- Match conditions (cos, precedence, qos-group)
 
 ## Output Format
 
-The parser outputs JSON Lines format with a standardized structure compatible with the syslogwriter library. Each interface produces a JSON object with the following structure:
+The parser outputs JSON Lines format with a standardized structure compatible with the syslogwriter library. Each class map produces a JSON object with the following structure:
 
 ### Standardized Structure
 
 ```json
 {
-  "data_type": "cisco_nexus_interface_counters",
-  "timestamp": "2025-07-01T23:45:57Z",
-  "date": "2025-07-01",
+  "data_type": "cisco_nexus_class_map",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
   "message": {
-    // Interface-specific fields here
+    // Class map-specific fields here
   }
 }
 ```
 
 ### Required Fields
 
-- `data_type`: Always "cisco_nexus_interface_counters"
-- `timestamp`: Processing timestamp in ISO 8601 format (e.g., "2025-07-01T23:45:57Z")
+- `data_type`: Always "cisco_nexus_class_map"
+- `timestamp`: Processing timestamp in ISO 8601 format (e.g., "2025-01-20T10:30:45Z")
 - `date`: Processing date in ISO format (YYYY-MM-DD)
-- `message`: JSON object containing all interface counter data
+- `message`: JSON object containing all class map data
 
 ### Message Fields
 
-The `message` field contains all interface-specific data:
+The `message` field contains all class map-specific data:
 
 ```json
 {
-  "interface_name": "Eth1/29",
-  "interface_type": "ethernet",
-  "in_octets": 5049641112717,
-  "in_ucast_pkts": 6489292847,
-  "in_mcast_pkts": 963320,
-  "in_bcast_pkts": 490562,
-  "out_octets": 5095780391460,
-  "out_ucast_pkts": 6593171948,
-  "out_mcast_pkts": 10233218,
-  "out_bcast_pkts": 6452477,
-  "has_ingress_data": true,
-  "has_egress_data": true
+  "class_name": "RDMA",
+  "class_type": "qos",
+  "match_type": "match-all",
+  "description": "",
+  "match_rules": [
+    {
+      "match_type": "cos",
+      "match_value": "3"
+    }
+  ]
 }
 ```
 
 #### Core Fields
 
-- `interface_name`: Interface name (e.g., Eth1/29, Po50, Vlan125, mgmt0, Tunnel1)
-- `interface_type`: Categorized interface type (ethernet, port-channel, vlan, management, tunnel, unknown)
+- `class_name`: Name of the class map (e.g., "RDMA", "c-out-q3", "c-nq1")
+- `class_type`: Type of class map (qos, queuing, network-qos)
+- `match_type`: Match mode (match-all, match-any)
 
-#### Counter Fields
+#### Optional Fields
 
-- `in_octets`: Ingress octets
-- `in_ucast_pkts`: Ingress unicast packets  
-- `in_mcast_pkts`: Ingress multicast packets
-- `in_bcast_pkts`: Ingress broadcast packets
-- `out_octets`: Egress octets
-- `out_ucast_pkts`: Egress unicast packets
-- `out_mcast_pkts`: Egress multicast packets
-- `out_bcast_pkts`: Egress broadcast packets
+- `description`: Optional description text
+- `match_rules`: Array of match conditions
 
-#### Status Fields
+#### Match Rules Structure
 
-- `has_ingress_data`: True if ingress counters are available
-- `has_egress_data`: True if egress counters are available
+Each match rule contains:
+- `match_type`: Type of match (cos, precedence, qos-group)
+- `match_value`: Value being matched
 
-## Interface Types
+## Class Map Types
 
-The tool automatically categorizes interfaces:
+The parser handles three types of class maps:
 
-- **ethernet**: Physical Ethernet interfaces (Eth1/1, Eth1/2, etc.)
-- **port-channel**: Port channel/LAG interfaces (Po50, Po101, etc.)
-- **vlan**: VLAN interfaces (Vlan1, Vlan125, etc.)
-- **management**: Management interfaces (mgmt0)
-- **tunnel**: Tunnel interfaces (Tunnel1, etc.)
-- **unknown**: Unrecognized interface types
+- **qos**: Quality of Service classification
+  - Match conditions: cos, precedence
+  - Used for traffic classification
+
+- **queuing**: Queue management
+  - Match conditions: qos-group
+  - Used for ingress/egress queue assignment
+
+- **network-qos**: Network-wide QoS policies
+  - Match conditions: qos-group
+  - Used for system-level QoS configuration
 
 ## Data Handling
 
-- **Unavailable Counters**: Represented as `-1` in JSON output (e.g., for VLAN interfaces showing "--")
-- **Zero Values**: Actual zero counters are preserved as `0`
-- **Status Flags**: `has_ingress_data` and `has_egress_data` indicate data availability
+- **Empty Descriptions**: Class maps without descriptions have empty string values
+- **Multiple Match Rules**: Class maps can have multiple match conditions captured in the match_rules array
+- **Section Headers**: Type headers are used to categorize class maps correctly
+- **Whitespace**: All values are trimmed of leading/trailing whitespace
 
 ## Integration with Commands.json
 
-When using the `-commands` option, the tool looks for an entry with `"name": "interface-counter"` in the commands.json file:
+When using the `-commands` option, the tool looks for an entry with `"name": "class-map"` in the commands.json file:
 
 ```json
 {
   "commands": [
     {
-      "name": "interface-counter",
-      "command": "show interface counters"
+      "name": "class-map",
+      "command": "show class-map"
     }
   ]
 }
@@ -157,35 +161,82 @@ When using the `-commands` option, the tool looks for an entry with `"name": "in
 ### Sample Input
 
 ```text
-RR1-S46-R14-93180hl-22-1a# show interface counters 
+  Type qos class-maps
+  ====================
 
-----------------------------------------------------------------------------------
-Port                                     InOctets                      InUcastPkts
-----------------------------------------------------------------------------------
-Eth1/1                               205027653248                        650373664
-Eth1/2                               144387970112                        277741204
+    class-map type qos match-all RDMA
+      match cos 3
+
+    class-map type qos match-any c-dflt-mpls-qosgrp1
+      Description: This is an ingress default qos class-map that classify traffic with prec  1
+      match precedence 1
+
+  Type queuing class-maps
+  ========================
+
+    class-map type queuing match-any c-out-q3
+      Description: Classifier for Egress queue 3
+      match qos-group 3
+
+  Type network-qos class-maps
+  ===========================
+  class-map type network-qos match-any c-nq1
+      Description: Default class on qos-group 1
+    match qos-group 1
 ```
 
 ### Sample Output
 
 ```json
 {
-  "data_type": "cisco_nexus_interface_counters",
-  "timestamp": "2025-07-01T23:45:57Z",
-  "date": "2025-07-01",
+  "data_type": "cisco_nexus_class_map",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
   "message": {
-    "interface_name": "Eth1/29",
-    "interface_type": "ethernet",
-    "in_octets": 5049641112717,
-    "in_ucast_pkts": 6489292847,
-    "in_mcast_pkts": 963320,
-    "in_bcast_pkts": 490562,
-    "out_octets": 5095780391460,
-    "out_ucast_pkts": 6593171948,
-    "out_mcast_pkts": 10233218,
-    "out_bcast_pkts": 6452477,
-    "has_ingress_data": true,
-    "has_egress_data": true
+    "class_name": "RDMA",
+    "class_type": "qos",
+    "match_type": "match-all",
+    "description": "",
+    "match_rules": [
+      {
+        "match_type": "cos",
+        "match_value": "3"
+      }
+    ]
+  }
+}
+{
+  "data_type": "cisco_nexus_class_map",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
+  "message": {
+    "class_name": "c-dflt-mpls-qosgrp1",
+    "class_type": "qos",
+    "match_type": "match-any",
+    "description": "This is an ingress default qos class-map that classify traffic with prec  1",
+    "match_rules": [
+      {
+        "match_type": "precedence",
+        "match_value": "1"
+      }
+    ]
+  }
+}
+{
+  "data_type": "cisco_nexus_class_map",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
+  "message": {
+    "class_name": "c-out-q3",
+    "class_type": "queuing",
+    "match_type": "match-any",
+    "description": "Classifier for Egress queue 3",
+    "match_rules": [
+      {
+        "match_type": "qos-group",
+        "match_value": "3"
+      }
+    ]
   }
 }
 ```
@@ -196,11 +247,11 @@ To validate that the parser output conforms to the standardized JSON structure, 
 
 ```bash
 # Validate parser output
-./interface_counters_parser -input show-interface-counter.txt | /workspaces/arc-switch2/validate-parser-output.sh
+./class_map_parser -input show-class-map.txt | /workspaces/arc-switch2/validate-parser-output.sh
 
 # Or validate a saved output file
-./interface_counters_parser -input show-interface-counter.txt -output interface-results.json
-/workspaces/arc-switch2/validate-parser-output.sh interface-results.json
+./class_map_parser -input show-class-map.txt -output class-map-results.json
+/workspaces/arc-switch2/validate-parser-output.sh class-map-results.json
 ```
 
 The validation script checks for:
@@ -215,10 +266,11 @@ The validation script checks for:
 The tool includes comprehensive error handling for:
 
 - Invalid input files
-- Malformed command output
+- Malformed class map definitions
+- Missing or incomplete match rules
 - Missing commands.json entries
 - Network connectivity issues (when using direct switch communication)
-- Invalid counter values
+- Section header parsing
 
 ## Requirements
 

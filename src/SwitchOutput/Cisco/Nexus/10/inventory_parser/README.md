@@ -1,22 +1,22 @@
-# Cisco Nexus Interface Counters Parser
+# Cisco Nexus Inventory Parser
 
-This tool parses Cisco Nexus `show interface counters` output and converts it to structured JSON format for monitoring and analysis.
+This tool parses Cisco Nexus `show inventory all` output and converts it to structured JSON format for hardware inventory tracking and asset management.
 
 ## Features
 
 - **Dual Input Modes**: Parse from input file or execute commands directly on switch
-- **Comprehensive Metrics**: Captures all interface counter metrics (ingress/egress octets, unicast/multicast/broadcast packets)
-- **Interface Classification**: Automatically categorizes interfaces by type (ethernet, port-channel, vlan, management, tunnel)
+- **Comprehensive Inventory Data**: Captures all hardware components including chassis, modules, power supplies, fans, and transceivers
+- **Component Classification**: Automatically categorizes components by type
 - **Standardized JSON Output**: Uses the project's standardized JSON structure compatible with syslogwriter
-- **JSON Lines Format**: Each interface produces a separate JSON object for streaming/logging compatibility
-- **Error Handling**: Robust parsing with proper handling of unavailable counters and malformed data
+- **JSON Lines Format**: Each component produces a separate JSON object for streaming/logging compatibility
+- **Error Handling**: Robust parsing with proper handling of empty fields and N/A values
 - **CLI Integration**: Uses `vsh` for direct switch communication
 
 ## Installation
 
 ```bash
 # Build the binary
-go build -o interface_counters_parser interface_counters_parser.go
+go build -o inventory_parser inventory_parser.go
 ```
 
 ## Usage
@@ -24,129 +24,111 @@ go build -o interface_counters_parser interface_counters_parser.go
 ### Parse from Input File
 
 ```bash
-# Parse interface counters from a text file
-./interface_counters_parser -input show-interface-counter.txt -output output.json
+# Parse inventory data from a text file
+./inventory_parser -input show-inventory.txt -output output.json
 
 # Parse and output to stdout
-./interface_counters_parser -input show-interface-counter.txt
+./inventory_parser -input show-inventory.txt
 ```
 
 ### Get Data Directly from Switch
 
 ```bash
 # Execute commands on switch using commands.json
-./interface_counters_parser -commands ../commands.json -output output.json
+./inventory_parser -commands ../commands.json -output output.json
 ```
 
 ### Command Line Options
 
-- `-input <file>`: Input file containing `show interface counters` output
+- `-input <file>`: Input file containing `show inventory all` output
 - `-output <file>`: Output file for JSON data (optional, defaults to stdout)
 - `-commands <file>`: Commands JSON file (used when no input file is specified)
 - `-help`: Show help message
 
 ## Input Format
 
-The tool expects standard Cisco Nexus `show interface counters` output, which includes multiple sections:
+The tool expects standard Cisco Nexus `show inventory all` output with two-line entries for each component:
 
-1. **InOctets and InUcastPkts**: Ingress octets and unicast packets
-2. **InMcastPkts and InBcastPkts**: Ingress multicast and broadcast packets  
-3. **OutOctets and OutUcastPkts**: Egress octets and unicast packets
-4. **OutMcastPkts and OutBcastPkts**: Egress multicast and broadcast packets
+1. **NAME and DESCR line**: Component name and description
+2. **PID, VID, and SN line**: Product ID, Version ID, and Serial Number
 
 ## Output Format
 
-The parser outputs JSON Lines format with a standardized structure compatible with the syslogwriter library. Each interface produces a JSON object with the following structure:
+The parser outputs JSON Lines format with a standardized structure compatible with the syslogwriter library. Each component produces a JSON object with the following structure:
 
 ### Standardized Structure
 
 ```json
 {
-  "data_type": "cisco_nexus_interface_counters",
-  "timestamp": "2025-07-01T23:45:57Z",
-  "date": "2025-07-01",
+  "data_type": "cisco_nexus_inventory",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
   "message": {
-    // Interface-specific fields here
+    // Component-specific fields here
   }
 }
 ```
 
 ### Required Fields
 
-- `data_type`: Always "cisco_nexus_interface_counters"
-- `timestamp`: Processing timestamp in ISO 8601 format (e.g., "2025-07-01T23:45:57Z")
+- `data_type`: Always "cisco_nexus_inventory"
+- `timestamp`: Processing timestamp in ISO 8601 format (e.g., "2025-01-20T10:30:45Z")
 - `date`: Processing date in ISO format (YYYY-MM-DD)
-- `message`: JSON object containing all interface counter data
+- `message`: JSON object containing all inventory data
 
 ### Message Fields
 
-The `message` field contains all interface-specific data:
+The `message` field contains all component-specific data:
 
 ```json
 {
-  "interface_name": "Eth1/29",
-  "interface_type": "ethernet",
-  "in_octets": 5049641112717,
-  "in_ucast_pkts": 6489292847,
-  "in_mcast_pkts": 963320,
-  "in_bcast_pkts": 490562,
-  "out_octets": 5095780391460,
-  "out_ucast_pkts": 6593171948,
-  "out_mcast_pkts": 10233218,
-  "out_bcast_pkts": 6452477,
-  "has_ingress_data": true,
-  "has_egress_data": true
+  "name": "Chassis",
+  "description": "Nexus9000 C93180YC-FX Chassis",
+  "product_id": "N9K-C93180YC-FX",
+  "version_id": "V04",
+  "serial_number": "FKE24000X1A",
+  "component_type": "chassis"
 }
 ```
 
 #### Core Fields
 
-- `interface_name`: Interface name (e.g., Eth1/29, Po50, Vlan125, mgmt0, Tunnel1)
-- `interface_type`: Categorized interface type (ethernet, port-channel, vlan, management, tunnel, unknown)
+- `name`: Component name (e.g., "Chassis", "Slot 1", "Power Supply 1", "Fan 1", "Ethernet1/1")
+- `description`: Component description
+- `product_id`: Product identifier (PID)
+- `version_id`: Version identifier (VID)
+- `serial_number`: Serial number (SN)
+- `component_type`: Automatically categorized type
 
-#### Counter Fields
+## Component Types
 
-- `in_octets`: Ingress octets
-- `in_ucast_pkts`: Ingress unicast packets  
-- `in_mcast_pkts`: Ingress multicast packets
-- `in_bcast_pkts`: Ingress broadcast packets
-- `out_octets`: Egress octets
-- `out_ucast_pkts`: Egress unicast packets
-- `out_mcast_pkts`: Egress multicast packets
-- `out_bcast_pkts`: Egress broadcast packets
+The parser automatically categorizes components:
 
-#### Status Fields
-
-- `has_ingress_data`: True if ingress counters are available
-- `has_egress_data`: True if egress counters are available
-
-## Interface Types
-
-The tool automatically categorizes interfaces:
-
-- **ethernet**: Physical Ethernet interfaces (Eth1/1, Eth1/2, etc.)
-- **port-channel**: Port channel/LAG interfaces (Po50, Po101, etc.)
-- **vlan**: VLAN interfaces (Vlan1, Vlan125, etc.)
-- **management**: Management interfaces (mgmt0)
-- **tunnel**: Tunnel interfaces (Tunnel1, etc.)
-- **unknown**: Unrecognized interface types
+- **chassis**: Main chassis components
+- **slot**: Line cards and modules
+- **power_supply**: Power supply units
+- **fan**: Fan modules
+- **transceiver**: SFP/QSFP transceivers (Ethernet interfaces)
+- **unknown**: Unrecognized component types
 
 ## Data Handling
 
-- **Unavailable Counters**: Represented as `-1` in JSON output (e.g., for VLAN interfaces showing "--")
-- **Zero Values**: Actual zero counters are preserved as `0`
-- **Status Flags**: `has_ingress_data` and `has_egress_data` indicate data availability
+- **Quoted Values**: Automatically removes surrounding quotes from NAME and DESCR fields
+- **Empty Fields**: Empty PID fields are preserved as empty strings
+- **N/A Values**: Serial numbers showing "N/A" are preserved as-is
+- **Ethernet Names**: Trailing commas in Ethernet interface names are automatically cleaned
+- **Whitespace**: All values are trimmed of leading/trailing whitespace
 
 ## Integration with Commands.json
 
-When using the `-commands` option, the tool looks for an entry with `"name": "interface-counter"` in the commands.json file:
+When using the `-commands` option, the tool looks for an entry with `"name": "inventory"` in the commands.json file:
 
 ```json
 {
   "commands": [
     {
-      "name": "interface-counter",
-      "command": "show interface counters"
+      "name": "inventory",
+      "command": "show inventory all"
     }
   ]
 }
@@ -157,35 +139,73 @@ When using the `-commands` option, the tool looks for an entry with `"name": "in
 ### Sample Input
 
 ```text
-RR1-S46-R14-93180hl-22-1a# show interface counters 
+CONTOSO-DC1-TOR-01# show inventory all 
+NAME: "Chassis",  DESCR: "Nexus9000 C93180YC-FX Chassis"         
+PID: N9K-C93180YC-FX     ,  VID: V04 ,  SN: FKE24000X1A          
 
-----------------------------------------------------------------------------------
-Port                                     InOctets                      InUcastPkts
-----------------------------------------------------------------------------------
-Eth1/1                               205027653248                        650373664
-Eth1/2                               144387970112                        277741204
+NAME: "Power Supply 1",  DESCR: "Nexus9000 C93180YC-FX Chassis Power Supply"
+PID: NXA-PAC-500W-PE     ,  VID: V01 ,  SN: ABC24001X2B          
+
+NAME: "Fan 1",  DESCR: "Nexus9000 C93180YC-FX Chassis Fan Module"
+PID: NXA-FAN-30CFM-F     ,  VID: V01 ,  SN: N/A                  
+
+NAME: Ethernet1/1,  DESCR: CISCO-AMPHENOL                          
+PID: SFP-H25G-CU3M       ,  VID: NDCCGJ-C403,  SN: XYZ24001A1B
 ```
 
 ### Sample Output
 
 ```json
 {
-  "data_type": "cisco_nexus_interface_counters",
-  "timestamp": "2025-07-01T23:45:57Z",
-  "date": "2025-07-01",
+  "data_type": "cisco_nexus_inventory",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
   "message": {
-    "interface_name": "Eth1/29",
-    "interface_type": "ethernet",
-    "in_octets": 5049641112717,
-    "in_ucast_pkts": 6489292847,
-    "in_mcast_pkts": 963320,
-    "in_bcast_pkts": 490562,
-    "out_octets": 5095780391460,
-    "out_ucast_pkts": 6593171948,
-    "out_mcast_pkts": 10233218,
-    "out_bcast_pkts": 6452477,
-    "has_ingress_data": true,
-    "has_egress_data": true
+    "name": "Chassis",
+    "description": "Nexus9000 C93180YC-FX Chassis",
+    "product_id": "N9K-C93180YC-FX",
+    "version_id": "V04",
+    "serial_number": "FKE24000X1A",
+    "component_type": "chassis"
+  }
+}
+{
+  "data_type": "cisco_nexus_inventory",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
+  "message": {
+    "name": "Power Supply 1",
+    "description": "Nexus9000 C93180YC-FX Chassis Power Supply",
+    "product_id": "NXA-PAC-500W-PE",
+    "version_id": "V01",
+    "serial_number": "ABC24001X2B",
+    "component_type": "power_supply"
+  }
+}
+{
+  "data_type": "cisco_nexus_inventory",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
+  "message": {
+    "name": "Fan 1",
+    "description": "Nexus9000 C93180YC-FX Chassis Fan Module",
+    "product_id": "NXA-FAN-30CFM-F",
+    "version_id": "V01",
+    "serial_number": "N/A",
+    "component_type": "fan"
+  }
+}
+{
+  "data_type": "cisco_nexus_inventory",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
+  "message": {
+    "name": "Ethernet1/1",
+    "description": "CISCO-AMPHENOL",
+    "product_id": "SFP-H25G-CU3M",
+    "version_id": "NDCCGJ-C403",
+    "serial_number": "XYZ24001A1B",
+    "component_type": "transceiver"
   }
 }
 ```
@@ -196,11 +216,11 @@ To validate that the parser output conforms to the standardized JSON structure, 
 
 ```bash
 # Validate parser output
-./interface_counters_parser -input show-interface-counter.txt | /workspaces/arc-switch2/validate-parser-output.sh
+./inventory_parser -input show-inventory.txt | /workspaces/arc-switch2/validate-parser-output.sh
 
 # Or validate a saved output file
-./interface_counters_parser -input show-interface-counter.txt -output interface-results.json
-/workspaces/arc-switch2/validate-parser-output.sh interface-results.json
+./inventory_parser -input show-inventory.txt -output inventory-results.json
+/workspaces/arc-switch2/validate-parser-output.sh inventory-results.json
 ```
 
 The validation script checks for:
@@ -215,10 +235,11 @@ The validation script checks for:
 The tool includes comprehensive error handling for:
 
 - Invalid input files
-- Malformed command output
+- Malformed inventory output
+- Multi-line parsing issues
 - Missing commands.json entries
 - Network connectivity issues (when using direct switch communication)
-- Invalid counter values
+- Empty or N/A field values
 
 ## Requirements
 

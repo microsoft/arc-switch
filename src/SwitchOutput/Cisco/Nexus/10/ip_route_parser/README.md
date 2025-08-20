@@ -1,22 +1,23 @@
-# Cisco Nexus Interface Counters Parser
+# Cisco Nexus IP Route Parser
 
-This tool parses Cisco Nexus `show interface counters` output and converts it to structured JSON format for monitoring and analysis.
+This tool parses Cisco Nexus `show ip route` output and converts it to structured JSON format for network routing analysis and monitoring.
 
 ## Features
 
 - **Dual Input Modes**: Parse from input file or execute commands directly on switch
-- **Comprehensive Metrics**: Captures all interface counter metrics (ingress/egress octets, unicast/multicast/broadcast packets)
-- **Interface Classification**: Automatically categorizes interfaces by type (ethernet, port-channel, vlan, management, tunnel)
+- **Comprehensive Route Data**: Captures all routing table information including next-hops, metrics, and attributes
+- **Multi-path Support**: Handles routes with multiple next-hop entries (ECMP/load balancing)
+- **Protocol Recognition**: Automatically identifies route protocols (BGP, direct, local, HSRP)
 - **Standardized JSON Output**: Uses the project's standardized JSON structure compatible with syslogwriter
-- **JSON Lines Format**: Each interface produces a separate JSON object for streaming/logging compatibility
-- **Error Handling**: Robust parsing with proper handling of unavailable counters and malformed data
+- **JSON Lines Format**: Each route produces a separate JSON object for streaming/logging compatibility
+- **Error Handling**: Robust parsing with proper handling of complex route attributes and tags
 - **CLI Integration**: Uses `vsh` for direct switch communication
 
 ## Installation
 
 ```bash
 # Build the binary
-go build -o interface_counters_parser interface_counters_parser.go
+go build -o ip_route_parser ip_route_parser.go
 ```
 
 ## Usage
@@ -24,129 +25,149 @@ go build -o interface_counters_parser interface_counters_parser.go
 ### Parse from Input File
 
 ```bash
-# Parse interface counters from a text file
-./interface_counters_parser -input show-interface-counter.txt -output output.json
+# Parse IP routes from a text file
+./ip_route_parser -input show-ip-route.txt -output output.json
 
 # Parse and output to stdout
-./interface_counters_parser -input show-interface-counter.txt
+./ip_route_parser -input show-ip-route.txt
 ```
 
 ### Get Data Directly from Switch
 
 ```bash
 # Execute commands on switch using commands.json
-./interface_counters_parser -commands ../commands.json -output output.json
+./ip_route_parser -commands ../commands.json -output output.json
 ```
 
 ### Command Line Options
 
-- `-input <file>`: Input file containing `show interface counters` output
+- `-input <file>`: Input file containing `show ip route` output
 - `-output <file>`: Output file for JSON data (optional, defaults to stdout)
 - `-commands <file>`: Commands JSON file (used when no input file is specified)
 - `-help`: Show help message
 
 ## Input Format
 
-The tool expects standard Cisco Nexus `show interface counters` output, which includes multiple sections:
+The tool expects standard Cisco Nexus `show ip route` output with the following structure:
 
-1. **InOctets and InUcastPkts**: Ingress octets and unicast packets
-2. **InMcastPkts and InBcastPkts**: Ingress multicast and broadcast packets  
-3. **OutOctets and OutUcastPkts**: Egress octets and unicast packets
-4. **OutMcastPkts and OutBcastPkts**: Egress multicast and broadcast packets
+- VRF information header
+- Network entries with ubest/mbest counters
+- Next-hop entries with via addresses, interfaces, and attributes
+- Route attributes including preference/metric, age, protocol, and tags
 
 ## Output Format
 
-The parser outputs JSON Lines format with a standardized structure compatible with the syslogwriter library. Each interface produces a JSON object with the following structure:
+The parser outputs JSON Lines format with a standardized structure compatible with the syslogwriter library. Each route produces a JSON object with the following structure:
 
 ### Standardized Structure
 
 ```json
 {
-  "data_type": "cisco_nexus_interface_counters",
-  "timestamp": "2025-07-01T23:45:57Z",
-  "date": "2025-07-01",
+  "data_type": "cisco_nexus_ip_route",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
   "message": {
-    // Interface-specific fields here
+    // Route-specific fields here
   }
 }
 ```
 
 ### Required Fields
 
-- `data_type`: Always "cisco_nexus_interface_counters"
-- `timestamp`: Processing timestamp in ISO 8601 format (e.g., "2025-07-01T23:45:57Z")
+- `data_type`: Always "cisco_nexus_ip_route"
+- `timestamp`: Processing timestamp in ISO 8601 format (e.g., "2025-01-20T10:30:45Z")
 - `date`: Processing date in ISO format (YYYY-MM-DD)
-- `message`: JSON object containing all interface counter data
+- `message`: JSON object containing all route data
 
 ### Message Fields
 
-The `message` field contains all interface-specific data:
+The `message` field contains all route-specific data:
 
 ```json
 {
-  "interface_name": "Eth1/29",
-  "interface_type": "ethernet",
-  "in_octets": 5049641112717,
-  "in_ucast_pkts": 6489292847,
-  "in_mcast_pkts": 963320,
-  "in_bcast_pkts": 490562,
-  "out_octets": 5095780391460,
-  "out_ucast_pkts": 6593171948,
-  "out_mcast_pkts": 10233218,
-  "out_bcast_pkts": 6452477,
-  "has_ingress_data": true,
-  "has_egress_data": true
+  "vrf": "default",
+  "network": "0.0.0.0/0",
+  "prefix": "0.0.0.0",
+  "prefix_length": 0,
+  "ubest": 2,
+  "mbest": 0,
+  "route_type": "bgp",
+  "next_hops": [
+    {
+      "via": "192.168.100.1",
+      "interface": "",
+      "preference": 20,
+      "metric": 0,
+      "age": "14w1d",
+      "protocol": "bgp-65238",
+      "attributes": ["external", "tag 64846"]
+    },
+    {
+      "via": "192.168.100.9",
+      "interface": "",
+      "preference": 20,
+      "metric": 0,
+      "age": "14w1d",
+      "protocol": "bgp-65238",
+      "attributes": ["external", "tag 64846"]
+    }
+  ]
 }
 ```
 
 #### Core Fields
 
-- `interface_name`: Interface name (e.g., Eth1/29, Po50, Vlan125, mgmt0, Tunnel1)
-- `interface_type`: Categorized interface type (ethernet, port-channel, vlan, management, tunnel, unknown)
+- `vrf`: VRF name (typically "default" for global routing table)
+- `network`: Network address with CIDR notation (e.g., "192.168.1.0/24")
+- `prefix`: IP address portion of the network
+- `prefix_length`: Subnet mask length (0-32)
 
-#### Counter Fields
+#### Path Selection Fields
 
-- `in_octets`: Ingress octets
-- `in_ucast_pkts`: Ingress unicast packets  
-- `in_mcast_pkts`: Ingress multicast packets
-- `in_bcast_pkts`: Ingress broadcast packets
-- `out_octets`: Egress octets
-- `out_ucast_pkts`: Egress unicast packets
-- `out_mcast_pkts`: Egress multicast packets
-- `out_bcast_pkts`: Egress broadcast packets
+- `ubest`: Number of best unicast paths
+- `mbest`: Number of best multicast paths
+- `route_type`: Type of route (attached, bgp, direct, local, hsrp, unknown)
 
-#### Status Fields
+#### Next-Hop Array
 
-- `has_ingress_data`: True if ingress counters are available
-- `has_egress_data`: True if egress counters are available
+Each next-hop entry contains:
+- `via`: Next-hop IP address
+- `interface`: Egress interface (e.g., "Eth1/47", "Vlan7", "Po50", "Lo0", "Tunnel1")
+- `preference`: Administrative distance/preference value
+- `metric`: Route metric
+- `age`: Route age (e.g., "14w1d", "37w6d")
+- `protocol`: Routing protocol (e.g., "bgp-65238", "direct", "local", "hsrp")
+- `attributes`: Array of additional attributes (e.g., "internal", "external", "tag 65238")
 
-## Interface Types
+## Route Types
 
-The tool automatically categorizes interfaces:
+The parser automatically categorizes routes:
 
-- **ethernet**: Physical Ethernet interfaces (Eth1/1, Eth1/2, etc.)
-- **port-channel**: Port channel/LAG interfaces (Po50, Po101, etc.)
-- **vlan**: VLAN interfaces (Vlan1, Vlan125, etc.)
-- **management**: Management interfaces (mgmt0)
-- **tunnel**: Tunnel interfaces (Tunnel1, etc.)
-- **unknown**: Unrecognized interface types
+- **attached**: Directly connected networks
+- **bgp**: BGP learned routes
+- **direct**: Direct routes
+- **local**: Local interface addresses
+- **hsrp**: HSRP virtual IP routes
+- **unknown**: Unrecognized route types
 
 ## Data Handling
 
-- **Unavailable Counters**: Represented as `-1` in JSON output (e.g., for VLAN interfaces showing "--")
-- **Zero Values**: Actual zero counters are preserved as `0`
-- **Status Flags**: `has_ingress_data` and `has_egress_data` indicate data availability
+- **Multiple Next-Hops**: Routes with multiple paths are captured with all next-hop details
+- **Empty Fields**: Missing interface or attributes are represented as empty strings or arrays
+- **Preference/Metric**: Extracted from `[x/y]` format where x=preference, y=metric
+- **Route Attributes**: BGP attributes (internal/external) and tags are parsed into arrays
+- **Host Routes**: Routes without explicit prefix length default to /32
 
 ## Integration with Commands.json
 
-When using the `-commands` option, the tool looks for an entry with `"name": "interface-counter"` in the commands.json file:
+When using the `-commands` option, the tool looks for an entry with `"name": "ip-route"` in the commands.json file:
 
 ```json
 {
   "commands": [
     {
-      "name": "interface-counter",
-      "command": "show interface counters"
+      "name": "ip-route",
+      "command": "show ip route"
     }
   ]
 }
@@ -157,35 +178,82 @@ When using the `-commands` option, the tool looks for an entry with `"name": "in
 ### Sample Input
 
 ```text
-RR1-S46-R14-93180hl-22-1a# show interface counters 
+CONTOSO-DC1-TOR-01# show ip route |no
+IP Route Table for VRF "default"
+'*' denotes best ucast next-hop
+'**' denotes best mcast next-hop
+'[x/y]' denotes [preference/metric]
+'%<string>' in via output denotes VRF <string>
 
-----------------------------------------------------------------------------------
-Port                                     InOctets                      InUcastPkts
-----------------------------------------------------------------------------------
-Eth1/1                               205027653248                        650373664
-Eth1/2                               144387970112                        277741204
+0.0.0.0/0, ubest/mbest: 2/0
+    *via 192.168.100.1, [20/0], 14w1d, bgp-65238, external, tag 64846
+    *via 192.168.100.9, [20/0], 14w1d, bgp-65238, external, tag 64846
+192.168.1.0/24, ubest/mbest: 1/0, attached
+    *via 192.168.1.2, Vlan7, [0/0], 37w6d, direct
+192.168.1.1/32, ubest/mbest: 1/0, attached
+    *via 192.168.1.1, Vlan7, [0/0], 37w6d, hsrp
 ```
 
 ### Sample Output
 
 ```json
 {
-  "data_type": "cisco_nexus_interface_counters",
-  "timestamp": "2025-07-01T23:45:57Z",
-  "date": "2025-07-01",
+  "data_type": "cisco_nexus_ip_route",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
   "message": {
-    "interface_name": "Eth1/29",
-    "interface_type": "ethernet",
-    "in_octets": 5049641112717,
-    "in_ucast_pkts": 6489292847,
-    "in_mcast_pkts": 963320,
-    "in_bcast_pkts": 490562,
-    "out_octets": 5095780391460,
-    "out_ucast_pkts": 6593171948,
-    "out_mcast_pkts": 10233218,
-    "out_bcast_pkts": 6452477,
-    "has_ingress_data": true,
-    "has_egress_data": true
+    "vrf": "default",
+    "network": "0.0.0.0/0",
+    "prefix": "0.0.0.0",
+    "prefix_length": 0,
+    "ubest": 2,
+    "mbest": 0,
+    "route_type": "bgp",
+    "next_hops": [
+      {
+        "via": "192.168.100.1",
+        "interface": "",
+        "preference": 20,
+        "metric": 0,
+        "age": "14w1d",
+        "protocol": "bgp-65238",
+        "attributes": ["external", "tag 64846"]
+      },
+      {
+        "via": "192.168.100.9",
+        "interface": "",
+        "preference": 20,
+        "metric": 0,
+        "age": "14w1d",
+        "protocol": "bgp-65238",
+        "attributes": ["external", "tag 64846"]
+      }
+    ]
+  }
+}
+{
+  "data_type": "cisco_nexus_ip_route",
+  "timestamp": "2025-01-20T10:30:45Z",
+  "date": "2025-01-20",
+  "message": {
+    "vrf": "default",
+    "network": "192.168.1.0/24",
+    "prefix": "192.168.1.0",
+    "prefix_length": 24,
+    "ubest": 1,
+    "mbest": 0,
+    "route_type": "attached",
+    "next_hops": [
+      {
+        "via": "192.168.1.2",
+        "interface": "Vlan7",
+        "preference": 0,
+        "metric": 0,
+        "age": "37w6d",
+        "protocol": "direct",
+        "attributes": []
+      }
+    ]
   }
 }
 ```
@@ -196,11 +264,11 @@ To validate that the parser output conforms to the standardized JSON structure, 
 
 ```bash
 # Validate parser output
-./interface_counters_parser -input show-interface-counter.txt | /workspaces/arc-switch2/validate-parser-output.sh
+./ip_route_parser -input show-ip-route.txt | /workspaces/arc-switch2/validate-parser-output.sh
 
 # Or validate a saved output file
-./interface_counters_parser -input show-interface-counter.txt -output interface-results.json
-/workspaces/arc-switch2/validate-parser-output.sh interface-results.json
+./ip_route_parser -input show-ip-route.txt -output route-results.json
+/workspaces/arc-switch2/validate-parser-output.sh route-results.json
 ```
 
 The validation script checks for:
@@ -215,10 +283,11 @@ The validation script checks for:
 The tool includes comprehensive error handling for:
 
 - Invalid input files
-- Malformed command output
+- Malformed routing table output
+- Complex multi-line route entries
 - Missing commands.json entries
 - Network connectivity issues (when using direct switch communication)
-- Invalid counter values
+- Invalid preference/metric values
 
 ## Requirements
 
