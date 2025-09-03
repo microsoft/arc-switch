@@ -6,7 +6,7 @@ on:
       version:
         description: 'Release version (e.g., v0.0.3-alpha.1)'
         required: true
-        default: 'v0.0.3-alpha.1'
+        default: 'v0.0.3-alpha.3'
       component:
         description: 'Component to build'
         required: true
@@ -36,16 +36,6 @@ jobs:
           - goos: linux
             goarch: arm64
             name: linux-arm64
-          - goos: darwin
-            goarch: amd64
-            name: darwin-amd64
-          - goos: darwin
-            goarch: arm64
-            name: darwin-arm64
-          - goos: windows
-            goarch: amd64
-            name: windows-amd64
-            ext: .exe
     
     steps:
     - name: Checkout code
@@ -61,19 +51,14 @@ jobs:
         cd src/SwitchOutput/Cisco/Nexus/10/mac_address_parser
         go mod tidy
         CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
-          go build -ldflags="-w -s" -o mac_address_parser${{ matrix.ext }} mac_address_parser.go
+          go build -ldflags="-w -s" -o mac_address_parser mac_address_parser.go
           
     - name: Create package
       run: |
         cd src/SwitchOutput/Cisco/Nexus/10/mac_address_parser
         mkdir -p $GITHUB_WORKSPACE/release-assets
-        if [ "${{ matrix.goos }}" = "windows" ]; then
-          zip $GITHUB_WORKSPACE/release-assets/mac_address_parser-${{ github.event.inputs.version }}-${{ matrix.name }}.zip \
-            mac_address_parser.exe README.md mac-address-table-sample.json
-        else
-          tar -czf $GITHUB_WORKSPACE/release-assets/mac_address_parser-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
-            mac_address_parser README.md mac-address-table-sample.json
-        fi
+        tar -czf $GITHUB_WORKSPACE/release-assets/mac_address_parser-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
+          mac_address_parser README.md mac-address-table-sample.json
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -93,16 +78,6 @@ jobs:
           - goos: linux
             goarch: arm64
             name: linux-arm64
-          - goos: darwin
-            goarch: amd64
-            name: darwin-amd64
-          - goos: darwin
-            goarch: arm64
-            name: darwin-arm64
-          - goos: windows
-            goarch: amd64
-            name: windows-amd64
-            ext: .exe
     
     steps:
     - name: Checkout code
@@ -117,19 +92,14 @@ jobs:
       run: |
         cd src/SwitchOutput/DellOS/10/interface
         CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
-          go build -ldflags="-w -s" -o show_interface${{ matrix.ext }} show_interface.go
+          go build -ldflags="-w -s" -o show_interface show_interface.go
           
     - name: Create package
       run: |
         cd src/SwitchOutput/DellOS/10/interface
         mkdir -p $GITHUB_WORKSPACE/release-assets
-        if [ "${{ matrix.goos }}" = "windows" ]; then
-          zip $GITHUB_WORKSPACE/release-assets/dell_interface-${{ github.event.inputs.version }}-${{ matrix.name }}.zip \
-            show_interface.exe README.md example_show_interface.txt example_show_interface.json
-        else
-          tar -czf $GITHUB_WORKSPACE/release-assets/dell_interface-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
-            show_interface README.md example_show_interface.txt example_show_interface.json
-        fi
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_interface-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
+          show_interface README.md example_show_interface.txt example_show_interface.json
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -149,16 +119,6 @@ jobs:
           - goos: linux
             goarch: arm64
             name: linux-arm64
-          - goos: darwin
-            goarch: amd64
-            name: darwin-amd64
-          - goos: darwin
-            goarch: arm64
-            name: darwin-arm64
-          - goos: windows
-            goarch: amd64
-            name: windows-amd64
-            ext: .exe
     
     steps:
     - name: Checkout code
@@ -173,19 +133,14 @@ jobs:
       run: |
         cd src/SwitchOutput/DellOS/10/interface_phyeth
         CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
-          go build -ldflags="-w -s" -o show_interface_phy_eth${{ matrix.ext }} show_interface_phy_eth.go
+          go build -ldflags="-w -s" -o show_interface_phy_eth show_interface_phy_eth.go
           
     - name: Create package
       run: |
         cd src/SwitchOutput/DellOS/10/interface_phyeth
         mkdir -p $GITHUB_WORKSPACE/release-assets
-        if [ "${{ matrix.goos }}" = "windows" ]; then
-          zip $GITHUB_WORKSPACE/release-assets/dell_interface_phyeth-${{ github.event.inputs.version }}-${{ matrix.name }}.zip \
-            show_interface_phy_eth.exe show_interface_phy-eth.txt show_interface_phy-eth.json test-output.json
-        else
-          tar -czf $GITHUB_WORKSPACE/release-assets/dell_interface_phyeth-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
-            show_interface_phy_eth show_interface_phy-eth.txt show_interface_phy-eth.json test-output.json
-        fi
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_interface_phyeth-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
+          show_interface_phy_eth show_interface_phy-eth.txt show_interface_phy-eth.json test-output.json
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -205,16 +160,6 @@ jobs:
           - goos: linux
             goarch: arm64
             name: linux-arm64
-          - goos: darwin
-            goarch: amd64
-            name: darwin-amd64
-          - goos: darwin
-            goarch: arm64
-            name: darwin-arm64
-          - goos: windows
-            goarch: amd64
-            name: windows-amd64
-            ext: .exe
     
     steps:
     - name: Checkout code
@@ -229,19 +174,14 @@ jobs:
       run: |
         cd src/SwitchOutput/DellOS/10/lldp-sylog
         CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
-          go build -ldflags="-w -s" -o lldpsyslog${{ matrix.ext }} lldp_syslog.go
+          go build -ldflags="-w -s" -o lldpsyslog lldp_syslog.go
           
     - name: Create package
       run: |
         cd src/SwitchOutput/DellOS/10/lldp-sylog
         mkdir -p $GITHUB_WORKSPACE/release-assets
-        if [ "${{ matrix.goos }}" = "windows" ]; then
-          zip $GITHUB_WORKSPACE/release-assets/dell_lldp_syslog-${{ github.event.inputs.version }}-${{ matrix.name }}.zip \
-            lldpsyslog.exe README.md build_lldp_syslog_deb.sh show-lldp-neighbors-detail.txt example-lldp-data.json lldp-kql-query.kql
-        else
-          tar -czf $GITHUB_WORKSPACE/release-assets/dell_lldp_syslog-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
-            lldpsyslog README.md build_lldp_syslog_deb.sh show-lldp-neighbors-detail.txt example-lldp-data.json lldp-kql-query.kql
-        fi
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_lldp_syslog-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
+          lldpsyslog README.md build_lldp_syslog_deb.sh show-lldp-neighbors-detail.txt example-lldp-data.json lldp-kql-query.kql
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -261,16 +201,6 @@ jobs:
           - goos: linux
             goarch: arm64
             name: linux-arm64
-          - goos: darwin
-            goarch: amd64
-            name: darwin-amd64
-          - goos: darwin
-            goarch: arm64
-            name: darwin-arm64
-          - goos: windows
-            goarch: amd64
-            name: windows-amd64
-            ext: .exe
     
     steps:
     - name: Checkout code
@@ -285,19 +215,14 @@ jobs:
       run: |
         cd src/SwitchOutput/DellOS/10/Version
         CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
-          go build -ldflags="-w -s" -o show_version${{ matrix.ext }} show_version.go
+          go build -ldflags="-w -s" -o show_version show_version.go
           
     - name: Create package
       run: |
         cd src/SwitchOutput/DellOS/10/Version
         mkdir -p $GITHUB_WORKSPACE/release-assets
-        if [ "${{ matrix.goos }}" = "windows" ]; then
-          zip $GITHUB_WORKSPACE/release-assets/dell_version-${{ github.event.inputs.version }}-${{ matrix.name }}.zip \
-            show_version.exe README.md show_version.txt show_version.json
-        else
-          tar -czf $GITHUB_WORKSPACE/release-assets/dell_version-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
-            show_version README.md show_version.txt show_version.json
-        fi
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_version-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
+          show_version README.md show_version.txt show_version.json
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -378,9 +303,6 @@ jobs:
           
           - **Linux AMD64** - `*-${{ github.event.inputs.version }}-linux-amd64.tar.gz`
           - **Linux ARM64** - `*-${{ github.event.inputs.version }}-linux-arm64.tar.gz`
-          - **macOS AMD64** - `*-${{ github.event.inputs.version }}-darwin-amd64.tar.gz`
-          - **macOS ARM64** - `*-${{ github.event.inputs.version }}-darwin-arm64.tar.gz`
-          - **Windows AMD64** - `*-${{ github.event.inputs.version }}-windows-amd64.zip`
           
           ### 🔧 Technical Changes
           
@@ -392,7 +314,7 @@ jobs:
           ### 🔗 Usage Examples
           
           ```bash
-          # Extract archives (Linux/macOS)
+          # Extract archives (Linux)
           tar -xzf mac_address_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
           tar -xzf dell_interface-${{ github.event.inputs.version }}-linux-amd64.tar.gz
           
