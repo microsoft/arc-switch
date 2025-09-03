@@ -147,7 +147,8 @@ EOF
 # ==== Build the Debian package ====
 PACKAGE_FILE="${PACKAGE_NAME}_${VERSION}_${ARCH}.deb"
 echo "Building Debian package ${PACKAGE_FILE}..."
-dpkg-deb --build "$BUILD_DIR" "$PACKAGE_FILE"
+# Use gzip compression for better compatibility with older dpkg versions
+dpkg-deb --build --root-owner-group -Zgzip "$BUILD_DIR" "$PACKAGE_FILE"
 
 if [ $? -ne 0 ]; then
     echo "Error building the Debian package."
