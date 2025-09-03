@@ -17,7 +17,7 @@ PACKAGE_NAME="lldpsyslog"
 VERSION="1.0"
 ARCH="amd64"
 MAINTAINER="Eric Marquez <emarq@microsoft.com>"
-DESCRIPTION="LLDP Neighbor Service for Debian - Runs every 60 minutes using systemd timer."
+DESCRIPTION="LLDP Neighbor Service for Debian - Runs every 1 minute using systemd timer."
 
 # Build directory for package content
 BUILD_DIR="./${PACKAGE_NAME}_pkg"
@@ -49,7 +49,16 @@ EOF
 # ==== Create DEBIAN/postinst script ====
 cat > "$BUILD_DIR/DEBIAN/postinst" <<'EOF'
 #!/bin/bash
-# Post-install script: Reload systemd, enable and start the timer.
+# Post-install script: Create user, reload systemd, enable and start the timer.
+
+# Create system user for the service
+if ! id "lldpsyslog" &>/dev/null; then
+    useradd --system --no-create-home --shell /bin/false --home-dir /opt/microsoft/lldpsyslog lldpsyslog
+fi
+
+# Set ownership
+chown -R lldpsyslog:lldpsyslog /opt/microsoft/lldpsyslog
+
 systemctl daemon-reload
 systemctl enable lldpsyslog.timer
 systemctl start lldpsyslog.timer
@@ -65,6 +74,13 @@ systemctl disable lldpsyslog.timer
 rm -f /etc/systemd/system/lldpsyslog.service
 rm -f /etc/systemd/system/lldpsyslog.timer
 systemctl daemon-reload
+
+# Remove user on purge
+if [ "$1" = "purge" ]; then
+    if id "lldpsyslog" &>/dev/null; then
+        userdel lldpsyslog
+    fi
+fi
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postrm"
 
@@ -84,15 +100,29 @@ cat > "$BUILD_DIR/etc/systemd/system/lldpsyslog.service" <<EOF
 [Unit]
 Description=LLDP Neighbor Service
 After=network.target
+Wants=network.target
 
 [Service]
+Type=oneshot
 ExecStart=/opt/microsoft/${PACKAGE_NAME}/lldpsyslog
-Restart=always
-User=root
-Group=root
-StandardOutput=syslog
-StandardError=syslog
+TimeoutStartSec=45s
+TimeoutStopSec=10s
+User=lldpsyslog
+Group=lldpsyslog
+StandardOutput=journal
+StandardError=journal
 SyslogIdentifier=lldpsyslog
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
 
 [Install]
 WantedBy=multi-user.target
@@ -101,12 +131,14 @@ EOF
 # ==== Create systemd timer file ====
 cat > "$BUILD_DIR/etc/systemd/system/lldpsyslog.timer" <<EOF
 [Unit]
-Description=Run LLDP Neighbor every 60 minutes
+Description=Run LLDP Neighbor every 1 minute
 
 [Timer]
-OnBootSec=5min
-OnUnitActiveSec=60min
+OnBootSec=1min
+OnUnitActiveSec=1min
 Unit=lldpsyslog.service
+Persistent=true
+AccuracySec=1s
 
 [Install]
 WantedBy=timers.target
