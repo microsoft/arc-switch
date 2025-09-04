@@ -382,6 +382,7 @@ jobs:
           tar -xzf dell_interface-${{ steps.version.outputs.version }}-linux-amd64.tar.gz
           
           # Install LLDP Syslog service (Linux .deb package)
+          wget <URL_TO_LLDPSYSLOG_DEB>
           sudo dpkg -i dell_lldp_syslog-${{ steps.version.outputs.version }}-linux-amd64.deb
           
           # Run parsers with input files
