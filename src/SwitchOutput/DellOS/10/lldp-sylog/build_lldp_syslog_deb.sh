@@ -49,15 +49,10 @@ EOF
 # ==== Create DEBIAN/postinst script ====
 cat > "$BUILD_DIR/DEBIAN/postinst" <<'EOF'
 #!/bin/bash
-# Post-install script: Create user, reload systemd, enable and start the timer.
+# Post-install script: Reload systemd, enable and start the timer.
 
-# Create system user for the service
-if ! id "lldpsyslog" &>/dev/null; then
-    useradd --system --no-create-home --shell /bin/false --home-dir /opt/microsoft/lldpsyslog lldpsyslog
-fi
-
-# Set ownership
-chown -R lldpsyslog:lldpsyslog /opt/microsoft/lldpsyslog
+# Set ownership to root
+chown -R root:root /opt/microsoft/lldpsyslog
 
 systemctl daemon-reload
 systemctl enable lldpsyslog.timer
@@ -74,13 +69,6 @@ systemctl disable lldpsyslog.timer
 rm -f /etc/systemd/system/lldpsyslog.service
 rm -f /etc/systemd/system/lldpsyslog.timer
 systemctl daemon-reload
-
-# Remove user on purge
-if [ "$1" = "purge" ]; then
-    if id "lldpsyslog" &>/dev/null; then
-        userdel lldpsyslog
-    fi
-fi
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postrm"
 
@@ -107,22 +95,11 @@ Type=oneshot
 ExecStart=/opt/microsoft/${PACKAGE_NAME}/lldpsyslog
 TimeoutStartSec=45s
 TimeoutStopSec=10s
-User=lldpsyslog
-Group=lldpsyslog
+User=root
+Group=root
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=lldpsyslog
-
-# Security hardening
-NoNewPrivileges=true
-ProtectSystem=strict
-ProtectHome=true
-ReadWritePaths=/var/log
-PrivateTmp=true
-ProtectKernelTunables=true
-ProtectControlGroups=true
-RestrictRealtime=true
-RestrictSUIDSGID=true
 
 [Install]
 WantedBy=multi-user.target
