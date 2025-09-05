@@ -56,6 +56,7 @@ Thumbs.db
 .azure
 src/GCService_Linux**/*
 src/ExtensionService_Linux**/*
+
 src/ARC-Installer/**/*
 
 # Debian package build artifacts
