@@ -57,3 +57,9 @@ Thumbs.db
 src/GCService_Linux**/*
 src/ExtensionService_Linux**/*
 src/ARC-Installer/**/*
+
+# Debian package build artifacts
+*.deb
+*_pkg/
+lldpsyslog
+interface-syslog
