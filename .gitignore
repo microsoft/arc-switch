@@ -63,3 +63,4 @@ src/ARC-Installer/**/*
 *_pkg/
 lldpsyslog
 interface-syslog
+interface_phyeth

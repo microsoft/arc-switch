@@ -154,14 +154,32 @@ jobs:
       run: |
         cd src/SwitchOutput/DellOS/10/interface_phyeth
         CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
-          go build -ldflags="-w -s" -o show_interface_phy_eth show_interface_phy_eth.go
+          go build -ldflags="-w -s" -o interface_phyeth show_interface_phy_eth.go
           
-    - name: Create package
+    - name: Create deb package
+      if: matrix.goos == 'linux'
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface_phyeth
+        # Install dpkg-deb if not available (should be on ubuntu-latest)
+        sudo apt-get update
+        sudo apt-get install -y dpkg-dev
+        # Make the build script executable
+        chmod +x build_interface_phyeth_deb.sh
+        # Update version in the script to use the generated version (already numeric)
+        sed -i "s/VERSION=\"1.0\"/VERSION=\"${{ steps.version.outputs.version }}\"/" build_interface_phyeth_deb.sh
+        # Build the deb package
+        ./build_interface_phyeth_deb.sh
+        # Move the created deb file to release assets
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        mv interface-phyeth_*.deb $GITHUB_WORKSPACE/release-assets/dell_interface_phyeth-${{ steps.version.outputs.version }}-${{ matrix.name }}.deb
+          
+    - name: Create tar package (non-Linux platforms)
+      if: matrix.goos != 'linux'
       run: |
         cd src/SwitchOutput/DellOS/10/interface_phyeth
         mkdir -p $GITHUB_WORKSPACE/release-assets
         tar -czf $GITHUB_WORKSPACE/release-assets/dell_interface_phyeth-${{ steps.version.outputs.version }}-${{ matrix.name }}.tar.gz \
-          show_interface_phy_eth show_interface_phy-eth.txt show_interface_phy-eth.json test-output.json
+          interface_phyeth README.md build_interface_phyeth_deb.sh show_interface_phy-eth.txt show_interface_phy-eth.json test-output.json
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -426,7 +444,7 @@ jobs:
           
           **Dell OS10 Tools:**
           - **Interface Parser** - Parse Dell OS10 interface information
-          - **Interface Physical Ethernet Parser** - Parse Dell OS10 physical interface details  
+          - **Interface Physical Ethernet Parser** - Parse Dell OS10 physical interface details (available as .deb package for Linux)
           - **LLDP Syslog** - LLDP neighbor data collection with syslog output (available as .deb package for Linux)
           - **Interface Syslog** - Interface statistics collection with syslog output (available as .deb package for Linux)
           - **Version Parser** - Parse Dell OS10 version information
@@ -444,6 +462,7 @@ jobs:
           - Enhanced Dell OS10 support with multiple parser tools
           - LLDP Syslog now packaged as .deb with systemd service integration
           - Interface Syslog now packaged as .deb with systemd service integration
+          - Interface Physical Ethernet now packaged as .deb with systemd service integration
           
           ### 🔗 Usage Examples
           
@@ -460,6 +479,10 @@ jobs:
           wget <URL_TO_INTERFACE_SYSLOG_DEB>
           sudo dpkg -i dell_interface_syslog-${{ steps.version.outputs.version }}-linux-amd64.deb
           
+          # Install Interface Physical Ethernet service (Linux .deb package)
+          wget <URL_TO_INTERFACE_PHYETH_DEB>
+          sudo dpkg -i dell_interface_phyeth-${{ steps.version.outputs.version }}-linux-amd64.deb
+          
           # Run parsers with input files
           ./mac_address_parser -input show-mac-address-table.txt -output output.json
           ./show_interface -input show-interface.txt -output interface.json
@@ -472,6 +495,10 @@ jobs:
           # Interface service is automatically started via systemd timer (runs every 1 minute)
           sudo systemctl status interface-syslog.timer
           sudo systemctl status interface-syslog.service
+          
+          # Interface Physical Ethernet service is automatically started via systemd timer (runs every 60 seconds)
+          sudo systemctl status interface-phyeth.timer
+          sudo systemctl status interface-phyeth.service
           ```
           
           **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.prev_tag.outputs.prev_tag }}..v${{ steps.version.outputs.version }}
