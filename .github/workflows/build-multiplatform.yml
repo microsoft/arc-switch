@@ -12,6 +12,7 @@ on:
           - 'dell_interface'
           - 'dell_interface_phyeth'
           - 'dell_lldp_syslog'
+          - 'dell_interface_syslog'
           - 'dell_version'
           - 'all'
         default: 'all'
@@ -235,6 +236,73 @@ jobs:
         name: dell_lldp_syslog-${{ matrix.name }}
         path: release-assets/
 
+  build-dell-interface-syslog:
+    if: ${{ github.event.inputs.component == 'dell_interface_syslog' || github.event.inputs.component == 'all' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            name: linux-amd64
+          - goos: linux
+            goarch: arm64
+            name: linux-arm64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Generate version
+      id: version
+      run: |
+        YYMM=$(date +"%y%m")
+        VERSION="1.${YYMM}.${{ github.run_number }}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Generated version: ${VERSION}"
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Build binary
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface
+        CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
+          go build -ldflags="-w -s" -o interface-syslog show_interface.go
+          
+    - name: Create deb package
+      if: matrix.goos == 'linux'
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface
+        # Install dpkg-deb if not available (should be on ubuntu-latest)
+        sudo apt-get update
+        sudo apt-get install -y dpkg-dev
+        # Make the build script executable
+        chmod +x build_interface_syslog_deb.sh
+        # Update version in the script to use the generated version (already numeric)
+        sed -i "s/VERSION=\"1.0\"/VERSION=\"${{ steps.version.outputs.version }}\"/" build_interface_syslog_deb.sh
+        # Build the deb package
+        ./build_interface_syslog_deb.sh
+        # Move the created deb file to release assets
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        mv interface-syslog_*.deb $GITHUB_WORKSPACE/release-assets/dell_interface_syslog-${{ steps.version.outputs.version }}-${{ matrix.name }}.deb
+          
+    - name: Create tar package (non-Linux platforms)
+      if: matrix.goos != 'linux'
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_interface_syslog-${{ steps.version.outputs.version }}-${{ matrix.name }}.tar.gz \
+          interface-syslog README.md build_interface_syslog_deb.sh example_show_interface.txt example_show_interface.json
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dell_interface_syslog-${{ matrix.name }}
+        path: release-assets/
+
   build-dell-version:
     if: ${{ github.event.inputs.component == 'dell_version' || github.event.inputs.component == 'all' }}
     runs-on: ubuntu-latest
@@ -285,8 +353,8 @@ jobs:
         path: release-assets/
 
   create-release:
-    needs: [build-mac-address-parser, build-dell-interface, build-dell-interface-phyeth, build-dell-lldp-syslog, build-dell-version]
-    if: always() && (needs.build-mac-address-parser.result == 'success' || needs.build-dell-interface.result == 'success' || needs.build-dell-interface-phyeth.result == 'success' || needs.build-dell-lldp-syslog.result == 'success' || needs.build-dell-version.result == 'success')
+    needs: [build-mac-address-parser, build-dell-interface, build-dell-interface-phyeth, build-dell-lldp-syslog, build-dell-interface-syslog, build-dell-version]
+    if: always() && (needs.build-mac-address-parser.result == 'success' || needs.build-dell-interface.result == 'success' || needs.build-dell-interface-phyeth.result == 'success' || needs.build-dell-lldp-syslog.result == 'success' || needs.build-dell-interface-syslog.result == 'success' || needs.build-dell-version.result == 'success')
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -314,12 +382,13 @@ jobs:
         find artifacts -name "dell_interface-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
         find artifacts -name "dell_interface_phyeth-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
         find artifacts -name "dell_lldp_syslog-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
+        find artifacts -name "dell_interface_syslog-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
         find artifacts -name "dell_version-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
         
     - name: Generate checksums
       run: |
         cd release-assets
-        for file in mac_address_parser-* dell_interface-* dell_interface_phyeth-* dell_lldp_syslog-* dell_version-*; do
+        for file in mac_address_parser-* dell_interface-* dell_interface_phyeth-* dell_lldp_syslog-* dell_interface_syslog-* dell_version-*; do
           if [ -f "$file" ]; then
             sha256sum "$file" > "$file.sha256"
           fi
@@ -359,6 +428,7 @@ jobs:
           - **Interface Parser** - Parse Dell OS10 interface information
           - **Interface Physical Ethernet Parser** - Parse Dell OS10 physical interface details  
           - **LLDP Syslog** - LLDP neighbor data collection with syslog output (available as .deb package for Linux)
+          - **Interface Syslog** - Interface statistics collection with syslog output (available as .deb package for Linux)
           - **Version Parser** - Parse Dell OS10 version information
           
           ### 🖥️ Available Platforms
@@ -373,6 +443,7 @@ jobs:
           - Comprehensive test data and documentation included
           - Enhanced Dell OS10 support with multiple parser tools
           - LLDP Syslog now packaged as .deb with systemd service integration
+          - Interface Syslog now packaged as .deb with systemd service integration
           
           ### 🔗 Usage Examples
           
@@ -385,6 +456,10 @@ jobs:
           wget <URL_TO_LLDPSYSLOG_DEB>
           sudo dpkg -i dell_lldp_syslog-${{ steps.version.outputs.version }}-linux-amd64.deb
           
+          # Install Interface Syslog service (Linux .deb package)
+          wget <URL_TO_INTERFACE_SYSLOG_DEB>
+          sudo dpkg -i dell_interface_syslog-${{ steps.version.outputs.version }}-linux-amd64.deb
+          
           # Run parsers with input files
           ./mac_address_parser -input show-mac-address-table.txt -output output.json
           ./show_interface -input show-interface.txt -output interface.json
@@ -393,6 +468,10 @@ jobs:
           # LLDP service is automatically started via systemd timer (runs every 1 minute)
           sudo systemctl status lldpsyslog.timer
           sudo systemctl status lldpsyslog.service
+          
+          # Interface service is automatically started via systemd timer (runs every 1 minute)
+          sudo systemctl status interface-syslog.timer
+          sudo systemctl status interface-syslog.service
           ```
           
           **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.prev_tag.outputs.prev_tag }}..v${{ steps.version.outputs.version }}

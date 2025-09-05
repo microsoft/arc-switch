@@ -74,12 +74,12 @@ chmod 755 "$BUILD_DIR/DEBIAN/postrm"
 
 # ==== Build the Go binary if it doesn't exist ====
 if [ ! -f "./interface-syslog" ]; then
-    echo "Building Go binary from lldp_syslog.go..."
-    if [ ! -f "./lldp_syslog.go" ]; then
-        echo "Error: lldp_syslog.go source file not found in the current directory."
+    echo "Building Go binary from show_interface.go..."
+    if [ ! -f "./show_interface.go" ]; then
+        echo "Error: show_interface.go source file not found in the current directory."
         exit 1
     fi
-    go build -o interface-syslog lldp_syslog.go
+    go build -o interface-syslog show_interface.go
     if [ $? -ne 0 ]; then
         echo "Error: Failed to build Go binary."
         exit 1
