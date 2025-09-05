@@ -1,7 +1,0 @@
-#!/bin/bash
-# Post-removal script: Stop and disable the timer, remove unit files and reload systemd.
-systemctl stop lldpsyslog.timer
-systemctl disable lldpsyslog.timer
-rm -f /etc/systemd/system/lldpsyslog.service
-rm -f /etc/systemd/system/lldpsyslog.timer
-systemctl daemon-reload

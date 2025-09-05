@@ -1,7 +1,0 @@
-Package: lldpsyslog
-Version: 1.0
-Section: base
-Priority: optional
-Architecture: amd64
-Maintainer: Eric Marquez <emarq@microsoft.com>
-Description: LLDP Neighbor Service for Debian - Runs every 1 minute using systemd timer.
