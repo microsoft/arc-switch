@@ -1,0 +1,18 @@
+[Unit]
+Description=LLDP Neighbor Service
+After=network.target
+Wants=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/microsoft/lldpsyslog/lldpsyslog
+TimeoutStartSec=45s
+TimeoutStopSec=10s
+User=root
+Group=root
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=lldpsyslog
+
+[Install]
+WantedBy=multi-user.target

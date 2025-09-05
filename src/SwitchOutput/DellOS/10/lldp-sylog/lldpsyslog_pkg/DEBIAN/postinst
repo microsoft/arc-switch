@@ -1,0 +1,9 @@
+#!/bin/bash
+# Post-install script: Reload systemd, enable and start the timer.
+
+# Set ownership to root
+chown -R root:root /opt/microsoft/lldpsyslog
+
+systemctl daemon-reload
+systemctl enable lldpsyslog.timer
+systemctl start lldpsyslog.timer
