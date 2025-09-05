@@ -372,7 +372,7 @@ jobs:
 
   create-release:
     needs: [build-mac-address-parser, build-dell-interface, build-dell-interface-phyeth, build-dell-lldp-syslog, build-dell-interface-syslog, build-dell-version]
-    if: always() && (needs.build-mac-address-parser.result == 'success' || needs.build-dell-interface.result == 'success' || needs.build-dell-interface-phyeth.result == 'success' || needs.build-dell-lldp-syslog.result == 'success' || needs.build-dell-interface-syslog.result == 'success' || needs.build-dell-version.result == 'success')
+    if: always() && contains(needs.*.result, 'success')
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
