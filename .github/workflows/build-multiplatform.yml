@@ -245,16 +245,6 @@ jobs:
         echo "Release assets prepared:"
         ls -la release-assets/
         
-    - name: Generate checksums
-      run: |
-        cd release-assets
-        echo "Generating checksums..."
-        for archive in *.tar.gz; do
-          echo "  Generating checksum for $archive"
-          sha256sum "$archive" > "${archive}.sha256"
-        done
-        echo "All checksums generated"
-        
     - name: Get previous tag
       id: prev_tag
       run: |
