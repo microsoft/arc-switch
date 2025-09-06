@@ -32,60 +32,73 @@ jobs:
     - name: Discover parser programs
       id: discover
       run: |
-        PARSER_BASE_DIR="src/SwitchOutput/Cisco/Nexus/10"
+        # Define all parser base directories
+        PARSER_BASE_DIRS=(
+          "src/SwitchOutput/Cisco/Nexus/10"
+          "src/SwitchOutput/DellOS/10"
+        )
         
-        echo "Looking for parsers in: $PARSER_BASE_DIR"
-        
-        if [ ! -d "$PARSER_BASE_DIR" ]; then
-          echo "ERROR: Directory $PARSER_BASE_DIR not found!"
-          ls -la src/SwitchOutput/Cisco/Nexus/ || true
-          exit 1
-        fi
-        
-        # Find all *_parser directories
-        PARSER_DIRS=$(find "$PARSER_BASE_DIR" -maxdepth 1 -name "*_parser" -type d | sort)
-        
-        echo "Found parser directories:"
-        for dir in $PARSER_DIRS; do
-          echo "  - $dir"
-        done
-        
-        if [ -z "$PARSER_DIRS" ]; then
-          echo "ERROR: No parser directories found!"
-          echo "Contents of $PARSER_BASE_DIR:"
-          ls -la "$PARSER_BASE_DIR"
-          exit 1
-        fi
+        echo "Looking for parsers in multiple directories..."
         
         # Build JSON array of programs
         PROGRAM_ARRAY="["
         FIRST=true
         
-        for parser_dir in $PARSER_DIRS; do
-          parser_name=$(basename "$parser_dir")
-          parser_go_file="$parser_dir/$parser_name.go"
+        for PARSER_BASE_DIR in "${PARSER_BASE_DIRS[@]}"; do
+          echo ""
+          echo "Checking directory: $PARSER_BASE_DIR"
           
-          echo "Checking for: $parser_go_file"
-          
-          if [ -f "$parser_go_file" ]; then
-            if grep -q "package main" "$parser_go_file"; then
-              echo "  ✓ Found valid main program: $parser_name"
-              
-              if [ "$FIRST" = true ]; then
-                FIRST=false
-              else
-                PROGRAM_ARRAY+=","
-              fi
-              
-              PROGRAM_ARRAY+="{\"name\":\"$parser_name\",\"dir\":\"$parser_dir\",\"file\":\"$parser_go_file\"}"
-            else
-              echo "  ✗ $parser_go_file does not have 'package main'"
-            fi
-          else
-            echo "  ✗ $parser_go_file not found"
-            echo "    Contents of $parser_dir:"
-            ls -la "$parser_dir" || true
+          if [ ! -d "$PARSER_BASE_DIR" ]; then
+            echo "WARNING: Directory $PARSER_BASE_DIR not found, skipping..."
+            continue
           fi
+          
+          # Find all *_parser directories
+          PARSER_DIRS=$(find "$PARSER_BASE_DIR" -maxdepth 1 -name "*_parser" -type d | sort)
+          
+          if [ -z "$PARSER_DIRS" ]; then
+            echo "No parser directories found in $PARSER_BASE_DIR"
+            continue
+          fi
+          
+          echo "Found parser directories in $PARSER_BASE_DIR:"
+          for dir in $PARSER_DIRS; do
+            echo "  - $dir"
+          done
+          
+          for parser_dir in $PARSER_DIRS; do
+            parser_name=$(basename "$parser_dir")
+            parser_go_file="$parser_dir/$parser_name.go"
+            
+            # Extract vendor info from path
+            if [[ "$parser_dir" == *"Cisco"* ]]; then
+              vendor="cisco"
+            elif [[ "$parser_dir" == *"DellOS"* ]]; then
+              vendor="dell"
+            else
+              vendor="unknown"
+            fi
+            
+            echo "Checking for: $parser_go_file"
+            
+            if [ -f "$parser_go_file" ]; then
+              if grep -q "package main" "$parser_go_file"; then
+                echo "  ✓ Found valid main program: $parser_name ($vendor)"
+                
+                if [ "$FIRST" = true ]; then
+                  FIRST=false
+                else
+                  PROGRAM_ARRAY+=","
+                fi
+                
+                PROGRAM_ARRAY+="{\"name\":\"$parser_name\",\"dir\":\"$parser_dir\",\"file\":\"$parser_go_file\",\"vendor\":\"$vendor\"}"
+              else
+                echo "  ✗ $parser_go_file does not have 'package main'"
+              fi
+            else
+              echo "  ✗ $parser_go_file not found"
+            fi
+          done
         done
         
         PROGRAM_ARRAY+="]"
@@ -93,7 +106,7 @@ jobs:
         echo "programs=$PROGRAM_ARRAY" >> $GITHUB_OUTPUT
         echo ""
         echo "Final programs JSON:"
-        echo "$PROGRAM_ARRAY" | jq -r '.[] | "  - \(.name) (\(.dir))"'
+        echo "$PROGRAM_ARRAY" | jq -r '.[] | "  - \(.vendor)/\(.name) (\(.dir))"'
         
         # Validate we found at least one program
         PROGRAM_COUNT=$(echo "$PROGRAM_ARRAY" | jq length)
@@ -102,7 +115,7 @@ jobs:
           exit 1
         fi
         
-        echo "Successfully discovered $PROGRAM_COUNT parser programs"
+        echo "Successfully discovered $PROGRAM_COUNT parser programs across all vendors"
 
   build:
     needs: discover-programs
@@ -132,7 +145,7 @@ jobs:
       run: |
         cd "${{ matrix.program.dir }}"
         
-        echo "Building ${{ matrix.program.name }} for ${{ matrix.platform.goos }}/${{ matrix.platform.goarch }}"
+        echo "Building ${{ matrix.program.vendor }}/${{ matrix.program.name }} for ${{ matrix.platform.goos }}/${{ matrix.platform.goarch }}"
         echo "Working directory: $(pwd)"
         echo "Source file: ${{ matrix.program.name }}.go"
         
@@ -176,7 +189,7 @@ jobs:
         fi
         
         # Include common files from the parent directory
-        PARENT_DIR="../.."  # Go up to src/SwitchOutput/Cisco/Nexus/10
+        PARENT_DIR=".."  # Go up one level from parser directory
         
         # Check for commands.json in parent directory
         if [ -f "$PARENT_DIR/commands.json" ]; then
@@ -193,17 +206,19 @@ jobs:
         
         echo "Packaging files: $PACKAGE_FILES"
         
-        # Create archive
+        # Create archive with vendor prefix in filename
+        ARCHIVE_NAME="${{ matrix.program.vendor }}-${{ matrix.program.name }}-${{ github.event.inputs.version }}-${{ matrix.platform.name }}"
+        
         if [ "${{ matrix.platform.goos }}" = "windows" ]; then
-          zip "$GITHUB_WORKSPACE/release-assets/${{ matrix.program.name }}-${{ github.event.inputs.version }}-${{ matrix.platform.name }}.zip" $PACKAGE_FILES
+          zip "$GITHUB_WORKSPACE/release-assets/${ARCHIVE_NAME}.zip" $PACKAGE_FILES
         else
-          tar -czf "$GITHUB_WORKSPACE/release-assets/${{ matrix.program.name }}-${{ github.event.inputs.version }}-${{ matrix.platform.name }}.tar.gz" $PACKAGE_FILES
+          tar -czf "$GITHUB_WORKSPACE/release-assets/${ARCHIVE_NAME}.tar.gz" $PACKAGE_FILES
         fi
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.program.name }}-${{ matrix.platform.name }}
+        name: ${{ matrix.program.vendor }}-${{ matrix.program.name }}-${{ matrix.platform.name }}
         path: release-assets/
 
   create-release:
@@ -254,16 +269,22 @@ jobs:
     - name: Generate release notes
       id: release_notes
       run: |
-        # Create parser list from discovered programs
-        PARSER_LIST=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '.[] | "- **" + .name + "**"' | tr '\n' '\n')
+        # Parse programs by vendor
+        CISCO_PARSERS=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '[.[] | select(.vendor == "cisco")] | .[] | "- **" + .name + "**"' | tr '\n' '\n')
+        DELL_PARSERS=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '[.[] | select(.vendor == "dell")] | .[] | "- **" + .name + "**"' | tr '\n' '\n')
         
         cat > release_notes.md << EOF
-        # Cisco Nexus Switch Parsers - ${{ github.event.inputs.version }}
+        # Switch Output Parsers - ${{ github.event.inputs.version }}
         
-        Multi-platform binaries for Cisco Nexus switch output parsing tools.
+        Multi-platform binaries for network switch output parsing tools.
         
         ## Available Parsers
-        $PARSER_LIST
+        
+        ### Cisco Nexus Parsers
+        $CISCO_PARSERS
+        
+        ### Dell OS10 Parsers  
+        $DELL_PARSERS
         
         ## Platforms
         - **Linux AMD64** (\`.tar.gz\`)
@@ -271,14 +292,19 @@ jobs:
         
         ## Usage
         \`\`\`bash
-        # Linux example
-        tar -xzf class_map_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
+        # Linux example (Cisco parser)
+        tar -xzf cisco-class_map_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
         ./class_map_parser -input show-class-map.txt -output output.json
         
-        # Windows example  
+        # Windows example (Dell parser)
         # Extract the .zip file and run the .exe
-        class_map_parser.exe -input show-class-map.txt -output output.json
+        dell-interface_parser.exe -input show-interface.txt -output output.json
         \`\`\`
+        
+        ## File Naming Convention
+        Files are prefixed with vendor name for clarity:
+        - \`cisco-<parser_name>-<version>-<platform>.<ext>\`
+        - \`dell-<parser_name>-<version>-<platform>.<ext>\`
         EOF
         
         # Output for next step
@@ -297,12 +323,16 @@ jobs:
     - name: Print release summary
       run: |
         PROGRAM_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq length)
+        CISCO_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq '[.[] | select(.vendor == "cisco")] | length')
+        DELL_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq '[.[] | select(.vendor == "dell")] | length')
         PLATFORM_COUNT=2
         TOTAL_BINARIES=$((PROGRAM_COUNT * PLATFORM_COUNT))
         
         echo "Release created successfully!"
         echo "Tag: ${{ github.event.inputs.version }}"
-        echo "Programs built: $PROGRAM_COUNT"
+        echo "Total programs built: $PROGRAM_COUNT"
+        echo "  - Cisco parsers: $CISCO_COUNT"
+        echo "  - Dell parsers: $DELL_COUNT"
         echo "Platforms: $PLATFORM_COUNT (Linux, Windows)"
         echo "Total binary packages: $TOTAL_BINARIES"
         echo ""
