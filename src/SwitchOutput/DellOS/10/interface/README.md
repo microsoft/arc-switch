@@ -17,7 +17,12 @@ This Go script is designed to run on Dell switches using the Linux-based OS10.5 
 - **Test Mode:**  
   A test mode is available to validate parsing and output without executing system commands or sending data to syslog.
 
+- **Debian Package:**  
+  The script can be packaged as a Debian package with systemd service integration for automatic data collection.
+
 ## Usage
+
+### Manual Execution
 
 - **Normal Mode:**  
   The script runs on the switch and collects live data:
@@ -32,6 +37,55 @@ This Go script is designed to run on Dell switches using the Linux-based OS10.5 
   ```shell
   ./show_interface -test -inputfile <path_to_cli_output.txt>
   ```
+
+### Debian Package Installation
+
+The interface syslog service can be packaged as a Debian package for easy installation and automatic systemd service management.
+
+#### Building the Debian Package
+
+```shell
+# Build the package only
+./build_interface_syslog_deb.sh
+
+# Build and install the package
+./build_interface_syslog_deb.sh --install
+```
+
+#### Installing the Package
+
+```shell
+# Install the package
+sudo dpkg -i interface-syslog_<version>_amd64.deb
+
+# Check service status
+sudo systemctl status interface-syslog.timer
+sudo systemctl status interface-syslog.service
+
+# View service logs
+sudo journalctl -u interface-syslog.service -f
+```
+
+#### Removing the Package
+
+```shell
+# Remove the package and stop services
+sudo apt remove interface-syslog
+
+# Or use dpkg directly
+sudo dpkg -r interface-syslog
+```
+
+#### Package Details
+
+- **Package name:** `interface-syslog`
+- **Installation path:** `/opt/microsoft/interface-syslog`
+- **Service files:** 
+  - `/etc/systemd/system/interface-syslog.service`
+  - `/etc/systemd/system/interface-syslog.timer`
+- **Execution frequency:** Every 1 minute (controlled by systemd timer)
+- **User:** root
+- **Output:** Syslog integration for Azure Arc collection
 
 ## Requirements
 

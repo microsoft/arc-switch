@@ -1,23 +1,23 @@
 #!/bin/bash
 #
-# build_lldpsyslog_deb.sh
+# build_interface_phyeth_deb.sh
 #
-# This script builds a Debian package for the lldpsyslog service.
-# It creates a structured package with your application in /opt/microsoft/lldpsyslog,
+# This script builds a Debian package for the interface-phyeth service.
+# It creates a structured package with your application in /opt/microsoft/interface-phyeth,
 # systemd unit files for service and timer in /etc/systemd/system,
 # and includes proper post-install and post-removal scripts for service registration and cleanup.
 #
 # Usage:
-#   ./build_lldpsyslog_deb.sh          # Builds the package only.
-#   ./build_lldpsyslog_deb.sh --install  # Builds and installs the package.
+#   ./build_interface_phyeth_deb.sh          # Builds the package only.
+#   ./build_interface_phyeth_deb.sh --install  # Builds and installs the package.
 #
 
 # Package metadata
-PACKAGE_NAME="lldpsyslog"
+PACKAGE_NAME="interface-phyeth"
 VERSION="1.0"
 ARCH="amd64"
 MAINTAINER="Eric Marquez <emarq@microsoft.com>"
-DESCRIPTION="LLDP Neighbor Service for Debian - Runs every 1 minute using systemd timer."
+DESCRIPTION="Interface Physical Ethernet Service for Debian - SFP data collection service runs every 60 seconds using systemd timer."
 
 # Build directory for package content
 BUILD_DIR="./${PACKAGE_NAME}_pkg"
@@ -52,11 +52,11 @@ cat > "$BUILD_DIR/DEBIAN/postinst" <<'EOF'
 # Post-install script: Reload systemd, enable and start the timer.
 
 # Set ownership to root
-chown -R root:root /opt/microsoft/lldpsyslog
+chown -R root:root /opt/microsoft/interface-phyeth
 
 systemctl daemon-reload
-systemctl enable lldpsyslog.timer
-systemctl start lldpsyslog.timer
+systemctl enable interface-phyeth.timer
+systemctl start interface-phyeth.timer
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postinst"
 
@@ -64,56 +64,63 @@ chmod 755 "$BUILD_DIR/DEBIAN/postinst"
 cat > "$BUILD_DIR/DEBIAN/postrm" <<'EOF'
 #!/bin/bash
 # Post-removal script: Stop and disable the timer, remove unit files and reload systemd.
-systemctl stop lldpsyslog.timer
-systemctl disable lldpsyslog.timer
-rm -f /etc/systemd/system/lldpsyslog.service
-rm -f /etc/systemd/system/lldpsyslog.timer
+systemctl stop interface-phyeth.timer
+systemctl disable interface-phyeth.timer
+rm -f /etc/systemd/system/interface-phyeth.service
+rm -f /etc/systemd/system/interface-phyeth.timer
 systemctl daemon-reload
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postrm"
 
-# ==== Copy application binary ====
-# Assumes the lldpsyslog binary is in the same directory as this script.
-if [ ! -f "./lldpsyslog" ]; then
-    echo "Error: lldpsyslog binary not found in the current directory."
-    exit 1
+# ==== Build the Go binary if it doesn't exist ====
+if [ ! -f "./interface_phyeth" ]; then
+    echo "Building Go binary from show_interface_phy_eth.go..."
+    if [ ! -f "./show_interface_phy_eth.go" ]; then
+        echo "Error: show_interface_phy_eth.go source file not found in the current directory."
+        exit 1
+    fi
+    go build -o interface_phyeth show_interface_phy_eth.go
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to build Go binary."
+        exit 1
+    fi
 fi
 
-echo "Copying application binary to ${BUILD_DIR}/opt/microsoft/${PACKAGE_NAME}/lldpsyslog"
-cp "./lldpsyslog" "$BUILD_DIR/opt/microsoft/${PACKAGE_NAME}/lldpsyslog"
-chmod 755 "$BUILD_DIR/opt/microsoft/${PACKAGE_NAME}/lldpsyslog"
+echo "Copying application binary to ${BUILD_DIR}/opt/microsoft/${PACKAGE_NAME}/interface_phyeth"
+cp "./interface_phyeth" "$BUILD_DIR/opt/microsoft/${PACKAGE_NAME}/interface_phyeth"
+chmod 755 "$BUILD_DIR/opt/microsoft/${PACKAGE_NAME}/interface_phyeth"
 
 # ==== Create systemd service file ====
-cat > "$BUILD_DIR/etc/systemd/system/lldpsyslog.service" <<EOF
+cat > "$BUILD_DIR/etc/systemd/system/interface-phyeth.service" <<EOF
 [Unit]
-Description=LLDP Neighbor Service
+Description=Interface Physical Ethernet Service - SFP Data Collection
 After=network.target
 Wants=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/opt/microsoft/${PACKAGE_NAME}/lldpsyslog
+ExecStart=/opt/microsoft/${PACKAGE_NAME}/interface_phyeth
 TimeoutStartSec=45s
 TimeoutStopSec=10s
 User=root
 Group=root
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=lldpsyslog
+SyslogIdentifier=interface-phyeth
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
 # ==== Create systemd timer file ====
-cat > "$BUILD_DIR/etc/systemd/system/lldpsyslog.timer" <<EOF
+cat > "$BUILD_DIR/etc/systemd/system/interface-phyeth.timer" <<EOF
 [Unit]
-Description=Run LLDP Neighbor every 1 minute
+Description=Run Interface Physical Ethernet Service every 60 seconds
 
 [Timer]
 OnBootSec=1min
 OnUnitActiveSec=1min
-Unit=lldpsyslog.service
+Unit=interface-phyeth.service
 Persistent=true
 AccuracySec=1s
 

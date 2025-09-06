@@ -28,7 +28,7 @@ type LLDPData struct {
 // getLLDPDataFromClish executes the clish command to retrieve LLDP data.
 func getLLDPDataFromClish() (string, error) {
     fmt.Println("[VERBOSE] Executing clish command to retrieve LLDP data...")
-    cmd := exec.Command("clish", "-c", "show lldp neighbors detail")
+    cmd := exec.Command("/opt/dell/os10/bin/clish", "-c", "show lldp neighbors detail")
     var out bytes.Buffer
     var stderr bytes.Buffer
     cmd.Stdout = &out

@@ -3,16 +3,26 @@ name: Build Multi-Platform Binaries
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Release version (e.g., v0.0.3-alpha.1)'
+      component:
+        description: 'Component to build'
         required: true
-        default: 'v0.0.3-alpha.1'
+        type: choice
+        options:
+          - 'mac_address_parser'
+          - 'dell_interface'
+          - 'dell_interface_phyeth'
+          - 'dell_lldp_syslog'
+          - 'dell_interface_syslog'
+          - 'dell_version'
+          - 'all'
+        default: 'all'
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  build-mac-address-parser:
+    if: ${{ github.event.inputs.component == 'mac_address_parser' || github.event.inputs.component == 'all' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,20 +33,18 @@ jobs:
           - goos: linux
             goarch: arm64
             name: linux-arm64
-          - goos: darwin
-            goarch: amd64
-            name: darwin-amd64
-          - goos: darwin
-            goarch: arm64
-            name: darwin-arm64
-          - goos: windows
-            goarch: amd64
-            name: windows-amd64
-            ext: .exe
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      
+    - name: Generate version
+      id: version
+      run: |
+        YYMM=$(date +"%y%m")
+        VERSION="1.${YYMM}.${{ github.run_number }}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Generated version: ${VERSION}"
       
     - name: Set up Go
       uses: actions/setup-go@v4
@@ -48,19 +56,14 @@ jobs:
         cd src/SwitchOutput/Cisco/Nexus/10/mac_address_parser
         go mod tidy
         CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
-          go build -ldflags="-w -s" -o mac_address_parser${{ matrix.ext }} mac_address_parser.go
+          go build -ldflags="-w -s" -o mac_address_parser mac_address_parser.go
           
     - name: Create package
       run: |
         cd src/SwitchOutput/Cisco/Nexus/10/mac_address_parser
         mkdir -p $GITHUB_WORKSPACE/release-assets
-        if [ "${{ matrix.goos }}" = "windows" ]; then
-          zip $GITHUB_WORKSPACE/release-assets/mac_address_parser-${{ github.event.inputs.version }}-${{ matrix.name }}.zip \
-            mac_address_parser.exe README.md mac-address-table-sample.json
-        else
-          tar -czf $GITHUB_WORKSPACE/release-assets/mac_address_parser-${{ github.event.inputs.version }}-${{ matrix.name }}.tar.gz \
-            mac_address_parser README.md mac-address-table-sample.json
-        fi
+        tar -czf $GITHUB_WORKSPACE/release-assets/mac_address_parser-${{ steps.version.outputs.version }}-${{ matrix.name }}.tar.gz \
+          mac_address_parser README.md mac-address-table-sample.json
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -68,14 +71,322 @@ jobs:
         name: mac_address_parser-${{ matrix.name }}
         path: release-assets/
 
+  build-dell-interface:
+    if: ${{ github.event.inputs.component == 'dell_interface' || github.event.inputs.component == 'all' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            name: linux-amd64
+          - goos: linux
+            goarch: arm64
+            name: linux-arm64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Generate version
+      id: version
+      run: |
+        YYMM=$(date +"%y%m")
+        VERSION="1.${YYMM}.${{ github.run_number }}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Generated version: ${VERSION}"
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Build binary
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface
+        CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
+          go build -ldflags="-w -s" -o show_interface show_interface.go
+          
+    - name: Create package
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_interface-${{ steps.version.outputs.version }}-${{ matrix.name }}.tar.gz \
+          show_interface README.md example_show_interface.txt example_show_interface.json
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dell_interface-${{ matrix.name }}
+        path: release-assets/
+
+  build-dell-interface-phyeth:
+    if: ${{ github.event.inputs.component == 'dell_interface_phyeth' || github.event.inputs.component == 'all' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            name: linux-amd64
+          - goos: linux
+            goarch: arm64
+            name: linux-arm64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Generate version
+      id: version
+      run: |
+        YYMM=$(date +"%y%m")
+        VERSION="1.${YYMM}.${{ github.run_number }}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Generated version: ${VERSION}"
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Build binary
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface_phyeth
+        CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
+          go build -ldflags="-w -s" -o interface_phyeth show_interface_phy_eth.go
+          
+    - name: Create deb package
+      if: matrix.goos == 'linux'
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface_phyeth
+        # Install dpkg-deb if not available (should be on ubuntu-latest)
+        sudo apt-get update
+        sudo apt-get install -y dpkg-dev
+        # Make the build script executable
+        chmod +x build_interface_phyeth_deb.sh
+        # Update version in the script to use the generated version (already numeric)
+        sed -i "s/VERSION=\"1.0\"/VERSION=\"${{ steps.version.outputs.version }}\"/" build_interface_phyeth_deb.sh
+        # Build the deb package
+        ./build_interface_phyeth_deb.sh
+        # Move the created deb file to release assets
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        mv interface-phyeth_*.deb $GITHUB_WORKSPACE/release-assets/dell_interface_phyeth-${{ steps.version.outputs.version }}-${{ matrix.name }}.deb
+          
+    - name: Create tar package (non-Linux platforms)
+      if: matrix.goos != 'linux'
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface_phyeth
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_interface_phyeth-${{ steps.version.outputs.version }}-${{ matrix.name }}.tar.gz \
+          interface_phyeth README.md build_interface_phyeth_deb.sh show_interface_phy-eth.txt show_interface_phy-eth.json test-output.json
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dell_interface_phyeth-${{ matrix.name }}
+        path: release-assets/
+
+  build-dell-lldp-syslog:
+    if: ${{ github.event.inputs.component == 'dell_lldp_syslog' || github.event.inputs.component == 'all' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            name: linux-amd64
+          - goos: linux
+            goarch: arm64
+            name: linux-arm64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Generate version
+      id: version
+      run: |
+        YYMM=$(date +"%y%m")
+        VERSION="1.${YYMM}.${{ github.run_number }}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Generated version: ${VERSION}"
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Build binary
+      run: |
+        cd src/SwitchOutput/DellOS/10/lldp-sylog
+        CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
+          go build -ldflags="-w -s" -o lldpsyslog lldp_syslog.go
+          
+    - name: Create deb package
+      if: matrix.goos == 'linux'
+      run: |
+        cd src/SwitchOutput/DellOS/10/lldp-sylog
+        # Install dpkg-deb if not available (should be on ubuntu-latest)
+        sudo apt-get update
+        sudo apt-get install -y dpkg-dev
+        # Make the build script executable
+        chmod +x build_lldp_syslog_deb.sh
+        # Update version in the script to use the generated version (already numeric)
+        sed -i "s/VERSION=\"1.0\"/VERSION=\"${{ steps.version.outputs.version }}\"/" build_lldp_syslog_deb.sh
+        # Build the deb package
+        ./build_lldp_syslog_deb.sh
+        # Move the created deb file to release assets
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        mv lldpsyslog_*.deb $GITHUB_WORKSPACE/release-assets/dell_lldp_syslog-${{ steps.version.outputs.version }}-${{ matrix.name }}.deb
+          
+    - name: Create tar package (non-Linux platforms)
+      if: matrix.goos != 'linux'
+      run: |
+        cd src/SwitchOutput/DellOS/10/lldp-sylog
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_lldp_syslog-${{ steps.version.outputs.version }}-${{ matrix.name }}.tar.gz \
+          lldpsyslog README.md build_lldp_syslog_deb.sh show-lldp-neighbors-detail.txt example-lldp-data.json lldp-kql-query.kql
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dell_lldp_syslog-${{ matrix.name }}
+        path: release-assets/
+
+  build-dell-interface-syslog:
+    if: ${{ github.event.inputs.component == 'dell_interface_syslog' || github.event.inputs.component == 'all' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            name: linux-amd64
+          - goos: linux
+            goarch: arm64
+            name: linux-arm64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Generate version
+      id: version
+      run: |
+        YYMM=$(date +"%y%m")
+        VERSION="1.${YYMM}.${{ github.run_number }}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Generated version: ${VERSION}"
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Build binary
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface
+        CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
+          go build -ldflags="-w -s" -o interface-syslog show_interface.go
+          
+    - name: Create deb package
+      if: matrix.goos == 'linux'
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface
+        # Install dpkg-deb if not available (should be on ubuntu-latest)
+        sudo apt-get update
+        sudo apt-get install -y dpkg-dev
+        # Make the build script executable
+        chmod +x build_interface_syslog_deb.sh
+        # Update version in the script to use the generated version (already numeric)
+        sed -i "s/VERSION=\"1.0\"/VERSION=\"${{ steps.version.outputs.version }}\"/" build_interface_syslog_deb.sh
+        # Build the deb package
+        ./build_interface_syslog_deb.sh
+        # Move the created deb file to release assets
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        mv interface-syslog_*.deb $GITHUB_WORKSPACE/release-assets/dell_interface_syslog-${{ steps.version.outputs.version }}-${{ matrix.name }}.deb
+          
+    - name: Create tar package (non-Linux platforms)
+      if: matrix.goos != 'linux'
+      run: |
+        cd src/SwitchOutput/DellOS/10/interface
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_interface_syslog-${{ steps.version.outputs.version }}-${{ matrix.name }}.tar.gz \
+          interface-syslog README.md build_interface_syslog_deb.sh example_show_interface.txt example_show_interface.json
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dell_interface_syslog-${{ matrix.name }}
+        path: release-assets/
+
+  build-dell-version:
+    if: ${{ github.event.inputs.component == 'dell_version' || github.event.inputs.component == 'all' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            name: linux-amd64
+          - goos: linux
+            goarch: arm64
+            name: linux-arm64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Generate version
+      id: version
+      run: |
+        YYMM=$(date +"%y%m")
+        VERSION="1.${YYMM}.${{ github.run_number }}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Generated version: ${VERSION}"
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Build binary
+      run: |
+        cd src/SwitchOutput/DellOS/10/Version
+        CGO_ENABLED=0 GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} \
+          go build -ldflags="-w -s" -o show_version show_version.go
+          
+    - name: Create package
+      run: |
+        cd src/SwitchOutput/DellOS/10/Version
+        mkdir -p $GITHUB_WORKSPACE/release-assets
+        tar -czf $GITHUB_WORKSPACE/release-assets/dell_version-${{ steps.version.outputs.version }}-${{ matrix.name }}.tar.gz \
+          show_version README.md show_version.txt show_version.json
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dell_version-${{ matrix.name }}
+        path: release-assets/
+
   create-release:
-    needs: build
+    needs: [build-mac-address-parser, build-dell-interface, build-dell-interface-phyeth, build-dell-lldp-syslog, build-dell-interface-syslog, build-dell-version]
+    if: always() && contains(needs.*.result, 'success')
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        
+    - name: Generate version
+      id: version
+      run: |
+        YYMM=$(date +"%y%m")
+        VERSION="1.${YYMM}.${{ github.run_number }}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Generated version: ${VERSION}"
         
     - name: Download all artifacts
       uses: actions/download-artifact@v4
@@ -85,13 +396,20 @@ jobs:
     - name: Prepare release assets
       run: |
         mkdir -p release-assets
-        find artifacts -name "mac_address_parser-*" -type f -exec cp {} release-assets/ \;
+        find artifacts -name "mac_address_parser-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
+        find artifacts -name "dell_interface-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
+        find artifacts -name "dell_interface_phyeth-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
+        find artifacts -name "dell_lldp_syslog-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
+        find artifacts -name "dell_interface_syslog-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
+        find artifacts -name "dell_version-*" -type f -exec cp {} release-assets/ \; 2>/dev/null || true
         
     - name: Generate checksums
       run: |
         cd release-assets
-        for file in mac_address_parser-*; do
-          sha256sum "$file" > "$file.sha256"
+        for file in mac_address_parser-* dell_interface-* dell_interface_phyeth-* dell_lldp_syslog-* dell_interface_syslog-* dell_version-*; do
+          if [ -f "$file" ]; then
+            sha256sum "$file" > "$file.sha256"
+          fi
         done
         
     - name: Get previous tag
@@ -104,46 +422,86 @@ jobs:
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git tag -a "${{ github.event.inputs.version }}" -m "Release ${{ github.event.inputs.version }}"
-        git push origin "${{ github.event.inputs.version }}"
+        git tag -a "v${{ steps.version.outputs.version }}" -m "Release v${{ steps.version.outputs.version }}"
+        git push origin "v${{ steps.version.outputs.version }}"
         
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.event.inputs.version }}
-        name: Release ${{ github.event.inputs.version }}
+        tag_name: v${{ steps.version.outputs.version }}
+        name: Release v${{ steps.version.outputs.version }}
         body: |
-          # Release Notes - ${{ github.event.inputs.version }}
+          # Release Notes - v${{ steps.version.outputs.version }}
           
-          ## 🚀 Multi-Platform Release: MAC Address Parser
+          ## 🚀 Multi-Platform Release: Network Switch Parsers
           
-          This release includes pre-compiled binaries for multiple platforms.
+          This release includes pre-compiled binaries for multiple platforms and components.
           
-          ### 📦 Available Platforms
+          ### 📦 Available Components
           
-          - **Linux AMD64** - `mac_address_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz`
-          - **Linux ARM64** - `mac_address_parser-${{ github.event.inputs.version }}-linux-arm64.tar.gz`
-          - **macOS AMD64** - `mac_address_parser-${{ github.event.inputs.version }}-darwin-amd64.tar.gz`
-          - **macOS ARM64** - `mac_address_parser-${{ github.event.inputs.version }}-darwin-arm64.tar.gz`
-          - **Windows AMD64** - `mac_address_parser-${{ github.event.inputs.version }}-windows-amd64.zip`
+          **Cisco Nexus Tools:**
+          - **MAC Address Parser** - Parse Cisco Nexus MAC address tables
+          
+          **Dell OS10 Tools:**
+          - **Interface Parser** - Parse Dell OS10 interface information
+          - **Interface Physical Ethernet Parser** - Parse Dell OS10 physical interface details (available as .deb package for Linux)
+          - **LLDP Syslog** - LLDP neighbor data collection with syslog output (available as .deb package for Linux)
+          - **Interface Syslog** - Interface statistics collection with syslog output (available as .deb package for Linux)
+          - **Version Parser** - Parse Dell OS10 version information
+          
+          ### 🖥️ Available Platforms
+          
+          - **Linux AMD64** - `*-${{ steps.version.outputs.version }}-linux-amd64.tar.gz`
+          - **Linux ARM64** - `*-${{ steps.version.outputs.version }}-linux-arm64.tar.gz`
           
           ### 🔧 Technical Changes
           
-          - Uses `vsh` CLI for Cisco Nexus Linux shell compatibility
+          - Cross-platform compatibility for all parsers
           - Optimized binary builds with reduced size
-          - Cross-platform compatibility
+          - Comprehensive test data and documentation included
+          - Enhanced Dell OS10 support with multiple parser tools
+          - LLDP Syslog now packaged as .deb with systemd service integration
+          - Interface Syslog now packaged as .deb with systemd service integration
+          - Interface Physical Ethernet now packaged as .deb with systemd service integration
           
-          ### 🔗 Usage
+          ### 🔗 Usage Examples
           
           ```bash
-          # Extract the archive (Linux/macOS)
-          tar -xzf mac_address_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
+          # Extract archives (Linux)
+          tar -xzf mac_address_parser-${{ steps.version.outputs.version }}-linux-amd64.tar.gz
+          tar -xzf dell_interface-${{ steps.version.outputs.version }}-linux-amd64.tar.gz
           
-          # Run with input file
+          # Install LLDP Syslog service (Linux .deb package)
+          wget <URL_TO_LLDPSYSLOG_DEB>
+          sudo dpkg -i dell_lldp_syslog-${{ steps.version.outputs.version }}-linux-amd64.deb
+          
+          # Install Interface Syslog service (Linux .deb package)
+          wget <URL_TO_INTERFACE_SYSLOG_DEB>
+          sudo dpkg -i dell_interface_syslog-${{ steps.version.outputs.version }}-linux-amd64.deb
+          
+          # Install Interface Physical Ethernet service (Linux .deb package)
+          wget <URL_TO_INTERFACE_PHYETH_DEB>
+          sudo dpkg -i dell_interface_phyeth-${{ steps.version.outputs.version }}-linux-amd64.deb
+          
+          # Run parsers with input files
           ./mac_address_parser -input show-mac-address-table.txt -output output.json
+          ./show_interface -input show-interface.txt -output interface.json
+          ./show_version -input show-version.txt -output version.json
+          
+          # LLDP service is automatically started via systemd timer (runs every 1 minute)
+          sudo systemctl status lldpsyslog.timer
+          sudo systemctl status lldpsyslog.service
+          
+          # Interface service is automatically started via systemd timer (runs every 1 minute)
+          sudo systemctl status interface-syslog.timer
+          sudo systemctl status interface-syslog.service
+          
+          # Interface Physical Ethernet service is automatically started via systemd timer (runs every 60 seconds)
+          sudo systemctl status interface-phyeth.timer
+          sudo systemctl status interface-phyeth.service
           ```
           
-          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.prev_tag.outputs.prev_tag }}...${{ github.event.inputs.version }}
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.prev_tag.outputs.prev_tag }}..v${{ steps.version.outputs.version }}
         prerelease: true
         files: |
           release-assets/*
@@ -152,7 +510,8 @@ jobs:
     - name: Print release info
       run: |
         echo "✅ Multi-platform release created successfully!"
-        echo "🏷️ Tag: ${{ github.event.inputs.version }}"
+        echo "🏷️ Tag: v${{ steps.version.outputs.version }}"
+        echo "🎯 Component: ${{ github.event.inputs.component }}"
         echo "📦 Assets:"
         ls -la release-assets/
-        echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/${{ github.event.inputs.version }}"
+        echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.version }}"

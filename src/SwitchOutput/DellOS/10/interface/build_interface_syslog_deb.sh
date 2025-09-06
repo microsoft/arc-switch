@@ -1,23 +1,23 @@
 #!/bin/bash
 #
-# build_lldpsyslog_deb.sh
+# build_interface_syslog_deb.sh
 #
-# This script builds a Debian package for the lldpsyslog service.
-# It creates a structured package with your application in /opt/microsoft/lldpsyslog,
+# This script builds a Debian package for the interface-syslog service.
+# It creates a structured package with your application in /opt/microsoft,
 # systemd unit files for service and timer in /etc/systemd/system,
 # and includes proper post-install and post-removal scripts for service registration and cleanup.
 #
 # Usage:
-#   ./build_lldpsyslog_deb.sh          # Builds the package only.
-#   ./build_lldpsyslog_deb.sh --install  # Builds and installs the package.
+#   ./build_interface_syslog_deb.sh          # Builds the package only.
+#   ./build_interface_syslog_deb.sh --install  # Builds and installs the package.
 #
 
 # Package metadata
-PACKAGE_NAME="lldpsyslog"
+PACKAGE_NAME="interface-syslog"
 VERSION="1.0"
 ARCH="amd64"
 MAINTAINER="Eric Marquez <emarq@microsoft.com>"
-DESCRIPTION="LLDP Neighbor Service for Debian - Runs every 1 minute using systemd timer."
+DESCRIPTION="Interface Syslog Service for Debian - LLDP Neighbor Service runs every 1 minute using systemd timer."
 
 # Build directory for package content
 BUILD_DIR="./${PACKAGE_NAME}_pkg"
@@ -32,7 +32,7 @@ echo "Setting up package directory structure..."
 
 # Create directory structure
 mkdir -p "$BUILD_DIR/DEBIAN"
-mkdir -p "$BUILD_DIR/opt/microsoft/${PACKAGE_NAME}"
+mkdir -p "$BUILD_DIR/opt/microsoft"
 mkdir -p "$BUILD_DIR/etc/systemd/system"
 
 # ==== Create DEBIAN/control file ====
@@ -52,11 +52,11 @@ cat > "$BUILD_DIR/DEBIAN/postinst" <<'EOF'
 # Post-install script: Reload systemd, enable and start the timer.
 
 # Set ownership to root
-chown -R root:root /opt/microsoft/lldpsyslog
+chown -R root:root /opt/microsoft/interface-syslog
 
 systemctl daemon-reload
-systemctl enable lldpsyslog.timer
-systemctl start lldpsyslog.timer
+systemctl enable interface-syslog.timer
+systemctl start interface-syslog.timer
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postinst"
 
@@ -64,56 +64,64 @@ chmod 755 "$BUILD_DIR/DEBIAN/postinst"
 cat > "$BUILD_DIR/DEBIAN/postrm" <<'EOF'
 #!/bin/bash
 # Post-removal script: Stop and disable the timer, remove unit files and reload systemd.
-systemctl stop lldpsyslog.timer
-systemctl disable lldpsyslog.timer
-rm -f /etc/systemd/system/lldpsyslog.service
-rm -f /etc/systemd/system/lldpsyslog.timer
+systemctl stop interface-syslog.timer
+systemctl disable interface-syslog.timer
+rm -f /etc/systemd/system/interface-syslog.service
+rm -f /etc/systemd/system/interface-syslog.timer
 systemctl daemon-reload
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postrm"
 
-# ==== Copy application binary ====
-# Assumes the lldpsyslog binary is in the same directory as this script.
-if [ ! -f "./lldpsyslog" ]; then
-    echo "Error: lldpsyslog binary not found in the current directory."
-    exit 1
+# ==== Build the Go binary if it doesn't exist ====
+if [ ! -f "./interface-syslog" ]; then
+    echo "Building Go binary from show_interface.go..."
+    if [ ! -f "./show_interface.go" ]; then
+        echo "Error: show_interface.go source file not found in the current directory."
+        exit 1
+    fi
+    go build -o interface-syslog show_interface.go
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to build Go binary."
+        exit 1
+    fi
 fi
 
-echo "Copying application binary to ${BUILD_DIR}/opt/microsoft/${PACKAGE_NAME}/lldpsyslog"
-cp "./lldpsyslog" "$BUILD_DIR/opt/microsoft/${PACKAGE_NAME}/lldpsyslog"
-chmod 755 "$BUILD_DIR/opt/microsoft/${PACKAGE_NAME}/lldpsyslog"
+echo "Copying application binary to ${BUILD_DIR}/opt/microsoft/interface-syslog"
+mkdir -p "$BUILD_DIR/opt/microsoft"
+cp "./interface-syslog" "$BUILD_DIR/opt/microsoft/interface-syslog"
+chmod 755 "$BUILD_DIR/opt/microsoft/interface-syslog"
 
 # ==== Create systemd service file ====
-cat > "$BUILD_DIR/etc/systemd/system/lldpsyslog.service" <<EOF
+cat > "$BUILD_DIR/etc/systemd/system/interface-syslog.service" <<EOF
 [Unit]
-Description=LLDP Neighbor Service
+Description=Interface Syslog Service - LLDP Neighbor Service
 After=network.target
 Wants=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/opt/microsoft/${PACKAGE_NAME}/lldpsyslog
+ExecStart=/opt/microsoft/interface-syslog
 TimeoutStartSec=45s
 TimeoutStopSec=10s
 User=root
 Group=root
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=lldpsyslog
+SyslogIdentifier=interface-syslog
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
 # ==== Create systemd timer file ====
-cat > "$BUILD_DIR/etc/systemd/system/lldpsyslog.timer" <<EOF
+cat > "$BUILD_DIR/etc/systemd/system/interface-syslog.timer" <<EOF
 [Unit]
-Description=Run LLDP Neighbor every 1 minute
+Description=Run Interface Syslog Service every 1 minute
 
 [Timer]
 OnBootSec=1min
 OnUnitActiveSec=1min
-Unit=lldpsyslog.service
+Unit=interface-syslog.service
 Persistent=true
 AccuracySec=1s
 
