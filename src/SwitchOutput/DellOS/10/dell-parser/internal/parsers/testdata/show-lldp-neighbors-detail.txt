@@ -1,0 +1,373 @@
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 1c:34:da:42:14:7e
+Remote Port Subtype: Mac address (3)
+Remote Port ID: 1c:34:da:42:14:7c
+Remote Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
+Local Port ID: ethernet1/1/1
+Locally assigned remote Neighbor Index: 13
+Remote TTL: 48
+Information valid for next 41 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:22:30
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 1c:34:da:41:e4:2e
+Remote Port Subtype: Mac address (3)
+Remote Port ID: 1c:34:da:41:e4:2c
+Remote Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
+Local Port ID: ethernet1/1/2
+Locally assigned remote Neighbor Index: 24
+Remote TTL: 48
+Information valid for next 40 seconds
+Time since last information change of this neighbor: 39 weeks 4 days 14:02:54
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 1c:34:da:42:14:36
+Remote Port Subtype: Mac address (3)
+Remote Port ID: 1c:34:da:42:14:34
+Remote Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
+Local Port ID: ethernet1/1/3
+Locally assigned remote Neighbor Index: 6
+Remote TTL: 48
+Information valid for next 24 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:22:31
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 1c:34:da:42:17:0e
+Remote Port Subtype: Mac address (3)
+Remote Port ID: 1c:34:da:42:17:0c
+Remote Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
+Local Port ID: ethernet1/1/4
+Locally assigned remote Neighbor Index: 11
+Remote TTL: 48
+Information valid for next 34 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:22:31
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 1c:34:da:41:f8:8e
+Remote Port Subtype: Mac address (3)
+Remote Port ID: 1c:34:da:41:f8:8c
+Remote Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
+Local Port ID: ethernet1/1/5
+Locally assigned remote Neighbor Index: 23
+Remote TTL: 48
+Information valid for next 34 seconds
+Time since last information change of this neighbor: 43 weeks 04:36:27
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 1c:34:da:41:f9:0e
+Remote Port Subtype: Mac address (3)
+Remote Port ID: 1c:34:da:41:f9:0c
+Remote Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
+Local Port ID: ethernet1/1/6
+Locally assigned remote Neighbor Index: 16
+Remote TTL: 48
+Information valid for next 44 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:22:30
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 1c:34:da:41:f8:76
+Remote Port Subtype: Mac address (3)
+Remote Port ID: 1c:34:da:41:f8:74
+Remote Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
+Local Port ID: ethernet1/1/7
+Locally assigned remote Neighbor Index: 15
+Remote TTL: 48
+Information valid for next 42 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:22:30
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 1c:34:da:41:ee:fe
+Remote Port Subtype: Mac address (3)
+Remote Port ID: 1c:34:da:41:ee:fc
+Remote Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
+Local Port ID: ethernet1/1/8
+Locally assigned remote Neighbor Index: 29
+Remote TTL: 48
+Information valid for next 32 seconds
+Time since last information change of this neighbor: 21 weeks 2 days 22:26:58
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 50:6b:4b:b1:42:a0
+Remote Port Subtype: Mac address (3)
+Remote Port ID: 50:6b:4b:b1:42:9e
+Remote Port Description: ConnectX-4 Lx, 25G/10G/1G SFP
+Local Port ID: ethernet1/1/38
+Locally assigned remote Neighbor Index: 14
+Remote TTL: 48
+Information valid for next 42 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:22:30
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 0c:29:ef:c3:0b:20
+Remote Port Subtype: Interface name (5)
+Remote Port ID: ethernet1/1/39
+Remote Port Description: P2P_Rack01/TOR1-ibgp-1_To_Rack01/TOR2-ibgp-1
+Local Port ID: ethernet1/1/39
+Locally assigned remote Neighbor Index: 22
+Remote TTL: 120
+Information valid for next 118 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:18:27
+Remote System Name: s46r23b-Rack01-TOR-2
+Remote System Desc: Dell SmartFabric OS10 Enterprise.
+Copyright (c) 1999-2024 by Dell Inc. All Rights Reserved.
+System Description: OS10 Enterprise.
+OS Version: 10.5.6.1.
+System Type: S5248F-ON
+Existing System Capabilities:  Repeater, Bridge, Router
+Enabled System Capabilities:  Repeater, Bridge, Router
+Remote Max Frame Size: 9216
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 1
+    Auto-neg enabled: 1
+    Auto-neg advertised capabilities:
+        1000BASE-T half duplex mode
+Dell Organization Specific Detail:
+Originator: Switch
+    Service Tag: CXYB9Z2
+    Product Base:
+    Product Serial Number:
+    Product Part Number:
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 0c:29:ef:c3:0b:20
+Remote Port Subtype: Interface name (5)
+Remote Port ID: ethernet1/1/40
+Remote Port Description: P2P_Rack01/TOR1-ibgp-2_To_Rack01/TOR2-ibgp-2
+Local Port ID: ethernet1/1/40
+Locally assigned remote Neighbor Index: 21
+Remote TTL: 120
+Information valid for next 102 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:18:46
+Remote System Name: s46r23b-Rack01-TOR-2
+Remote System Desc: Dell SmartFabric OS10 Enterprise.
+Copyright (c) 1999-2024 by Dell Inc. All Rights Reserved.
+System Description: OS10 Enterprise.
+OS Version: 10.5.6.1.
+System Type: S5248F-ON
+Existing System Capabilities:  Repeater, Bridge, Router
+Enabled System Capabilities:  Repeater, Bridge, Router
+Remote Max Frame Size: 9216
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 1
+    Auto-neg enabled: 1
+    Auto-neg advertised capabilities:
+        1000BASE-T half duplex mode
+Dell Organization Specific Detail:
+Originator: Switch
+    Service Tag: CXYB9Z2
+    Product Base:
+    Product Serial Number:
+    Product Part Number:
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 68:9e:0b:af:91:78
+Remote Port Subtype: Interface name (5)
+Remote Port ID: Ethernet1/16/1
+Remote Port Description: INFRA:PTP:rr1-s46-r23-93360hl-36-1a:Eth1/95:HL
+Local Port ID: ethernet1/1/47:1
+Locally assigned remote Neighbor Index: 32
+Remote TTL: 120
+Information valid for next 110 seconds
+Time since last information change of this neighbor: 2 weeks 4 days 05:51:53
+Remote System Name: RR1-S46-R01-9336ssp-1b.corp.microsoft.com
+Remote Management Address (IPv6): 2001:4898:e0:2::546:1002
+Remote System Desc: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
+TAC support: http://www.cisco.com/tac
+Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
+Existing System Capabilities:  Bridge, Router
+Enabled System Capabilities:  Bridge, Router
+Remote Max Frame Size: 9100
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 78:64:a0:52:70:7c
+Remote Port Subtype: Interface name (5)
+Remote Port ID: Ethernet1/16/1
+Remote Port Description: INFRA:PTP:rr1-s46-r23-93360hl-36-1a:Eth1/96:HL
+Local Port ID: ethernet1/1/48:1
+Locally assigned remote Neighbor Index: 31
+Remote TTL: 120
+Information valid for next 104 seconds
+Time since last information change of this neighbor: 2 weeks 4 days 05:51:59
+Remote System Name: RR1-S46-R01-9336ssp-1a.corp.microsoft.com
+Remote Management Address (IPv6): 2001:4898:e0:2::546:1010
+Remote System Desc: Cisco Nexus Operating System (NX-OS) Software 10.3(4a)
+TAC support: http://www.cisco.com/tac
+Copyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.
+Existing System Capabilities:  Bridge, Router
+Enabled System Capabilities:  Bridge, Router
+Remote Max Frame Size: 9100
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 0c:29:ef:c3:0b:20
+Remote Port Subtype: Interface name (5)
+Remote Port ID: ethernet1/1/49
+Remote Port Description: ethernet1/1/49
+Local Port ID: ethernet1/1/49
+Locally assigned remote Neighbor Index: 19
+Remote TTL: 120
+Information valid for next 96 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:19:07
+Remote System Name: s46r23b-Rack01-TOR-2
+Remote System Desc: Dell SmartFabric OS10 Enterprise.
+Copyright (c) 1999-2024 by Dell Inc. All Rights Reserved.
+System Description: OS10 Enterprise.
+OS Version: 10.5.6.1.
+System Type: S5248F-ON
+Existing System Capabilities:  Repeater, Bridge, Router
+Enabled System Capabilities:  Repeater, Bridge, Router
+Remote Max Frame Size: 9216
+Remote Aggregation Status: true
+MAC PHY Configuration:
+    Auto-neg supported: 1
+    Auto-neg enabled: 0
+    Auto-neg advertised capabilities:
+        1000BASE-T half duplex mode
+Dell Organization Specific Detail:
+Originator: Switch
+    Service Tag: CXYB9Z2
+    Product Base:
+    Product Serial Number:
+    Product Part Number:
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 0c:29:ef:c3:0b:20
+Remote Port Subtype: Interface name (5)
+Remote Port ID: ethernet1/1/50
+Remote Port Description: ethernet1/1/50
+Local Port ID: ethernet1/1/50
+Locally assigned remote Neighbor Index: 20
+Remote TTL: 120
+Information valid for next 118 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:19:07
+Remote System Name: s46r23b-Rack01-TOR-2
+Remote System Desc: Dell SmartFabric OS10 Enterprise.
+Copyright (c) 1999-2024 by Dell Inc. All Rights Reserved.
+System Description: OS10 Enterprise.
+OS Version: 10.5.6.1.
+System Type: S5248F-ON
+Existing System Capabilities:  Repeater, Bridge, Router
+Enabled System Capabilities:  Repeater, Bridge, Router
+Remote Max Frame Size: 9216
+Remote Aggregation Status: true
+MAC PHY Configuration:
+    Auto-neg supported: 1
+    Auto-neg enabled: 0
+    Auto-neg advertised capabilities:
+        1000BASE-T half duplex mode
+Dell Organization Specific Detail:
+Originator: Switch
+    Service Tag: CXYB9Z2
+    Product Base:
+    Product Serial Number:
+    Product Part Number:
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: 0c:29:ef:c3:0b:20
+Remote Port Subtype: Interface name (5)
+Remote Port ID: ethernet1/1/51
+Remote Port Description: ethernet1/1/51
+Local Port ID: ethernet1/1/51
+Locally assigned remote Neighbor Index: 18
+Remote TTL: 120
+Information valid for next 93 seconds
+Time since last information change of this neighbor: 47 weeks 5 days 19:19:07
+Remote System Name: s46r23b-Rack01-TOR-2
+Remote System Desc: Dell SmartFabric OS10 Enterprise.
+Copyright (c) 1999-2024 by Dell Inc. All Rights Reserved.
+System Description: OS10 Enterpri Auto-neg advertised capabilities:
+        1000BASE-T half duplex mode
+Dell Organization Specific Detail:
+Originator: Switch
+    Service Tag: CXYB9Z2
+    Product Base:
+    Product Serial Number:
+    Product Part Number:
+---------------------------------------------------------------------------

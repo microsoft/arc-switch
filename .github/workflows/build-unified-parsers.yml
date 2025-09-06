@@ -1,0 +1,178 @@
+name: Build Unified Switch Parsers
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      prerelease:
+        description: 'Mark as pre-release'
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  build-parsers:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        parser:
+          - name: cisco-parser
+            path: src/SwitchOutput/Cisco/Nexus/10/cisco-parser
+            vendor: cisco-nexus
+            description: "Unified Cisco Nexus Switch Parser"
+          - name: dell-parser
+            path: src/SwitchOutput/DellOS/10/dell-parser
+            vendor: dell-os10
+            description: "Unified Dell OS10 Switch Parser"
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        
+    - name: Build ${{ matrix.parser.name }}
+      run: |
+        cd ${{ matrix.parser.path }}
+        
+        echo "========================================="
+        echo "Building: ${{ matrix.parser.name }}"
+        echo "Vendor: ${{ matrix.parser.vendor }}"
+        echo "Description: ${{ matrix.parser.description }}"
+        echo "Version: ${{ github.event.inputs.version }}"
+        echo "========================================="
+        
+        # Initialize go module if needed
+        if [ ! -f "go.mod" ]; then
+          go mod init ${{ matrix.parser.name }}
+        fi
+        go mod tidy
+        
+        # Build
+        mkdir -p build
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+          -ldflags="-w -s -X main.version=${{ github.event.inputs.version }}" \
+          -o build/${{ matrix.parser.name }} cmd/main.go
+        
+        # Create package
+        mkdir -p dist
+        cp build/${{ matrix.parser.name }} dist/
+        
+        # Copy sample files from parent directory
+        if [ "${{ matrix.parser.vendor }}" = "cisco-nexus" ]; then
+          cp ../show-*.txt dist/ 2>/dev/null || true
+          cp ../commands.json dist/ 2>/dev/null || true
+        fi
+        
+        # Create README
+        cat > dist/README.md << EOF
+        # ${{ matrix.parser.description }}
+        Version: ${{ github.event.inputs.version }}
+        
+        ## Usage
+        \`\`\`bash
+        ./${{ matrix.parser.name }} -list
+        ./${{ matrix.parser.name }} -p <parser-type> -i <input-file> -o <output-file>
+        \`\`\`
+        
+        ## Available Parsers
+        Run \`./${{ matrix.parser.name }} -list\` to see all available parsers.
+        EOF
+        
+        # Create tarball
+        cd dist
+        tar -czf ../../${{ matrix.parser.vendor }}-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz *
+        cd ..
+        
+        echo "Package created successfully!"
+        ls -lh ../*.tar.gz
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.parser.vendor }}-parser
+        path: "*.tar.gz"
+
+  create-release:
+    needs: build-parsers
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+        
+    - name: Prepare release assets
+      run: |
+        mkdir -p release-assets
+        find artifacts -name "*.tar.gz" -type f -exec mv {} release-assets/ \;
+        
+        echo "Release assets:"
+        ls -la release-assets/
+        
+    - name: Create Git Tag
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -a "${{ github.event.inputs.version }}" -m "Release ${{ github.event.inputs.version }}"
+        git push origin "${{ github.event.inputs.version }}"
+        
+    - name: Generate release notes
+      run: |
+        cat > release_notes.md << 'EOF'
+        # Unified Switch Parsers - ${{ github.event.inputs.version }}
+        
+        ## 🎯 What's New
+        
+        Unified parser architecture with single binaries per vendor for easier deployment and maintenance.
+        
+        ## 📦 Available Packages
+        
+        ### Cisco Nexus Unified Parser
+        - **File**: `cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz`
+        - **Parsers**: class-map, interface-counters, inventory, ip-arp, ip-route, lldp-neighbor, mac-address, transceiver
+        
+        ### Dell OS10 Unified Parser
+        - **File**: `dell-os10-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz`
+        - **Parsers**: interface, interface-phy, lldp, version
+        
+        ## 🚀 Usage
+        
+        ```bash
+        # Extract and use
+        tar -xzf cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
+        ./cisco-parser -list
+        ./cisco-parser -p class-map -i show-class-map.txt -o output.json
+        ```
+        
+        ## 📋 Benefits
+        - Single binary per vendor (reduced deployment complexity)
+        - Consistent command-line interface
+        - Smaller total package size
+        - Easier updates and maintenance
+        
+        EOF
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.event.inputs.version }}
+        name: Release ${{ github.event.inputs.version }}
+        body_path: release_notes.md
+        prerelease: ${{ github.event.inputs.prerelease }}
+        files: release-assets/*
+        token: ${{ secrets.GITHUB_TOKEN }}
