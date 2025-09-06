@@ -1,4 +1,4 @@
-name: Build Multi-Platform and Create Pre-Release
+name: Build Switch Parsers for Target Platforms
 
 on:
   workflow_dispatch:
@@ -70,13 +70,22 @@ jobs:
             parser_name=$(basename "$parser_dir")
             parser_go_file="$parser_dir/$parser_name.go"
             
-            # Extract vendor info from path
+            # Extract vendor info and determine target platform
             if [[ "$parser_dir" == *"Cisco"* ]]; then
-              vendor="cisco"
+              vendor="cisco-nexus"
+              target_os="linux"
+              target_arch="amd64"
+              target_desc="Nexus NX-OS (Linux x86_64)"
             elif [[ "$parser_dir" == *"DellOS"* ]]; then
-              vendor="dell"
+              vendor="dell-os10"
+              target_os="linux"
+              target_arch="amd64"
+              target_desc="Dell OS10 (Debian Linux x86_64)"
             else
               vendor="unknown"
+              target_os="linux"
+              target_arch="amd64"
+              target_desc="Unknown"
             fi
             
             echo "Checking for: $parser_go_file"
@@ -84,6 +93,7 @@ jobs:
             if [ -f "$parser_go_file" ]; then
               if grep -q "package main" "$parser_go_file"; then
                 echo "  ✓ Found valid main program: $parser_name ($vendor)"
+                echo "    Target Platform: $target_desc"
                 
                 if [ "$FIRST" = true ]; then
                   FIRST=false
@@ -91,7 +101,7 @@ jobs:
                   PROGRAM_ARRAY+=","
                 fi
                 
-                PROGRAM_ARRAY+="{\"name\":\"$parser_name\",\"dir\":\"$parser_dir\",\"file\":\"$parser_go_file\",\"vendor\":\"$vendor\"}"
+                PROGRAM_ARRAY+="{\"name\":\"$parser_name\",\"dir\":\"$parser_dir\",\"file\":\"$parser_go_file\",\"vendor\":\"$vendor\",\"target_os\":\"$target_os\",\"target_arch\":\"$target_arch\",\"target_desc\":\"$target_desc\"}"
               else
                 echo "  ✗ $parser_go_file does not have 'package main'"
               fi
@@ -106,7 +116,7 @@ jobs:
         echo "programs=$PROGRAM_ARRAY" >> $GITHUB_OUTPUT
         echo ""
         echo "Final programs JSON:"
-        echo "$PROGRAM_ARRAY" | jq -r '.[] | "  - \(.vendor)/\(.name) (\(.dir))"'
+        echo "$PROGRAM_ARRAY" | jq -r '.[] | "  - \(.vendor)/\(.name) -> Target: \(.target_desc)"'
         
         # Validate we found at least one program
         PROGRAM_COUNT=$(echo "$PROGRAM_ARRAY" | jq length)
@@ -115,21 +125,13 @@ jobs:
           exit 1
         fi
         
-        echo "Successfully discovered $PROGRAM_COUNT parser programs across all vendors"
+        echo "Successfully discovered $PROGRAM_COUNT parser programs"
 
   build:
     needs: discover-programs
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform:
-          - goos: linux
-            goarch: amd64
-            name: linux-amd64
-          - goos: windows
-            goarch: amd64
-            name: windows-amd64
-            ext: .exe
         program: ${{ fromJson(needs.discover-programs.outputs.programs) }}
     
     steps:
@@ -141,17 +143,16 @@ jobs:
       with:
         go-version: '1.21'
         
-    - name: Build binary
+    - name: Build binary for target platform
       run: |
         cd "${{ matrix.program.dir }}"
         
-        echo "Building ${{ matrix.program.vendor }}/${{ matrix.program.name }} for ${{ matrix.platform.goos }}/${{ matrix.platform.goarch }}"
-        echo "Working directory: $(pwd)"
-        echo "Source file: ${{ matrix.program.name }}.go"
-        
-        # List directory contents for debugging
-        echo "Directory contents:"
-        ls -la
+        echo "========================================="
+        echo "Building: ${{ matrix.program.name }}"
+        echo "Vendor: ${{ matrix.program.vendor }}"
+        echo "Target Platform: ${{ matrix.program.target_desc }}"
+        echo "Target OS/Arch: ${{ matrix.program.target_os }}/${{ matrix.program.target_arch }}"
+        echo "========================================="
         
         # Check if source file exists
         if [ ! -f "${{ matrix.program.name }}.go" ]; then
@@ -168,12 +169,14 @@ jobs:
         # Tidy dependencies
         go mod tidy
         
-        # Build the binary
-        CGO_ENABLED=0 GOOS=${{ matrix.platform.goos }} GOARCH=${{ matrix.platform.goarch }} \
-          go build -ldflags="-w -s" -o "${{ matrix.program.name }}${{ matrix.platform.ext }}" "${{ matrix.program.name }}.go"
+        # Build the binary - ONLY for the target platform
+        echo "Building Linux binary for ${{ matrix.program.vendor }}..."
+        CGO_ENABLED=0 GOOS=${{ matrix.program.target_os }} GOARCH=${{ matrix.program.target_arch }} \
+          go build -ldflags="-w -s" -o "${{ matrix.program.name }}" "${{ matrix.program.name }}.go"
         
         echo "Build successful!"
-        ls -la "${{ matrix.program.name }}${{ matrix.platform.ext }}"
+        ls -lh "${{ matrix.program.name }}"
+        file "${{ matrix.program.name }}"
           
     - name: Package binary
       run: |
@@ -181,7 +184,7 @@ jobs:
         mkdir -p $GITHUB_WORKSPACE/release-assets
         
         # Determine what files to include
-        PACKAGE_FILES="${{ matrix.program.name }}${{ matrix.platform.ext }}"
+        PACKAGE_FILES="${{ matrix.program.name }}"
         
         # Always include README if it exists
         if [ -f "README.md" ]; then
@@ -189,7 +192,7 @@ jobs:
         fi
         
         # Include common files from the parent directory
-        PARENT_DIR=".."  # Go up one level from parser directory
+        PARENT_DIR=".."
         
         # Check for commands.json in parent directory
         if [ -f "$PARENT_DIR/commands.json" ]; then
@@ -199,26 +202,25 @@ jobs:
         
         # Include any sample files or documentation in the current directory
         for file in *.json *.txt; do
-          if [ -f "$file" ] && [[ "$file" != "${{ matrix.program.name }}${{ matrix.platform.ext }}" ]]; then
+          if [ -f "$file" ] && [[ "$file" != "${{ matrix.program.name }}" ]]; then
             PACKAGE_FILES="$PACKAGE_FILES $file"
           fi
         done
         
         echo "Packaging files: $PACKAGE_FILES"
         
-        # Create archive with vendor prefix in filename
-        ARCHIVE_NAME="${{ matrix.program.vendor }}-${{ matrix.program.name }}-${{ github.event.inputs.version }}-${{ matrix.platform.name }}"
+        # Create archive with vendor and platform in filename
+        ARCHIVE_NAME="${{ matrix.program.vendor }}-${{ matrix.program.name }}-${{ github.event.inputs.version }}-${{ matrix.program.target_os }}-${{ matrix.program.target_arch }}"
         
-        if [ "${{ matrix.platform.goos }}" = "windows" ]; then
-          zip "$GITHUB_WORKSPACE/release-assets/${ARCHIVE_NAME}.zip" $PACKAGE_FILES
-        else
-          tar -czf "$GITHUB_WORKSPACE/release-assets/${ARCHIVE_NAME}.tar.gz" $PACKAGE_FILES
-        fi
+        # Always create tar.gz for Linux systems
+        tar -czf "$GITHUB_WORKSPACE/release-assets/${ARCHIVE_NAME}.tar.gz" $PACKAGE_FILES
+        
+        echo "Created: ${ARCHIVE_NAME}.tar.gz"
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.program.vendor }}-${{ matrix.program.name }}-${{ matrix.platform.name }}
+        name: ${{ matrix.program.vendor }}-${{ matrix.program.name }}
         path: release-assets/
 
   create-release:
@@ -243,16 +245,6 @@ jobs:
         echo "Release assets prepared:"
         ls -la release-assets/
         
-    - name: Generate checksums
-      run: |
-        cd release-assets
-        echo "Generating checksums..."
-        for archive in *; do
-          echo "  Generating checksum for $archive"
-          sha256sum "$archive" > "${archive}.sha256"
-        done
-        echo "All checksums generated"
-        
     - name: Get previous tag
       id: prev_tag
       run: |
@@ -270,41 +262,66 @@ jobs:
       id: release_notes
       run: |
         # Parse programs by vendor
-        CISCO_PARSERS=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '[.[] | select(.vendor == "cisco")] | .[] | "- **" + .name + "**"' | tr '\n' '\n')
-        DELL_PARSERS=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '[.[] | select(.vendor == "dell")] | .[] | "- **" + .name + "**"' | tr '\n' '\n')
+        CISCO_PARSERS=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '[.[] | select(.vendor == "cisco-nexus")] | .[] | "- **" + .name + "**"' | tr '\n' '\n')
+        DELL_PARSERS=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '[.[] | select(.vendor == "dell-os10")] | .[] | "- **" + .name + "**"' | tr '\n' '\n')
         
         cat > release_notes.md << EOF
         # Switch Output Parsers - ${{ github.event.inputs.version }}
         
-        Multi-platform binaries for network switch output parsing tools.
+        Optimized Linux binaries for network switch output parsing tools.
         
-        ## Available Parsers
+        ## Target Platforms
         
-        ### Cisco Nexus Parsers
+        ### Cisco Nexus Switches
+        - **Target OS**: Nexus NX-OS 10.3(4a)I9 (Linux-based)
+        - **Architecture**: x86_64 (amd64)
+        - **Binary Format**: Linux ELF executable
+        
+        #### Available Parsers:
         $CISCO_PARSERS
         
-        ### Dell OS10 Parsers  
+        ### Dell OS10 Switches  
+        - **Target OS**: Dell OS10 (Debian GNU/Linux 10 "buster")
+        - **Architecture**: x86_64 (amd64)
+        - **Binary Format**: Linux ELF executable
+        
+        #### Available Parsers:
         $DELL_PARSERS
         
-        ## Platforms
-        - **Linux AMD64** (\`.tar.gz\`)
-        - **Windows AMD64** (\`.zip\`)
+        ## Installation & Usage
         
-        ## Usage
+        ### On Cisco Nexus Switch
         \`\`\`bash
-        # Linux example (Cisco parser)
-        tar -xzf cisco-class_map_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
-        ./class_map_parser -input show-class-map.txt -output output.json
+        # Transfer to Nexus switch
+        scp cisco-nexus-class_map_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz admin@nexus-switch:/bootflash/
         
-        # Windows example (Dell parser)
-        # Extract the .zip file and run the .exe
-        dell-interface_parser.exe -input show-interface.txt -output output.json
+        # On the Nexus switch
+        cd /bootflash
+        tar -xzf cisco-nexus-class_map_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
+        chmod +x class_map_parser
+        ./class_map_parser -input show-class-map.txt -output output.json
+        \`\`\`
+        
+        ### On Dell OS10 Switch
+        \`\`\`bash
+        # Transfer to Dell switch
+        scp dell-os10-interface_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz admin@dell-switch:/home/admin/
+        
+        # On the Dell switch
+        cd /home/admin
+        tar -xzf dell-os10-interface_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
+        chmod +x interface_parser
+        ./interface_parser -input show-interface.txt -output output.json
         \`\`\`
         
         ## File Naming Convention
-        Files are prefixed with vendor name for clarity:
-        - \`cisco-<parser_name>-<version>-<platform>.<ext>\`
-        - \`dell-<parser_name>-<version>-<platform>.<ext>\`
+        - \`cisco-nexus-<parser_name>-<version>-linux-amd64.tar.gz\` - For Cisco Nexus switches
+        - \`dell-os10-<parser_name>-<version>-linux-amd64.tar.gz\` - For Dell OS10 switches
+        
+        ## Notes
+        - All binaries are statically compiled (CGO_ENABLED=0) for maximum compatibility
+        - Binaries are stripped to reduce file size
+        - Only Linux x86_64 binaries are provided as both switch types run on Linux
         EOF
         
         # Output for next step
@@ -323,20 +340,24 @@ jobs:
     - name: Print release summary
       run: |
         PROGRAM_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq length)
-        CISCO_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq '[.[] | select(.vendor == "cisco")] | length')
-        DELL_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq '[.[] | select(.vendor == "dell")] | length')
-        PLATFORM_COUNT=2
-        TOTAL_BINARIES=$((PROGRAM_COUNT * PLATFORM_COUNT))
+        CISCO_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq '[.[] | select(.vendor == "cisco-nexus")] | length')
+        DELL_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq '[.[] | select(.vendor == "dell-os10")] | length')
         
+        echo "========================================="
         echo "Release created successfully!"
+        echo "========================================="
         echo "Tag: ${{ github.event.inputs.version }}"
-        echo "Total programs built: $PROGRAM_COUNT"
-        echo "  - Cisco parsers: $CISCO_COUNT"
-        echo "  - Dell parsers: $DELL_COUNT"
-        echo "Platforms: $PLATFORM_COUNT (Linux, Windows)"
-        echo "Total binary packages: $TOTAL_BINARIES"
+        echo ""
+        echo "Parsers built:"
+        echo "  - Cisco Nexus parsers: $CISCO_COUNT (Linux x86_64 only)"
+        echo "  - Dell OS10 parsers: $DELL_COUNT (Linux x86_64 only)"
+        echo "  - Total: $PROGRAM_COUNT parsers"
+        echo ""
+        echo "Target Platforms:"
+        echo "  - Cisco Nexus NX-OS 10.3(4a)I9"
+        echo "  - Dell OS10 (Debian 10)"
         echo ""
         echo "Assets:"
-        ls -la release-assets/
+        ls -lh release-assets/
         echo ""
         echo "Release URL: https://github.com/${{ github.repository }}/releases/tag/${{ github.event.inputs.version }}"
