@@ -251,41 +251,45 @@ jobs:
         git tag -a "${{ github.event.inputs.version }}" -m "Release ${{ github.event.inputs.version }}"
         git push origin "${{ github.event.inputs.version }}"
         
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        # Create parser list from discovered programs
+        PARSER_LIST=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '.[] | "- **" + .name + "**"' | tr '\n' '\n')
+        
+        cat > release_notes.md << EOF
+        # Cisco Nexus Switch Parsers - ${{ github.event.inputs.version }}
+        
+        Multi-platform binaries for Cisco Nexus switch output parsing tools.
+        
+        ## Available Parsers
+        $PARSER_LIST
+        
+        ## Platforms
+        - **Linux AMD64** (\`.tar.gz\`)
+        - **Windows AMD64** (\`.zip\`)
+        
+        ## Usage
+        \`\`\`bash
+        # Linux example
+        tar -xzf class_map_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
+        ./class_map_parser -input show-class-map.txt -output output.json
+        
+        # Windows example  
+        # Extract the .zip file and run the .exe
+        class_map_parser.exe -input show-class-map.txt -output output.json
+        \`\`\`
+        EOF
+        
+        # Output for next step
+        echo "notes_file=release_notes.md" >> $GITHUB_OUTPUT
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.event.inputs.version }}
         name: Release ${{ github.event.inputs.version }}
-        body: |
-          # Cisco Nexus Switch Parsers - ${{ github.event.inputs.version }}
-          
-          Multi-platform binaries for Cisco Nexus switch output parsing tools.
-          
-          ## Available Parsers
-          ${{ fromJson(needs.discover-programs.outputs.programs) | map("- **" + .name + "**") | join("\n") }}
-          
-          ## Platforms
-          - **Linux AMD64** (`.tar.gz`)
-          - **Windows AMD64** (`.zip`)
-          
-          ## Usage
-          ```bash
-          # Linux example
-          tar -xzf class_map_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
-          ./class_map_parser -input show-class-map.txt -output output.json
-          
-          # Windows example  
-          # Extract the .zip file and run the .exe
-          class_map_parser.exe -input show-class-map.txt -output output.json
-          ```
-          
-          ## Download Script
-          ```bash
-          # Use the download script for easy installation
-          curl -O https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/download-latest.sh
-          chmod +x download-latest.sh
-          ./download-latest.sh linux-amd64 ${{ github.event.inputs.version }}
-          ```
+        body_path: ${{ steps.release_notes.outputs.notes_file }}
         prerelease: ${{ github.event.inputs.prerelease }}
         files: release-assets/*
         token: ${{ secrets.GITHUB_TOKEN }}
