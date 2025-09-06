@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Pre-release version (e.g., v0.0.4-alpha.3)'
+        description: 'Pre-release version (e.g., v0.0.4-alpha.1)'
         required: true
-        default: 'v0.0.4-alpha.3'
+        default: 'v0.0.4-alpha.1'
       prerelease:
         description: 'Mark as pre-release'
         required: true
@@ -29,80 +29,32 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Discover parser programs
+    - name: Discover Go programs
       id: discover
       run: |
-        PARSER_BASE_DIR="src/SwitchOutput/Cisco/Nexus/10"
+        # Find all main Go programs under src/SwitchOutput
+        PROGRAMS=$(find src/SwitchOutput -name "*.go" -not -name "*_test.go" -type f -exec grep -l "package main" {} \; | sort)
         
-        echo "Looking for parsers in: $PARSER_BASE_DIR"
-        
-        if [ ! -d "$PARSER_BASE_DIR" ]; then
-          echo "ERROR: Directory $PARSER_BASE_DIR not found!"
-          ls -la src/SwitchOutput/Cisco/Nexus/ || true
-          exit 1
-        fi
-        
-        # Find all *_parser directories
-        PARSER_DIRS=$(find "$PARSER_BASE_DIR" -maxdepth 1 -name "*_parser" -type d | sort)
-        
-        echo "Found parser directories:"
-        for dir in $PARSER_DIRS; do
-          echo "  - $dir"
-        done
-        
-        if [ -z "$PARSER_DIRS" ]; then
-          echo "ERROR: No parser directories found!"
-          echo "Contents of $PARSER_BASE_DIR:"
-          ls -la "$PARSER_BASE_DIR"
-          exit 1
-        fi
-        
-        # Build JSON array of programs
+        # Convert to JSON array for matrix strategy
         PROGRAM_ARRAY="["
         FIRST=true
-        
-        for parser_dir in $PARSER_DIRS; do
-          parser_name=$(basename "$parser_dir")
-          parser_go_file="$parser_dir/$parser_name.go"
+        for program_file in $PROGRAMS; do
+          program_dir=$(dirname "$program_file")
+          program_name=$(basename "$program_file" .go)
           
-          echo "Checking for: $parser_go_file"
-          
-          if [ -f "$parser_go_file" ]; then
-            if grep -q "package main" "$parser_go_file"; then
-              echo "  ✓ Found valid main program: $parser_name"
-              
-              if [ "$FIRST" = true ]; then
-                FIRST=false
-              else
-                PROGRAM_ARRAY+=","
-              fi
-              
-              PROGRAM_ARRAY+="{\"name\":\"$parser_name\",\"dir\":\"$parser_dir\",\"file\":\"$parser_go_file\"}"
-            else
-              echo "  ✗ $parser_go_file does not have 'package main'"
-            fi
+          if [ "$FIRST" = true ]; then
+            FIRST=false
           else
-            echo "  ✗ $parser_go_file not found"
-            echo "    Contents of $parser_dir:"
-            ls -la "$parser_dir" || true
+            PROGRAM_ARRAY+=","
           fi
+          
+          PROGRAM_ARRAY+="{\"name\":\"$program_name\",\"dir\":\"$program_dir\",\"file\":\"$program_file\"}"
         done
-        
         PROGRAM_ARRAY+="]"
         
         echo "programs=$PROGRAM_ARRAY" >> $GITHUB_OUTPUT
-        echo ""
-        echo "Final programs JSON:"
+        echo "Discovered programs:"
         echo "$PROGRAM_ARRAY" | jq -r '.[] | "  - \(.name) (\(.dir))"'
-        
-        # Validate we found at least one program
-        PROGRAM_COUNT=$(echo "$PROGRAM_ARRAY" | jq length)
-        if [ "$PROGRAM_COUNT" -eq 0 ]; then
-          echo "ERROR: No valid programs discovered!"
-          exit 1
-        fi
-        
-        echo "Successfully discovered $PROGRAM_COUNT parser programs"
 
   build:
     needs: discover-programs
@@ -113,6 +65,15 @@ jobs:
           - goos: linux
             goarch: amd64
             name: linux-amd64
+          - goos: linux
+            goarch: arm64
+            name: linux-arm64
+          - goos: darwin
+            goarch: amd64
+            name: darwin-amd64
+          - goos: darwin
+            goarch: arm64
+            name: darwin-arm64
           - goos: windows
             goarch: amd64
             name: windows-amd64
@@ -132,20 +93,6 @@ jobs:
       run: |
         cd "${{ matrix.program.dir }}"
         
-        echo "Building ${{ matrix.program.name }} for ${{ matrix.platform.goos }}/${{ matrix.platform.goarch }}"
-        echo "Working directory: $(pwd)"
-        echo "Source file: ${{ matrix.program.name }}.go"
-        
-        # List directory contents for debugging
-        echo "Directory contents:"
-        ls -la
-        
-        # Check if source file exists
-        if [ ! -f "${{ matrix.program.name }}.go" ]; then
-          echo "ERROR: Source file ${{ matrix.program.name }}.go not found!"
-          exit 1
-        fi
-        
         # Initialize go module if it doesn't exist
         if [ ! -f "go.mod" ]; then
           echo "Initializing go module for ${{ matrix.program.name }}..."
@@ -158,16 +105,13 @@ jobs:
         # Build the binary
         CGO_ENABLED=0 GOOS=${{ matrix.platform.goos }} GOARCH=${{ matrix.platform.goarch }} \
           go build -ldflags="-w -s" -o "${{ matrix.program.name }}${{ matrix.platform.ext }}" "${{ matrix.program.name }}.go"
-        
-        echo "Build successful!"
-        ls -la "${{ matrix.program.name }}${{ matrix.platform.ext }}"
           
     - name: Package binary
       run: |
         cd "${{ matrix.program.dir }}"
         mkdir -p $GITHUB_WORKSPACE/release-assets
         
-        # Determine what files to include
+        # Determine what files to include based on the program
         PACKAGE_FILES="${{ matrix.program.name }}${{ matrix.platform.ext }}"
         
         # Always include README if it exists
@@ -175,14 +119,87 @@ jobs:
           PACKAGE_FILES="$PACKAGE_FILES README.md"
         fi
         
-        # Include common files
-        for file in commands.json *.json *.txt; do
-          if [ -f "$file" ] && [[ "$file" != "${{ matrix.program.name }}${{ matrix.platform.ext }}" ]]; then
-            PACKAGE_FILES="$PACKAGE_FILES $file"
-          fi
-        done
-        
-        echo "Packaging files: $PACKAGE_FILES"
+        # Include specific files based on the program name
+        case "${{ matrix.program.name }}" in
+          "class_map_parser")
+            if [ -f "class-map-sample.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES class-map-sample.json"
+            fi
+            ;;
+          "interface_counters_parser")
+            if [ -f "interface-counters-sample.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES interface-counters-sample.json"
+            fi
+            ;;
+          "inventory_parser")
+            if [ -f "inventory-sample.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES inventory-sample.json"
+            fi
+            ;;
+          "ip_arp_parser")
+            if [ -f "ip-arp-sample.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES ip-arp-sample.json"
+            fi
+            ;;
+          "ip_route_parser")
+            if [ -f "ip-route-sample.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES ip-route-sample.json"
+            fi
+            ;;
+          "lldp_neighbor_parser")
+            if [ -f "lldp-neighbor-sample.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES lldp-neighbor-sample.json"
+            fi
+            ;;
+          "mac_address_parser")
+            if [ -f "mac-address-table-sample.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES mac-address-table-sample.json"
+            fi
+            ;;
+          "transceiver_parser")
+            if [ -f "transceiver-sample.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES transceiver-sample.json"
+            fi
+            ;;
+          "show_interface_phy_eth")
+            if [ -f "show_interface_phy-eth.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES show_interface_phy-eth.json"
+            fi
+            if [ -f "show_interface_phy-eth.txt" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES show_interface_phy-eth.txt"
+            fi
+            ;;
+          "lldp_syslog")
+            if [ -f "example-lldp-data.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES example-lldp-data.json"
+            fi
+            if [ -f "lldp-kql-query.kql" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES lldp-kql-query.kql"
+            fi
+            if [ -f "show-lldp-neighbors-detail.txt" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES show-lldp-neighbors-detail.txt"
+            fi
+            ;;
+          "show_version")
+            if [ -f "show_version.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES show_version.json"
+            fi
+            if [ -f "show_version.txt" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES show_version.txt"
+            fi
+            ;;
+          "show_interface")
+            if [ -f "example_show_interface.json" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES example_show_interface.json"
+            fi
+            if [ -f "example_show_interface.txt" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES example_show_interface.txt"
+            fi
+            if [ -f "example_interface.kql" ]; then
+              PACKAGE_FILES="$PACKAGE_FILES example_interface.kql"
+            fi
+            ;;
+        esac
         
         # Create archive
         if [ "${{ matrix.platform.goos }}" = "windows" ]; then
@@ -216,9 +233,6 @@ jobs:
         mkdir -p release-assets
         find artifacts -name "*-${{ github.event.inputs.version }}-*" -type f -exec cp {} release-assets/ \;
         
-        echo "Release assets prepared:"
-        ls -la release-assets/
-        
     - name: Generate checksums
       run: |
         cd release-assets
@@ -232,8 +246,71 @@ jobs:
     - name: Get previous tag
       id: prev_tag
       run: |
-        PREV_TAG=$(git tag --sort=-version:refname | head -n1 2>/dev/null || echo "")
+        PREV_TAG=$(git tag --sort=-version:refname | head -n1)
         echo "prev_tag=${PREV_TAG}" >> $GITHUB_OUTPUT
+        
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        VERSION="${{ github.event.inputs.version }}"
+        PREV_TAG="${{ steps.prev_tag.outputs.prev_tag }}"
+        CUSTOM_NOTES="${{ github.event.inputs.release_notes }}"
+        
+        # Count programs and platforms
+        PROGRAM_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq length)
+        PLATFORM_COUNT=5  # linux-amd64, linux-arm64, darwin-amd64, darwin-arm64, windows-amd64
+        
+        if [ -n "$CUSTOM_NOTES" ]; then
+          NOTES="$CUSTOM_NOTES"
+        else
+          NOTES="# Release Notes - ${VERSION}
+
+## Multi-Platform Network Switch Output Tools
+
+This release includes **${PROGRAM_COUNT} network switch output processing tools** compiled for **${PLATFORM_COUNT} platforms**.
+
+### Included Tools
+
+$(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '.[] | "- **\(.name)** - Located in \(.dir)"')
+
+### Supported Platforms
+
+- **Linux AMD64** - \`*-${VERSION}-linux-amd64.tar.gz\`
+- **Linux ARM64** - \`*-${VERSION}-linux-arm64.tar.gz\`
+- **macOS AMD64** - \`*-${VERSION}-darwin-amd64.tar.gz\`
+- **macOS ARM64** - \`*-${VERSION}-darwin-arm64.tar.gz\`
+- **Windows AMD64** - \`*-${VERSION}-windows-amd64.zip\`
+
+### Quick Start
+
+\`\`\`bash
+# Download and extract (example with class_map_parser)
+wget https://github.com/${{ github.repository }}/releases/download/${VERSION}/class_map_parser-${VERSION}-linux-amd64.tar.gz
+tar -xzf class_map_parser-${VERSION}-linux-amd64.tar.gz
+
+# Run the tool
+./class_map_parser -input show-class-map.txt -output output.json
+\`\`\`
+
+### Download Script Support
+
+You can use the download scripts to automatically get the latest version:
+
+\`\`\`bash
+curl -O https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/download-latest.sh
+chmod +x download-latest.sh
+./download-latest.sh linux-amd64 ${VERSION}
+\`\`\`
+
+---
+
+**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${VERSION}"
+        fi
+        
+        echo "$NOTES" > release-notes.md
+        echo "notes<<EOF" >> $GITHUB_OUTPUT
+        echo "$NOTES" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
         
     - name: Create Git Tag
       run: |
@@ -247,53 +324,25 @@ jobs:
       with:
         tag_name: ${{ github.event.inputs.version }}
         name: Release ${{ github.event.inputs.version }}
-        body: |
-          # Cisco Nexus Switch Parsers - ${{ github.event.inputs.version }}
-          
-          Multi-platform binaries for Cisco Nexus switch output parsing tools.
-          
-          ## Available Parsers
-          $(echo '${{ needs.discover-programs.outputs.programs }}' | jq -r '.[] | "- **\(.name)**"')
-          
-          ## Platforms
-          - **Linux AMD64** (`.tar.gz`)
-          - **Windows AMD64** (`.zip`)
-          
-          ## Usage
-          ```bash
-          # Linux example
-          tar -xzf class_map_parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
-          ./class_map_parser -input show-class-map.txt -output output.json
-          
-          # Windows example  
-          # Extract the .zip file and run the .exe
-          class_map_parser.exe -input show-class-map.txt -output output.json
-          ```
-          
-          ## Download Script
-          ```bash
-          # Use the download script for easy installation
-          curl -O https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/download-latest.sh
-          chmod +x download-latest.sh
-          ./download-latest.sh linux-amd64 ${{ github.event.inputs.version }}
-          ```
+        body: ${{ steps.release_notes.outputs.notes }}
         prerelease: ${{ github.event.inputs.prerelease }}
         files: release-assets/*
         token: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Print release summary
       run: |
-        PROGRAM_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq length)
-        PLATFORM_COUNT=2
-        TOTAL_BINARIES=$((PROGRAM_COUNT * PLATFORM_COUNT))
-        
         echo "Release created successfully!"
         echo "Tag: ${{ github.event.inputs.version }}"
-        echo "Programs built: $PROGRAM_COUNT"
-        echo "Platforms: $PLATFORM_COUNT (Linux, Windows)"
-        echo "Total binary packages: $TOTAL_BINARIES"
         echo ""
-        echo "Assets:"
-        ls -la release-assets/
+        echo "Assets summary:"
+        PROGRAM_COUNT=$(echo '${{ needs.discover-programs.outputs.programs }}' | jq length)
+        PLATFORM_COUNT=5
+        TOTAL_BINARIES=$((PROGRAM_COUNT * PLATFORM_COUNT))
+        TOTAL_CHECKSUMS=$((PROGRAM_COUNT * PLATFORM_COUNT))
+        echo "  Programs discovered: ${PROGRAM_COUNT}"
+        echo "  Platforms: ${PLATFORM_COUNT}"
+        echo "  Total binaries: ${TOTAL_BINARIES}"
+        echo "  Total checksums: ${TOTAL_CHECKSUMS}"
+        echo "  Total assets: $((TOTAL_BINARIES + TOTAL_CHECKSUMS))"
         echo ""
         echo "Release URL: https://github.com/${{ github.repository }}/releases/tag/${{ github.event.inputs.version }}"
