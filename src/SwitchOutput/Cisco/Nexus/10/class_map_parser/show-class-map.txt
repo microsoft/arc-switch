@@ -1,0 +1,167 @@
+CONTOSO-DC1-TOR-01# show class-map 
+
+
+  Type qos class-maps
+  ====================
+
+    class-map type qos match-all RDMA
+      match cos 3
+
+    class-map type qos match-all CLUSTER
+      match cos 7
+
+    class-map type qos match-any class-ndb-default
+      Description: system ndb default
+
+    class-map type qos match-any c-dflt-mpls-qosgrp1
+      Description: This is an ingress default qos class-map that classify traffic with prec  1
+      match precedence 1
+
+    class-map type qos match-any c-dflt-mpls-qosgrp2
+      Description: This is an ingress default qos class-map that classify traffic with prec  2
+      match precedence 2
+
+    class-map type qos match-any c-dflt-mpls-qosgrp3
+      Description: This is an ingress default qos class-map that classify traffic with prec  3
+      match precedence 3
+
+    class-map type qos match-any c-dflt-mpls-qosgrp4
+      Description: This is an ingress default qos class-map that classify traffic with prec  4
+      match precedence 4
+
+    class-map type qos match-any c-dflt-mpls-qosgrp5
+      Description: This is an ingress default qos class-map that classify traffic with prec  5
+      match precedence 5
+
+    class-map type qos match-any c-dflt-mpls-qosgrp6
+      Description: This is an ingress default qos class-map that classify traffic with prec  6
+      match precedence 6
+
+    class-map type qos match-any c-dflt-mpls-qosgrp7
+      Description: This is an ingress default qos class-map that classify traffic with prec  7
+      match precedence 7
+
+
+  Type queuing class-maps
+  ========================
+
+    class-map type queuing match-any c-out-q3
+      Description: Classifier for Egress queue 3
+      match qos-group 3
+
+    class-map type queuing match-any c-out-q2
+      Description: Classifier for Egress queue 2
+      match qos-group 2
+
+    class-map type queuing match-any c-out-q1
+      Description: Classifier for Egress queue 1
+      match qos-group 1
+
+    class-map type queuing match-any c-out-q-default
+      Description: Classifier for Egress default queue
+      match qos-group 0
+
+    class-map type queuing match-any c-out-8q-q7
+      Description: Classifier for Egress queue 7
+      match qos-group 7
+
+    class-map type queuing match-any c-out-8q-q6
+      Description: Classifier for Egress queue 6
+      match qos-group 6
+
+    class-map type queuing match-any c-out-8q-q5
+      Description: Classifier for Egress queue 5
+      match qos-group 5
+
+    class-map type queuing match-any c-out-8q-q4
+      Description: Classifier for Egress queue 4
+      match qos-group 4
+
+    class-map type queuing match-any c-out-8q-q3
+      Description: Classifier for Egress queue 3
+      match qos-group 3
+
+    class-map type queuing match-any c-out-8q-q2
+      Description: Classifier for Egress queue 2
+      match qos-group 2
+
+    class-map type queuing match-any c-out-8q-q1
+      Description: Classifier for Egress queue 1
+      match qos-group 1
+
+    class-map type queuing match-any c-out-8q-q-default
+      Description: Classifier for Egress default queue
+      match qos-group 0
+
+    class-map type queuing match-any c-in-q7
+      Description: Classifier for Ingress queue 7
+      match qos-group 7
+
+    class-map type queuing match-any c-in-q6
+      Description: Classifier for Ingress queue 6
+      match qos-group 6
+
+    class-map type queuing match-any c-in-q5
+      Description: Classifier for Ingress queue 5
+      match qos-group 5
+
+    class-map type queuing match-any c-in-q4
+      Description: Classifier for Ingress queue 4
+      match qos-group 4
+
+    class-map type queuing match-any c-in-q3
+      Description: Classifier for Ingress queue 3
+      match qos-group 3
+
+    class-map type queuing match-any c-in-q2
+      Description: Classifier for Ingress queue 2
+      match qos-group 2
+
+    class-map type queuing match-any c-in-q1
+      Description: Classifier for Ingress queue 1
+      match qos-group 1
+
+    class-map type queuing match-any c-in-q-default
+      Description: Classifier for Ingress default queue
+      match qos-group 0
+
+
+  Type network-qos class-maps
+  ===========================
+  class-map type network-qos match-any c-nq1
+      Description: Default class on qos-group 1
+    match qos-group 1
+  class-map type network-qos match-any c-nq2
+      Description: Default class on qos-group 2
+    match qos-group 2
+  class-map type network-qos match-any c-nq3
+      Description: Default class on qos-group 3
+    match qos-group 3
+  class-map type network-qos match-any c-8q-nq1
+      Description: Default class on qos-group 1
+    match qos-group 1
+  class-map type network-qos match-any c-8q-nq2
+      Description: Default class on qos-group 2
+    match qos-group 2
+  class-map type network-qos match-any c-8q-nq3
+      Description: Default class on qos-group 3
+    match qos-group 3
+  class-map type network-qos match-any c-8q-nq4
+      Description: Default class on qos-group 4
+    match qos-group 4
+  class-map type network-qos match-any c-8q-nq5
+      Description: Default class on qos-group 5
+    match qos-group 5
+  class-map type network-qos match-any c-8q-nq6
+      Description: Default class on qos-group 6
+    match qos-group 6
+  class-map type network-qos match-any c-8q-nq7
+      Description: Default class on qos-group 7
+    match qos-group 7
+  class-map type network-qos match-any c-nq-default
+      Description: Default class on qos-group 0
+    match qos-group 0
+  class-map type network-qos match-any c-8q-nq-default
+      Description: Default class on qos-group 0
+    match qos-group 0
+

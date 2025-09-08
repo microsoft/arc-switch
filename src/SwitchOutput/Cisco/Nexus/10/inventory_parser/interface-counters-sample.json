@@ -1,0 +1,57 @@
+{
+  "data_type": "cisco_nexus_interface_counters",
+  "timestamp": "2025-07-01T23:45:57Z",
+  "date": "2025-07-01",
+  "message": {
+    "interface_name": "Eth1/29",
+    "interface_type": "ethernet",
+    "in_octets": 5049641112717,
+    "in_ucast_pkts": 6489292847,
+    "in_mcast_pkts": 963320,
+    "in_bcast_pkts": 490562,
+    "out_octets": 5095780391460,
+    "out_ucast_pkts": 6593171948,
+    "out_mcast_pkts": 10233218,
+    "out_bcast_pkts": 6452477,
+    "has_ingress_data": true,
+    "has_egress_data": true
+  }
+}
+{
+  "data_type": "cisco_nexus_interface_counters",
+  "timestamp": "2025-07-01T23:45:57Z",
+  "date": "2025-07-01",
+  "message": {
+    "interface_name": "Vlan125",
+    "interface_type": "vlan",
+    "in_octets": 0,
+    "in_ucast_pkts": 0,
+    "in_mcast_pkts": -1,
+    "in_bcast_pkts": -1,
+    "out_octets": 0,
+    "out_ucast_pkts": 0,
+    "out_mcast_pkts": -1,
+    "out_bcast_pkts": -1,
+    "has_ingress_data": true,
+    "has_egress_data": true
+  }
+}
+{
+  "data_type": "cisco_nexus_interface_counters",
+  "timestamp": "2025-07-01T23:45:57Z",
+  "date": "2025-07-01",
+  "message": {
+    "interface_name": "Vlan515",
+    "interface_type": "vlan",
+    "in_octets": 0,
+    "in_ucast_pkts": 0,
+    "in_mcast_pkts": -1,
+    "in_bcast_pkts": -1,
+    "out_octets": 0,
+    "out_ucast_pkts": 0,
+    "out_mcast_pkts": -1,
+    "out_bcast_pkts": -1,
+    "has_ingress_data": true,
+    "has_egress_data": true
+  }
+}
