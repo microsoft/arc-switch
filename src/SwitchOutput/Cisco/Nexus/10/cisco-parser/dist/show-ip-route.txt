@@ -1,0 +1,167 @@
+CONTOSO-DC1-TOR-01# show ip route |no
+IP Route Table for VRF "default"
+'*' denotes best ucast next-hop
+'**' denotes best mcast next-hop
+'[x/y]' denotes [preference/metric]
+'%<string>' in via output denotes VRF <string>
+
+0.0.0.0/0, ubest/mbest: 2/0
+    *via 192.168.100.1, [20/0], 14w1d, bgp-65238, external, tag 64846
+    *via 192.168.100.9, [20/0], 14w1d, bgp-65238, external, tag 64846
+2.1.1.0/31, ubest/mbest: 1/0, attached
+    *via 172.16.0.1, Tunnel1, [0/0], 37w6d, direct
+172.16.0.1/32, ubest/mbest: 1/0, attached
+    *via 172.16.0.1, Tunnel1, [0/0], 37w6d, local
+192.168.1.0/24, ubest/mbest: 1/0, attached
+    *via 192.168.1.2, Vlan7, [0/0], 37w6d, direct
+192.168.1.1/32, ubest/mbest: 1/0, attached
+    *via 192.168.1.1, Vlan7, [0/0], 37w6d, hsrp
+192.168.1.2/32, ubest/mbest: 1/0, attached
+    *via 192.168.1.2, Vlan7, [0/0], 37w6d, local
+192.168.2.0/24, ubest/mbest: 1/0, attached
+    *via 192.168.2.2, Vlan201, [0/0], 37w6d, direct
+192.168.2.1/32, ubest/mbest: 1/0, attached
+    *via 192.168.2.1, Vlan201, [0/0], 37w6d, hsrp
+192.168.2.2/32, ubest/mbest: 1/0, attached
+    *via 192.168.2.2, Vlan201, [0/0], 37w6d, local
+192.168.3.0/25, ubest/mbest: 1/0, attached
+    *via 192.168.3.2, Vlan301, [0/0], 37w6d, direct
+192.168.3.1/32, ubest/mbest: 1/0, attached
+    *via 192.168.3.1, Vlan301, [0/0], 37w6d, hsrp
+192.168.3.2/32, ubest/mbest: 1/0, attached
+    *via 192.168.3.2, Vlan301, [0/0], 37w6d, local
+192.168.3.128/25, ubest/mbest: 1/0, attached
+    *via 192.168.3.130, Vlan401, [0/0], 37w6d, direct
+192.168.3.129/32, ubest/mbest: 1/0, attached
+    *via 192.168.3.129, Vlan401, [0/0], 37w6d, hsrp
+192.168.3.130/32, ubest/mbest: 1/0, attached
+    *via 192.168.3.130, Vlan401, [0/0], 37w6d, local
+192.168.4.0/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.2, Vlan501, [0/0], 37w6d, direct
+192.168.4.1/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.1, Vlan501, [0/0], 37w6d, hsrp
+192.168.4.2/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.2, Vlan501, [0/0], 37w6d, local
+192.168.4.16/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.18, Vlan502, [0/0], 37w6d, direct
+192.168.4.17/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.17, Vlan502, [0/0], 37w6d, hsrp
+192.168.4.18/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.18, Vlan502, [0/0], 37w6d, local
+192.168.4.32/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.34, Vlan503, [0/0], 37w6d, direct
+192.168.4.33/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.33, Vlan503, [0/0], 37w6d, hsrp
+192.168.4.34/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.34, Vlan503, [0/0], 37w6d, local
+192.168.4.48/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.50, Vlan504, [0/0], 37w6d, direct
+192.168.4.49/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.49, Vlan504, [0/0], 37w6d, hsrp
+192.168.4.50/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.50, Vlan504, [0/0], 37w6d, local
+192.168.4.64/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.66, Vlan505, [0/0], 37w6d, direct
+192.168.4.65/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.65, Vlan505, [0/0], 37w6d, hsrp
+192.168.4.66/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.66, Vlan505, [0/0], 37w6d, local
+192.168.4.80/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.82, Vlan506, [0/0], 37w6d, direct
+192.168.4.81/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.81, Vlan506, [0/0], 37w6d, hsrp
+192.168.4.82/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.82, Vlan506, [0/0], 37w6d, local
+192.168.4.96/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.98, Vlan507, [0/0], 37w6d, direct
+192.168.4.97/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.97, Vlan507, [0/0], 37w6d, hsrp
+192.168.4.98/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.98, Vlan507, [0/0], 37w6d, local
+192.168.4.112/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.114, Vlan508, [0/0], 37w6d, direct
+192.168.4.113/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.113, Vlan508, [0/0], 37w6d, hsrp
+192.168.4.114/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.114, Vlan508, [0/0], 37w6d, local
+192.168.4.128/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.130, Vlan509, [0/0], 37w6d, direct
+192.168.4.129/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.129, Vlan509, [0/0], 37w6d, hsrp
+192.168.4.130/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.130, Vlan509, [0/0], 37w6d, local
+192.168.4.144/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.146, Vlan510, [0/0], 37w6d, direct
+192.168.4.145/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.145, Vlan510, [0/0], 37w6d, hsrp
+192.168.4.146/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.146, Vlan510, [0/0], 37w6d, local
+192.168.4.160/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.162, Vlan511, [0/0], 37w6d, direct
+192.168.4.161/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.161, Vlan511, [0/0], 37w6d, hsrp
+192.168.4.162/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.162, Vlan511, [0/0], 37w6d, local
+192.168.4.176/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.178, Vlan512, [0/0], 37w6d, direct
+192.168.4.177/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.177, Vlan512, [0/0], 37w6d, hsrp
+192.168.4.178/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.178, Vlan512, [0/0], 37w6d, local
+192.168.4.192/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.194, Vlan513, [0/0], 37w6d, direct
+192.168.4.193/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.193, Vlan513, [0/0], 37w6d, hsrp
+192.168.4.194/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.194, Vlan513, [0/0], 37w6d, local
+192.168.4.208/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.210, Vlan514, [0/0], 37w6d, direct
+192.168.4.209/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.209, Vlan514, [0/0], 37w6d, hsrp
+192.168.4.210/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.210, Vlan514, [0/0], 37w6d, local
+192.168.4.224/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.226, Vlan515, [0/0], 37w6d, direct
+192.168.4.225/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.225, Vlan515, [0/0], 37w6d, hsrp
+192.168.4.226/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.226, Vlan515, [0/0], 37w6d, local
+192.168.4.240/28, ubest/mbest: 1/0, attached
+    *via 192.168.4.242, Vlan516, [0/0], 37w6d, direct
+192.168.4.241/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.241, Vlan516, [0/0], 37w6d, hsrp
+192.168.4.242/32, ubest/mbest: 1/0, attached
+    *via 192.168.4.242, Vlan516, [0/0], 37w6d, local
+192.168.100.0/30, ubest/mbest: 1/0, attached
+    *via 192.168.100.2, Eth1/48, [0/0], 14w1d, direct
+192.168.100.2/32, ubest/mbest: 1/0, attached
+    *via 192.168.100.2, Eth1/48, [0/0], 14w1d, local
+192.168.100.4/30, ubest/mbest: 1/0
+    *via 192.168.100.18, [200/0], 14w1d, bgp-65238, internal, tag 65238
+192.168.100.8/30, ubest/mbest: 1/0, attached
+    *via 192.168.100.10, Eth1/47, [0/0], 14w1d, direct
+192.168.100.10/32, ubest/mbest: 1/0, attached
+    *via 192.168.100.10, Eth1/47, [0/0], 14w1d, local
+192.168.100.12/30, ubest/mbest: 1/0
+    *via 192.168.100.18, [200/0], 14w1d, bgp-65238, internal, tag 65238
+192.168.100.16/30, ubest/mbest: 1/0, attached
+    *via 192.168.100.17, Po50, [0/0], 37w6d, direct
+192.168.100.17/32, ubest/mbest: 1/0, attached
+    *via 192.168.100.17, Po50, [0/0], 37w6d, local
+192.168.100.20/32, ubest/mbest: 2/0, attached
+    *via 192.168.100.20, Lo0, [0/0], 37w6d, local
+    *via 192.168.100.20, Lo0, [0/0], 37w6d, direct
+192.168.100.21/32, ubest/mbest: 1/0
+    *via 192.168.100.18, [200/0], 37w6d, bgp-65238, internal, tag 65238
+192.168.100.64/26, ubest/mbest: 1/0, attached
+    *via 192.168.100.95, Vlan125, [0/0], 37w6d, direct
+192.168.100.65/32, ubest/mbest: 1/0, attached
+    *via 192.168.100.65, Vlan125, [0/0], 37w6d, hsrp
+192.168.100.95/32, ubest/mbest: 1/0, attached
+    *via 192.168.100.95, Vlan125, [0/0], 37w6d, local
+192.168.101.0/25, ubest/mbest: 1/0, attached
+    *via 192.168.101.2, Vlan6, [0/0], 37w6d, direct
+192.168.101.1/32, ubest/mbest: 1/0, attached
+    *via 192.168.101.1, Vlan6, [0/0], 37w6d, hsrp
+192.168.101.2/32, ubest/mbest: 1/0, attached
+    *via 192.168.101.2, Vlan6, [0/0], 37w6d, local
