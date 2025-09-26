@@ -130,7 +130,7 @@ func getInterfaceData(inputfile string, test bool) (string, error) {
     }
 
     // Use CLI command to fetch data
-    cmd := exec.Command("clish", "-c", "show interface")
+    cmd := exec.Command("/opt/dell/os10/bin/clish", "-c", "show interface")
     output, err := cmd.CombinedOutput()
     if err != nil {
         return "", fmt.Errorf("failed to execute CLI command: %w", err)

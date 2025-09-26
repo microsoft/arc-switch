@@ -109,7 +109,7 @@ func main() {
 		}
 	} else {
 		// If no file is provided and not in test mode, execute the clish command.
-		output, err := exec.Command("clish", "-c", "show version").Output()
+		output, err := exec.Command("/opt/dell/os10/bin/clish", "-c", "show version").Output()
 		if err != nil {
 			log.Fatalf("Error executing clish command: %v", err)
 		}
