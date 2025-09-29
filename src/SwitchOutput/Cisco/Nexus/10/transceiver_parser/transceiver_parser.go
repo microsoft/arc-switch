@@ -1,4 +1,4 @@
-package main
+package transceiver_parser
 
 import (
 	"bufio"
@@ -562,4 +562,18 @@ func main() {
 			fmt.Println(string(jsonData))
 		}
 	}
+}
+
+// UnifiedParser implements the unified parser interface
+type UnifiedParser struct{}
+
+// GetDescription returns the parser description
+func (p *UnifiedParser) GetDescription() string {
+	return "Parses 'show interface transceiver' output"
+}
+
+// Parse implements the Parser interface for unified binary
+func (p *UnifiedParser) Parse(input []byte) (interface{}, error) {
+	content := string(input)
+	return parseTransceivers(content), nil
 }

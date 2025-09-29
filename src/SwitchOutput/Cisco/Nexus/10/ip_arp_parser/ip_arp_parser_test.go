@@ -1,4 +1,4 @@
-package main
+package ip_arp_parser
 
 import (
 	"encoding/json"

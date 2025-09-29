@@ -1,4 +1,4 @@
-package main
+package class_map_parser
 
 import (
 	"bufio"
@@ -193,7 +193,7 @@ func findClassMapCommand(config *CommandConfig) (string, error) {
 	return "", fmt.Errorf("class-map command not found in commands file")
 }
 
-func main() {
+func Main() {
 	var inputFile = flag.String("input", "", "Input file containing 'show class-map' output")
 	var outputFile = flag.String("output", "", "Output file for JSON data (optional, defaults to stdout)")
 	var commandsFile = flag.String("commands", "", "Commands JSON file (used when no input file is specified)")
@@ -315,4 +315,18 @@ func main() {
 			fmt.Println(string(jsonData))
 		}
 	}
+}
+
+// UnifiedParser implements the unified parser interface
+type UnifiedParser struct{}
+
+// GetDescription returns the parser description
+func (p *UnifiedParser) GetDescription() string {
+	return "Parses 'show class-map' output"
+}
+
+// Parse implements the Parser interface for unified binary
+func (p *UnifiedParser) Parse(input []byte) (interface{}, error) {
+	content := string(input)
+	return parseClassMaps(content), nil
 }

@@ -1,4 +1,4 @@
-package main
+package ip_route_parser
 
 import (
 	"encoding/json"

@@ -1,0 +1,173 @@
+CONTOSO-DC1-TOR-01# show mac address-table
+Legend: 
+        * - primary entry, G - Gateway MAC, (R) - Routed MAC, O - Overlay MAC
+        age - seconds since last seen,+ - primary entry using vPC Peer-Link,
+        (T) - True, (F) - False, C - ControlPlane MAC, ~ - vsan,
+        (NA)- Not Applicable
+   VLAN     MAC Address      Type      age     Secure NTFY Ports
+---------+-----------------+--------+---------+------+----+------------------
+*    7     2222.a004.0000   dynamic  NA         F      F    Eth1/1
+*    7     2222.a040.0000   dynamic  NA         F      F    Eth1/6
+*    7     2222.a060.0000   dynamic  NA         F      F    Eth1/8
+*    7     2222.a080.0000   dynamic  NA         F      F    Eth1/10
+*    7     2222.a0c0.0000   dynamic  NA         F      F    Eth1/16
+*    7     2222.a0e0.0000   dynamic  NA         F      F    Eth1/14
+*    7     6666.a11c.7de7   dynamic  NA         F      F    Eth1/12
+*    7     6666.a11c.d5e7   dynamic  NA         F      F    Eth1/4
+*    7     6666.a11c.e13f   dynamic  NA         F      F    Eth1/3
++  125     3333.5d53.7e5b   dynamic  NA         F      F    Po102
++  125     3333.5d53.7e5d   dynamic  NA         F      F    Po102
++  125     3333.5d53.7e63   dynamic  NA         F      F    Po102
+*  125     3333.5d53.7e6c   dynamic  NA         F      F    Po102
++  125     3333.5d53.7e6e   dynamic  NA         F      F    Po102
+*  125     3333.5d53.7e72   dynamic  NA         F      F    Po102
++  125     3333.5d53.7e73   dynamic  NA         F      F    Po102
+*  125     3333.5d53.7edb   dynamic  NA         F      F    Po102
++  125     6666.a11d.005e   dynamic  NA         F      F    Po102
++  125     6666.a11d.005f   dynamic  NA         F      F    Po102
++  125     5555.56c3.c977   dynamic  NA         F      F    Po102
++  125     4444.70e6.4220   dynamic  NA         F      F    Po102
+*  125     4444.70e9.115e   dynamic  NA         F      F    Po102
++  125     4444.70e9.116a   dynamic  NA         F      F    Po102
++  125     4444.70e9.15a2   dynamic  NA         F      F    Po102
++  125     4444.70e9.186c   dynamic  NA         F      F    Po102
++  125     4444.70e9.1d94   dynamic  NA         F      F    Po102
++  125     4444.70e9.367e   dynamic  NA         F      F    Po102
+*  125     4444.70e9.36b4   dynamic  NA         F      F    Po102
+*  125     4444.70e9.36e4   dynamic  NA         F      F    Po102
+*  125     4444.70e9.36f6   dynamic  NA         F      F    Po102
++  125     4444.70e9.3714   dynamic  NA         F      F    Po102
++  125     4444.70e9.3738   dynamic  NA         F      F    Po102
++  125     4444.70e9.3756   dynamic  NA         F      F    Po102
++  125     4444.70e9.3a26   dynamic  NA         F      F    Po102
+*  125     4444.70e9.3bd6   dynamic  NA         F      F    Po102
++  125     4444.70e9.4644   dynamic  NA         F      F    Po102
++  125     4444.70e9.4692   dynamic  NA         F      F    Po102
+*  201     3333.5d45.a180   dynamic  NA         F      F    Eth1/9
+*  201     3333.5d45.a181   dynamic  NA         F      F    Eth1/10
+*  201     2222.a040.0001   dynamic  NA         F      F    Eth1/5
+*  201     2222.a0c0.0001   dynamic  NA         F      F    Eth1/15
+*  201     2222.a0c0.0004   dynamic  NA         F      F    Eth1/15
+*  201     2222.a0c0.0006   dynamic  NA         F      F    Eth1/16
+*  201     2222.a0c0.0007   dynamic  NA         F      F    Eth1/15
+*  712     9999.72f8.1c67   dynamic  NA         F      F    Eth1/29
+*  712     aaaa.a17e.0dc9   dynamic  NA         F      F    Eth1/24
+*  712     aaaa.a17e.0e39   dynamic  NA         F      F    Eth1/28
+*  712     aaaa.a17e.0fb9   dynamic  NA         F      F    Eth1/22
+*  712     aaaa.a17e.0fd9   dynamic  NA         F      F    Eth1/25
+*  712     aaaa.a17e.0ff9   dynamic  NA         F      F    Eth1/23
+*  712     aaaa.a17e.1019   dynamic  NA         F      F    Eth1/30
+*  712     aaaa.a17e.10c1   dynamic  NA         F      F    Eth1/32
+*  712     aaaa.a17e.10d1   dynamic  NA         F      F    Eth1/31
+*  712     bbbb.a18c.d565   dynamic  NA         F      F    Eth1/27
+*  712     bbbb.a18c.d5d5   dynamic  NA         F      F    Eth1/26
+*  712     bbbb.a18c.d5dd   dynamic  NA         F      F    Eth1/18
+*  712     bbbb.a18c.d60d   dynamic  NA         F      F    Eth1/21
+*  712     bbbb.a18c.d97d   dynamic  NA         F      F    Eth1/17
++    7     6666.a11c.7de6   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.8d2e   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.91ce   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.b1ce   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.c68e   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.d59e   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.d5e6   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.e10e   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.e11e   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.e136   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.e13e   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.e276   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.e2c6   dynamic  NA         F      F    vPC Peer-Link
++    7     6666.a11c.e2de   dynamic  NA         F      F    vPC Peer-Link
++    7     0c42.a11c.e46e   dynamic  NA         F      F    vPC Peer-Link
++    7     0c42.a11c.e49e   dynamic  NA         F      F    vPC Peer-Link
++  201     0015.5d45.a182   dynamic  NA         F      F    vPC Peer-Link
++  201     0015.5d45.a183   dynamic  NA         F      F    vPC Peer-Link
++  201     02ec.a040.0004   dynamic  NA         F      F    vPC Peer-Link
++  201     02ec.a0c0.0002   dynamic  NA         F      F    vPC Peer-Link
++  201     02ec.a0c0.0003   dynamic  NA         F      F    vPC Peer-Link
++  201     02ec.a0c0.0005   dynamic  NA         F      F    vPC Peer-Link
++  201     02ec.a0c0.0008   dynamic  NA         F      F    vPC Peer-Link
++  711     043f.72f8.1c66   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a17e.0dc8   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a17e.0e38   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a17e.0fb8   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a17e.0fd8   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a17e.0ff8   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a17e.1018   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a17e.10c0   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a17e.10d0   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a18c.d564   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a18c.d5d4   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a18c.d5dc   dynamic  NA         F      F    vPC Peer-Link
++  711     0c42.a18c.d60c   dynamic  NA         F      F    vPC Peer-Link
+G    6     0000.0c9f.f006   static   -         F      F    vPC Peer-Link(R)
+G    7     0000.0c9f.f007   static   -         F      F    vPC Peer-Link(R)
+G  125     0000.0c9f.f07d   static   -         F      F    vPC Peer-Link(R)
+G  201     0000.0c9f.f0c9   static   -         F      F    vPC Peer-Link(R)
+G  301     0000.0c9f.f12d   static   -         F      F    vPC Peer-Link(R)
+G  401     0000.0c9f.f191   static   -         F      F    vPC Peer-Link(R)
+G  501     0000.0c9f.f1f5   static   -         F      F    vPC Peer-Link(R)
+G  502     0000.0c9f.f1f6   static   -         F      F    vPC Peer-Link(R)
+G  503     0000.0c9f.f1f7   static   -         F      F    vPC Peer-Link(R)
+G  504     0000.0c9f.f1f8   static   -         F      F    vPC Peer-Link(R)
+G  505     0000.0c9f.f1f9   static   -         F      F    vPC Peer-Link(R)
+G  506     0000.0c9f.f1fa   static   -         F      F    vPC Peer-Link(R)
+G  507     0000.0c9f.f1fb   static   -         F      F    vPC Peer-Link(R)
+G  508     0000.0c9f.f1fc   static   -         F      F    vPC Peer-Link(R)
+G  509     0000.0c9f.f1fd   static   -         F      F    vPC Peer-Link(R)
+G  510     0000.0c9f.f1fe   static   -         F      F    vPC Peer-Link(R)
+G  511     0000.0c9f.f1ff   static   -         F      F    vPC Peer-Link(R)
+G  512     1111.1111.f200   static   -         F      F    vPC Peer-Link(R)
+G  513     1111.1111.f201   static   -         F      F    vPC Peer-Link(R)
+G  514     1111.1111.f202   static   -         F      F    vPC Peer-Link(R)
+G  515     1111.1111.f203   static   -         F      F    vPC Peer-Link(R)
+G  516     1111.1111.f204   static   -         F      F    vPC Peer-Link(R)
+G    -     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  512     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  513     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  514     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  515     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  516     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G    6     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G    7     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  301     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  125     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  401     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  711     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  712     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  201     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  501     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  502     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  503     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  504     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  505     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  506     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  507     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  508     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  509     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  510     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  511     cccc.9d9f.0887   static   -         F      F    sup-eth1(R)
+G  512     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  513     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  514     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  515     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  516     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G    6     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G    7     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  301     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  125     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  401     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  711     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  712     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  201     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  501     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  502     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  503     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  504     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  505     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  506     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  507     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  508     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  509     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  510     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)
+G  511     1234.5678.9001   static   -         F      F    vPC Peer-Link(R)

@@ -1,4 +1,4 @@
-package main
+package lldp_neighbor_parser
 
 import (
 	"encoding/json"
