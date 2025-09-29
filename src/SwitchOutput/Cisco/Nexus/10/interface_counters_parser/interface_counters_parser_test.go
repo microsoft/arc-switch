@@ -1,4 +1,4 @@
-package main
+package interface_counters_parser
 
 import (
 	"encoding/json"

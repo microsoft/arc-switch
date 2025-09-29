@@ -1,4 +1,4 @@
-package main
+package transceiver_parser
 
 import (
 	"encoding/json"

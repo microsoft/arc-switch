@@ -1,4 +1,4 @@
-package main
+package class_map_parser
 
 import (
 	"encoding/json"

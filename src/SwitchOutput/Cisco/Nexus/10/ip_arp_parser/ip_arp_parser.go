@@ -1,4 +1,4 @@
-package main
+package ip_arp_parser
 
 import (
 	"bufio"
@@ -346,4 +346,18 @@ func main() {
 			os.Exit(1)
 		}
 	}
+}
+
+// UnifiedParser implements the unified parser interface
+type UnifiedParser struct{}
+
+// GetDescription returns the parser description
+func (p *UnifiedParser) GetDescription() string {
+	return "Parses 'show ip arp' output"
+}
+
+// Parse implements the Parser interface for unified binary
+func (p *UnifiedParser) Parse(input []byte) (interface{}, error) {
+	content := string(input)
+	return parseARP(content)
 }

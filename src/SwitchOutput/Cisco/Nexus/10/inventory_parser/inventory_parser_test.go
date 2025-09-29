@@ -1,4 +1,4 @@
-package main
+package inventory_parser
 
 import (
 	"encoding/json"

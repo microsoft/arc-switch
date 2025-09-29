@@ -1,4 +1,4 @@
-package main
+package mac_address_parser
 
 import (
 	"encoding/json"
