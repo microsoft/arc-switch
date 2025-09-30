@@ -88,13 +88,13 @@ jobs:
         Run \`./${{ matrix.parser.name }} -list\` to see all available parsers.
         EOF
         
-        # Create tarball
+	# Create tarball
         cd dist
-        tar -czf ../../${{ matrix.parser.vendor }}-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz *
+        tar -czf ../${{ matrix.parser.vendor }}-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz *
         cd ..
         
         echo "Package created successfully!"
-        ls -lh ../*.tar.gz
+        ls -lh *.tar.gz
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
