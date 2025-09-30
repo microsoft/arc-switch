@@ -98,7 +98,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.parser.vendor }}-parser
-        path: "*.tar.gz"
+        path: "${{ matrix.parser.path }}/*.tar.gz"
 
   create-release:
     needs: build-parsers
