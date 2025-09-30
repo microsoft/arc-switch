@@ -73,20 +73,19 @@ jobs:
           cp ../commands.json dist/ 2>/dev/null || true
         fi
         
-        # Create README
-        cat > dist/README.md << EOF
+	# Create README
+        cat > dist/README.md << 'EOFREADME'
         # ${{ matrix.parser.description }}
         Version: ${{ github.event.inputs.version }}
         
         ## Usage
-        \`\`\`bash
+```bash
         ./${{ matrix.parser.name }} -list
         ./${{ matrix.parser.name }} -p <parser-type> -i <input-file> -o <output-file>
-        \`\`\`
-        
+
         ## Available Parsers
-        Run \`./${{ matrix.parser.name }} -list\` to see all available parsers.
-        EOF
+    	Run `./$${{ matrix.parser.name }} -list` to see all available parsers.
+    	EOFREADME
         
 	# Create tarball
         cd dist
