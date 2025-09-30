@@ -73,21 +73,22 @@ jobs:
           cp ../commands.json dist/ 2>/dev/null || true
         fi
         
-	# Create README
-        cat > dist/README.md << 'EOFREADME'
+        # Create README
+        cat > dist/README.md << EOFREADME
         # ${{ matrix.parser.description }}
         Version: ${{ github.event.inputs.version }}
         
         ## Usage
-```bash
+        \`\`\`bash
         ./${{ matrix.parser.name }} -list
         ./${{ matrix.parser.name }} -p <parser-type> -i <input-file> -o <output-file>
-
-        ## Available Parsers
-    	Run `./$${{ matrix.parser.name }} -list` to see all available parsers.
-    	EOFREADME
+        \`\`\`
         
-	# Create tarball
+        ## Available Parsers
+        Run \`./${{ matrix.parser.name }} -list\` to see all available parsers.
+        EOFREADME
+        
+        # Create tarball
         cd dist
         tar -czf ../${{ matrix.parser.vendor }}-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz *
         cd ..
@@ -132,7 +133,7 @@ jobs:
         
     - name: Generate release notes
       run: |
-        cat > release_notes.md << 'EOF'
+        cat > release_notes.md << 'EOFNOTES'
         # Unified Switch Parsers - ${{ github.event.inputs.version }}
         
         ## 🎯 What's New
@@ -150,28 +151,4 @@ jobs:
         - **Parsers**: interface, interface-phy, lldp, version
         
         ## 🚀 Usage
-        
-        ```bash
-        # Extract and use
-        tar -xzf cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
-        ./cisco-parser -list
-        ./cisco-parser -p class-map -i show-class-map.txt -o output.json
-        ```
-        
-        ## 📋 Benefits
-        - Single binary per vendor (reduced deployment complexity)
-        - Consistent command-line interface
-        - Smaller total package size
-        - Easier updates and maintenance
-        
-        EOF
-        
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: ${{ github.event.inputs.version }}
-        name: Release ${{ github.event.inputs.version }}
-        body_path: release_notes.md
-        prerelease: ${{ github.event.inputs.prerelease }}
-        files: release-assets/*
-        token: ${{ secrets.GITHUB_TOKEN }}
+```bash
