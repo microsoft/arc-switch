@@ -74,33 +74,31 @@ jobs:
         fi
         
         # Create README
-        cat > dist/README.md << EOF
-        # ${{ matrix.parser.description }}
-        Version: ${{ github.event.inputs.version }}
-        
-        ## Usage
-        \`\`\`bash
-        ./${{ matrix.parser.name }} -list
-        ./${{ matrix.parser.name }} -p <parser-type> -i <input-file> -o <output-file>
-        \`\`\`
-        
-        ## Available Parsers
-        Run \`./${{ matrix.parser.name }} -list\` to see all available parsers.
-        EOF
+        echo "# ${{ matrix.parser.description }}" > dist/README.md
+        echo "Version: ${{ github.event.inputs.version }}" >> dist/README.md
+        echo "" >> dist/README.md
+        echo "## Usage" >> dist/README.md
+        echo '```bash' >> dist/README.md
+        echo "./${{ matrix.parser.name }} -list" >> dist/README.md
+        echo "./${{ matrix.parser.name }} -p <parser-type> -i <input-file> -o <output-file>" >> dist/README.md
+        echo '```' >> dist/README.md
+        echo "" >> dist/README.md
+        echo "## Available Parsers" >> dist/README.md
+        echo "Run \`./${{ matrix.parser.name }} -list\` to see all available parsers." >> dist/README.md
         
         # Create tarball
         cd dist
-        tar -czf ../../${{ matrix.parser.vendor }}-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz *
+        tar -czf ../${{ matrix.parser.vendor }}-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz *
         cd ..
         
         echo "Package created successfully!"
-        ls -lh ../*.tar.gz
+        ls -lh *.tar.gz
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.parser.vendor }}-parser
-        path: "*.tar.gz"
+        path: "${{ matrix.parser.path }}/*.tar.gz"
 
   create-release:
     needs: build-parsers
@@ -133,39 +131,36 @@ jobs:
         
     - name: Generate release notes
       run: |
-        cat > release_notes.md << 'EOF'
-        # Unified Switch Parsers - ${{ github.event.inputs.version }}
-        
-        ## 🎯 What's New
-        
-        Unified parser architecture with single binaries per vendor for easier deployment and maintenance.
-        
-        ## 📦 Available Packages
-        
-        ### Cisco Nexus Unified Parser
-        - **File**: `cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz`
-        - **Parsers**: class-map, interface-counters, inventory, ip-arp, ip-route, lldp-neighbor, mac-address, transceiver
-        
-        ### Dell OS10 Unified Parser
-        - **File**: `dell-os10-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz`
-        - **Parsers**: interface, interface-phy, lldp, version
-        
-        ## 🚀 Usage
-        
-        ```bash
-        # Extract and use
-        tar -xzf cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz
-        ./cisco-parser -list
-        ./cisco-parser -p class-map -i show-class-map.txt -o output.json
-        ```
-        
-        ## 📋 Benefits
-        - Single binary per vendor (reduced deployment complexity)
-        - Consistent command-line interface
-        - Smaller total package size
-        - Easier updates and maintenance
-        
-        EOF
+        echo "# Unified Switch Parsers - ${{ github.event.inputs.version }}" > release_notes.md
+        echo "" >> release_notes.md
+        echo "## 🎯 What's New" >> release_notes.md
+        echo "" >> release_notes.md
+        echo "Unified parser architecture with single binaries per vendor for easier deployment and maintenance." >> release_notes.md
+        echo "" >> release_notes.md
+        echo "## 📦 Available Packages" >> release_notes.md
+        echo "" >> release_notes.md
+        echo "### Cisco Nexus Unified Parser" >> release_notes.md
+        echo "- **File**: \`cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz\`" >> release_notes.md
+        echo "- **Parsers**: class-map, interface-counters, inventory, ip-arp, ip-route, lldp-neighbor, mac-address, transceiver" >> release_notes.md
+        echo "" >> release_notes.md
+        echo "### Dell OS10 Unified Parser" >> release_notes.md
+        echo "- **File**: \`dell-os10-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz\`" >> release_notes.md
+        echo "- **Parsers**: interface, interface-phy, lldp, version" >> release_notes.md
+        echo "" >> release_notes.md
+        echo "## 🚀 Usage" >> release_notes.md
+        echo "" >> release_notes.md
+        echo '```bash' >> release_notes.md
+        echo "# Extract and use" >> release_notes.md
+        echo "tar -xzf cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz" >> release_notes.md
+        echo "./cisco-parser -list" >> release_notes.md
+        echo "./cisco-parser -p class-map -i show-class-map.txt -o output.json" >> release_notes.md
+        echo '```' >> release_notes.md
+        echo "" >> release_notes.md
+        echo "## 📋 Benefits" >> release_notes.md
+        echo "- Single binary per vendor (reduced deployment complexity)" >> release_notes.md
+        echo "- Consistent command-line interface" >> release_notes.md
+        echo "- Smaller total package size" >> release_notes.md
+        echo "- Easier updates and maintenance" >> release_notes.md
         
     - name: Create Release
       uses: softprops/action-gh-release@v1
