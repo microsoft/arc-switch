@@ -12,6 +12,7 @@ import (
 
 	"class_map_parser"
 	"interface_counters_parser"
+	"interface_counters_error_parser"
 	"inventory_parser"
 	"ip_arp_parser"
 	"ip_route_parser"
@@ -28,14 +29,15 @@ type Parser interface {
 }
 
 var parsers = map[string]func() Parser{
-	"class-map":          func() Parser { return &class_map_parser.UnifiedParser{} },
-	"interface-counters": func() Parser { return &interface_counters_parser.UnifiedParser{} },
-	"inventory":          func() Parser { return &inventory_parser.UnifiedParser{} },
-	"ip-arp":             func() Parser { return &ip_arp_parser.UnifiedParser{} },
-	"ip-route":           func() Parser { return &ip_route_parser.UnifiedParser{} },
-	"lldp-neighbor":      func() Parser { return &lldp_neighbor_parser.UnifiedParser{} },
-	"mac-address":        func() Parser { return &mac_address_parser.UnifiedParser{} },
-	"transceiver":        func() Parser { return &transceiver_parser.UnifiedParser{} },
+	"class-map":                func() Parser { return &class_map_parser.UnifiedParser{} },
+	"interface-counters":       func() Parser { return &interface_counters_parser.UnifiedParser{} },
+	"interface-error-counters": func() Parser { return &interface_counters_error_parser.UnifiedParser{} },
+	"inventory":                func() Parser { return &inventory_parser.UnifiedParser{} },
+	"ip-arp":                   func() Parser { return &ip_arp_parser.UnifiedParser{} },
+	"ip-route":                 func() Parser { return &ip_route_parser.UnifiedParser{} },
+	"lldp-neighbor":            func() Parser { return &lldp_neighbor_parser.UnifiedParser{} },
+	"mac-address":              func() Parser { return &mac_address_parser.UnifiedParser{} },
+	"transceiver":              func() Parser { return &transceiver_parser.UnifiedParser{} },
 }
 
 func main() {

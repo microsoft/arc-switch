@@ -29,6 +29,10 @@
             "command": "show interface counters"
         },
         {
+            "name": "interface-error-counter",
+            "command": "show interface counters errors"
+        },
+        {
             "name": "interface-configuration",
             "command": "show running-config interface"
         },
