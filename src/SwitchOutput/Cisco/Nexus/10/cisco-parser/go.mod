@@ -4,8 +4,8 @@ go 1.24.3
 
 require (
 	class_map_parser v0.0.0
-	interface_counters_parser v0.0.0
 	interface_counters_error_parser v0.0.0
+	interface_counters_parser v0.0.0
 	inventory_parser v0.0.0
 	ip_arp_parser v0.0.0
 	ip_route_parser v0.0.0
