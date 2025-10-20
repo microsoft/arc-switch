@@ -13,6 +13,9 @@ Neighbor        V    AS    MsgRcvd    MsgSent   TblVer  InQ OutQ Up/Down  State/
 
 BGP summary information for VRF default, address family IPv6 Unicast
 
+CONTOSO-DC1-TOR-01# show bgp all summary | json
+{"TABLE_vrf": {"ROW_vrf": {"vrf-name-out": "default", "vrf-router-id": "100.71.34.149", "vrf-local-as": "64781", "TABLE_af": {"ROW_af": [{"af-id": "1", "TABLE_saf": {"ROW_saf": {"safi": "1", "af-name": "IPv4 Unicast", "tableversion": "3971", "configuredpeers": "4", "capablepeers": "3", "totalnetworks": "3911", "totalpaths": "3938", "memoryused": "1426412", "numberattrs": "189", "bytesattrs": "69552", "numberpaths": "165", "bytespaths": "2818", "numbercommunities": "0", "bytescommunities": "0", "numberclusterlist": "0","bytesclusterlist": "0", "dampening": "false", "TABLE_neighbor": {"ROW_neighbor": [{"neighborid": "100.71.34.129", "neighborversion": "4", "msgrecvd": "5155", "msgsent": "4452", "neighbortableversion": "3971", "inq": "0", "outq": "0", "neighboras": "64841", "time": "P3DT2H4M33S", "state": "Established", "prefixreceived": "3884"}, {"neighborid": "100.71.34.137", "neighborversion": "4", "msgrecvd": "5190", "msgsent": "4455", "neighbortableversion": "3971", "inq": "0", "outq": "0", "neighboras": "64841", "time": "P2DT23H38M36S", "state": "Established", "prefixreceived": "1"}, {"neighborid": "100.71.34.146", "neighborversion": "4", "msgrecvd": "4451", "msgsent": "4452", "neighbortableversion": "3971", "inq": "0", "outq": "0", "neighboras": "64781", "time": "P3DT2H4M31S", "state": "Established", "prefixreceived": "27"}]}}}}, {"af-id": "2", "TABLE_saf": {"ROW_saf": {"safi": "1", "af-name": "IPv6 Unicast"}}}]}}}}
+
 CONTOSO-DC1-TOR-01# show bgp all summary | json-pretty
 {
     "TABLE_vrf": {
