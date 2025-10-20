@@ -1,0 +1,139 @@
+{
+  "TABLE_vrf": {
+    "ROW_vrf": {
+      "vrf-name-out": "default",
+      "vrf-router-id": "192.168.100.20",
+      "vrf-local-as": 65238,
+      "TABLE_af": {
+        "ROW_af": [
+          {
+            "af-id": 1,
+            "safi": 1,
+            "af-name": "IPv4-Unicast",
+            "tableversion": 12345,
+            "configuredpeers": 4,
+            "capablepeers": 4,
+            "totalnetworks": 150,
+            "totalpaths": 300,
+            "memoryused": 40960,
+            "numberattrs": 50,
+            "bytesattrs": 5000,
+            "numberpaths": 300,
+            "bytespaths": 24000,
+            "numbercommunities": 25,
+            "bytescommunities": 800,
+            "numberclusterlist": 10,
+            "bytesclusterlist": 400,
+            "dampening": "yes",
+            "TABLE_neighbor": {
+              "ROW_neighbor": [
+                {
+                  "neighborid": "192.168.100.1",
+                  "neighborversion": 4,
+                  "msgrecvd": 15000,
+                  "msgsent": 14500,
+                  "neighbortableversion": 12345,
+                  "inq": 0,
+                  "outq": 0,
+                  "neighboras": 64846,
+                  "time": "P14W1D",
+                  "state": "Established",
+                  "prefixreceived": 75
+                },
+                {
+                  "neighborid": "192.168.100.9",
+                  "neighborversion": 4,
+                  "msgrecvd": 14800,
+                  "msgsent": 14300,
+                  "neighbortableversion": 12345,
+                  "inq": 0,
+                  "outq": 0,
+                  "neighboras": 64846,
+                  "time": "P14W1D",
+                  "state": "Established",
+                  "prefixreceived": 75
+                },
+                {
+                  "neighborid": "192.168.100.18",
+                  "neighborversion": 4,
+                  "msgrecvd": 20000,
+                  "msgsent": 19500,
+                  "neighbortableversion": 12345,
+                  "inq": 0,
+                  "outq": 0,
+                  "neighboras": 65238,
+                  "time": "P37W6D",
+                  "state": "Established",
+                  "prefixreceived": 150
+                },
+                {
+                  "neighborid": "192.168.100.5",
+                  "neighborversion": 4,
+                  "msgrecvd": 0,
+                  "msgsent": 0,
+                  "neighbortableversion": 0,
+                  "inq": 0,
+                  "outq": 5,
+                  "neighboras": 65239,
+                  "time": "never",
+                  "state": "Idle",
+                  "prefixreceived": 0
+                }
+              ]
+            }
+          },
+          {
+            "af-id": 2,
+            "safi": 1,
+            "af-name": "IPv6-Unicast",
+            "tableversion": 5678,
+            "configuredpeers": 2,
+            "capablepeers": 2,
+            "totalnetworks": 50,
+            "totalpaths": 100,
+            "memoryused": 20480,
+            "numberattrs": 20,
+            "bytesattrs": 2000,
+            "numberpaths": 100,
+            "bytespaths": 8000,
+            "numbercommunities": 10,
+            "bytescommunities": 320,
+            "numberclusterlist": 5,
+            "bytesclusterlist": 200,
+            "dampening": "no",
+            "TABLE_neighbor": {
+              "ROW_neighbor": [
+                {
+                  "neighborid": "2001:db8::1",
+                  "neighborversion": 4,
+                  "msgrecvd": 5000,
+                  "msgsent": 4800,
+                  "neighbortableversion": 5678,
+                  "inq": 0,
+                  "outq": 0,
+                  "neighboras": 64846,
+                  "time": "P10W2D",
+                  "state": "Established",
+                  "prefixreceived": 50
+                },
+                {
+                  "neighborid": "2001:db8::2",
+                  "neighborversion": 4,
+                  "msgrecvd": 4900,
+                  "msgsent": 4700,
+                  "neighbortableversion": 5678,
+                  "inq": 0,
+                  "outq": 0,
+                  "neighboras": 64846,
+                  "time": "P10W2D",
+                  "state": "Established",
+                  "prefixreceived": 50
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
