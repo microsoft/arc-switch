@@ -1,0 +1,18 @@
+CONTOSO-DC1-TOR-01# show system uptime
+System start time:          Fri Oct 17 13:50:28 2025
+System uptime:              2 days, 22 hours, 1 minutes, 43 seconds
+Kernel uptime:              2 days, 22 hours, 3 minutes, 51 seconds
+
+
+CONTOSO-DC1-TOR-01# show system uptime  | json-pretty
+{
+    "sys_st_time": "Fri Oct 17 13:50:28 2025",
+    "sys_up_days": "2",
+    "sys_up_hrs": "22",
+    "sys_up_mins": "1",
+    "sys_up_secs": "51",
+    "kn_up_days": "2",
+    "kn_up_hrs": "22",
+    "kn_up_mins": "3",
+    "kn_up_secs": "58"
+}

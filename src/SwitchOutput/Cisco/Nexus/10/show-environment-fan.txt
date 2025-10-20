@@ -1,13 +1,168 @@
-CONTOSO-DC1-TOR-01# show environment fan 
+CONTOSO-DC1-TOR-01# show environment fan detail
 Fan:
 ---------------------------------------------------------------------------
 Fan             Model                Hw     Direction       Status
 ---------------------------------------------------------------------------
-Fan1(sys_fan1)  NXA-FAN-30CFM-F      --     back-to-front   Ok 
-Fan2(sys_fan2)  NXA-FAN-30CFM-F      --     back-to-front   Ok 
-Fan3(sys_fan3)  NXA-FAN-30CFM-F      --     back-to-front   Ok 
-Fan4(sys_fan4)  NXA-FAN-30CFM-F      --     back-to-front   Ok 
+Fan1(sys_fan1)  NXA-FAN-65CFM-PE     --     back-to-front   Ok
+Fan2(sys_fan2)  NXA-FAN-65CFM-PE     --     back-to-front   Ok
+Fan3(sys_fan3)  NXA-FAN-65CFM-PE     --     back-to-front   Ok
 Fan_in_PS1      --                   --     back-to-front   Ok
 Fan_in_PS2      --                   --     back-to-front   Ok
 Fan Zone Speed: Zone 1: 0xb3
 Fan Air Filter : NotSupported
+Fan:
+------------------------------------------------------------------
+ Fan Name          Fan Num   Fan Direction   Speed(%%)  Speed(RPM)
+------------------------------------------------------------------
+Fan1(sys_fan1)      fan1    back-to-front    71        16564
+Fan1(sys_fan1)      fan2    back-to-front    71        14438
+Fan1(sys_fan1)      fan3    back-to-front    71        16615
+Fan1(sys_fan1)      fan4    back-to-front    71        14555
+Fan2(sys_fan2)      fan1    back-to-front    70        16413
+Fan2(sys_fan2)      fan2    back-to-front    70        14285
+Fan2(sys_fan2)      fan3    back-to-front    71        16718
+Fan2(sys_fan2)      fan4    back-to-front    71        14438
+Fan3(sys_fan3)      fan1    back-to-front    72        16981
+Fan3(sys_fan3)      fan2    back-to-front    73        14835
+Fan3(sys_fan3)      fan3    back-to-front    73        17088
+Fan3(sys_fan3)      fan4    back-to-front    72        14754
+
+CONTOSO-DC1-TOR-01# show environment fan detail | json-pretty
+{
+    "fandetails": {
+        "TABLE_faninfo": {
+            "ROW_faninfo": [
+                {
+                    "fanname": "Fan1(sys_fan1)",
+                    "fanmodel": "NXA-FAN-65CFM-PE",
+                    "fanhwver": "--",
+                    "fandir": "back-to-front",
+                    "fanstatus": "Ok"
+                },
+                {
+                    "fanname": "Fan2(sys_fan2)",
+                    "fanmodel": "NXA-FAN-65CFM-PE",
+                    "fanhwver": "--",
+                    "fandir": "back-to-front",
+                    "fanstatus": "Ok"
+                },
+                {
+                    "fanname": "Fan3(sys_fan3)",
+                    "fanmodel": "NXA-FAN-65CFM-PE",
+                    "fanhwver": "--",
+                    "fandir": "back-to-front",
+                    "fanstatus": "Ok"
+                },
+                {
+                    "fanname": "Fan_in_PS1",
+                    "fanmodel": "--",
+                    "fanhwver": "--",
+                    "fandir": "back-to-front",
+                    "fanstatus": "Ok"
+                },
+                {
+                    "fanname": "Fan_in_PS2",
+                    "fanmodel": "--",
+                    "fanhwver": "--",
+                    "fandir": "back-to-front",
+                    "fanstatus": "Ok"
+                }
+            ]
+        },
+        "TABLE_fan_zone_speed": {
+            "ROW_fan_zone_speed": {
+                "zone": "1",
+                "zonespeed": "0xb3"
+            }
+        },
+        "fan_filter_status": "NotSupported",
+        "TABLE_fantray": {
+            "ROW_fantray": [
+                {
+                    "fanname": "Fan1(sys_fan1)",
+                    "trayfannum": "fan1",
+                    "fandir": "back-to-front",
+                    "fanperc": "71",
+                    "fanrpm": "16615"
+                },
+                {
+                    "fanname": "Fan1(sys_fan1)",
+                    "trayfannum": "fan2",
+                    "fandir": "back-to-front",
+                    "fanperc": "71",
+                    "fanrpm": "14477"
+                },
+                {
+                    "fanname": "Fan1(sys_fan1)",
+                    "trayfannum": "fan3",
+                    "fandir": "back-to-front",
+                    "fanperc": "71",
+                    "fanrpm": "16615"
+                },
+                {
+                    "fanname": "Fan1(sys_fan1)",
+                    "trayfannum": "fan4",
+                    "fandir": "back-to-front",
+                    "fanperc": "71",
+                    "fanrpm": "14555"
+                },
+                {
+                    "fanname": "Fan2(sys_fan2)",
+                    "trayfannum": "fan1",
+                    "fandir": "back-to-front",
+                    "fanperc": "70",
+                    "fanrpm": "16463"
+                },
+                {
+                    "fanname": "Fan2(sys_fan2)",
+                    "trayfannum": "fan2",
+                    "fandir": "back-to-front",
+                    "fanperc": "70",
+                    "fanrpm": "14248"
+                },
+                {
+                    "fanname": "Fan2(sys_fan2)",
+                    "trayfannum": "fan3",
+                    "fandir": "back-to-front",
+                    "fanperc": "71",
+                    "fanrpm": "16718"
+                },
+                {
+                    "fanname": "Fan2(sys_fan2)",
+                    "trayfannum": "fan4",
+                    "fandir": "back-to-front",
+                    "fanperc": "70",
+                    "fanrpm": "14400"
+                },
+                {
+                    "fanname": "Fan3(sys_fan3)",
+                    "trayfannum": "fan1",
+                    "fandir": "back-to-front",
+                    "fanperc": "73",
+                    "fanrpm": "17034"
+                },
+                {
+                    "fanname": "Fan3(sys_fan3)",
+                    "trayfannum": "fan2",
+                    "fandir": "back-to-front",
+                    "fanperc": "72",
+                    "fanrpm": "14794"
+                },
+                {
+                    "fanname": "Fan3(sys_fan3)",
+                    "trayfannum": "fan3",
+                    "fandir": "back-to-front",
+                    "fanperc": "73",
+                    "fanrpm": "17142"
+                },
+                {
+                    "fanname": "Fan3(sys_fan3)",
+                    "trayfannum": "fan4",
+                    "fandir": "back-to-front",
+                    "fanperc": "72",
+                    "fanrpm": "14713"
+                }
+            ]
+        }
+    }
+}

@@ -51,3 +51,78 @@ Cord connected to 220V AC
 Software-Alarm: No
 Hardware alarm_bits 
 
+CONTOSO-DC1-TOR-01# show environment power detail | json-pretty
+{
+    "powersup": {
+        "voltage_level": "12",
+        "TABLE_psinfo": {
+            "ROW_psinfo": [
+                {
+                    "psnum": "1",
+                    "psmodel": "NXA-PAC-1100W-PE2",
+                    "actual_out": "132 W",
+                    "actual_input": "150 W",
+                    "tot_capa": "1100 W",
+                    "ps_status": "Ok"
+                },
+                {
+                    "psnum": "2",
+                    "psmodel": "NXA-PAC-1100W-PE2",
+                    "actual_out": "156 W",
+                    "actual_input": "172 W",
+                    "tot_capa": "1100 W",
+                    "ps_status": "Ok"
+                }
+            ]
+        },
+        "power_summary": {
+            "ps_redun_mode": "PS-Redundant",
+            "ps_oper_mode": "PS-Redundant",
+            "tot_pow_capacity": "1100.00 W",
+            "tot_gridA_capacity": "1100.00 W",
+            "tot_gridB_capacity": "1100.00 W",
+            "cumulative_power": "2200.00 W",
+            "tot_pow_out_actual_draw": "288.00 W",
+            "tot_pow_input_actual_draw": "322.00 W",
+            "tot_pow_alloc_budgeted": "N/A",
+            "available_pow": "N/A"
+        },
+        "powersup_detail": {
+            "reserve_sup": "N/A",
+            "reserve_xbar": "N/A",
+            "reserve_fan": "N/A",
+            "reserve_supxbarfan": "N/A"
+        },
+        "all_inlets_connected": "Yes",
+        "TABLE_ps_detail_info": {
+            "ROW_ps_detail_info": [
+                {
+                    "det_name": "PS_1",
+                    "det_total_cap": "1100 W",
+                    "det_volt": "12V",
+                    "det_pintot": "150.00W",
+                    "det_vin": "207.50V",
+                    "det_iin": "0.75A",
+                    "det_pout": "132.00W",
+                    "det_vout": "12.00V",
+                    "det_iout": "11.00A",
+                    "det_cord": "connected to 220V AC",
+                    "det_sw_alarm": "No"
+                },
+                {
+                    "det_name": "PS_2",
+                    "det_total_cap": "1100 W",
+                    "det_volt": "12V",
+                    "det_pintot": "172.00W",
+                    "det_vin": "207.50V",
+                    "det_iin": "0.84A",
+                    "det_pout": "156.00W",
+                    "det_vout": "12.00V",
+                    "det_iout": "13.12A",
+                    "det_cord": "connected to 220V AC",
+                    "det_sw_alarm": "No"
+                }
+            ]
+        }
+    }
+}

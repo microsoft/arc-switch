@@ -1,0 +1,90 @@
+CONTOSO-DC1-TOR-01# show system resources
+Load average:   1 minute: 0.60   5 minutes: 0.63   15 minutes: 0.73
+Processes   :   954 total, 5 running
+CPU states  :   11.43% user,   4.52% kernel,   84.04% idle
+        CPU0 states  :   28.71% user,   6.93% kernel,   64.35% idle
+        CPU1 states  :   0.00% user,   0.00% kernel,   100.00% idle
+        CPU2 states  :   0.00% user,   1.00% kernel,   99.00% idle
+        CPU3 states  :   1.96% user,   1.96% kernel,   96.07% idle
+        CPU4 states  :   28.28% user,   4.04% kernel,   67.67% idle
+        CPU5 states  :   20.20% user,   12.12% kernel,   67.67% idle
+        CPU6 states  :   9.09% user,   7.07% kernel,   83.83% idle
+        CPU7 states  :   4.00% user,   3.00% kernel,   93.00% idle
+Memory usage:   24538812K total,   10765396K used,   13773416K free
+Kernel vmalloc:   0K total,   0K free
+Kernel buffers:   59712K Used
+Kernel cached :   5993960K Used
+Current memory status: OK
+
+
+CONTOSO-DC1-TOR-01# show system resources | json-pretty
+{
+    "load_avg_1min": "0.77",
+    "load_avg_5min": "0.65",
+    "load_avg_15min": "0.73",
+    "processes_total": "945",
+    "processes_running": "2",
+    "cpu_state_user": "12.56",
+    "cpu_state_kernel": "4.14",
+    "cpu_state_idle": "83.29",
+    "TABLE_cpu_usage": {
+        "ROW_cpu_usage": [
+            {
+                "cpuid": "0",
+                "user": "0.00",
+                "kernel": "1.00",
+                "idle": "99.00"
+            },
+            {
+                "cpuid": "1",
+                "user": "0.00",
+                "kernel": "1.98",
+                "idle": "98.01"
+            },
+            {
+                "cpuid": "2",
+                "user": "2.02",
+                "kernel": "5.05",
+                "idle": "92.92"
+            },
+            {
+                "cpuid": "3",
+                "user": "0.00",
+                "kernel": "1.01",
+                "idle": "98.98"
+            },
+            {
+                "cpuid": "4",
+                "user": "2.06",
+                "kernel": "5.15",
+                "idle": "92.78"
+            },
+            {
+                "cpuid": "5",
+                "user": "85.00",
+                "kernel": "15.00",
+                "idle": "0.00"
+            },
+            {
+                "cpuid": "6",
+                "user": "0.00",
+                "kernel": "1.00",
+                "idle": "99.00"
+            },
+            {
+                "cpuid": "7",
+                "user": "10.00",
+                "kernel": "3.00",
+                "idle": "87.00"
+            }
+        ]
+    },
+    "memory_usage_total": "24538812",
+    "memory_usage_used": "10748420",
+    "memory_usage_free": "13790392",
+    "vm_total": "0",
+    "vm_free": "0",
+    "mem_buffers": "59728",
+    "mem_cached": "5994184",
+    "current_memory_status": "OK"
+}

@@ -8,3 +8,43 @@ Module   Sensor        MajorThresh   MinorThres   CurTemp     Status
 1        BACK            70              42          26         Ok             
 1        CPU             90              80          42         Ok             
 1        Homewood        110             90          43         Ok 
+
+CONTOSO-DC1-TOR-01# show environment temperature | json-pretty
+{
+    "TABLE_tempinfo": {
+        "ROW_tempinfo": [
+            {
+                "tempmod": "1",
+                "sensor": "FRONT",
+                "majthres": "80",
+                "minthres": "70",
+                "curtemp": "29",
+                "alarmstatus": "Ok"
+            },
+            {
+                "tempmod": "1",
+                "sensor": "BACK",
+                "majthres": "70",
+                "minthres": "50",
+                "curtemp": "27",
+                "alarmstatus": "Ok"
+            },
+            {
+                "tempmod": "1",
+                "sensor": "CPU",
+                "majthres": "90",
+                "minthres": "80",
+                "curtemp": "36",
+                "alarmstatus": "Ok"
+            },
+            {
+                "tempmod": "1",
+                "sensor": "Heavenly",
+                "majthres": "110",
+                "minthres": "90",
+                "curtemp": "47",
+                "alarmstatus": "Ok"
+            }
+        ]
+    }
+}

@@ -869,3 +869,187 @@ Status : aggregated
 Link agg ID : 101
 
 Total entries displayed: 40
+
+CONTOSO-DC1-TOR-01# show lldp neighbors detail | json
+
+{"neigh_hdr": "neigh_hdr", "TABLE_nbor_detail": {"ROW_nbor_detail": [{"chassis_type": "Mac Address", "chassis_id": "e80a.b91a.aa5c", "port_type": "Interface Name", "port_id": "Ethernet1/33", "l_port_id": "Eth1/33"
+, "port_desc": "P2P_IBGP", "sys_name": "rr1-n42-r07-9336hl-13-1b", "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 10.6(1)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems,
+ Inc. All rights reserved.", "ttl": "115", "system_capability": "B, R", "enabled_capability": "B, R", "mgmt_addr_type": "802", "mgmt_addr": "e80a.b91a.aa5c", "mgmt_addr_ipv6_type": "Address not advertised", "mgmt_
+addr_ipv6": "not advertised", "vlan_id": "not advertised", "max_framesize": "9216", "vlan_name": "not advertised", "link_agg_capability": "enabled", "link_agg_status": "aggregated", "link_agg_id": "50", "dc_uuid":
+ "FLM272108KW"}, {"chassis_type": "Mac Address", "chassis_id": "e80a.b91a.aa60", "port_type": "Interface Name", "port_id": "Ethernet1/34", "l_port_id": "Eth1/34", "port_desc": "MLAG_Peer", "sys_name": "rr1-n42-r07
+-9336hl-13-1b", "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 10.6(1)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.", "ttl": "115", "system_
+capability": "B, R", "enabled_capability": "B, R", "mgmt_addr_type": "802", "mgmt_addr": "e80a.b91a.aa60", "mgmt_addr_ipv6_type": "Address not advertised", "mgmt_addr_ipv6": "not advertised", "vlan_id": "99", "max
+_framesize": "1500", "vlan_name": "1: default, 2: VLAN0002, 6: VLAN0006, 7: VLAN0007, 99: VLAN0099, 125: VLAN0125, 201: VLAN0201, 301: VLAN0301, 401: VLAN0401, 501: VLAN0501, 502: VLAN0502, 503: VLAN0503, 504: VLA
+N0504, 505: VLAN0505, 506: VLAN0506, 507: VLAN0507, 508: VLAN0508, 509: VLAN0509, 510: VLAN0510, 511: VLAN0511, 512: VLAN0512, 513: VLAN0513, 514: VLAN0514, 515: VLAN0515, 516: VLAN0516", "link_agg_capability": "e
+nabled", "link_agg_status": "aggregated", "link_agg_id": "101", "dc_uuid": "FLM272108KW"}, {"chassis_type": "Mac Address", "chassis_id": "e80a.b91a.aa64", "port_type": "Interface Name", "port_id": "Ethernet1/35",
+"l_port_id": "Eth1/35", "port_desc": "MLAG_Peer", "sys_name": "rr1-n42-r07-9336hl-13-1b", "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 10.6(1)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 20
+02-2025, Cisco Systems, Inc. All rights reserved.", "ttl": "115", "system_capability": "B, R", "enabled_capability": "B, R", "mgmt_addr_type": "802", "mgmt_addr": "e80a.b91a.aa64", "mgmt_addr_ipv6_type": "Address
+not advertised", "mgmt_addr_ipv6": "not advertised", "vlan_id": "99", "max_framesize": "1500", "vlan_name": "1: default, 2: VLAN0002, 6: VLAN0006, 7: VLAN0007, 99: VLAN0099, 125: VLAN0125, 201: VLAN0201, 301: VLAN
+0301, 401: VLAN0401, 501: VLAN0501, 502: VLAN0502, 503: VLAN0503, 504: VLAN0504, 505: VLAN0505, 506: VLAN0506, 507: VLAN0507, 508: VLAN0508, 509: VLAN0509, 510: VLAN0510, 511: VLAN0511, 512: VLAN0512, 513: VLAN051
+3, 514: VLAN0514, 515: VLAN0515, 516: VLAN0516", "link_agg_capability": "enabled", "link_agg_status": "aggregated", "link_agg_id": "101", "dc_uuid": "FLM272108KW"}, {"chassis_type": "Mac Address", "chassis_id": "f
+86b.d922.9376", "port_type": "Interface Name", "port_id": "Ethernet1/4/3", "l_port_id": "Eth1/36/1", "port_desc": "INFRA:PTP:rr1-n42-r07-93180hl-13-1a:Eth1/36/1:HL", "sys_name": "RR1-N42-R12-9336ssp-1a.corp.micros
+oft.com", "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 9.3(11)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.", "ttl": "96", "system_capabil
+ity": "B, R", "enabled_capability": "B, R", "mgmt_addr_type": "IPV4", "mgmt_addr": "10.218.68.194", "mgmt_addr_ipv6_type": "IPV6", "mgmt_addr_ipv6": "2001:4898:f8:24::1001", "vlan_id": "not advertised", "max_frame
+size": "not advertised", "vlan_name": "not advertised", "link_agg_capability": "not advertised", "link_agg_status": "not advertised", "link_agg_id": "0"}, {"chassis_type": "Mac Address", "chassis_id": "f86b.d922.b
+ff2", "port_type": "Interface Name", "port_id": "Ethernet1/4/3", "l_port_id": "Eth1/36/2", "port_desc": "INFRA:PTP:rr1-n42-r07-93180hl-13-1a:Eth1/36/2:HL", "sys_name": "RR1-N42-R12-9336ssp-1b.corp.microsoft.com",
+"sys_desc": "Cisco Nexus Operating System (NX-OS) Software 9.3(11)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.", "ttl": "90", "system_capability": "B,
+R", "enabled_capability": "B, R", "mgmt_addr_type": "IPV4", "mgmt_addr": "10.218.68.195", "mgmt_addr_ipv6_type": "IPV6", "mgmt_addr_ipv6": "2001:4898:f8:24::1002", "vlan_id": "not advertised", "max_framesize": "no
+t advertised", "vlan_name": "not advertised", "link_agg_capability": "not advertised", "link_agg_status": "not advertised", "link_agg_id": "0"}, {"chassis_type": "Mac Address", "chassis_id": "a410.b6bc.047a", "por
+t_type": "Interface Name", "port_id": "Ethernet1/51", "l_port_id": "Eth1/36/4", "port_desc": "TOR_BMC", "sys_name": "rr1-n42-r07-9348bmc-13-1", "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 10.4(3)\nT
+AC support: http://www.cisco.com/tac\nCopyright (c) 2002-2024, Cisco Systems, Inc. All rights reserved.", "ttl": "115", "system_capability": "B, R", "enabled_capability": "B, R", "mgmt_addr_type": "802", "mgmt_add
+r": "a410.b6bc.047a", "mgmt_addr_ipv6_type": "Address not advertised", "mgmt_addr_ipv6": "not advertised", "vlan_id": "99", "max_framesize": "9216", "vlan_name": "125: VLAN0125", "link_agg_capability": "enabled",
+"link_agg_status": "aggregated", "link_agg_id": "102", "dc_uuid": "FDO274801LB"}]}, "neigh_count": "6"}
+
+CONTOSO-DC1-TOR-01# show lldp neighbors detail | json-pretty
+{
+    "neigh_hdr": "neigh_hdr",
+    "TABLE_nbor_detail": {
+        "ROW_nbor_detail": [
+            {
+                "chassis_type": "Mac Address",
+                "chassis_id": "e80a.b91a.aa5c",
+                "port_type": "Interface Name",
+                "port_id": "Ethernet1/33",
+                "l_port_id": "Eth1/33",
+                "port_desc": "P2P_IBGP",
+                "sys_name": "rr1-n42-r07-9336hl-13-1b",
+                "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 10.6(1)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.",
+                "ttl": "94",
+                "system_capability": "B, R",
+                "enabled_capability": "B, R",
+                "mgmt_addr_type": "802",
+                "mgmt_addr": "e80a.b91a.aa5c",
+                "mgmt_addr_ipv6_type": "Address not advertised",
+                "mgmt_addr_ipv6": "not advertised",
+                "vlan_id": "not advertised",
+                "max_framesize": "9216",
+                "vlan_name": "not advertised",
+                "link_agg_capability": "enabled",
+                "link_agg_status": "aggregated",
+                "link_agg_id": "50",
+                "dc_uuid": "FLM272108KW"
+            },
+            {
+                "chassis_type": "Mac Address",
+                "chassis_id": "e80a.b91a.aa60",
+                "port_type": "Interface Name",
+                "port_id": "Ethernet1/34",
+                "l_port_id": "Eth1/34",
+                "port_desc": "MLAG_Peer",
+                "sys_name": "rr1-n42-r07-9336hl-13-1b",
+                "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 10.6(1)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.",
+                "ttl": "94",
+                "system_capability": "B, R",
+                "enabled_capability": "B, R",
+                "mgmt_addr_type": "802",
+                "mgmt_addr": "e80a.b91a.aa60",
+                "mgmt_addr_ipv6_type": "Address not advertised",
+                "mgmt_addr_ipv6": "not advertised",
+                "vlan_id": "99",
+                "max_framesize": "1500",
+                "vlan_name": "1: default, 2: VLAN0002, 6: VLAN0006, 7: VLAN0007, 99: VLAN0099, 125: VLAN0125, 201: VLAN0201, 301: VLAN0301, 401: VLAN0401, 501: VLAN0501, 502: VLAN0502, 503: VLAN0503, 504: VLAN0504
+, 505: VLAN0505, 506: VLAN0506, 507: VLAN0507, 508: VLAN0508, 509: VLAN0509, 510: VLAN0510, 511: VLAN0511, 512: VLAN0512, 513: VLAN0513, 514: VLAN0514, 515: VLAN0515, 516: VLAN0516",
+                "link_agg_capability": "enabled",
+                "link_agg_status": "aggregated",
+                "link_agg_id": "101",
+                "dc_uuid": "FLM272108KW"
+            },
+            {
+                "chassis_type": "Mac Address",
+                "chassis_id": "e80a.b91a.aa64",
+                "port_type": "Interface Name",
+                "port_id": "Ethernet1/35",
+                "l_port_id": "Eth1/35",
+                "port_desc": "MLAG_Peer",
+                "sys_name": "rr1-n42-r07-9336hl-13-1b",
+                "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 10.6(1)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.",
+                "ttl": "94",
+                "system_capability": "B, R",
+                "enabled_capability": "B, R",
+                "mgmt_addr_type": "802",
+                "mgmt_addr": "e80a.b91a.aa64",
+                "mgmt_addr_ipv6_type": "Address not advertised",
+                "mgmt_addr_ipv6": "not advertised",
+                "vlan_id": "99",
+                "max_framesize": "1500",
+                "vlan_name": "1: default, 2: VLAN0002, 6: VLAN0006, 7: VLAN0007, 99: VLAN0099, 125: VLAN0125, 201: VLAN0201, 301: VLAN0301, 401: VLAN0401, 501: VLAN0501, 502: VLAN0502, 503: VLAN0503, 504: VLAN0504
+, 505: VLAN0505, 506: VLAN0506, 507: VLAN0507, 508: VLAN0508, 509: VLAN0509, 510: VLAN0510, 511: VLAN0511, 512: VLAN0512, 513: VLAN0513, 514: VLAN0514, 515: VLAN0515, 516: VLAN0516",
+                "link_agg_capability": "enabled",
+                "link_agg_status": "aggregated",
+                "link_agg_id": "101",
+                "dc_uuid": "FLM272108KW"
+            },
+            {
+                "chassis_type": "Mac Address",
+                "chassis_id": "f86b.d922.9376",
+                "port_type": "Interface Name",
+                "port_id": "Ethernet1/4/3",
+                "l_port_id": "Eth1/36/1",
+                "port_desc": "INFRA:PTP:rr1-n42-r07-93180hl-13-1a:Eth1/36/1:HL",
+                "sys_name": "RR1-N42-R12-9336ssp-1a.corp.microsoft.com",
+                "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 9.3(11)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.",
+                "ttl": "105",
+                "system_capability": "B, R",
+                "enabled_capability": "B, R",
+                "mgmt_addr_type": "IPV4",
+                "mgmt_addr": "10.218.68.194",
+                "mgmt_addr_ipv6_type": "IPV6",
+                "mgmt_addr_ipv6": "2001:4898:f8:24::1001",
+                "vlan_id": "not advertised",
+                "max_framesize": "not advertised",
+                "vlan_name": "not advertised",
+                "link_agg_capability": "not advertised",
+                "link_agg_status": "not advertised",
+                "link_agg_id": "0"
+            },
+            {
+                "chassis_type": "Mac Address",
+                "chassis_id": "f86b.d922.bff2",
+                "port_type": "Interface Name",
+                "port_id": "Ethernet1/4/3",
+                "l_port_id": "Eth1/36/2",
+                "port_desc": "INFRA:PTP:rr1-n42-r07-93180hl-13-1a:Eth1/36/2:HL",
+                "sys_name": "RR1-N42-R12-9336ssp-1b.corp.microsoft.com",
+                "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 9.3(11)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2023, Cisco Systems, Inc. All rights reserved.",
+                "ttl": "99",
+                "system_capability": "B, R",
+                "enabled_capability": "B, R",
+                "mgmt_addr_type": "IPV4",
+                "mgmt_addr": "10.218.68.195",
+                "mgmt_addr_ipv6_type": "IPV6",
+                "mgmt_addr_ipv6": "2001:4898:f8:24::1002",
+                "vlan_id": "not advertised",
+                "max_framesize": "not advertised",
+                "vlan_name": "not advertised",
+                "link_agg_capability": "not advertised",
+                "link_agg_status": "not advertised",
+                "link_agg_id": "0"
+            },
+            {
+                "chassis_type": "Mac Address",
+                "chassis_id": "a410.b6bc.047a",
+                "port_type": "Interface Name",
+                "port_id": "Ethernet1/51",
+                "l_port_id": "Eth1/36/4",
+                "port_desc": "TOR_BMC",
+                "sys_name": "rr1-n42-r07-9348bmc-13-1",
+                "sys_desc": "Cisco Nexus Operating System (NX-OS) Software 10.4(3)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2024, Cisco Systems, Inc. All rights reserved.",
+                "ttl": "94",
+                "system_capability": "B, R",
+                "enabled_capability": "B, R",
+                "mgmt_addr_type": "802",
+                "mgmt_addr": "a410.b6bc.047a",
+                "mgmt_addr_ipv6_type": "Address not advertised",
+                "mgmt_addr_ipv6": "not advertised",
+                "vlan_id": "99",
+                "max_framesize": "9216",
+                "vlan_name": "125: VLAN0125",
+                "link_agg_capability": "enabled",
+                "link_agg_status": "aggregated",
+                "link_agg_id": "102",
+                "dc_uuid": "FDO274801LB"
+            }
+        ]
+    },
+    "neigh_count": "6"
+}
