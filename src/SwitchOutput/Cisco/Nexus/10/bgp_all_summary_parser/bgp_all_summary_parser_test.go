@@ -71,8 +71,8 @@ func TestParseBGPSummary(t *testing.T) {
 		t.Error("NeighborID should not be empty")
 	}
 	
-	if neighbor.HealthStatus == "" {
-		t.Error("HealthStatus should be set")
+	if neighbor.SessionType == "" {
+		t.Error("SessionType should be set")
 	}
 	
 	fmt.Printf("Successfully parsed %d BGP summary entries with %d address families\n", 
@@ -180,171 +180,42 @@ func TestASNClassification(t *testing.T) {
 	}
 }
 
-// TestNeighborHealthAnalysis tests neighbor health status determination
-func TestNeighborHealthAnalysis(t *testing.T) {
+// TestSessionTypeDetection tests session type determination
+func TestSessionTypeDetection(t *testing.T) {
 	tests := []struct {
-		name           string
-		neighbor       Neighbor
-		tableVersion   int
-		localAS        int
-		expectedStatus string
-		expectedIssues int
+		name         string
+		neighborAS   int
+		localAS      int
+		expectedType string
 	}{
 		{
-			name: "Healthy iBGP neighbor",
-			neighbor: Neighbor{
-				State:                "Established",
-				InQ:                  0,
-				OutQ:                 0,
-				PrefixReceived:       100,
-				NeighborAS:           65238,
-				NeighborTableVersion: 12345,
-			},
-			tableVersion:   12345,
-			localAS:        65238,
-			expectedStatus: "healthy",
-			expectedIssues: 0,
+			name:         "iBGP session",
+			neighborAS:   65238,
+			localAS:      65238,
+			expectedType: "iBGP",
 		},
 		{
-			name: "Neighbor with input queue",
-			neighbor: Neighbor{
-				State:          "Established",
-				InQ:            5,
-				OutQ:           0,
-				PrefixReceived: 100,
-				NeighborAS:     64846,
-			},
-			tableVersion:   12345,
-			localAS:        65238,
-			expectedStatus: "critical",
-			expectedIssues: 1,
+			name:         "eBGP session",
+			neighborAS:   64846,
+			localAS:      65238,
+			expectedType: "eBGP",
 		},
 		{
-			name: "Idle neighbor",
-			neighbor: Neighbor{
-				State:          "Idle",
-				InQ:            0,
-				OutQ:           5,
-				PrefixReceived: 0,
-				NeighborAS:     65239,
-			},
-			tableVersion:   12345,
-			localAS:        65238,
-			expectedStatus: "critical",
-			expectedIssues: 2, // Idle state + output queue
-		},
-		{
-			name: "Established but no prefixes",
-			neighbor: Neighbor{
-				State:          "Established",
-				InQ:            0,
-				OutQ:           0,
-				PrefixReceived: 0,
-				NeighborAS:     64846,
-			},
-			tableVersion:   12345,
-			localAS:        65238,
-			expectedStatus: "warning",
-			expectedIssues: 1,
+			name:         "Another eBGP session",
+			neighborAS:   65239,
+			localAS:      65238,
+			expectedType: "eBGP",
 		},
 	}
 	
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			analyzeNeighborHealth(&test.neighbor, test.tableVersion, test.localAS)
-			
-			if test.neighbor.HealthStatus != test.expectedStatus {
-				t.Errorf("Expected HealthStatus %q, got %q", 
-					test.expectedStatus, test.neighbor.HealthStatus)
-			}
-			
-			if len(test.neighbor.HealthIssues) != test.expectedIssues {
-				t.Errorf("Expected %d health issues, got %d: %v", 
-					test.expectedIssues, len(test.neighbor.HealthIssues), test.neighbor.HealthIssues)
-			}
-			
-			// Verify session type
-			if test.neighbor.NeighborAS == test.localAS {
-				if test.neighbor.SessionType != "iBGP" {
-					t.Errorf("Expected SessionType 'iBGP', got %q", test.neighbor.SessionType)
-				}
-			} else {
-				if test.neighbor.SessionType != "eBGP" {
-					t.Errorf("Expected SessionType 'eBGP', got %q", test.neighbor.SessionType)
-				}
+			result := determineSessionType(test.neighborAS, test.localAS)
+			if result != test.expectedType {
+				t.Errorf("Expected SessionType %q, got %q", test.expectedType, result)
 			}
 		})
 	}
-}
-
-// TestAnomalyDetection tests system-level anomaly detection
-func TestAnomalyDetection(t *testing.T) {
-	// Test case: fewer capable peers than configured
-	summary1 := BGPSummary{
-		VRFLocalAS: 65238,
-		AddressFamilies: []AddressFamily{
-			{
-				AFName:          "IPv4-Unicast",
-				ConfiguredPeers: 4,
-				CapablePeers:    3,
-				TotalNetworks:   100,
-				Neighbors: []Neighbor{
-					{State: "Established", PrefixReceived: 50},
-					{State: "Established", PrefixReceived: 50},
-					{State: "Idle", PrefixReceived: 0},
-				},
-			},
-		},
-	}
-	
-	anomalies1 := detectAnomalies(&summary1)
-	if len(anomalies1) == 0 {
-		t.Error("Expected anomalies for peer count mismatch")
-	}
-	
-	// Test case: excessive dependency on single peer
-	summary2 := BGPSummary{
-		VRFLocalAS: 65238,
-		AddressFamilies: []AddressFamily{
-			{
-				AFName:          "IPv4-Unicast",
-				ConfiguredPeers: 3,
-				CapablePeers:    3,
-				TotalNetworks:   100,
-				Neighbors: []Neighbor{
-					{
-						State:          "Established",
-						PrefixReceived: 60,
-						NeighborID:     "192.168.1.1",
-					},
-					{
-						State:          "Established",
-						PrefixReceived: 30,
-						NeighborID:     "192.168.1.2",
-					},
-					{
-						State:          "Established",
-						PrefixReceived: 10,
-						NeighborID:     "192.168.1.3",
-					},
-				},
-			},
-		},
-	}
-	
-	anomalies2 := detectAnomalies(&summary2)
-	foundDependency := false
-	for _, anomaly := range anomalies2 {
-		if contains(anomaly, "excessive_dependency") {
-			foundDependency = true
-			break
-		}
-	}
-	if !foundDependency {
-		t.Error("Expected excessive dependency anomaly")
-	}
-	
-	fmt.Printf("Anomaly detection tests passed\n")
 }
 
 // TestCommandJsonParsing tests that we can correctly parse a commands JSON file
@@ -412,35 +283,6 @@ func TestCommandJsonParsing(t *testing.T) {
 	fmt.Println("Successfully parsed commands JSON file")
 }
 
-// TestPathDiversityCalculation tests the path diversity ratio calculation
-func TestPathDiversityCalculation(t *testing.T) {
-	sampleFilePath := filepath.Join("..", "show-bgp-all-summary.txt")
-	data, err := os.ReadFile(sampleFilePath)
-	if err != nil {
-		t.Fatalf("Failed to read sample file: %v", err)
-	}
-	
-	entries, err := parseBGPSummary(string(data))
-	if err != nil {
-		t.Fatalf("Failed to parse BGP summary: %v", err)
-	}
-	
-	if len(entries) == 0 || len(entries[0].Message.AddressFamilies) == 0 {
-		t.Fatal("No data to test")
-	}
-	
-	af := entries[0].Message.AddressFamilies[0]
-	
-	// Verify path diversity ratio is calculated
-	if af.TotalNetworks > 0 {
-		expectedRatio := float64(af.TotalPaths) / float64(af.TotalNetworks)
-		if af.PathDiversityRatio != expectedRatio {
-			t.Errorf("Path diversity ratio mismatch: expected %.2f, got %.2f",
-				expectedRatio, af.PathDiversityRatio)
-		}
-	}
-}
-
 // TestInvalidInput tests error handling for invalid input
 func TestInvalidInput(t *testing.T) {
 	// Test with invalid JSON
@@ -488,21 +330,4 @@ func TestDataTypeField(t *testing.T) {
 	}
 	
 	fmt.Println("All entries have the correct data_type field")
-}
-
-// Helper function to check if a string contains a substring
-func contains(s, substr string) bool {
-	return len(s) >= len(substr) && (s == substr || len(s) > len(substr) && 
-		(s[:len(substr)] == substr || s[len(s)-len(substr):] == substr || 
-			len(s) > len(substr)*2 && s[len(s)/2-len(substr)/2:len(s)/2+len(substr)/2+len(substr)%2] == substr ||
-			findSubstring(s, substr)))
-}
-
-func findSubstring(s, substr string) bool {
-	for i := 0; i <= len(s)-len(substr); i++ {
-		if s[i:i+len(substr)] == substr {
-			return true
-		}
-	}
-	return false
 }

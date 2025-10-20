@@ -18,7 +18,6 @@ type StandardizedEntry struct {
 	Timestamp string     `json:"timestamp"`  // ISO 8601 timestamp
 	Date      string     `json:"date"`       // Date in YYYY-MM-DD format
 	Message   BGPSummary `json:"message"`    // BGP summary-specific data
-	Anomalies []string   `json:"anomalies,omitempty"` // List of detected anomalies
 }
 
 // BGPSummary represents the BGP summary data
@@ -50,7 +49,6 @@ type AddressFamily struct {
 	NumberClusterList  int        `json:"number_clusterlist"`   // Cluster list count
 	BytesClusterList   int        `json:"bytes_clusterlist"`    // Cluster list bytes
 	Dampening          string     `json:"dampening"`            // Flap suppression status
-	PathDiversityRatio float64    `json:"path_diversity_ratio"` // totalpaths/totalnetworks
 	Neighbors          []Neighbor `json:"neighbors"`            // Per-neighbor data
 }
 
@@ -69,8 +67,6 @@ type Neighbor struct {
 	State                 string           `json:"state"`                   // BGP session state
 	PrefixReceived        int              `json:"prefix_received"`         // Prefixes received from neighbor
 	SessionType           string           `json:"session_type"`            // "eBGP" or "iBGP"
-	HealthStatus          string           `json:"health_status"`           // "healthy", "warning", "critical"
-	HealthIssues          []string         `json:"health_issues,omitempty"` // List of health issues
 }
 
 // ParsedDuration represents a parsed ISO 8601 duration
@@ -228,95 +224,12 @@ func jsonNumberToInt(n json.Number) int {
 	return int(val)
 }
 
-// analyzeNeighborHealth determines neighbor health status and issues
-func analyzeNeighborHealth(neighbor *Neighbor, tableVersion int, localAS int) {
-	neighbor.HealthStatus = "healthy"
-	neighbor.HealthIssues = []string{}
-	
-	// Determine session type
-	if neighbor.NeighborAS == localAS {
-		neighbor.SessionType = "iBGP"
-	} else {
-		neighbor.SessionType = "eBGP"
+// determineSessionType determines if the session is eBGP or iBGP
+func determineSessionType(neighborAS int, localAS int) string {
+	if neighborAS == localAS {
+		return "iBGP"
 	}
-	
-	// Check for critical issues
-	if neighbor.State != "Established" {
-		neighbor.HealthStatus = "critical"
-		neighbor.HealthIssues = append(neighbor.HealthIssues, fmt.Sprintf("session_state_%s", strings.ToLower(neighbor.State)))
-	}
-	
-	if neighbor.InQ > 0 {
-		neighbor.HealthStatus = "critical"
-		neighbor.HealthIssues = append(neighbor.HealthIssues, fmt.Sprintf("input_queue_depth_%d", neighbor.InQ))
-	}
-	
-	if neighbor.OutQ > 0 {
-		if neighbor.HealthStatus == "healthy" {
-			neighbor.HealthStatus = "warning"
-		}
-		neighbor.HealthIssues = append(neighbor.HealthIssues, fmt.Sprintf("output_queue_depth_%d", neighbor.OutQ))
-	}
-	
-	if neighbor.State == "Established" && neighbor.PrefixReceived == 0 {
-		if neighbor.HealthStatus == "healthy" {
-			neighbor.HealthStatus = "warning"
-		}
-		neighbor.HealthIssues = append(neighbor.HealthIssues, "no_prefixes_received")
-	}
-	
-	// Check for table version mismatch
-	if neighbor.State == "Established" && neighbor.NeighborTableVersion != 0 && 
-	   neighbor.NeighborTableVersion != tableVersion {
-		if neighbor.HealthStatus == "healthy" {
-			neighbor.HealthStatus = "warning"
-		}
-		neighbor.HealthIssues = append(neighbor.HealthIssues, 
-			fmt.Sprintf("table_version_mismatch_local_%d_neighbor_%d", 
-				tableVersion, neighbor.NeighborTableVersion))
-	}
-}
-
-// detectAnomalies identifies system-level anomalies
-func detectAnomalies(summary *BGPSummary) []string {
-	anomalies := []string{}
-	
-	for _, af := range summary.AddressFamilies {
-		// Check for peer status mismatch
-		if af.CapablePeers < af.ConfiguredPeers {
-			anomalies = append(anomalies, 
-				fmt.Sprintf("%s: capable_peers(%d) < configured_peers(%d)", 
-					af.AFName, af.CapablePeers, af.ConfiguredPeers))
-		}
-		
-		// Check for excessive dependency on single peer
-		if len(af.Neighbors) > 1 && af.TotalNetworks > 0 {
-			for _, neighbor := range af.Neighbors {
-				if neighbor.State == "Established" && neighbor.PrefixReceived > 0 {
-					dependency := float64(neighbor.PrefixReceived) / float64(af.TotalNetworks) * 100
-					if dependency > 50 {
-						anomalies = append(anomalies, 
-							fmt.Sprintf("%s: excessive_dependency_on_peer_%s_%.1f%%", 
-								af.AFName, neighbor.NeighborID, dependency))
-					}
-				}
-			}
-		}
-		
-		// Check for any critical neighbor issues
-		criticalCount := 0
-		for _, neighbor := range af.Neighbors {
-			if neighbor.HealthStatus == "critical" {
-				criticalCount++
-			}
-		}
-		if criticalCount > 0 {
-			anomalies = append(anomalies, 
-				fmt.Sprintf("%s: %d_neighbors_in_critical_state", af.AFName, criticalCount))
-		}
-	}
-	
-	return anomalies
+	return "eBGP"
 }
 
 // parseBGPSummary parses the BGP all summary JSON input
@@ -404,11 +317,6 @@ func parseBGPSummary(input string) ([]StandardizedEntry, error) {
 				Dampening:         afData.Dampening,
 			}
 			
-			// Calculate path diversity ratio
-			if af.TotalNetworks > 0 {
-				af.PathDiversityRatio = float64(af.TotalPaths) / float64(af.TotalNetworks)
-			}
-			
 			// Handle ROW_neighbor as either single object or array
 			neighborList := []NeighborData{}
 			switch v := afData.TableNeighbor.RowNeighbor.(type) {
@@ -447,8 +355,8 @@ func parseBGPSummary(input string) ([]StandardizedEntry, error) {
 				// Parse duration
 				neighbor.TimeParsed = parseISO8601Duration(neighbor.Time)
 				
-				// Analyze neighbor health
-				analyzeNeighborHealth(&neighbor, af.TableVersion, summary.VRFLocalAS)
+				// Determine session type
+				neighbor.SessionType = determineSessionType(neighbor.NeighborAS, summary.VRFLocalAS)
 				
 				af.Neighbors = append(af.Neighbors, neighbor)
 			}
@@ -456,15 +364,11 @@ func parseBGPSummary(input string) ([]StandardizedEntry, error) {
 			summary.AddressFamilies = append(summary.AddressFamilies, af)
 		}
 		
-		// Detect anomalies
-		anomalies := detectAnomalies(&summary)
-		
 		entry := StandardizedEntry{
 			DataType:  "cisco_nexus_bgp_summary",
 			Timestamp: timestamp,
 			Date:      date,
 			Message:   summary,
-			Anomalies: anomalies,
 		}
 		
 		entries = append(entries, entry)

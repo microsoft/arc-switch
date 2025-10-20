@@ -1,6 +1,6 @@
 # BGP All Summary Parser
 
-A comprehensive Go-based parser for Cisco Nexus `show bgp all summary | json` command output. This parser extracts, validates, and enriches BGP summary data with health indicators and anomaly detection.
+A Go-based parser for Cisco Nexus `show bgp all summary | json` command output. This parser extracts and converts all BGP summary data to a standardized JSON format suitable for log analysis and network dashboards.
 
 ## Features
 
@@ -17,7 +17,6 @@ A comprehensive Go-based parser for Cisco Nexus `show bgp all summary | json` co
 - `tableversion`: RIB changes, convergence health indicator
 - `configuredpeers`, `capablepeers`: Peer status and alerting
 - `totalnetworks`, `totalpaths`: Route table sizing and redundancy
-- `path_diversity_ratio`: Calculated ratio of paths to networks
 
 **Memory Metrics:**
 - `memoryused`: Scale/capacity monitoring
@@ -41,23 +40,6 @@ A comprehensive Go-based parser for Cisco Nexus `show bgp all summary | json` co
 - `state`: BGP session state
 - `prefixreceived`: Prefixes received from neighbor
 - `session_type`: Automatically determined ("eBGP" or "iBGP")
-- `health_status`: Calculated health status ("healthy", "warning", "critical")
-- `health_issues`: List of detected issues
-
-### Health Indicators and Anomaly Detection
-
-**Critical Issues Detected:**
-1. Non-zero queue depths (inq/outq) - Processing delays
-2. capablepeers < configuredpeers - Peers down
-3. neighbortableversion mismatch - Synchronization issues
-4. prefixreceived = 0 on Established session - Peer not advertising
-5. state != "Established" - Session problems
-6. Excessive dependency - One peer contributing >50% of routes
-
-**Warning Indicators:**
-1. Output queue depth - Potential processing issues
-2. No prefixes on established session
-3. Table version mismatches
 
 ### ISO 8601 Duration Parsing
 
@@ -82,38 +64,9 @@ The parser includes a robust ISO 8601 duration parser that handles Cisco's forma
 ./bgp_all_summary_parser -commands ../commands.json -output output.json
 ```
 
-### As a Library
-
-```go
-import "github.com/microsoft/arc-switch/src/SwitchOutput/Cisco/Nexus/10/bgp_all_summary_parser"
-
-func main() {
-    jsonInput := `{"TABLE_vrf": {...}}`
-    entries, err := bgp_all_summary_parser.parseBGPSummary(jsonInput)
-    if err != nil {
-        log.Fatal(err)
-    }
-    
-    for _, entry := range entries {
-        fmt.Printf("VRF: %s, AS: %d (%s)\n", 
-            entry.Message.VRFNameOut,
-            entry.Message.VRFLocalAS,
-            entry.Message.ASNType)
-        
-        // Check for anomalies
-        if len(entry.Anomalies) > 0 {
-            fmt.Println("Anomalies detected:")
-            for _, anomaly := range entry.Anomalies {
-                fmt.Printf("  - %s\n", anomaly)
-            }
-        }
-    }
-}
-```
-
 ## Output Format
 
-The parser outputs JSON Lines format (one JSON object per line), compatible with KQL queries and log analysis tools:
+The parser outputs JSON Lines format (one JSON object per line), compatible with KQL queries and log analysis tools. The focus is on data extraction only - health monitoring and anomaly detection should be performed using KQL for better resource efficiency on network devices.
 
 ```json
 {
@@ -135,7 +88,6 @@ The parser outputs JSON Lines format (one JSON object per line), compatible with
         "capable_peers": 4,
         "total_networks": 150,
         "total_paths": 300,
-        "path_diversity_ratio": 2.0,
         "memory_used": 40960,
         "dampening": "yes",
         "neighbors": [
@@ -156,57 +108,110 @@ The parser outputs JSON Lines format (one JSON object per line), compatible with
             },
             "state": "Established",
             "prefix_received": 75,
-            "session_type": "eBGP",
-            "health_status": "healthy",
-            "health_issues": []
+            "session_type": "eBGP"
           }
         ]
       }
     ]
-  },
-  "anomalies": []
+  }
 }
 ```
 
-## Field Validation
+## Health Monitoring with KQL
 
-The parser includes comprehensive field validation:
-- Type checking for all numeric fields
-- IP address format validation for router IDs and neighbor IDs
-- AS number range validation (1-4294967295)
-- BGP state validation
-- Duration format validation
+The parser focuses on data extraction and conversion. Health indicators and anomaly detection should be performed using KQL queries for better resource efficiency on network devices.
 
-## KQL Query Examples
+### KQL Query Examples for Health Monitoring
 
 ```kql
-// Find all BGP entries with anomalies
+// Detect peers with non-zero queue depths (critical issue)
 BGPSummaryLogs
 | where data_type == "cisco_nexus_bgp_summary"
-| where array_length(anomalies) > 0
-| project timestamp, message.vrf_name_out, anomalies
+| mv-expand af = message.address_families
+| mv-expand neighbor = af.neighbors
+| where neighbor.inq > 0 or neighbor.outq > 0
+| project timestamp, message.vrf_name_out, af.af_name, neighbor.neighbor_id, 
+          neighbor.state, neighbor.inq, neighbor.outq
+| extend severity = iff(neighbor.inq > 0, "critical", "warning")
 
-// Monitor neighbor health
+// Detect peer count mismatches (capable vs configured)
 BGPSummaryLogs
 | where data_type == "cisco_nexus_bgp_summary"
-| mv-expand neighbor = message.address_families[0].neighbors
-| where neighbor.health_status != "healthy"
-| project timestamp, message.vrf_name_out, neighbor.neighbor_id, neighbor.health_status, neighbor.health_issues
+| mv-expand af = message.address_families
+| where af.capable_peers < af.configured_peers
+| project timestamp, message.vrf_name_out, af.af_name, 
+          af.configured_peers, af.capable_peers
+| extend peers_down = af.configured_peers - af.capable_peers
 
-// Track table version changes over time
+// Detect sessions not in Established state
+BGPSummaryLogs
+| where data_type == "cisco_nexus_bgp_summary"
+| mv-expand af = message.address_families
+| mv-expand neighbor = af.neighbors
+| where neighbor.state != "Established"
+| project timestamp, message.vrf_name_out, af.af_name, 
+          neighbor.neighbor_id, neighbor.state, neighbor.outq
+
+// Detect established sessions with no prefixes received
+BGPSummaryLogs
+| where data_type == "cisco_nexus_bgp_summary"
+| mv-expand af = message.address_families
+| mv-expand neighbor = af.neighbors
+| where neighbor.state == "Established" and neighbor.prefix_received == 0
+| project timestamp, message.vrf_name_out, af.af_name, neighbor.neighbor_id
+
+// Detect table version mismatches between local and neighbors
+BGPSummaryLogs
+| where data_type == "cisco_nexus_bgp_summary"
+| mv-expand af = message.address_families
+| mv-expand neighbor = af.neighbors
+| where neighbor.state == "Established" 
+    and neighbor.neighbor_table_version > 0 
+    and neighbor.neighbor_table_version != af.table_version
+| project timestamp, message.vrf_name_out, af.af_name, neighbor.neighbor_id,
+          local_version = af.table_version, neighbor_version = neighbor.neighbor_table_version
+
+// Calculate path diversity ratio and detect low diversity
+BGPSummaryLogs
+| where data_type == "cisco_nexus_bgp_summary"
+| mv-expand af = message.address_families
+| where af.total_networks > 0
+| extend path_diversity_ratio = todouble(af.total_paths) / todouble(af.total_networks)
+| where path_diversity_ratio < 1.5
+| project timestamp, message.vrf_name_out, af.af_name, 
+          af.total_networks, af.total_paths, path_diversity_ratio
+
+// Detect excessive dependency on single peer (>50% of routes)
+BGPSummaryLogs
+| where data_type == "cisco_nexus_bgp_summary"
+| mv-expand af = message.address_families
+| mv-expand neighbor = af.neighbors
+| where af.total_networks > 0 and neighbor.state == "Established"
+| extend dependency_percent = (todouble(neighbor.prefix_received) / todouble(af.total_networks)) * 100
+| where dependency_percent > 50
+| project timestamp, message.vrf_name_out, af.af_name, 
+          neighbor.neighbor_id, neighbor.prefix_received, af.total_networks, dependency_percent
+
+// Track session stability (sessions up for less than 1 day)
+BGPSummaryLogs
+| where data_type == "cisco_nexus_bgp_summary"
+| mv-expand af = message.address_families
+| mv-expand neighbor = af.neighbors
+| where neighbor.time_parsed.total_seconds < 86400 and neighbor.state == "Established"
+| project timestamp, message.vrf_name_out, af.af_name, neighbor.neighbor_id, 
+          neighbor.time, uptime_hours = neighbor.time_parsed.total_seconds / 3600
+
+// Monitor BGP convergence by tracking table version changes
 BGPSummaryLogs
 | where data_type == "cisco_nexus_bgp_summary"
 | mv-expand af = message.address_families
 | project timestamp, message.vrf_name_out, af.af_name, af.table_version
 | order by timestamp desc
-
-// Identify peers with low uptime (potential flapping)
-BGPSummaryLogs
-| where data_type == "cisco_nexus_bgp_summary"
-| mv-expand af = message.address_families
-| mv-expand neighbor = af.neighbors
-| where neighbor.time_parsed.total_seconds < 86400  // Less than 1 day
-| project timestamp, neighbor.neighbor_id, neighbor.time, neighbor.state
+| serialize
+| extend version_change = af.table_version - prev(af.table_version, 1)
+| where version_change != 0
+| project timestamp, message.vrf_name_out, af.af_name, 
+          current_version = af.table_version, version_change
 ```
 
 ## Building
@@ -225,18 +230,17 @@ The test suite includes:
 - Full BGP summary parsing validation
 - ISO 8601 duration parsing tests
 - ASN classification tests
-- Neighbor health analysis tests
-- Anomaly detection tests
+- Session type detection tests
 - Invalid input handling tests
 - Commands JSON integration tests
 
 ## Reference Documentation
 
-See `fieldbreakdown.md` for detailed field-by-field breakdown, operational relevance, and expert notes on each BGP summary field.
+See `fieldbreakdown.md` for detailed field-by-field breakdown and operational relevance of each BGP summary field.
 
 ## Command Integration
 
-The parser integrates with the Cisco Nexus commands.json configuration file. Add this entry to your commands.json:
+The parser integrates with the Cisco Nexus commands.json configuration file. The following entry is included:
 
 ```json
 {
@@ -248,15 +252,3 @@ The parser integrates with the Cisco Nexus commands.json configuration file. Add
 ## License
 
 This project is part of the microsoft/arc-switch repository and follows the same license terms.
-
-## Contributing
-
-Contributions are welcome! Please ensure:
-1. All tests pass
-2. New features include tests
-3. Code follows Go best practices
-4. Documentation is updated
-
-## Support
-
-For issues, questions, or contributions, please use the GitHub issue tracker for the arc-switch repository.
