@@ -67,6 +67,10 @@
         {
             "name": "bgp-all-summary",
             "command": "show bgp all summary | json"
+        },
+        {
+            "name": "system-uptime",
+            "command": "show system uptime"
         }
     ]
 }
