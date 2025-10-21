@@ -1,0 +1,75 @@
+[
+  {
+    "data_type": "cisco_nexus_system_resources",
+    "timestamp": "2025-10-21T22:51:54Z",
+    "date": "2025-10-21",
+    "message": {
+      "load_avg_1min": "0.60",
+      "load_avg_5min": "0.63",
+      "load_avg_15min": "0.73",
+      "processes_total": 954,
+      "processes_running": 5,
+      "cpu_state_user": "11.43",
+      "cpu_state_kernel": "4.52",
+      "cpu_state_idle": "84.04",
+      "cpu_usage": [
+        {
+          "cpuid": "0",
+          "user": "28.71",
+          "kernel": "6.93",
+          "idle": "64.35"
+        },
+        {
+          "cpuid": "1",
+          "user": "0.00",
+          "kernel": "0.00",
+          "idle": "100.00"
+        },
+        {
+          "cpuid": "2",
+          "user": "0.00",
+          "kernel": "1.00",
+          "idle": "99.00"
+        },
+        {
+          "cpuid": "3",
+          "user": "1.96",
+          "kernel": "1.96",
+          "idle": "96.07"
+        },
+        {
+          "cpuid": "4",
+          "user": "28.28",
+          "kernel": "4.04",
+          "idle": "67.67"
+        },
+        {
+          "cpuid": "5",
+          "user": "20.20",
+          "kernel": "12.12",
+          "idle": "67.67"
+        },
+        {
+          "cpuid": "6",
+          "user": "9.09",
+          "kernel": "7.07",
+          "idle": "83.83"
+        },
+        {
+          "cpuid": "7",
+          "user": "4.00",
+          "kernel": "3.00",
+          "idle": "93.00"
+        }
+      ],
+      "memory_usage_total": 24538812,
+      "memory_usage_used": 10765396,
+      "memory_usage_free": 13773416,
+      "kernel_vmalloc_total": 0,
+      "kernel_vmalloc_free": 0,
+      "kernel_buffers": 59712,
+      "kernel_cached": 5993960,
+      "current_memory_status": "OK"
+    }
+  }
+]
