@@ -141,4 +141,341 @@ NAME: Ethernet1/50,  DESCR: CISCO-AMPHENOL
 PID: QSFP-100G-CU1M      ,  VID: NDAAFF-C401,  SN: MNO24001Z1B-Y        
 
 NAME: Ethernet1/51,  DESCR: CISCO-AMPHENOL                          
-PID: QSFP-100G-CU1M      ,  VID: NDAAFF-C401,  SN: MNO24001Z2C-Z        
+PID: QSFP-100G-CU1M      ,  VID: NDAAFF-C401,  SN: MNO24001Z2C-Z
+
+CONTOSO-DC1-TOR-01# show inventory all | json-pretty
+{
+    "TABLE_inv": {
+        "ROW_inv": [
+            {
+                "name": "\"Chassis\"",
+                "desc": "\"Nexus9000 C9336C-FX2 Chassis\"",
+                "productid": "N9K-C9336C-FX2",
+                "vendorid": "V04",
+                "serialnum": "FLM27210AP2"
+            },
+            {
+                "name": "\"Slot 1\"",
+                "desc": "\"36x40/100G QSFP28 Ethernet Module\"",
+                "productid": "N9K-C9336C-FX2",
+                "vendorid": "V04",
+                "serialnum": "FLM27210AP2"
+            },
+            {
+                "name": "\"Slot 27\"",
+                "desc": "\"36x40/100G QSFP28 Ethernet Module\"",
+                "productid": "N9K-C9336C-FX2",
+                "vendorid": "V04",
+                "serialnum": "FLM27210AP2"
+            },
+            {
+                "name": "\"Power Supply 1\"",
+                "desc": "\"Nexus9000 C9336C-FX2 Chassis Power Supply\"",
+                "productid": "NXA-PAC-1100W-PE2",
+                "vendorid": "V03",
+                "serialnum": "ART2738F2WF"
+            },
+            {
+                "name": "\"Power Supply 2\"",
+                "desc": "\"Nexus9000 C9336C-FX2 Chassis Power Supply\"",
+                "productid": "NXA-PAC-1100W-PE2",
+                "vendorid": "V03",
+                "serialnum": "ART2738F2U3"
+            },
+            {
+                "name": "\"Fan 1\"",
+                "desc": "\"Nexus9000 C9336C-FX2 Chassis Fan Module\"",
+                "productid": "NXA-FAN-65CFM-PE",
+                "vendorid": "V01",
+                "serialnum": "N/A"
+            },
+            {
+                "name": "\"Fan 2\"",
+                "desc": "\"Nexus9000 C9336C-FX2 Chassis Fan Module\"",
+                "productid": "NXA-FAN-65CFM-PE",
+                "vendorid": "V01",
+                "serialnum": "N/A"
+            },
+            {
+                "name": "\"Fan 3\"",
+                "desc": "\"Nexus9000 C9336C-FX2 Chassis Fan Module\"",
+                "productid": "NXA-FAN-65CFM-PE",
+                "vendorid": "V01",
+                "serialnum": "N/A"
+            },
+            {
+                "name": "Ethernet1/1",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLLY"
+            },
+            {
+                "name": "Ethernet1/2",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45HMT8"
+            },
+            {
+                "name": "Ethernet1/3",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FM72"
+            },
+            {
+                "name": "Ethernet1/4",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FL8G"
+            },
+            {
+                "name": "Ethernet1/5",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FM4D"
+            },
+            {
+                "name": "Ethernet1/6",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLHH"
+            },
+            {
+                "name": "Ethernet1/7",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45HMRJ"
+            },
+            {
+                "name": "Ethernet1/8",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FM7K"
+            },
+            {
+                "name": "Ethernet1/9",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45HMRP"
+            },
+            {
+                "name": "Ethernet1/10",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45GMEM"
+            },
+            {
+                "name": "Ethernet1/11",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY3B2JT3"
+            },
+            {
+                "name": "Ethernet1/12",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FL7R"
+            },
+            {
+                "name": "Ethernet1/13",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLMP"
+            },
+            {
+                "name": "Ethernet1/14",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLP8"
+            },
+            {
+                "name": "Ethernet1/15",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FL6P"
+            },
+            {
+                "name": "Ethernet1/16",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FM88"
+            },
+            {
+                "name": "Ethernet1/17",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLM2"
+            },
+            {
+                "name": "Ethernet1/18",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45GMG8"
+            },
+            {
+                "name": "Ethernet1/19",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLNM"
+            },
+            {
+                "name": "Ethernet1/20",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45HMPJ"
+            },
+            {
+                "name": "Ethernet1/21",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLR6"
+            },
+            {
+                "name": "Ethernet1/22",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLJG"
+            },
+            {
+                "name": "Ethernet1/23",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45HN0E"
+            },
+            {
+                "name": "Ethernet1/24",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45GMFE"
+            },
+            {
+                "name": "Ethernet1/25",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLNY"
+            },
+            {
+                "name": "Ethernet1/26",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FM85"
+            },
+            {
+                "name": "Ethernet1/27",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FM80"
+            },
+            {
+                "name": "Ethernet1/28",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLRG"
+            },
+            {
+                "name": "Ethernet1/29",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FL73"
+            },
+            {
+                "name": "Ethernet1/30",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FM7M"
+            },
+            {
+                "name": "Ethernet1/31",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLNH"
+            },
+            {
+                "name": "Ethernet1/32",
+                "desc": "LENV-Amphenol",
+                "productid": null,
+                "vendorid": "0000001GV910",
+                "serialnum": "Y050FY45FLM3"
+            },
+            {
+                "name": "Ethernet1/33",
+                "desc": "FS",
+                "productid": null,
+                "vendorid": "QSFP-100G-PC01",
+                "serialnum": "G2410219016-1"
+            },
+            {
+                "name": "Ethernet1/34",
+                "desc": "FS",
+                "productid": null,
+                "vendorid": "QSFP-100G-PC01",
+                "serialnum": "G2410219025-2"
+            },
+            {
+                "name": "Ethernet1/35",
+                "desc": "FS",
+                "productid": null,
+                "vendorid": "QSFP-100G-PC01",
+                "serialnum": "G2410219029-1"
+            },
+            {
+                "name": "Ethernet1/36/1",
+                "desc": "FS",
+                "productid": null,
+                "vendorid": "QSFP-CSR4-40G",
+                "serialnum": "C2407418236"
+            },
+            {
+                "name": "Ethernet1/36/2",
+                "desc": "FS",
+                "productid": null,
+                "vendorid": "QSFP-CSR4-40G",
+                "serialnum": "C2407418236"
+            },
+            {
+                "name": "Ethernet1/36/3",
+                "desc": "FS",
+                "productid": null,
+                "vendorid": "QSFP-CSR4-40G",
+                "serialnum": "C2407418236"
+            },
+            {
+                "name": "Ethernet1/36/4",
+                "desc": "FS",
+                "productid": null,
+                "vendorid": "QSFP-CSR4-40G",
+                "serialnum": "C2407418236"
+            }
+        ]
+    }
+}
