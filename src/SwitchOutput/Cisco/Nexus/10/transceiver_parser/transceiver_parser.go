@@ -44,12 +44,13 @@ type TransceiverData struct {
 
 // DOMDiagnostics represents Digital Optical Monitoring data
 type DOMDiagnostics struct {
-	Temperature      *DOMParameter `json:"temperature,omitempty"`
-	Voltage          *DOMParameter `json:"voltage,omitempty"`
-	Current          *DOMParameter `json:"current,omitempty"`
-	TxPower          *DOMParameter `json:"tx_power,omitempty"`
-	RxPower          *DOMParameter `json:"rx_power,omitempty"`
-	TransmitFaultCount int         `json:"transmit_fault_count"`
+	Temperature        *DOMParameter `json:"temperature,omitempty"`
+	Voltage            *DOMParameter `json:"voltage,omitempty"`
+	Current            *DOMParameter `json:"current,omitempty"`
+	TxPower            *DOMParameter `json:"tx_power,omitempty"`
+	RxPower            *DOMParameter `json:"rx_power,omitempty"`
+	TransmitFaultCount int           `json:"transmit_fault_count"`
+	LaneNumber         int           `json:"lane_number,omitempty"` // For QSFP multi-lane transceivers
 }
 
 // DOMParameter represents a single DOM measurement with thresholds
@@ -71,6 +72,76 @@ type CommandConfig struct {
 type Command struct {
 	Name    string `json:"name"`
 	Command string `json:"command"`
+}
+
+// JSONInput represents the JSON structure from "show interface transceiver details | json-pretty"
+type JSONInput struct {
+	TABLEInterface struct {
+		ROWInterface []JSONInterface `json:"ROW_interface"`
+	} `json:"TABLE_interface"`
+}
+
+// JSONInterface represents a single interface in the JSON output
+type JSONInterface struct {
+	Interface    string        `json:"interface"`
+	SFP          string        `json:"sfp"`
+	Type         string        `json:"type"`
+	Name         string        `json:"name"`
+	PartNum      string        `json:"partnum"`
+	Rev          string        `json:"rev"`
+	SerialNum    string        `json:"serialnum"`
+	NomBitrate   string        `json:"nom_bitrate"`
+	LenCu        string        `json:"len_cu"`
+	Len50OM2     string        `json:"len_50_OM2"`
+	Len50OM3     string        `json:"len_50_OM3"`
+	Len625       string        `json:"len_62_5"`
+	CiscoID      string        `json:"ciscoid"`
+	CiscoID1     string        `json:"ciscoid_1"`
+	CiscoPartNum string        `json:"cisco_part_number"`
+	CiscoProdID  string        `json:"cisco_product_id"`
+	CiscoVerID   string        `json:"cisco_version_id"`
+	TABLELane    *JSONLaneData `json:"TABLE_lane,omitempty"`
+}
+
+// JSONLaneData represents the lane data for QSFP transceivers
+type JSONLaneData struct {
+	ROWLane interface{} `json:"ROW_lane"` // Can be single object or array
+}
+
+// JSONLane represents a single lane's DOM data in JSON
+type JSONLane struct {
+	LaneNumber      string `json:"lane_number"`
+	Temperature     string `json:"temperature"`
+	TempFlag        string `json:"temp_flag"`
+	TempAlrmHi      string `json:"temp_alrm_hi"`
+	TempAlrmLo      string `json:"temp_alrm_lo"`
+	TempWarnHi      string `json:"temp_warn_hi"`
+	TempWarnLo      string `json:"temp_warn_lo"`
+	Voltage         string `json:"voltage"`
+	VoltFlag        string `json:"volt_flag"`
+	VoltAlrmHi      string `json:"volt_alrm_hi"`
+	VoltAlrmLo      string `json:"volt_alrm_lo"`
+	VoltWarnHi      string `json:"volt_warn_hi"`
+	VoltWarnLo      string `json:"volt_warn_lo"`
+	Current         string `json:"current"`
+	CurrentFlag     string `json:"current_flag"`
+	CurrentAlrmHi   string `json:"current_alrm_hi"`
+	CurrentAlrmLo   string `json:"current_alrm_lo"`
+	CurrentWarnHi   string `json:"current_warn_hi"`
+	CurrentWarnLo   string `json:"current_warn_lo"`
+	TxPwr           string `json:"tx_pwr"`
+	TxPwrFlag       string `json:"tx_pwr_flag"`
+	TxPwrAlrmHi     string `json:"tx_pwr_alrm_hi"`
+	TxPwrAlrmLo     string `json:"tx_pwr_alrm_lo"`
+	TxPwrWarnHi     string `json:"tx_pwr_warn_hi"`
+	TxPwrWarnLo     string `json:"tx_pwr_warn_lo"`
+	RxPwr           string `json:"rx_pwr"`
+	RxPwrFlag       string `json:"rx_pwr_flag"`
+	RxPwrAlrmHi     string `json:"rx_pwr_alrm_hi"`
+	RxPwrAlrmLo     string `json:"rx_pwr_alrm_lo"`
+	RxPwrWarnHi     string `json:"rx_pwr_warn_hi"`
+	RxPwrWarnLo     string `json:"rx_pwr_warn_lo"`
+	XmitFaults      string `json:"xmit_faults"`
 }
 
 // parseFloatValue extracts float value and unit from strings like "34.22 C" or "3.26 V"
@@ -118,6 +189,176 @@ func determineStatus(value, alarmHigh, alarmLow, warningHigh, warningLow float64
 		return "low-warning"
 	}
 	return "normal"
+}
+
+// parseJSON parses JSON format from "show interface transceiver details | json-pretty"
+func parseJSON(content string) ([]StandardizedEntry, error) {
+	var jsonData JSONInput
+	err := json.Unmarshal([]byte(content), &jsonData)
+	if err != nil {
+		return nil, err
+	}
+
+	var transceivers []StandardizedEntry
+	timestamp := time.Now()
+
+	for _, intf := range jsonData.TABLEInterface.ROWInterface {
+		transceiver := TransceiverData{
+			InterfaceName:      intf.Interface,
+			TransceiverPresent: (intf.SFP == "present"),
+			DOMSupported:       false,
+		}
+
+		if transceiver.TransceiverPresent {
+			transceiver.Type = intf.Type
+			transceiver.Manufacturer = intf.Name
+			transceiver.PartNumber = intf.PartNum
+			transceiver.Revision = intf.Rev
+			transceiver.SerialNumber = intf.SerialNum
+			
+			// Parse bitrate
+			if intf.NomBitrate != "" {
+				transceiver.NominalBitrate = parseBitrate(intf.NomBitrate + " MBit/sec")
+			}
+
+			// Parse link length
+			if intf.LenCu != "" {
+				transceiver.LinkLength = "copper is " + intf.LenCu + " m"
+			} else if intf.Len50OM3 != "" {
+				transceiver.LinkLength = "50/125um OM3 fiber is " + intf.Len50OM3 + " m"
+			} else if intf.Len50OM2 != "" {
+				transceiver.LinkLength = "50/125um OM2 fiber is " + intf.Len50OM2 + " m"
+			} else if intf.Len625 != "" {
+				transceiver.LinkLength = "62.5/125um fiber is " + intf.Len625 + " m"
+			}
+
+			transceiver.CiscoID = intf.CiscoID
+			transceiver.CiscoExtendedID = intf.CiscoID1
+			transceiver.CiscoPartNumber = intf.CiscoPartNum
+			transceiver.CiscoProductID = intf.CiscoProdID
+			transceiver.CiscoVersionID = intf.CiscoVerID
+
+			// Parse DOM data if present (QSFP lanes)
+			if intf.TABLELane != nil && intf.TABLELane.ROWLane != nil {
+				transceiver.DOMSupported = true
+				
+				// ROWLane can be a single object or an array
+				lanes := []JSONLane{}
+				switch v := intf.TABLELane.ROWLane.(type) {
+				case map[string]interface{}:
+					// Single lane
+					laneBytes, _ := json.Marshal(v)
+					var lane JSONLane
+					json.Unmarshal(laneBytes, &lane)
+					lanes = append(lanes, lane)
+				case []interface{}:
+					// Multiple lanes
+					for _, laneData := range v {
+						laneBytes, _ := json.Marshal(laneData)
+						var lane JSONLane
+						json.Unmarshal(laneBytes, &lane)
+						lanes = append(lanes, lane)
+					}
+				}
+
+				// For now, use the first lane's data for the transceiver
+				// In a more complete implementation, you might want to aggregate or report all lanes
+				if len(lanes) > 0 {
+					lane := lanes[0]
+					domData := parseLaneToDOM(lane)
+					transceiver.DOMData = domData
+				}
+			}
+		}
+
+		entry := StandardizedEntry{
+			DataType:  "cisco_nexus_transceiver",
+			Timestamp: timestamp.Format(time.RFC3339),
+			Date:      timestamp.Format("2006-01-02"),
+			Message:   transceiver,
+		}
+		transceivers = append(transceivers, entry)
+	}
+
+	return transceivers, nil
+}
+
+// parseLaneToDOM converts JSON lane data to DOMDiagnostics structure
+func parseLaneToDOM(lane JSONLane) *DOMDiagnostics {
+	dom := &DOMDiagnostics{}
+
+	// Parse lane number
+	if lane.LaneNumber != "" {
+		laneNum, _ := strconv.Atoi(lane.LaneNumber)
+		dom.LaneNumber = laneNum
+	}
+
+	// Parse temperature
+	if lane.Temperature != "" {
+		temp := &DOMParameter{Unit: "C"}
+		temp.CurrentValue, _ = strconv.ParseFloat(lane.Temperature, 64)
+		temp.AlarmHigh, _ = strconv.ParseFloat(lane.TempAlrmHi, 64)
+		temp.AlarmLow, _ = strconv.ParseFloat(lane.TempAlrmLo, 64)
+		temp.WarningHigh, _ = strconv.ParseFloat(lane.TempWarnHi, 64)
+		temp.WarningLow, _ = strconv.ParseFloat(lane.TempWarnLo, 64)
+		temp.Status = determineStatus(temp.CurrentValue, temp.AlarmHigh, temp.AlarmLow, temp.WarningHigh, temp.WarningLow)
+		dom.Temperature = temp
+	}
+
+	// Parse voltage
+	if lane.Voltage != "" {
+		volt := &DOMParameter{Unit: "V"}
+		volt.CurrentValue, _ = strconv.ParseFloat(lane.Voltage, 64)
+		volt.AlarmHigh, _ = strconv.ParseFloat(lane.VoltAlrmHi, 64)
+		volt.AlarmLow, _ = strconv.ParseFloat(lane.VoltAlrmLo, 64)
+		volt.WarningHigh, _ = strconv.ParseFloat(lane.VoltWarnHi, 64)
+		volt.WarningLow, _ = strconv.ParseFloat(lane.VoltWarnLo, 64)
+		volt.Status = determineStatus(volt.CurrentValue, volt.AlarmHigh, volt.AlarmLow, volt.WarningHigh, volt.WarningLow)
+		dom.Voltage = volt
+	}
+
+	// Parse current
+	if lane.Current != "" {
+		curr := &DOMParameter{Unit: "mA"}
+		curr.CurrentValue, _ = strconv.ParseFloat(lane.Current, 64)
+		curr.AlarmHigh, _ = strconv.ParseFloat(lane.CurrentAlrmHi, 64)
+		curr.AlarmLow, _ = strconv.ParseFloat(lane.CurrentAlrmLo, 64)
+		curr.WarningHigh, _ = strconv.ParseFloat(lane.CurrentWarnHi, 64)
+		curr.WarningLow, _ = strconv.ParseFloat(lane.CurrentWarnLo, 64)
+		curr.Status = determineStatus(curr.CurrentValue, curr.AlarmHigh, curr.AlarmLow, curr.WarningHigh, curr.WarningLow)
+		dom.Current = curr
+	}
+
+	// Parse TX power
+	if lane.TxPwr != "" {
+		txPwr := &DOMParameter{Unit: "dBm"}
+		txPwr.CurrentValue, _ = strconv.ParseFloat(lane.TxPwr, 64)
+		txPwr.AlarmHigh, _ = strconv.ParseFloat(lane.TxPwrAlrmHi, 64)
+		txPwr.AlarmLow, _ = strconv.ParseFloat(lane.TxPwrAlrmLo, 64)
+		txPwr.WarningHigh, _ = strconv.ParseFloat(lane.TxPwrWarnHi, 64)
+		txPwr.WarningLow, _ = strconv.ParseFloat(lane.TxPwrWarnLo, 64)
+		txPwr.Status = determineStatus(txPwr.CurrentValue, txPwr.AlarmHigh, txPwr.AlarmLow, txPwr.WarningHigh, txPwr.WarningLow)
+		dom.TxPower = txPwr
+	}
+
+	// Parse RX power
+	if lane.RxPwr != "" {
+		rxPwr := &DOMParameter{Unit: "dBm"}
+		rxPwr.CurrentValue, _ = strconv.ParseFloat(lane.RxPwr, 64)
+		rxPwr.AlarmHigh, _ = strconv.ParseFloat(lane.RxPwrAlrmHi, 64)
+		rxPwr.AlarmLow, _ = strconv.ParseFloat(lane.RxPwrAlrmLo, 64)
+		rxPwr.WarningHigh, _ = strconv.ParseFloat(lane.RxPwrWarnHi, 64)
+		rxPwr.WarningLow, _ = strconv.ParseFloat(lane.RxPwrWarnLo, 64)
+		rxPwr.Status = determineStatus(rxPwr.CurrentValue, rxPwr.AlarmHigh, rxPwr.AlarmLow, rxPwr.WarningHigh, rxPwr.WarningLow)
+		dom.RxPower = rxPwr
+	}
+
+	// Parse transmit fault count
+	if lane.XmitFaults != "" {
+		dom.TransmitFaultCount, _ = strconv.Atoi(lane.XmitFaults)
+	}
+
+	return dom
 }
 
 // parseTransceivers parses the show interface transceiver details output
@@ -527,7 +768,25 @@ func main() {
 
 	// Parse the transceiver data
 	fmt.Fprintf(os.Stderr, "Parsing transceiver data...\n")
-	transceivers := parseTransceivers(content)
+	
+	// Try to parse as JSON first
+	var transceivers []StandardizedEntry
+	var parseErr error
+	
+	// Check if content looks like JSON
+	trimmedContent := strings.TrimSpace(content)
+	if strings.HasPrefix(trimmedContent, "{") {
+		fmt.Fprintf(os.Stderr, "Detected JSON format input\n")
+		transceivers, parseErr = parseJSON(content)
+		if parseErr != nil {
+			fmt.Fprintf(os.Stderr, "JSON parsing failed, trying text format: %v\n", parseErr)
+			transceivers = parseTransceivers(content)
+		}
+	} else {
+		fmt.Fprintf(os.Stderr, "Detected text format input\n")
+		transceivers = parseTransceivers(content)
+	}
+	
 	fmt.Fprintf(os.Stderr, "Found %d transceivers\n", len(transceivers))
 
 	// Output results as individual JSON objects (one per line)
