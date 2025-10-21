@@ -326,3 +326,325 @@ func TestLoadCommandsFromFile(t *testing.T) {
 		t.Errorf("Expected command '%s', got '%s'", expectedCommand, command)
 	}
 }
+
+func TestParseJSON(t *testing.T) {
+	// Sample JSON input with QSFP transceiver with DOM data
+	sampleJSON := `{
+    "TABLE_interface": {
+        "ROW_interface": [
+            {
+                "interface": "Ethernet1/1",
+                "sfp": "present",
+                "type": "QSFP-100G-PCC",
+                "name": "LENV-Amphenol",
+                "partnum": "0000001GV910",
+                "rev": "01",
+                "serialnum": "Y050FY45FLLY",
+                "nom_bitrate": "25500",
+                "len_cu": "3",
+                "ciscoid": "17",
+                "ciscoid_1": "0"
+            },
+            {
+                "interface": "Ethernet1/36/1",
+                "sfp": "present",
+                "type": "QSFP-40G-CSR4",
+                "name": "FS",
+                "partnum": "QSFP-CSR4-40G",
+                "rev": "C",
+                "serialnum": "C2407418236",
+                "nom_bitrate": "10300",
+                "len_cu": "200",
+                "len_50_OM3": "300",
+                "ciscoid": "13",
+                "ciscoid_1": "16",
+                "TABLE_lane": {
+                    "ROW_lane": {
+                        "lane_number": "1",
+                        "temperature": "34.48",
+                        "temp_flag": null,
+                        "temp_alrm_hi": "75.00",
+                        "temp_alrm_lo": "-5.00",
+                        "temp_warn_hi": "70.00",
+                        "temp_warn_lo": "0.00",
+                        "voltage": "3.28",
+                        "volt_flag": null,
+                        "volt_alrm_hi": "3.63",
+                        "volt_alrm_lo": "2.97",
+                        "volt_warn_hi": "3.46",
+                        "volt_warn_lo": "3.13",
+                        "current": "6.49",
+                        "current_flag": null,
+                        "current_alrm_hi": "15.00",
+                        "current_alrm_lo": "0.50",
+                        "current_warn_hi": "12.00",
+                        "current_warn_lo": "2.00",
+                        "tx_pwr": "-1.78",
+                        "tx_pwr_flag": null,
+                        "tx_pwr_alrm_hi": "2.99",
+                        "tx_pwr_alrm_lo": "-9.50",
+                        "tx_pwr_warn_hi": "1.99",
+                        "tx_pwr_warn_lo": "-7.52",
+                        "rx_pwr": "-1.24",
+                        "rx_pwr_flag": null,
+                        "rx_pwr_alrm_hi": "3.40",
+                        "rx_pwr_alrm_lo": "-14.10",
+                        "rx_pwr_warn_hi": "2.39",
+                        "rx_pwr_warn_lo": "-11.10",
+                        "xmit_faults": "0"
+                    }
+                }
+            }
+        ]
+    }
+}`
+
+	// Parse the JSON
+	transceivers, err := parseJSON(sampleJSON)
+	if err != nil {
+		t.Fatalf("Failed to parse JSON: %v", err)
+	}
+
+	// Should have 2 transceivers
+	expectedCount := 2
+	if len(transceivers) != expectedCount {
+		t.Fatalf("Expected %d transceivers, got %d", expectedCount, len(transceivers))
+	}
+
+	// Create map for easier testing
+	transceiverMap := make(map[string]StandardizedEntry)
+	for _, entry := range transceivers {
+		transceiverMap[entry.Message.InterfaceName] = entry
+	}
+
+	// Test Ethernet1/1 (QSFP without DOM)
+	if eth1Entry, exists := transceiverMap["Ethernet1/1"]; exists {
+		eth1 := eth1Entry.Message
+		// Check standardized fields
+		if eth1Entry.DataType != "cisco_nexus_transceiver" {
+			t.Errorf("Ethernet1/1 data_type: expected 'cisco_nexus_transceiver', got '%s'", eth1Entry.DataType)
+		}
+		if !eth1.TransceiverPresent {
+			t.Errorf("Ethernet1/1 transceiver should be present")
+		}
+		if eth1.Type != "QSFP-100G-PCC" {
+			t.Errorf("Ethernet1/1 type: expected 'QSFP-100G-PCC', got '%s'", eth1.Type)
+		}
+		if eth1.Manufacturer != "LENV-Amphenol" {
+			t.Errorf("Ethernet1/1 manufacturer: expected 'LENV-Amphenol', got '%s'", eth1.Manufacturer)
+		}
+		if eth1.SerialNumber != "Y050FY45FLLY" {
+			t.Errorf("Ethernet1/1 serial number: expected 'Y050FY45FLLY', got '%s'", eth1.SerialNumber)
+		}
+		if eth1.NominalBitrate != 25500 {
+			t.Errorf("Ethernet1/1 nominal bitrate: expected 25500, got %d", eth1.NominalBitrate)
+		}
+	} else {
+		t.Error("Ethernet1/1 transceiver not found in parsed data")
+	}
+
+	// Test Ethernet1/36/1 (QSFP with DOM)
+	if eth36Entry, exists := transceiverMap["Ethernet1/36/1"]; exists {
+		eth36 := eth36Entry.Message
+		if !eth36.TransceiverPresent {
+			t.Errorf("Ethernet1/36/1 transceiver should be present")
+		}
+		if eth36.Type != "QSFP-40G-CSR4" {
+			t.Errorf("Ethernet1/36/1 type: expected 'QSFP-40G-CSR4', got '%s'", eth36.Type)
+		}
+		if !eth36.DOMSupported {
+			t.Errorf("Ethernet1/36/1 DOM should be supported")
+		}
+		if eth36.DOMData == nil {
+			t.Fatal("Ethernet1/36/1 should have DOM data")
+		}
+
+		// Check DOM Temperature
+		if eth36.DOMData.Temperature == nil {
+			t.Error("Ethernet1/36/1 DOM should have temperature data")
+		} else {
+			if eth36.DOMData.Temperature.CurrentValue != 34.48 {
+				t.Errorf("Ethernet1/36/1 temperature: expected 34.48, got %f", eth36.DOMData.Temperature.CurrentValue)
+			}
+			if eth36.DOMData.Temperature.Unit != "C" {
+				t.Errorf("Ethernet1/36/1 temperature unit: expected 'C', got '%s'", eth36.DOMData.Temperature.Unit)
+			}
+			if eth36.DOMData.Temperature.AlarmHigh != 75.00 {
+				t.Errorf("Ethernet1/36/1 temperature alarm high: expected 75.00, got %f", eth36.DOMData.Temperature.AlarmHigh)
+			}
+			if eth36.DOMData.Temperature.Status != "normal" {
+				t.Errorf("Ethernet1/36/1 temperature status: expected 'normal', got '%s'", eth36.DOMData.Temperature.Status)
+			}
+		}
+
+		// Check DOM Voltage
+		if eth36.DOMData.Voltage == nil {
+			t.Error("Ethernet1/36/1 DOM should have voltage data")
+		} else {
+			if eth36.DOMData.Voltage.CurrentValue != 3.28 {
+				t.Errorf("Ethernet1/36/1 voltage: expected 3.28, got %f", eth36.DOMData.Voltage.CurrentValue)
+			}
+			if eth36.DOMData.Voltage.Unit != "V" {
+				t.Errorf("Ethernet1/36/1 voltage unit: expected 'V', got '%s'", eth36.DOMData.Voltage.Unit)
+			}
+		}
+
+		// Check DOM Current
+		if eth36.DOMData.Current == nil {
+			t.Error("Ethernet1/36/1 DOM should have current data")
+		} else {
+			if eth36.DOMData.Current.CurrentValue != 6.49 {
+				t.Errorf("Ethernet1/36/1 current: expected 6.49, got %f", eth36.DOMData.Current.CurrentValue)
+			}
+			if eth36.DOMData.Current.Unit != "mA" {
+				t.Errorf("Ethernet1/36/1 current unit: expected 'mA', got '%s'", eth36.DOMData.Current.Unit)
+			}
+		}
+
+		// Check DOM TX Power
+		if eth36.DOMData.TxPower == nil {
+			t.Error("Ethernet1/36/1 DOM should have TX power data")
+		} else {
+			if eth36.DOMData.TxPower.CurrentValue != -1.78 {
+				t.Errorf("Ethernet1/36/1 TX power: expected -1.78, got %f", eth36.DOMData.TxPower.CurrentValue)
+			}
+			if eth36.DOMData.TxPower.Unit != "dBm" {
+				t.Errorf("Ethernet1/36/1 TX power unit: expected 'dBm', got '%s'", eth36.DOMData.TxPower.Unit)
+			}
+		}
+
+		// Check DOM RX Power
+		if eth36.DOMData.RxPower == nil {
+			t.Error("Ethernet1/36/1 DOM should have RX power data")
+		} else {
+			if eth36.DOMData.RxPower.CurrentValue != -1.24 {
+				t.Errorf("Ethernet1/36/1 RX power: expected -1.24, got %f", eth36.DOMData.RxPower.CurrentValue)
+			}
+			if eth36.DOMData.RxPower.Unit != "dBm" {
+				t.Errorf("Ethernet1/36/1 RX power unit: expected 'dBm', got '%s'", eth36.DOMData.RxPower.Unit)
+			}
+		}
+
+		// Check DOM Lane Number
+		if eth36.DOMData.LaneNumber != 1 {
+			t.Errorf("Ethernet1/36/1 lane number: expected 1, got %d", eth36.DOMData.LaneNumber)
+		}
+
+		// Check Transmit Fault Count
+		if eth36.DOMData.TransmitFaultCount != 0 {
+			t.Errorf("Ethernet1/36/1 transmit fault count: expected 0, got %d", eth36.DOMData.TransmitFaultCount)
+		}
+	} else {
+		t.Error("Ethernet1/36/1 transceiver not found in parsed data")
+	}
+
+	// Test JSON marshaling
+	jsonData, err := json.Marshal(transceivers)
+	if err != nil {
+		t.Errorf("Failed to marshal transceivers to JSON: %v", err)
+	}
+
+	// Test JSON unmarshaling
+	var unmarshaledTransceivers []StandardizedEntry
+	err = json.Unmarshal(jsonData, &unmarshaledTransceivers)
+	if err != nil {
+		t.Errorf("Failed to unmarshal JSON: %v", err)
+	}
+
+	if len(unmarshaledTransceivers) != len(transceivers) {
+		t.Errorf("JSON round-trip failed: expected %d transceivers, got %d",
+			len(transceivers), len(unmarshaledTransceivers))
+	}
+}
+
+func TestParseJSONFromFile(t *testing.T) {
+	// Test parsing from actual JSON file
+	content, err := os.ReadFile("show-interface-transceiver-json.txt")
+	if err != nil {
+		t.Skipf("Skipping test: JSON file not found: %v", err)
+		return
+	}
+
+	transceivers, err := parseJSON(string(content))
+	if err != nil {
+		t.Fatalf("Failed to parse JSON file: %v", err)
+	}
+
+	// Should have multiple transceivers
+	if len(transceivers) == 0 {
+		t.Error("Expected transceivers from JSON file, got 0")
+	}
+
+	// Verify at least one has DOM data
+	foundDOM := false
+	for _, entry := range transceivers {
+		if entry.Message.DOMSupported && entry.Message.DOMData != nil {
+			foundDOM = true
+			// Verify DOM data structure
+			if entry.Message.DOMData.Temperature == nil {
+				t.Error("Expected temperature data in DOM-supported transceiver")
+			}
+			if entry.Message.DOMData.Voltage == nil {
+				t.Error("Expected voltage data in DOM-supported transceiver")
+			}
+			if entry.Message.DOMData.Current == nil {
+				t.Error("Expected current data in DOM-supported transceiver")
+			}
+			if entry.Message.DOMData.TxPower == nil {
+				t.Error("Expected TX power data in DOM-supported transceiver")
+			}
+			if entry.Message.DOMData.RxPower == nil {
+				t.Error("Expected RX power data in DOM-supported transceiver")
+			}
+			break
+		}
+	}
+
+	if !foundDOM {
+		t.Log("Warning: No transceivers with DOM data found in JSON file")
+	}
+}
+func TestParseTextFromFile(t *testing.T) {
+// Test parsing from actual text file
+content, err := os.ReadFile("show-interface-transceiver.txt")
+if err != nil {
+t.Skipf("Skipping test: Text file not found: %v", err)
+return
+}
+
+transceivers := parseTransceivers(string(content))
+
+// Should have multiple transceivers
+if len(transceivers) == 0 {
+t.Error("Expected transceivers from text file, got 0")
+}
+
+// Verify at least one has DOM data
+foundDOM := false
+for _, entry := range transceivers {
+if entry.Message.DOMSupported && entry.Message.DOMData != nil {
+foundDOM = true
+// Verify DOM data structure
+if entry.Message.DOMData.Temperature == nil {
+t.Error("Expected temperature data in DOM-supported transceiver")
+}
+if entry.Message.DOMData.Voltage == nil {
+t.Error("Expected voltage data in DOM-supported transceiver")
+}
+if entry.Message.DOMData.Current == nil {
+t.Error("Expected current data in DOM-supported transceiver")
+}
+if entry.Message.DOMData.TxPower == nil {
+t.Error("Expected TX power data in DOM-supported transceiver")
+}
+if entry.Message.DOMData.RxPower == nil {
+t.Error("Expected RX power data in DOM-supported transceiver")
+}
+break
+}
+}
+
+if !foundDOM {
+t.Error("Expected at least one transceiver with DOM data in text file")
+}
+}
