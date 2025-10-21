@@ -6,6 +6,7 @@ require (
 	bgp_all_summary_parser v0.0.0
 	class_map_parser v0.0.0
 	environment_power_parser v0.0.0
+	environment_temperature_parser v0.0.0
 	interface_counters_error_parser v0.0.0
 	interface_counters_parser v0.0.0
 	inventory_parser v0.0.0
@@ -14,6 +15,7 @@ require (
 	lldp_neighbor_parser v0.0.0
 	mac_address_parser v0.0.0
 	system_resources_parser v0.0.0
+	system_uptime_parser v0.0.0
 	transceiver_parser v0.0.0
 )
 
@@ -22,6 +24,8 @@ replace bgp_all_summary_parser => ../bgp_all_summary_parser
 replace class_map_parser => ../class_map_parser
 
 replace environment_power_parser => ../show-environment-power-details
+
+replace environment_temperature_parser => ../environment_temperature_parser
 
 replace interface_counters_parser => ../interface_counters_parser
 
@@ -38,5 +42,7 @@ replace lldp_neighbor_parser => ../lldp_neighbor_parser
 replace mac_address_parser => ../mac_address_parser
 
 replace system_resources_parser => ../system-resources
+
+replace system_uptime_parser => ../system-uptime
 
 replace transceiver_parser => ../transceiver_parser

@@ -141,7 +141,7 @@ jobs:
         echo "" >> release_notes.md
         echo "### Cisco Nexus Unified Parser" >> release_notes.md
         echo "- **File**: \`cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz\`" >> release_notes.md
-        echo "- **Parsers**: class-map, interface-counters, inventory, ip-arp, ip-route, lldp-neighbor, mac-address, transceiver" >> release_notes.md
+        echo "- **Parsers**: bgp-all-summary, class-map, environment-power, interface-counters, interface-error-counters, inventory, ip-arp, ip-route, lldp-neighbor, mac-address, system-uptime, transceiver" >> release_notes.md
         echo "" >> release_notes.md
         echo "### Dell OS10 Unified Parser" >> release_notes.md
         echo "- **File**: \`dell-os10-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz\`" >> release_notes.md

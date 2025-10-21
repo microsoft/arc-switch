@@ -13,6 +13,7 @@ import (
 	"bgp_all_summary_parser"
 	"class_map_parser"
 	"environment_power_parser"
+	"environment_temperature_parser"
 	"interface_counters_parser"
 	"interface_counters_error_parser"
 	"inventory_parser"
@@ -21,6 +22,7 @@ import (
 	"lldp_neighbor_parser"
 	"mac_address_parser"
 	"system_resources_parser"
+	"system_uptime_parser"
 	"transceiver_parser"
 )
 
@@ -35,6 +37,7 @@ var parsers = map[string]func() Parser{
 	"bgp-all-summary":          func() Parser { return &bgp_all_summary_parser.UnifiedParser{} },
 	"class-map":                func() Parser { return &class_map_parser.UnifiedParser{} },
 	"environment-power":        func() Parser { return &environment_power_parser.UnifiedParser{} },
+	"environment-temperature":  func() Parser { return &environment_temperature_parser.UnifiedParser{} },
 	"interface-counters":       func() Parser { return &interface_counters_parser.UnifiedParser{} },
 	"interface-error-counters": func() Parser { return &interface_counters_error_parser.UnifiedParser{} },
 	"inventory":                func() Parser { return &inventory_parser.UnifiedParser{} },
@@ -43,6 +46,7 @@ var parsers = map[string]func() Parser{
 	"lldp-neighbor":            func() Parser { return &lldp_neighbor_parser.UnifiedParser{} },
 	"mac-address":              func() Parser { return &mac_address_parser.UnifiedParser{} },
 	"system-resources":         func() Parser { return &system_resources_parser.UnifiedParser{} },
+	"system-uptime":            func() Parser { return &system_uptime_parser.UnifiedParser{} },
 	"transceiver":              func() Parser { return &transceiver_parser.UnifiedParser{} },
 }
 

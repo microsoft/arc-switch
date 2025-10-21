@@ -71,6 +71,10 @@
         {
             "name": "system-resources",
             "command": "show system resources"
+        },
+        {
+            "name": "system-uptime",
+            "command": "show system uptime"
         }
     ]
 }
