@@ -13,6 +13,7 @@ import (
 	"bgp_all_summary_parser"
 	"class_map_parser"
 	"environment_power_parser"
+	"environment_temperature_parser"
 	"interface_counters_parser"
 	"interface_counters_error_parser"
 	"inventory_parser"
@@ -34,6 +35,7 @@ var parsers = map[string]func() Parser{
 	"bgp-all-summary":          func() Parser { return &bgp_all_summary_parser.UnifiedParser{} },
 	"class-map":                func() Parser { return &class_map_parser.UnifiedParser{} },
 	"environment-power":        func() Parser { return &environment_power_parser.UnifiedParser{} },
+	"environment-temperature":  func() Parser { return &environment_temperature_parser.UnifiedParser{} },
 	"interface-counters":       func() Parser { return &interface_counters_parser.UnifiedParser{} },
 	"interface-error-counters": func() Parser { return &interface_counters_error_parser.UnifiedParser{} },
 	"inventory":                func() Parser { return &inventory_parser.UnifiedParser{} },
