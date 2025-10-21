@@ -20,6 +20,7 @@ import (
 	"ip_route_parser"
 	"lldp_neighbor_parser"
 	"mac_address_parser"
+	"system_resources_parser"
 	"transceiver_parser"
 )
 
@@ -41,6 +42,7 @@ var parsers = map[string]func() Parser{
 	"ip-route":                 func() Parser { return &ip_route_parser.UnifiedParser{} },
 	"lldp-neighbor":            func() Parser { return &lldp_neighbor_parser.UnifiedParser{} },
 	"mac-address":              func() Parser { return &mac_address_parser.UnifiedParser{} },
+	"system-resources":         func() Parser { return &system_resources_parser.UnifiedParser{} },
 	"transceiver":              func() Parser { return &transceiver_parser.UnifiedParser{} },
 }
 
