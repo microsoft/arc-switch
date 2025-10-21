@@ -1,4 +1,4 @@
-package main
+package bgp_all_summary_parser
 
 import (
 	"encoding/json"

@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"bgp_all_summary_parser"
 	"class_map_parser"
 	"interface_counters_parser"
 	"interface_counters_error_parser"
@@ -29,6 +30,7 @@ type Parser interface {
 }
 
 var parsers = map[string]func() Parser{
+	"bgp-all-summary":          func() Parser { return &bgp_all_summary_parser.UnifiedParser{} },
 	"class-map":                func() Parser { return &class_map_parser.UnifiedParser{} },
 	"interface-counters":       func() Parser { return &interface_counters_parser.UnifiedParser{} },
 	"interface-error-counters": func() Parser { return &interface_counters_error_parser.UnifiedParser{} },
