@@ -14,6 +14,7 @@ require (
 	ip_route_parser v0.0.0
 	lldp_neighbor_parser v0.0.0
 	mac_address_parser v0.0.0
+	system_uptime_parser v0.0.0
 	transceiver_parser v0.0.0
 )
 
@@ -38,5 +39,7 @@ replace ip_route_parser => ../ip_route_parser
 replace lldp_neighbor_parser => ../lldp_neighbor_parser
 
 replace mac_address_parser => ../mac_address_parser
+
+replace system_uptime_parser => ../system-uptime
 
 replace transceiver_parser => ../transceiver_parser
