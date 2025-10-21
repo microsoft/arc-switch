@@ -1,4 +1,3 @@
-CONTOSO-DC1-TOR-01# show interface transceiver details  | json-pretty
 {
     "TABLE_interface": {
         "ROW_interface": [

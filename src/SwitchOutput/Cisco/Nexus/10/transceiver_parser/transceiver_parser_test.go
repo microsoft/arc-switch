@@ -556,3 +556,95 @@ func TestParseJSON(t *testing.T) {
 			len(transceivers), len(unmarshaledTransceivers))
 	}
 }
+
+func TestParseJSONFromFile(t *testing.T) {
+	// Test parsing from actual JSON file
+	content, err := os.ReadFile("show-interface-transceiver-json.txt")
+	if err != nil {
+		t.Skipf("Skipping test: JSON file not found: %v", err)
+		return
+	}
+
+	transceivers, err := parseJSON(string(content))
+	if err != nil {
+		t.Fatalf("Failed to parse JSON file: %v", err)
+	}
+
+	// Should have multiple transceivers
+	if len(transceivers) == 0 {
+		t.Error("Expected transceivers from JSON file, got 0")
+	}
+
+	// Verify at least one has DOM data
+	foundDOM := false
+	for _, entry := range transceivers {
+		if entry.Message.DOMSupported && entry.Message.DOMData != nil {
+			foundDOM = true
+			// Verify DOM data structure
+			if entry.Message.DOMData.Temperature == nil {
+				t.Error("Expected temperature data in DOM-supported transceiver")
+			}
+			if entry.Message.DOMData.Voltage == nil {
+				t.Error("Expected voltage data in DOM-supported transceiver")
+			}
+			if entry.Message.DOMData.Current == nil {
+				t.Error("Expected current data in DOM-supported transceiver")
+			}
+			if entry.Message.DOMData.TxPower == nil {
+				t.Error("Expected TX power data in DOM-supported transceiver")
+			}
+			if entry.Message.DOMData.RxPower == nil {
+				t.Error("Expected RX power data in DOM-supported transceiver")
+			}
+			break
+		}
+	}
+
+	if !foundDOM {
+		t.Log("Warning: No transceivers with DOM data found in JSON file")
+	}
+}
+func TestParseTextFromFile(t *testing.T) {
+// Test parsing from actual text file
+content, err := os.ReadFile("show-interface-transceiver.txt")
+if err != nil {
+t.Skipf("Skipping test: Text file not found: %v", err)
+return
+}
+
+transceivers := parseTransceivers(string(content))
+
+// Should have multiple transceivers
+if len(transceivers) == 0 {
+t.Error("Expected transceivers from text file, got 0")
+}
+
+// Verify at least one has DOM data
+foundDOM := false
+for _, entry := range transceivers {
+if entry.Message.DOMSupported && entry.Message.DOMData != nil {
+foundDOM = true
+// Verify DOM data structure
+if entry.Message.DOMData.Temperature == nil {
+t.Error("Expected temperature data in DOM-supported transceiver")
+}
+if entry.Message.DOMData.Voltage == nil {
+t.Error("Expected voltage data in DOM-supported transceiver")
+}
+if entry.Message.DOMData.Current == nil {
+t.Error("Expected current data in DOM-supported transceiver")
+}
+if entry.Message.DOMData.TxPower == nil {
+t.Error("Expected TX power data in DOM-supported transceiver")
+}
+if entry.Message.DOMData.RxPower == nil {
+t.Error("Expected RX power data in DOM-supported transceiver")
+}
+break
+}
+}
+
+if !foundDOM {
+t.Error("Expected at least one transceiver with DOM data in text file")
+}
+}
