@@ -3,21 +3,60 @@ name: Build Unified Switch Parsers
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Release version (e.g., v1.0.0)'
-        required: true
-        default: 'v1.0.0'
       prerelease:
         description: 'Mark as pre-release'
         required: true
         default: false
         type: boolean
 
+env:
+  MAJOR_VERSION: 1
+
 permissions:
   contents: write
 
 jobs:
+  generate-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Generate build number
+      id: version
+      run: |
+        # Get current YYMM
+        YYMM=$(date +"%y%m")
+        echo "Current YYMM: ${YYMM}"
+        
+        # Get all tags that match the pattern Major.YYMM.*
+        PATTERN="${MAJOR_VERSION}.${YYMM}."
+        echo "Searching for tags matching: ${PATTERN}*"
+        
+        # Find the highest increment number for this YYMM
+        LAST_INCREMENT=$(git tag -l "${PATTERN}*" | \
+          sed "s/${PATTERN}//" | \
+          grep -E '^[0-9]+$' | \
+          sort -n | \
+          tail -1)
+        
+        # If no previous tag found for this YYMM, start at 1
+        if [ -z "$LAST_INCREMENT" ]; then
+          INCREMENT=1
+        else
+          INCREMENT=$((LAST_INCREMENT + 1))
+        fi
+        
+        VERSION="${MAJOR_VERSION}.${YYMM}.${INCREMENT}"
+        echo "Generated version: ${VERSION}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
   build-parsers:
+    needs: generate-version
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -48,7 +87,7 @@ jobs:
         echo "Building: ${{ matrix.parser.name }}"
         echo "Vendor: ${{ matrix.parser.vendor }}"
         echo "Description: ${{ matrix.parser.description }}"
-        echo "Version: ${{ github.event.inputs.version }}"
+        echo "Version: ${{ needs.generate-version.outputs.version }}"
         echo "========================================="
         
         # Initialize go module if needed
@@ -60,7 +99,7 @@ jobs:
         # Build
         mkdir -p build
         CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
-          -ldflags="-w -s -X main.version=${{ github.event.inputs.version }}" \
+          -ldflags="-w -s -X main.version=${{ needs.generate-version.outputs.version }}" \
           -o build/${{ matrix.parser.name }} cmd/main.go
         
         # Create package
@@ -75,7 +114,7 @@ jobs:
         
         # Create README
         echo "# ${{ matrix.parser.description }}" > dist/README.md
-        echo "Version: ${{ github.event.inputs.version }}" >> dist/README.md
+        echo "Version: ${{ needs.generate-version.outputs.version }}" >> dist/README.md
         echo "" >> dist/README.md
         echo "## Usage" >> dist/README.md
         echo '```bash' >> dist/README.md
@@ -88,7 +127,7 @@ jobs:
         
         # Create tarball
         cd dist
-        tar -czf ../${{ matrix.parser.vendor }}-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz *
+        tar -czf ../${{ matrix.parser.vendor }}-unified-parser-${{ needs.generate-version.outputs.version }}-linux-amd64.tar.gz *
         cd ..
         
         echo "Package created successfully!"
@@ -101,7 +140,7 @@ jobs:
         path: "${{ matrix.parser.path }}/*.tar.gz"
 
   create-release:
-    needs: build-parsers
+    needs: [generate-version, build-parsers]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -126,12 +165,12 @@ jobs:
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git tag -a "${{ github.event.inputs.version }}" -m "Release ${{ github.event.inputs.version }}"
-        git push origin "${{ github.event.inputs.version }}"
+        git tag -a "${{ needs.generate-version.outputs.version }}" -m "Release ${{ needs.generate-version.outputs.version }}"
+        git push origin "${{ needs.generate-version.outputs.version }}"
         
     - name: Generate release notes
       run: |
-        echo "# Unified Switch Parsers - ${{ github.event.inputs.version }}" > release_notes.md
+        echo "# Unified Switch Parsers - ${{ needs.generate-version.outputs.version }}" > release_notes.md
         echo "" >> release_notes.md
         echo "## 🎯 What's New" >> release_notes.md
         echo "" >> release_notes.md
@@ -140,18 +179,18 @@ jobs:
         echo "## 📦 Available Packages" >> release_notes.md
         echo "" >> release_notes.md
         echo "### Cisco Nexus Unified Parser" >> release_notes.md
-        echo "- **File**: \`cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz\`" >> release_notes.md
+        echo "- **File**: \`cisco-nexus-unified-parser-${{ needs.generate-version.outputs.version }}-linux-amd64.tar.gz\`" >> release_notes.md
         echo "- **Parsers**: bgp-all-summary, class-map, environment-power, interface-counters, interface-error-counters, inventory, ip-arp, ip-route, lldp-neighbor, mac-address, system-uptime, transceiver" >> release_notes.md
         echo "" >> release_notes.md
         echo "### Dell OS10 Unified Parser" >> release_notes.md
-        echo "- **File**: \`dell-os10-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz\`" >> release_notes.md
+        echo "- **File**: \`dell-os10-unified-parser-${{ needs.generate-version.outputs.version }}-linux-amd64.tar.gz\`" >> release_notes.md
         echo "- **Parsers**: interface, interface-phy, lldp, version" >> release_notes.md
         echo "" >> release_notes.md
         echo "## 🚀 Usage" >> release_notes.md
         echo "" >> release_notes.md
         echo '```bash' >> release_notes.md
         echo "# Extract and use" >> release_notes.md
-        echo "tar -xzf cisco-nexus-unified-parser-${{ github.event.inputs.version }}-linux-amd64.tar.gz" >> release_notes.md
+        echo "tar -xzf cisco-nexus-unified-parser-${{ needs.generate-version.outputs.version }}-linux-amd64.tar.gz" >> release_notes.md
         echo "./cisco-parser -list" >> release_notes.md
         echo "./cisco-parser -p class-map -i show-class-map.txt -o output.json" >> release_notes.md
         echo '```' >> release_notes.md
@@ -165,8 +204,8 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.event.inputs.version }}
-        name: Release ${{ github.event.inputs.version }}
+        tag_name: ${{ needs.generate-version.outputs.version }}
+        name: Release ${{ needs.generate-version.outputs.version }}
         body_path: release_notes.md
         prerelease: ${{ github.event.inputs.prerelease }}
         files: release-assets/*
