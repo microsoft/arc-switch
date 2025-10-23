@@ -1,6 +1,6 @@
 # Cisco Nexus Interface Error Counters Parser
 
-This tool parses Cisco Nexus `show interface counters errors` output and converts it to structured JSON format for monitoring and analysis.
+This tool parses Cisco Nexus `show interface counters errors | json` output and converts it to structured JSON format for monitoring and analysis.
 
 ## Features
 
@@ -198,6 +198,64 @@ Port          Align-Err    FCS-Err   Xmit-Err    Rcv-Err  UnderSize OutDiscards
 mgmt0                   0          0         --         --         --          --
 Eth1/1                  0          0          0          0          0           0
 Po700                   0          0          0          0          0        4303
+```
+
+### Sample Input (JSON)
+
+Complete List: [show-interface-counter-errors.txt](./show-interface-counter-errors.txt)
+
+**Command**: `show interface counters errors | json`
+
+```json
+{
+    "TABLE_interface": {
+        "ROW_interface": [
+            {
+                "interface": "mgmt0",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0"
+            },
+            {
+                "interface": "Ethernet1/1",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            ...
+            {
+                "interface": "port-channel102",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+                        {
+                "interface": "mgmt0"
+            },
+            {
+                "interface": "Ethernet1/1",
+                "eth_indisc": "0"
+            },
+            ...
+            {
+                "interface": "Ethernet1/1",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/2",
+                "eth_stomped_crc": "0"
+            },
+                        {
+                "interface": "port-channel102",
+                "eth_stomped_crc": "0"
+            }
+        ]
+    }
+}
 ```
 
 ### Sample Output

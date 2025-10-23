@@ -1,6 +1,6 @@
 # Cisco Nexus System Resources Parser
 
-This tool parses the output of the `show system resources` command from Cisco Nexus switches and converts it to structured JSON format for monitoring and analysis.
+This tool parses the output of the `show system resources | json` command from Cisco Nexus switches and converts it to structured JSON format for monitoring and analysis.
 
 ## Features
 
@@ -98,6 +98,10 @@ The parser outputs JSON Lines format with a standardized structure compatible wi
 ### Message Fields
 
 The `message` field contains all system resources data:
+
+**Command**: `show system resources | json`
+
+Example file: [show-system-resources.txt](../show-system-resources.txt)
 
 ```json
 {

@@ -318,3 +318,1462 @@ Po101                 0
 Po201                 0
 Po700                 0
 Po701                 0
+CONTOSO-DC1-TOR-01# show interface counters errors | json
+{
+    "TABLE_interface": {
+        "ROW_interface": [
+            {
+                "interface": "mgmt0",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0"
+            },
+            {
+                "interface": "Ethernet1/1",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/2",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/3",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/4",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/5",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/6",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/7",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/8",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/9",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/10",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/11",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/12",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/13",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/14",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/15",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/16",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/17",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/18",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/19",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/20",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/21",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/22",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/23",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/24",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/25",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/26",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/27",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/28",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/29",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/30",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/31",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/32",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/33",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/34",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/35",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/1",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/2",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/3",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/4",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "port-channel50",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "port-channel101",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "port-channel102",
+                "eth_align_err": "0",
+                "eth_fcs_err": "0",
+                "eth_xmit_err": "0",
+                "eth_rcv_err": "0",
+                "eth_undersize": "0",
+                "eth_outdisc": "0"
+            },
+            {
+                "interface": "mgmt0",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0"
+            },
+            {
+                "interface": "Ethernet1/1",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/2",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/3",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/4",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/5",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/6",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/7",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/8",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/9",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/10",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/11",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/12",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/13",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/14",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/15",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/16",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/17",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/18",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/19",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/20",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/21",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/22",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/23",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/24",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/25",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/26",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/27",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/28",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/29",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/30",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/31",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/32",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/33",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/34",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/35",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/36/1",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/36/2",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/36/3",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "Ethernet1/36/4",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "port-channel50",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "port-channel101",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "port-channel102",
+                "eth_single_col": "0",
+                "eth_multi_col": "0",
+                "eth_late_col": "0",
+                "eth_excess_col": "0",
+                "eth_carri_sen": "0",
+                "eth_runts": "0"
+            },
+            {
+                "interface": "mgmt0",
+                "eth_giants": "0",
+                "eth_sqetest_err": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/1",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/2",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/3",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/4",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/5",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/6",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/7",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/8",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/9",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/10",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/11",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/12",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/13",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/14",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/15",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/16",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/17",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/18",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/19",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/20",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/21",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/22",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/23",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/24",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/25",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/26",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/27",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/28",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/29",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/30",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/31",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/32",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/33",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/34",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/35",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/36/1",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/36/2",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/36/3",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "Ethernet1/36/4",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "port-channel50",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "port-channel101",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "port-channel102",
+                "eth_giants": "0",
+                "eth_deferred_tx": "0",
+                "eth_inmactx_err": "0",
+                "eth_inmacrx_err": "0",
+                "eth_symbol_err": "0"
+            },
+            {
+                "interface": "mgmt0"
+            },
+            {
+                "interface": "Ethernet1/1",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/2",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/3",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/4",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/5",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/6",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/7",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/8",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/9",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/10",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/11",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/12",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/13",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/14",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/15",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/16",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/17",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/18",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/19",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/20",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/21",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/22",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/23",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/24",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/25",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/26",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/27",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/28",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/29",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/30",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/31",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/32",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/33",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/34",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/35",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/1",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/2",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/3",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/4",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "port-channel50",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "port-channel101",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "port-channel102",
+                "eth_indisc": "0"
+            },
+            {
+                "interface": "Ethernet1/1",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/2",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/3",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/4",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/5",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/6",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/7",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/8",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/9",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/10",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/11",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/12",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/13",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/14",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/15",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/16",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/17",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/18",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/19",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/20",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/21",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/22",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/23",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/24",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/25",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/26",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/27",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/28",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/29",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/30",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/31",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/32",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/33",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/34",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/35",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/1",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/2",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/3",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "Ethernet1/36/4",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "port-channel50",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "port-channel101",
+                "eth_stomped_crc": "0"
+            },
+            {
+                "interface": "port-channel102",
+                "eth_stomped_crc": "0"
+            }
+        ]
+    }
+}

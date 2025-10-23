@@ -1,6 +1,6 @@
 # Cisco Nexus System Uptime Parser
 
-This tool parses the output of the `show system uptime` command from Cisco Nexus switches and converts it to structured JSON format for system availability monitoring and analysis.
+This tool parses the output of the `show system uptime | json` command from Cisco Nexus switches and converts it to structured JSON format for system availability monitoring and analysis.
 
 ## Features
 
@@ -74,6 +74,10 @@ Kernel uptime:              2 days, 22 hours, 3 minutes, 51 seconds
 ```
 
 ### JSON Format
+
+Command: `show system uptime | json`
+
+Example file: [show-system-uptime-json.txt](../show-system-uptime-json.txt)
 
 ```json
 {
