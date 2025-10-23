@@ -1,6 +1,6 @@
 # Cisco Nexus Environment Temperature Parser
 
-This parser extracts and formats environment temperature data from Cisco Nexus switch output. It processes the `show environment temperature` command output and converts it into structured JSON format for monitoring and analysis.
+This parser extracts and formats environment temperature data from Cisco Nexus switch output. It processes the `show environment temperature | json` command output and converts it into structured JSON format for monitoring and analysis.
 
 ## Overview
 
@@ -72,6 +72,53 @@ Module   Sensor        MajorThresh   MinorThres   CurTemp     Status
 1        BACK            70              42          26         Ok             
 1        CPU             90              80          42         Ok             
 1        Homewood        110             90          43         Ok 
+```
+
+### JSON Input Format
+
+Command: `show environment temperature | json`
+
+Example file: [show-environment-temperature-json.txt](../show-environment-temperature-json.txt)
+
+```json
+{
+    "TABLE_tempinfo": {
+        "ROW_tempinfo": [
+            {
+                "tempmod": "1",
+                "sensor": "FRONT",
+                "majthres": "80",
+                "minthres": "70",
+                "curtemp": "29",
+                "alarmstatus": "Ok"
+            },
+            {
+                "tempmod": "1",
+                "sensor": "BACK",
+                "majthres": "70",
+                "minthres": "50",
+                "curtemp": "27",
+                "alarmstatus": "Ok"
+            },
+            {
+                "tempmod": "1",
+                "sensor": "CPU",
+                "majthres": "90",
+                "minthres": "80",
+                "curtemp": "36",
+                "alarmstatus": "Ok"
+            },
+            {
+                "tempmod": "1",
+                "sensor": "Heavenly",
+                "majthres": "110",
+                "minthres": "90",
+                "curtemp": "47",
+                "alarmstatus": "Ok"
+            }
+        ]
+    }
+}
 ```
 
 Each temperature entry includes:

@@ -1,6 +1,6 @@
 # Cisco Nexus Environment Power Details Parser
 
-This parser processes the output of the `show environment power detail` command from Cisco Nexus switches and converts it to structured JSON format for power monitoring and analysis.
+This parser processes the output of the `show environment power detail | json` command from Cisco Nexus switches and converts it to structured JSON format for power monitoring and analysis.
 
 ## Features
 
@@ -46,7 +46,7 @@ The parser looks for a command named `power-supply` in the commands.json file:
   "commands": [
     {
       "name": "power-supply",
-      "command": "show environment power detail"
+      "command": "show environment power detail | json"
     }
   ]
 }
@@ -79,6 +79,10 @@ The parser outputs JSON Lines format with a standardized structure. Each power e
 ### Message Structure
 
 The `message` field contains comprehensive power data:
+
+Command: `show environment power detail | json`
+
+Example file: [show-environment-power-detail.txt](../show-environment-power-detail.txt)
 
 ```json
 {
