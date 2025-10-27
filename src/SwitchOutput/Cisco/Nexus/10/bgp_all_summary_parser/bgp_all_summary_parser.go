@@ -194,7 +194,7 @@ func parseBGPTextOutput(input string) ([]StandardizedEntry, error) {
 	
 	inNeighborTable := false
 	
-	for i, line := range lines {
+	for _, line := range lines {
 		line = strings.TrimSpace(line)
 		
 		// Empty lines
