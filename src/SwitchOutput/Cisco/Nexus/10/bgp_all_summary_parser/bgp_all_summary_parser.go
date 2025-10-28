@@ -188,23 +188,18 @@ func parseBGPTextOutput(input string) ([]StandardizedEntry, error) {
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
 
-		// ✅ FIXED: Don't finalize on empty lines - neighbors come after empty lines!
 		if line == "" {
-			// Just continue parsing - don't reset currentAF or finalize entries yet
 			continue
 		}
 
 		if match := vrfLineRe.FindStringSubmatch(line); len(match) > 2 {
-			// Before processing new AF, finalize the PREVIOUS AF (which now has its neighbors!)
 			if currentAF != nil && currentSummary != nil {
 				currentSummary.AddressFamilies = append(currentSummary.AddressFamilies, *currentAF)
 				currentAF = nil
 			}
 
 			vrfName := match[1]
-			// Check if we're starting a new VRF
 			if currentSummary != nil && currentSummary.VRFNameOut != vrfName {
-				// Finalize previous VRF entry
 				if len(currentSummary.AddressFamilies) > 0 {
 					entry := StandardizedEntry{
 						DataType:  "cisco_nexus_bgp_summary",
@@ -217,20 +212,18 @@ func parseBGPTextOutput(input string) ([]StandardizedEntry, error) {
 				currentSummary = nil
 			}
 
-			// Initialize new VRF if needed
 			if currentSummary == nil {
 				currentSummary = &BGPSummary{
 					VRFNameOut: vrfName,
 				}
 			}
 
-			// Initialize new address family
 			afName := strings.TrimSpace(match[2])
 			currentAF = &AddressFamily{
 				AFName:    afName,
 				SAFI:      1,
 				Dampening: "false",
-				Neighbors: []Neighbor{}, // ✅ Initialize empty neighbors slice
+				Neighbors: []Neighbor{},
 			}
 
 			if strings.Contains(strings.ToLower(afName), "ipv6") {
@@ -285,7 +278,6 @@ func parseBGPTextOutput(input string) ([]StandardizedEntry, error) {
 			continue
 		}
 
-		// ✅ FIXED: This now works because currentAF is NOT nil!
 		if inNeighborTable && currentAF != nil && currentSummary != nil {
 			fields := strings.Fields(line)
 			if len(fields) >= 10 {
