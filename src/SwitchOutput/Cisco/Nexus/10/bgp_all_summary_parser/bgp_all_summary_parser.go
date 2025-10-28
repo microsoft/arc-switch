@@ -189,27 +189,13 @@ func parseBGPTextOutput(input string) ([]StandardizedEntry, error) {
 		line = strings.TrimSpace(line)
 
 		if line == "" {
-			if currentAF != nil && currentSummary != nil {
-				currentSummary.AddressFamilies = append(currentSummary.AddressFamilies, *currentAF)
-				currentAF = nil
-			}
-			if currentSummary != nil && len(currentSummary.AddressFamilies) > 0 {
-				entry := StandardizedEntry{
-					DataType:  "cisco_nexus_bgp_summary",
-					Timestamp: timestamp,
-					Date:      date,
-					Message:   *currentSummary,
-				}
-				entries = append(entries, entry)
-				currentSummary = nil
-			}
-			inNeighborTable = false
 			continue
 		}
 
 		if match := vrfLineRe.FindStringSubmatch(line); len(match) > 2 {
 			if currentAF != nil && currentSummary != nil {
 				currentSummary.AddressFamilies = append(currentSummary.AddressFamilies, *currentAF)
+				currentAF = nil
 			}
 
 			vrfName := match[1]
@@ -237,6 +223,7 @@ func parseBGPTextOutput(input string) ([]StandardizedEntry, error) {
 				AFName:    afName,
 				SAFI:      1,
 				Dampening: "false",
+				Neighbors: []Neighbor{},
 			}
 
 			if strings.Contains(strings.ToLower(afName), "ipv6") {
