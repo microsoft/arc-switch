@@ -51,8 +51,8 @@ tail -f monitor.log
 
 ### Output Example
 ```
-Timestamp, CPU_Used(%), Mem_Used(%), Mem_Detail(used/total MB), Top_Process(CPU%)
-2025-11-18 13:10:05, 53.80, 49.81, 11935MB/23963MB, /isan/bin/vsh.bin(89.4%)
+Timestamp | CPU_Used(%) | Mem_Used(%) | Mem_Detail(used/total MB) | Top_Process(CPU%)
+2025-11-18 13:10:05 | 53.80 | 49.81 | 11935MB/23963MB | /isan/bin/vsh.bin(89.4%)
 ```
 
 ### Summary Report
