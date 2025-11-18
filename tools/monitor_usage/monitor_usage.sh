@@ -56,7 +56,7 @@ max_mem_process=""
 
 echo "=== Monitoring start: $(date '+%F %T') ===" | tee -a "$LOG_FILE"
 echo "Interval: ${INTERVAL_SEC}s, Iterations: ${ITERATIONS}" | tee -a "$LOG_FILE"
-echo "Timestamp, CPU_Used(%), Mem_Used(%), Mem_Detail(used/total MB), Top_Process(CPU%)" | tee -a "$LOG_FILE"
+echo "Timestamp | CPU_Used(%) | Mem_Used(%) | Mem_Detail(used/total MB) | Top_Process(CPU%)" | tee -a "$LOG_FILE"
 
 for i in $(seq 1 "$ITERATIONS"); do
   ts="$(date '+%F %T')"
@@ -105,7 +105,7 @@ for i in $(seq 1 "$ITERATIONS"); do
   fi
 
   # ---- Log the sample
-  echo "$ts, $cpu_used_pct, $mem_used_pct, ${used_mb}MB/${total_mb}MB, $top_process" | tee -a "$LOG_FILE"
+  echo "$ts | $cpu_used_pct | $mem_used_pct | ${used_mb}MB/${total_mb}MB | $top_process" | tee -a "$LOG_FILE"
 
   # ---- Track max CPU (optimized comparison)
   if [ "$(awk -v curr="$cpu_used_pct" -v max="$max_cpu_pct" 'BEGIN { print (curr > max) }')" = "1" ]; then
