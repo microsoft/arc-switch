@@ -37,7 +37,7 @@ sequenceDiagram
 ### Run & Control
 ```bash
 # Run in background for 30 mins, sample every 30s
-nohup bash monitor_usage.sh 1800 30 > monitor.log 2>&1 &
+nohup bash monitor_usage.sh 1800 30 &
 
 # Check if running
 pgrep -af monitor_usage

@@ -99,7 +99,7 @@ for i in $(seq 1 "$ITERATIONS"); do
   fi
 
   # ---- Get top CPU consuming process
-  top_process=$(ps aux --sort=-%cpu | awk 'NR==2 {printf "%s(%.1f%%)", $11, $3}')
+  top_process=$(ps aux --sort=-%cpu | awk 'NR==2 {cmd=""; for(i=11;i<=NF;++i){cmd=cmd (i==11?"":" ") $i} printf "%s(%.1f%%)", cmd, $3}')
   if [ -z "$top_process" ]; then
     top_process="N/A"
   fi
