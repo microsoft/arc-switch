@@ -68,3 +68,4 @@ src/ARC-Installer/**/*
 lldpsyslog
 interface-syslog
 interface_phyeth
+tools/monitor_usage/usage_*.log
