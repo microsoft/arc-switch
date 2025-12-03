@@ -1,0 +1,976 @@
+﻿#!/bin/bash
+
+# Configuration Variables - EDIT THESE
+REGION="<YOUR_AZURE_REGION>"
+RESOURCE_GROUP="<YOUR_RESOURCE_GROUP>"
+SUBSCRIPTION_ID="<YOUR_SUBSCRIPTION_ID>"
+MACHINE_NAME="<YOUR_SWITCH_HOSTNAME>"
+TENANT_ID="<YOUR_TENANT_ID>"
+DNS_SERVER_1="10.10.240.23"
+DNS_SERVER_2="10.10.240.24"
+
+# Configuration Variables - EDIT THESE
+WORKSPACE_ID="<LOG_ANALYTICS_WORKSPACE_ID>"
+PRIMARY_KEY="<LOG_ANALYTICS_PRIMARY_KEY>"
+SECONDARY_KEY="<LOG_ANALYTICS_SECONDARY_KEY>"
+PARSER_URL="https://github.com/microsoft/arc-switch/releases/download/1.2510.3/cisco-nexus-unified-parser-1.2510.3-linux-amd64.tar.gz"
+PARSER_PATH="/opt/cisco-parser"
+TEMP_DIR="/tmp/cisco-parser-output"
+AZURE_TEMP_DIR="/tmp/azure-logger"
+AZCMAGENT_RPM_URL="https://github.com/microsoft/arc-switch/releases/download/v0.0.2-alpha-rpm/azcmagent-1.54.03131-2112.x86_64.rpm"
+
+cd /opt
+wget -q "$AZCMAGENT_RPM_URL" -O azcmagent.rpm
+if [ $? -eq 0 ]; then
+    rpm -ivh azcmagent.rpm 2>/dev/null || rpm -Uvh azcmagent.rpm 2>/dev/null
+    rm -f azcmagent.rpm
+fi
+
+# PART 1: DNS AND GC CONFIG SETUP
+
+cat > /opt/GC_Service/GC/gc.config <<'EOF'
+{
+    "ServiceType": "GCArc"
+}
+EOF
+
+cat > /opt/GC_Ext/GC/gc.config <<'EOF'
+{
+    "ServiceType": "Extension"
+}
+EOF
+
+cat > /etc/resolv.conf <<DNSEOF
+nameserver ${DNS_SERVER_1}
+nameserver ${DNS_SERVER_2}
+DNSEOF
+
+cat > /isan/etc/template/etc/resolv.conf <<DNSEOF
+nameserver ${DNS_SERVER_1}
+nameserver ${DNS_SERVER_2}
+DNSEOF
+
+# PART 2: MAKE ARC BINARIES EXECUTABLE
+
+for binary in $(find /opt /var -type f -name "himds" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+for binary in $(find /opt /var -type f -name "arcproxy" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+for binary in $(find /opt /var -type f -name "azcmagent" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+for binary in $(find /opt /var -type f -name "gc_linux_service" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+for binary in $(find /opt /var -type f -name "gc_worker" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+
+# PART 3: CREATE SYSTEMD SHIMS
+
+SHIM_DIR=""
+for dir in /var/bin /tmp/bin /usr/local/bin /volatile/bin; do
+    mkdir -p "$dir" 2>/dev/null
+    if touch "$dir/.test" 2>/dev/null; then
+        rm -f "$dir/.test"
+        cat > "$dir/.test_exec.sh" <<'TEST_EOF'
+#!/bin/bash
+exit 0
+TEST_EOF
+        chmod +x "$dir/.test_exec.sh" 2>/dev/null
+        if "$dir/.test_exec.sh" 2>/dev/null; then
+            rm -f "$dir/.test_exec.sh"
+            [ -z "$SHIM_DIR" ] && SHIM_DIR="$dir"
+            break
+        else
+            rm -f "$dir/.test_exec.sh"
+        fi
+    fi
+done
+
+if [ -z "$SHIM_DIR" ]; then
+    echo "ERROR: No writable+executable directory found"
+    exit 1
+fi
+
+cat > "$SHIM_DIR/systemctl" <<'SYSTEMCTL_EOF'
+#!/bin/bash
+mkdir -p /var/log/arc 2>/dev/null
+exec 2>> /var/log/arc/systemctl-shim.log
+echo "[$(date)] systemctl called with: $*" >&2
+
+SERVICE_NAME=""; COMMAND=""
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        status|is-active|is-enabled|is-failed|start|stop|restart|reload|enable|disable|mask|unmask)
+            COMMAND="$1"; shift; SERVICE_NAME="$1"; shift ;;
+        list-units|list-unit-files|daemon-reload|reset-failed)
+            COMMAND="$1"; shift ;;
+        --all|-a|--no-pager|--no-legend|--plain|--full|--state=*|--type=*)
+            shift ;;
+        --version)
+            echo "systemctl 245 (245.4-4ubuntu3) - SHIM for Arc agent"
+            exit 0 ;;
+        --help|-h)
+            echo "systemctl [OPTIONS...] COMMAND [NAME...]"
+            exit 0 ;;
+        *) shift ;;
+    esac
+done
+
+SERVICE_NAME="${SERVICE_NAME%.service}"
+
+map_service() {
+    case "$1" in
+        extd|extension*|Extension*|"Extension Service") echo "/etc/init.d/extd" ;;
+        gcad|guestconfig*|GuestConfig*|"GC Service") echo "/etc/init.d/gcad" ;;
+        arcproxyd|arcproxy|ArcProxy*|"Azure Arc Proxy") echo "/etc/init.d/arcproxyd" ;;
+        himdsd|himds) echo "/etc/init.d/himdsd" ;;
+        azcmagent|"Agent Service") echo "/etc/init.d/himdsd" ;;
+        sshd|ssh) echo "/etc/init.d/sshd" ;;
+        *) echo "" ;;
+    esac
+}
+
+case "$COMMAND" in
+    status)
+        INIT_SCRIPT=$(map_service "$SERVICE_NAME")
+        if [ -n "$INIT_SCRIPT" ] && [ -f "$INIT_SCRIPT" ]; then
+            echo "● ${SERVICE_NAME}.service"
+            echo "   Loaded: loaded (/etc/init.d/${SERVICE_NAME}; enabled)"
+            status_output=$($INIT_SCRIPT status 2>&1)
+            if echo "$status_output" | grep -iq "running\|OK.*PID\|active"; then
+                echo "   Active: active (running)"
+                exit 0
+            else
+                echo "   Active: inactive (dead)"
+                exit 3
+            fi
+        else
+            exit 4
+        fi ;;
+    is-active)
+        INIT_SCRIPT=$(map_service "$SERVICE_NAME")
+        if [ -n "$INIT_SCRIPT" ] && [ -f "$INIT_SCRIPT" ]; then
+            $INIT_SCRIPT status 2>&1 | grep -iq "running\|OK.*PID\|active" && echo "active" && exit 0
+            echo "inactive"; exit 3
+        else
+            echo "unknown"; exit 3
+        fi ;;
+    is-enabled)
+        INIT_SCRIPT=$(map_service "$SERVICE_NAME")
+        [ -n "$INIT_SCRIPT" ] && [ -f "$INIT_SCRIPT" ] && echo "enabled" && exit 0
+        echo "disabled"; exit 1 ;;
+    start|stop|restart|reload)
+        INIT_SCRIPT=$(map_service "$SERVICE_NAME")
+        if [ -n "$INIT_SCRIPT" ] && [ -f "$INIT_SCRIPT" ]; then
+            [ "$COMMAND" = "reload" ] && COMMAND="restart"
+            $INIT_SCRIPT $COMMAND; exit $?
+        else
+            exit 5
+        fi ;;
+    enable|disable|mask|unmask|daemon-reload|reset-failed)
+        exit 0 ;;
+    list-units|list-unit-files)
+        echo "UNIT                          LOAD   ACTIVE SUB"
+        for script in /etc/init.d/{extd,gcad,arcproxyd,himdsd}; do
+            if [ -f "$script" ]; then
+                svc=$(basename "$script")
+                $script status 2>&1 | grep -iq "running" && \
+                printf "%-30s loaded active running\n" "${svc}.service" || \
+                printf "%-30s loaded inactive dead\n" "${svc}.service"
+            fi
+        done
+        exit 0 ;;
+    *) exit 0 ;;
+esac
+SYSTEMCTL_EOF
+
+chmod +x "$SHIM_DIR/systemctl"
+mkdir -p /var/log/arc
+
+for util in systemd systemd-notify journalctl service; do
+    cat > "$SHIM_DIR/$util" <<'EOF'
+#!/bin/bash
+exit 0
+EOF
+    chmod +x "$SHIM_DIR/$util"
+done
+
+# PART 4: EXTRACT ARC MACHINE IDENTITY
+
+RESOURCE_ID=""
+if [ -f /var/opt/azcmagent/agentconfig.json ]; then
+    RESOURCE_ID=$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+fi
+
+if [ -z "$RESOURCE_ID" ] || [ "$RESOURCE_ID" = "null" ]; then
+    RESOURCE_ID="/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.HybridCompute/machines/${MACHINE_NAME}"
+fi
+
+# PART 5: CONFIGURE SYSTEM ENVIRONMENT
+
+cat > /etc/environment <<ENVEOF
+IMDS_ENDPOINT=http://localhost:40342
+IDENTITY_ENDPOINT=http://localhost:40342/metadata/identity/oauth2/token
+AZGUESTCONFIG_ENDPOINT=http://localhost:40343
+EXTENSION_SERVICE_URL=http://localhost:40343
+PATH=${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin
+AZURE_RESOURCE_GROUP=${RESOURCE_GROUP}
+AZURE_LOCATION=${REGION}
+ARM_RESOURCE_ID=${RESOURCE_ID}
+SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
+TENANT_ID=${TENANT_ID}
+SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+NODE_TLS_REJECT_UNAUTHORIZED=0
+AZURE_CLI_DISABLE_CONNECTION_VERIFICATION=1
+ENVEOF
+
+mkdir -p /etc/profile.d 2>/dev/null
+cat > /etc/profile.d/arc-environment.sh <<PROFEOF
+#!/bin/bash
+export PATH="${SHIM_DIR}:\$PATH"
+export IMDS_ENDPOINT="http://localhost:40342"
+export IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token"
+export AZGUESTCONFIG_ENDPOINT="http://localhost:40343"
+export EXTENSION_SERVICE_URL="http://localhost:40343"
+export ARM_RESOURCE_ID="${RESOURCE_ID}"
+export AZURE_RESOURCE_GROUP="${RESOURCE_GROUP}"
+export AZURE_LOCATION="${REGION}"
+export SUBSCRIPTION_ID="${SUBSCRIPTION_ID}"
+export TENANT_ID="${TENANT_ID}"
+export SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt"
+export CURL_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+export NODE_TLS_REJECT_UNAUTHORIZED=0
+PROFEOF
+
+chmod +x /etc/profile.d/arc-environment.sh
+source /etc/profile.d/arc-environment.sh
+
+mkdir -p /var/opt/azcmagent/{log,tokens,arcproxy}
+mkdir -p /var/lib/{waagent,GuestConfig/Configuration,GuestConfig/Extension/{status,config}}
+mkdir -p /var/log/arc
+chmod 700 /var/opt/azcmagent/tokens
+chmod 755 /var/lib/GuestConfig/{Extension,Configuration}
+
+# PART 6: CREATE INIT SCRIPTS
+
+cat > /etc/init.d/himdsd <<HIMDS_EOF
+#!/bin/bash
+DAEMON="himds"
+PIDFILE="/var/run/himds.pid"
+LOGFILE="/var/log/arc/himds.log"
+
+DAEMON_PATH=\$(find /opt /var 2>/dev/null | grep -E "/himds\$" | grep -v ".bak\|.old\|.backup" | head -1)
+
+if [ -z "\$DAEMON_PATH" ]; then
+    echo "ERROR: himds binary not found"
+    exit 1
+fi
+
+start() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        return 0
+    fi
+    
+    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f /var/opt/azcmagent/socks/himds.sock 2>/dev/null
+    sleep 2
+    
+    mkdir -p /var/opt/azcmagent/socks \$(dirname \$LOGFILE)
+    
+    export PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin"
+    export IMDS_ENDPOINT="http://localhost:40342"
+    export IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token"
+    
+    cd \$(dirname \$DAEMON_PATH)
+    nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
+    PID=\$!
+    echo \$PID > \$PIDFILE
+    
+    for i in {1..20}; do
+        if [ -e /var/opt/azcmagent/socks/himds.sock ] && ps -p \$PID > /dev/null 2>&1; then
+            return 0
+        fi
+        sleep 1
+    done
+    
+    return 1
+}
+
+stop() {
+    [ -f \$PIDFILE ] && kill \$(cat \$PIDFILE) 2>/dev/null
+    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+}
+
+status() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        echo "HIMDS is running (PID \$(cat \$PIDFILE))"
+        return 0
+    else
+        echo "HIMDS is stopped"
+        return 3
+    fi
+}
+
+case "\$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) stop; sleep 2; start ;;
+    status) status ;;
+    *) echo "Usage: \$0 {start|stop|restart|status}" ;;
+esac
+HIMDS_EOF
+
+chmod +x /etc/init.d/himdsd
+
+cat > /etc/init.d/arcproxyd <<'ARCPROXY_EOF'
+#!/bin/bash
+DAEMON="arcproxy"
+PIDFILE="/var/run/arcproxy.pid"
+LOGFILE="/var/log/arc/arcproxy.log"
+
+DAEMON_PATH=$(find /opt /var 2>/dev/null | grep -E "/arcproxy$" | grep -v ".bak\|.old" | head -1)
+
+if [ -z "$DAEMON_PATH" ]; then
+    echo "ERROR: arcproxy binary not found"
+    exit 1
+fi
+
+start() {
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
+        return 0
+    fi
+    
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
+    fuser -k -9 40343/tcp 2>/dev/null
+    fuser -k -9 40344/tcp 2>/dev/null
+    rm -f $PIDFILE
+    sleep 3
+    
+    mkdir -p $(dirname $LOGFILE)
+    [ -f /etc/profile.d/arc-environment.sh ] && source /etc/profile.d/arc-environment.sh
+    
+    nohup $DAEMON_PATH >> $LOGFILE 2>&1 &
+    PID=$!
+    echo $PID > $PIDFILE
+    sleep 5
+    
+    if ps -p $PID > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+stop() {
+    if [ -f $PIDFILE ]; then
+        kill -9 $(cat $PIDFILE) 2>/dev/null
+        rm -f $PIDFILE
+    fi
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
+    fuser -k -9 40343/tcp 2>/dev/null
+    fuser -k -9 40344/tcp 2>/dev/null
+    sleep 3
+}
+
+restart() {
+    stop
+    sleep 5
+    start
+}
+
+status() {
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
+        echo "ArcProxy is running (PID $(cat $PIDFILE))"
+        return 0
+    else
+        echo "ArcProxy is stopped"
+        return 3
+    fi
+}
+
+case "$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) restart ;;
+    status) status ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" ;;
+esac
+ARCPROXY_EOF
+
+chmod +x /etc/init.d/arcproxyd
+
+cat > /etc/init.d/extd <<EXTD_EOF
+#!/bin/bash
+DAEMON="gc_linux_service"
+PIDFILE="/var/run/extd.pid"
+LOGFILE="/var/log/arc/extd.log"
+
+DAEMON_PATH=\$(find /opt /var 2>/dev/null | grep -E "/GC_Ext.*gc_linux_service\$" | grep -v ".bak\|.old" | head -1)
+GC_PATH=\$(dirname "\$DAEMON_PATH" 2>/dev/null)
+
+if [ -z "\$DAEMON_PATH" ] || [ ! -f "\$DAEMON_PATH" ]; then
+    echo "ERROR: EXTD binary not found"
+    exit 1
+fi
+
+start() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        return 0
+    fi
+    
+    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+    sleep 2
+    
+    mkdir -p \$(dirname \$LOGFILE) /var/lib/GuestConfig/Extension/{status,config} /var/lib/waagent
+    cd \$GC_PATH
+    
+    ARM_RES_ID=""
+    if [ -f /var/opt/azcmagent/agentconfig.json ]; then
+        ARM_RES_ID=\$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+    fi
+    
+    if [ -z "\$ARM_RES_ID" ]; then
+        ARM_RES_ID="${RESOURCE_ID}"
+    fi
+    
+    env - PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin" \
+        IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token" \
+        IMDS_ENDPOINT="http://localhost:40342" \
+        AZGUESTCONFIG_ENDPOINT="http://localhost:40343" \
+        EXTENSION_SERVICE_URL="http://localhost:40343" \
+        ARM_RESOURCE_ID="\$ARM_RES_ID" \
+        LD_LIBRARY_PATH="\$GC_PATH" \
+        AZURE_GUEST_AGENT_EXTENSION_PATH="/var/lib/waagent" \
+        AZURE_GUEST_AGENT_EXTENSION_SUPPORTED_FEATURES="ExtensionTelemetryPipeline,PersistentExtensions" \
+        AZURE_HTTP_USER_AGENT="GuestConfiguration/Extension" \
+        nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
+    
+    PID=\$!
+    echo \$PID > \$PIDFILE
+    sleep 8
+    
+    if ps -p \$PID > /dev/null 2>&1; then
+        return 0
+    else
+        rm -f \$PIDFILE
+        return 1
+    fi
+}
+
+stop() {
+    [ -f \$PIDFILE ] && kill \$(cat \$PIDFILE) 2>/dev/null
+    pkill -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+}
+
+status() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        echo "EXTD is running (PID \$(cat \$PIDFILE))"
+        return 0
+    else
+        echo "EXTD is stopped"
+        return 3
+    fi
+}
+
+case "\$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) stop; sleep 2; start ;;
+    status) status ;;
+    *) echo "Usage: \$0 {start|stop|restart|status}" ;;
+esac
+EXTD_EOF
+
+chmod +x /etc/init.d/extd
+
+cat > /etc/init.d/gcad <<GCAD_EOF
+#!/bin/bash
+DAEMON="gc_linux_service"
+PIDFILE="/var/run/gcad.pid"
+LOGFILE="/var/log/arc/gcad.log"
+
+DAEMON_PATH=\$(find /opt /var 2>/dev/null | grep -E "/GC_Service.*gc_linux_service\$" | grep -v ".bak\|.old" | head -1)
+GC_PATH=\$(dirname "\$DAEMON_PATH" 2>/dev/null)
+
+if [ -z "\$DAEMON_PATH" ] || [ ! -f "\$DAEMON_PATH" ]; then
+    echo "ERROR: GCAD binary not found"
+    exit 1
+fi
+
+start() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        return 0
+    fi
+    
+    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+    sleep 2
+    
+    mkdir -p \$(dirname \$LOGFILE) /var/lib/GuestConfig/Configuration
+    cd \$GC_PATH
+    
+    ARM_RES_ID=""
+    if [ -f /var/opt/azcmagent/agentconfig.json ]; then
+        ARM_RES_ID=\$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+    fi
+    
+    if [ -z "\$ARM_RES_ID" ]; then
+        ARM_RES_ID="${RESOURCE_ID}"
+    fi
+    
+    env - PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin" \
+        IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token" \
+        IMDS_ENDPOINT="http://localhost:40342" \
+        AZGUESTCONFIG_ENDPOINT="http://localhost:40343" \
+        ARM_RESOURCE_ID="\$ARM_RES_ID" \
+        LD_LIBRARY_PATH="\$GC_PATH" \
+        AZURE_GUEST_CONFIGURATION_PATH="/var/lib/GuestConfig/Configuration" \
+        AZURE_HTTP_USER_AGENT="GuestConfiguration/Agent" \
+        nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
+    
+    PID=\$!
+    echo \$PID > \$PIDFILE
+    sleep 8
+    
+    if ps -p \$PID > /dev/null 2>&1; then
+        return 0
+    else
+        rm -f \$PIDFILE
+        return 1
+    fi
+}
+
+stop() {
+    [ -f \$PIDFILE ] && kill \$(cat \$PIDFILE) 2>/dev/null
+    pkill -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+}
+
+status() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        echo "GCAD is running (PID \$(cat \$PIDFILE))"
+        return 0
+    else
+        echo "GCAD is stopped"
+        return 3
+    fi
+}
+
+case "\$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) stop; sleep 2; start ;;
+    status) status ;;
+    *) echo "Usage: \$0 {start|stop|restart|status}" ;;
+esac
+GCAD_EOF
+
+chmod +x /etc/init.d/gcad
+
+# PART 7: RESTART ALL SERVICES
+
+echo "Stopping services..."
+for service in gcad extd arcproxyd himdsd; do
+    /etc/init.d/$service stop 2>/dev/null
+done
+
+sleep 5
+pkill -9 -f "gc_linux_service" 2>/dev/null
+pkill -9 -f "arcproxy" 2>/dev/null
+pkill -9 -f "himds" 2>/dev/null
+for port in 40342 40343 40344; do
+    fuser -k -9 $port/tcp 2>/dev/null
+done
+rm -f /var/run/*.pid 2>/dev/null
+rm -f /var/opt/azcmagent/socks/himds.sock 2>/dev/null
+sleep 3
+
+echo "Starting services..."
+/etc/init.d/himdsd start
+sleep 5
+
+/etc/init.d/arcproxyd start
+sleep 5
+
+/etc/init.d/extd start
+sleep 8
+
+/etc/init.d/gcad start
+sleep 8
+
+echo "Setup complete. Check service status:"
+for service in himdsd arcproxyd extd gcad; do
+    /etc/init.d/$service status
+done
+
+# PART 8: DOWNLOAD AND INSTALL PARSER
+
+wget -q "$PARSER_URL" -O parser.tar.gz
+tar -xzf parser.tar.gz
+rm -f parser.tar.gz
+find /opt/azcmagent -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null
+find /var/tmp -name "rpm-tmp.*" -type f -exec chmod +x {} \; 2>/dev/null
+
+# PART 9: CREATE SIGNATURE GENERATOR
+
+cat > /opt/azure-signature-generator.sh << 'SIG_EOF'
+#!/bin/bash
+generate_signature() {
+    local workspace_id="$1"
+    local shared_key="$2" 
+    local date="$3"
+    local content_length="$4"
+    local string_to_sign="POST\n${content_length}\napplication/json\nx-ms-date:${date}\n/api/logs"
+    local decoded_key=$(echo -n "$shared_key" | base64 -d)
+    local signature=$(echo -en "$string_to_sign" | openssl dgst -sha256 -mac hmac -macopt key:"$decoded_key" -binary | base64)
+    echo "SharedKey ${workspace_id}:${signature}"
+}
+export -f generate_signature
+SIG_EOF
+
+chmod +x /opt/azure-signature-generator.sh
+
+# PART 10: CREATE AZURE LOGGER
+
+cat > /opt/cisco-azure-logger-v2.sh << LOGGER_EOF
+#!/bin/bash
+WORKSPACE_ID="${WORKSPACE_ID}"
+PRIMARY_KEY="${PRIMARY_KEY}"
+SECONDARY_KEY="${SECONDARY_KEY}"
+SHARED_KEY="\$PRIMARY_KEY"
+TEMP_DIR="${AZURE_TEMP_DIR}"
+
+mkdir -p "\$TEMP_DIR"
+
+source /opt/azure-signature-generator.sh
+
+send_to_azure_custom_table() {
+    local json_data="\$1"
+    local table_name="\$2"
+    local timestamp=\$(date -u +"%a, %d %b %Y %H:%M:%S GMT")
+    
+    local temp_payload="\$TEMP_DIR/payload_\$\$.json"
+    echo -n "\$json_data" > "\$temp_payload"
+    
+    local content_length=\$(stat -c%s "\$temp_payload" 2>/dev/null || stat -f%z "\$temp_payload" 2>/dev/null)
+    
+    local authorization=\$(generate_signature "\$WORKSPACE_ID" "\$SHARED_KEY" "\$timestamp" "\$content_length")
+    
+    local response=\$(curl -k -s -w "\\nHTTP_CODE:%{http_code}" -X POST \\
+        -H "Content-Type: application/json" \\
+        -H "Log-Type: \$table_name" \\
+        -H "x-ms-date: \$timestamp" \\
+        -H "Authorization: \$authorization" \\
+        --data-binary "@\${temp_payload}" \\
+        "https://\${WORKSPACE_ID}.ods.opinsights.azure.com/api/logs?api-version=2016-04-01")
+    
+    rm -f "\$temp_payload"
+    
+    local http_code=\$(echo "\$response" | grep "HTTP_CODE:" | cut -d: -f2)
+    
+    if [ "\$http_code" = "200" ]; then
+        return 0
+    else
+        if [ "\$SHARED_KEY" = "\$PRIMARY_KEY" ] && [ ! -z "\$SECONDARY_KEY" ]; then
+            SHARED_KEY="\$SECONDARY_KEY"
+            send_to_azure_custom_table "\$json_data" "\$table_name"
+            return \$?
+        fi
+        return 1
+    fi
+}
+
+add_metadata_simple() {
+    local json_input="\$1"
+    local hostname="\$2"
+    
+    if command -v python3 >/dev/null 2>&1; then
+        echo "\$json_input" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    if isinstance(data, list):
+        for item in data:
+            item['hostname'] = '\$hostname'
+            item['device_type'] = 'cisco-nx-os'
+    else:
+        data['hostname'] = '\$hostname'
+        data['device_type'] = 'cisco-nx-os'
+        data = [data]
+    print(json.dumps(data))
+except:
+    sys.exit(1)
+"
+        return \$?
+    elif command -v python >/dev/null 2>&1; then
+        echo "\$json_input" | python -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    if isinstance(data, list):
+        for item in data:
+            item['hostname'] = '\$hostname'
+            item['device_type'] = 'cisco-nx-os'
+    else:
+        data['hostname'] = '\$hostname'
+        data['device_type'] = 'cisco-nx-os'
+        data = [data]
+    print(json.dumps(data))
+except:
+    sys.exit(1)
+"
+        return \$?
+    else
+        echo "\$json_input"
+        return 0
+    fi
+}
+
+process_and_send() {
+    local parser_output="\$1"
+    local table_name="\$2"
+    local hostname=\$(hostname)
+    
+    if [ -z "\$parser_output" ]; then
+        return 1
+    fi
+    
+    local azure_json=\$(add_metadata_simple "\$parser_output" "\$hostname")
+    
+    if [ \$? -ne 0 ] || [ -z "\$azure_json" ]; then
+        return 1
+    fi
+    
+    send_to_azure_custom_table "\$azure_json" "\$table_name"
+    return \$?
+}
+
+export -f send_to_azure_custom_table
+export -f process_and_send
+
+case "\$1" in
+    "send")
+        if [ -z "\$2" ] || [ -z "\$3" ]; then
+            exit 1
+        fi
+        
+        table_name="\$2"
+        json_source="\$3"
+        
+        if [ "\$json_source" = "-" ]; then
+            json_data=\$(cat)
+        elif [ -f "\$json_source" ]; then
+            json_data=\$(cat "\$json_source")
+        else
+            exit 1
+        fi
+        
+        process_and_send "\$json_data" "\$table_name"
+        ;;
+    "test")
+        test_data='[{"test":"connection","timestamp":"'\$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"}]'
+        send_to_azure_custom_table "\$test_data" "CiscoSwitchTest"
+        ;;
+    *)
+        exit 1
+        ;;
+esac
+LOGGER_EOF
+
+chmod +x /opt/cisco-azure-logger-v2.sh
+
+
+# PART 11: CREATE PARSER COLLECTOR
+
+cat > /opt/cisco-parser-collector.sh << COLLECTOR_EOF
+#!/bin/bash
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/isan/bin:/isan/sbin:\$PATH
+
+PARSER_PATH="${PARSER_PATH}"
+LOGGER_PATH="/opt/cisco-azure-logger-v2.sh"
+TEMP_DIR="${TEMP_DIR}"
+LOG_FILE="/var/log/cisco-parser-collector.log"
+
+mkdir -p "\$TEMP_DIR"
+
+log_message() {
+    echo "[\$(date '+%Y-%m-%d %H:%M:%S')] \$1" >> "\$LOG_FILE"
+}
+
+run_and_process() {
+    local command_name="\$1"
+    local vsh_command="\$2"
+    local parser_type="\$3"
+    local table_name="\$4"
+    
+    local temp_input="\$TEMP_DIR/\${command_name}-input.txt"
+    local temp_output="\$TEMP_DIR/\${command_name}-output.json"
+    
+    if ! vsh -c "\$vsh_command" > "\$temp_input" 2>&1; then
+        return 1
+    fi
+    
+    if [ ! -s "\$temp_input" ]; then
+        return 1
+    fi
+    
+    if ! "\$PARSER_PATH" -p "\$parser_type" -i "\$temp_input" -o "\$temp_output" >> "\$LOG_FILE" 2>&1; then
+        return 1
+    fi
+    
+    if [ ! -s "\$temp_output" ]; then
+        return 1
+    fi
+    
+    if "\$LOGGER_PATH" send "\$table_name" "\$temp_output" >> "\$LOG_FILE" 2>&1; then
+        rm -f "\$temp_input" "\$temp_output"
+        return 0
+    else
+        return 1
+    fi
+}
+
+process_command() {
+    local cmd_name="\$1"
+    local vsh_cmd="\$2"
+    local parser_type="\$3"
+    local table_name="\$4"
+    
+    if run_and_process "\$cmd_name" "\$vsh_cmd" "\$parser_type" "\$table_name"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+main() {
+    log_message "Collection cycle started"
+    
+    local success_count=0
+    local failure_count=0
+    
+    process_command "class-map" "show class-map" "class-map" "CiscoClassMap"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "interface-counters" "show interface counter" "interface-counters" "CiscoInterfaceCounter"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "inventory" "show inventory all" "inventory" "CiscoInventory"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "ip-arp" "show ip arp" "ip-arp" "CiscoIpArp"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "ip-route" "show ip route" "ip-route" "CiscoIpRoute"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "lldp-neighbor" "show lldp neighbor detail" "lldp-neighbor" "CiscoLldpNeighbor"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "mac-address" "show mac address-table" "mac-address" "CiscoMacAddress"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "transceiver" "show interface transceiver" "transceiver" "CiscoTransceiver"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "env-temp" "show environment temperature" "environment-temperature" "CiscoEnvTemp"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "interface-errors" "show interface counters errors" "interface-error-counters" "CiscoInterfaceErrors"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "env-power" "show environment power detail" "environment-power" "CiscoEnvPower"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "system-resources" "show system resources" "system-resources" "CiscoSystemResources"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "system-uptime" "show system uptime" "system-uptime" "CiscoSystemUptime"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+
+    process_command "bgp-all-summary" "show bgp all summary" "bgp-all-summary" "CiscoBgpSummary"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    log_message "Collection complete: \$success_count success, \$failure_count failures"
+    
+    find "\$TEMP_DIR" -type f -mmin +60 -delete 2>/dev/null
+    
+    if [ -f "\$LOG_FILE" ] && [ \$(stat -f%z "\$LOG_FILE" 2>/dev/null || stat -c%s "\$LOG_FILE" 2>/dev/null) -gt 10485760 ]; then
+        mv "\$LOG_FILE" "\${LOG_FILE}.old"
+    fi
+}
+
+main
+exit 0
+COLLECTOR_EOF
+
+chmod +x /opt/cisco-parser-collector.sh
+
+# PART 12: SETUP CRON JOB
+
+cat > /tmp/cisco-cron-temp << 'CRON_EOF'
+* * * * * /opt/cisco-parser-collector.sh
+CRON_EOF
+
+crontab -l > /tmp/current-cron 2>/dev/null || true
+cat /tmp/current-cron /tmp/cisco-cron-temp | crontab -
+rm -f /tmp/cisco-cron-temp /tmp/current-cron
+
+echo "============================================================================"
+echo "Azure Arc Setup Script Completed Successfully!"
+echo "============================================================================"
+echo ""
+echo "NEXT STEPS:"
+echo "1. Connect the Arc agent to Azure (see README.md for instructions)"
+echo "2. Verify Arc agent connection with: azcmagent show"
+echo "3. Check service status with: /etc/init.d/himdsd status"
+echo "4. View logs in /var/log/arc/"
+echo ""
+echo "============================================================================"
