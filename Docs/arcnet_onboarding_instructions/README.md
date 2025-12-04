@@ -253,6 +253,7 @@ Agent Status      : Connected
 
 ### Step 4.4 Cleanup Steps If needed after lab completion
 
+## Step 4.4.1
 ```bash
 service himdsd stop
 service arcproxyd stop
@@ -263,8 +264,10 @@ killall arcproxy 2>/dev/null
 sudo rpm -e azcmagent
 ```
 
+## Step 4.4.2
+
 Also remove all files related to ArcNet from /opt folder
-rm -f cisco-azure-logger.sh
+rm -f cisco-azure-logger-v2.sh
 rm -f cisco-parser
 .......
 
