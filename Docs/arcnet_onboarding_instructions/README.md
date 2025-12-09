@@ -873,7 +873,7 @@ grep -i "connection" /var/opt/azcmagent/log/himds.log | tail -10
 
 # Step 5: Reconnect if needed
 azcmagent disconnect
-# Then re-run Azure connection script from Step 4
+# WARNING: You must re-run the Azure connection script from Step 4 after disconnecting
 ```
 
 #### Issue 2: Services Keep Stopping Automatically
