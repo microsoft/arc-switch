@@ -312,7 +312,7 @@ done
 
 RESOURCE_ID=""
 if [ -f /var/opt/azcmagent/agentconfig.json ]; then
-    RESOURCE_ID=$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1 || true)
+    RESOURCE_ID=$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1) || { echo "[WARN] Failed to extract resourceId from agentconfig.json"; RESOURCE_ID=""; }
 fi
 
 if [ -z "$RESOURCE_ID" ] || [ "$RESOURCE_ID" = "null" ]; then
