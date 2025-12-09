@@ -739,7 +739,7 @@ start() {
     
     [ -f /etc/profile.d/arc-environment.sh ] && source /etc/profile.d/arc-environment.sh
     
-    env - PATH="/var/bin:/tmp/bin:/usr/local/bin:/volatile/bin:/usr/bin:/usr/sbin:/bin:/sbin" \
+    env - PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin" \
         IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token" \
         IMDS_ENDPOINT="http://localhost:40342" \
         AZGUESTCONFIG_ENDPOINT="http://localhost:40343" \
