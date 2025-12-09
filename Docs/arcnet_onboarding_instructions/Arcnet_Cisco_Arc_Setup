@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # Trap errors and cleanup
-trap 'echo "[ERROR] Script failed at line $LINENO"; exit 1' ERR
+trap 'echo "[ERROR] Script failed at line $LINENO with command: $BASH_COMMAND"; exit 1' ERR
 
 # Verify running as root
 if [ "$EUID" -ne 0 ]; then
