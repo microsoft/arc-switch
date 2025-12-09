@@ -1003,7 +1003,7 @@ free -m | grep Mem
 df -h / | tail -1
 
 echo -e "\n=== ARC AGENT STATUS ==="
-if command -v azcmagent &> /dev/null; then
+if command -v azcmagent > /dev/null 2>&1; then
     azcmagent show 2>&1 | grep -E "Status|Version|Resource"
     echo ""
     azcmagent check 2>&1 | head -10
