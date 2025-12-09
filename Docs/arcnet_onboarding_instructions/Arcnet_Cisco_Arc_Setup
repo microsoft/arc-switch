@@ -164,10 +164,26 @@ set_binary_permissions() {
     setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
 }
 
-for binary_name in "himds" "arcproxy" "azcmagent" "gc_linux_service" "gc_worker"; do
-    while IFS= read -r binary; do
-        set_binary_permissions "$binary"
-    done < <(find /opt /var -type f -name "$binary_name" 2>/dev/null | grep -v ".bak\|.old\|.backup")
+# Define trusted binary paths (edit as needed for your environment)
+TRUSTED_BINARIES=(
+    "/opt/himds/himds"
+    "/opt/arcproxy/arcproxy"
+    "/opt/azcmagent/azcmagent"
+    "/opt/gc_linux_service/gc_linux_service"
+    "/opt/gc_worker/gc_worker"
+)
+
+for binary in "${TRUSTED_BINARIES[@]}"; do
+    if [ -f "$binary" ]; then
+        owner_uid=$(stat -c '%u' "$binary" 2>/dev/null)
+        if [ "$owner_uid" -eq 0 ]; then
+            set_binary_permissions "$binary"
+        else
+            echo "[WARN] Skipping $binary: not owned by root"
+        fi
+    else
+        echo "[INFO] Skipping $binary: not found"
+    fi
 done
 
 echo "[INFO] Binary permissions configured"
