@@ -54,6 +54,7 @@ graph LR
 ```mermaid
 sequenceDiagram
     participant CS as Cisco Switch
+    participant Arc as Arc Agent
     participant Cron as Cron Scheduler
     participant Parser as Cisco Parser
     participant Logger as Azure Logger
@@ -69,8 +70,8 @@ sequenceDiagram
     Logger->>Logger: Add metadata & signature
     Logger->>LA: Send via REST API (direct)
     Note over LA: Store in custom tables
-    Note over A: Send heartbeat status
-    A->>LA: Heartbeat via Arc tunnel
+    Note over Arc: Send heartbeat status
+    Arc->>LA: Heartbeat via Arc tunnel
     GM->>LA: Query for dashboards
     LA->>GM: Return aggregated data
 ```
