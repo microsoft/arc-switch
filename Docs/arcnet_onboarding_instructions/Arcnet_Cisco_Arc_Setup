@@ -1,15 +1,27 @@
 ﻿#!/bin/bash
 
+# Enable strict error handling
+set -euo pipefail
+
+# Trap errors and cleanup
+trap 'echo "[ERROR] Script failed at line $LINENO"; exit 1' ERR
+
+# Verify running as root
+if [ "$EUID" -ne 0 ]; then
+    echo "[ERROR] This script must be run as root"
+    exit 1
+fi
+
 # Configuration Variables - EDIT THESE
 REGION="<YOUR_AZURE_REGION>"
 RESOURCE_GROUP="<YOUR_RESOURCE_GROUP>"
 SUBSCRIPTION_ID="<YOUR_SUBSCRIPTION_ID>"
 MACHINE_NAME="<YOUR_SWITCH_HOSTNAME>"
 TENANT_ID="<YOUR_TENANT_ID>"
-# Default: 10.10.240.23
-DNS_SERVER_1="<DNS_SERVER_1>"
-# Default: 10.10.240.24
-DNS_SERVER_2="<DNS_SERVER_2>"
+
+# DNS Servers - Provide space-separated list (e.g., "10.10.240.23 10.10.240.24" or "8.8.8.8")
+# If empty, system DNS will be used
+DNS_SERVERS="<DNS_SERVER_LIST>"
 
 # Configuration Variables - EDIT THESE
 WORKSPACE_ID="<LOG_ANALYTICS_WORKSPACE_ID>"
@@ -21,14 +33,85 @@ TEMP_DIR="/tmp/cisco-parser-output"
 AZURE_TEMP_DIR="/tmp/azure-logger"
 AZCMAGENT_RPM_URL="https://github.com/microsoft/arc-switch/releases/download/v0.0.2-alpha-rpm/azcmagent-1.54.03131-2112.x86_64.rpm"
 
+# Validation function
+validate_configuration() {
+    local errors=0
+    
+    # Check for placeholder values
+    for var in REGION RESOURCE_GROUP SUBSCRIPTION_ID MACHINE_NAME TENANT_ID WORKSPACE_ID PRIMARY_KEY SECONDARY_KEY; do
+        local value=$(eval echo \$"$var")
+        if [[ "$value" == "<"*">" ]] || [ -z "$value" ]; then
+            echo "[ERROR] Configuration variable '$var' is not set properly: $value"
+            ((errors++))
+        fi
+    done
+    
+    # Validate WORKSPACE_ID format (should look like UUID)
+    if ! [[ "$WORKSPACE_ID" =~ ^[a-f0-9-]{36}$ ]]; then
+        echo "[WARN] WORKSPACE_ID does not appear to be a valid UUID format: $WORKSPACE_ID"
+    fi
+    
+    if [ $errors -gt 0 ]; then
+        echo "[ERROR] Configuration validation failed with $errors error(s)"
+        exit 1
+    fi
+}
+
+echo "[INFO] Validating configuration..."
+validate_configuration
+echo "[INFO] Configuration validation passed"
+
+# Check and handle existing services
+echo "[INFO] Checking for existing Arc services..."
+for service in himdsd arcproxyd extd gcad; do
+    if [ -f "/etc/init.d/$service" ] && /etc/init.d/$service status &>/dev/null 2>&1; then
+        echo "[INFO] Service '$service' is already running. Will refresh it with this setup."
+        /etc/init.d/$service stop 2>/dev/null || true
+        sleep 2
+    fi
+done
+
+# Download and install Arc agent RPM
+echo "[INFO] Downloading Arc agent RPM..."
 cd /opt
-wget -q "$AZCMAGENT_RPM_URL" -O azcmagent.rpm
-if [ $? -eq 0 ]; then
-    rpm -ivh azcmagent.rpm 2>/dev/null || rpm -Uvh azcmagent.rpm 2>/dev/null
-    rm -f azcmagent.rpm
+rpm_file="azcmagent.rpm"
+rpm_path="$(pwd)/$rpm_file"
+download_retries=3
+retry_count=0
+
+# Attempt download with retry logic
+while [ $retry_count -lt $download_retries ]; do
+    echo "[INFO] Download attempt $((retry_count + 1))/$download_retries"
+    if wget --timeout=30 --tries=2 -q -O "$rpm_file" "$AZCMAGENT_RPM_URL" 2>&1; then
+        if [ -f "$rpm_file" ] && [ -s "$rpm_file" ]; then
+            file_size=$(du -h "$rpm_file" | cut -f1)
+            echo "[INFO] Arc agent RPM downloaded successfully ($file_size)"
+            break
+        fi
+    fi
+    retry_count=$((retry_count + 1))
+    if [ $retry_count -lt $download_retries ]; then
+        echo "[WARN] Download attempt $retry_count failed, retrying in 5 seconds..."
+        sleep 5
+        rm -f "$rpm_file"
+    fi
+done
+
+if [ $retry_count -eq $download_retries ]; then
+    echo "[ERROR] Failed to download Arc agent RPM after $download_retries attempts"
+    exit 1
 fi
 
+echo "[INFO] Installing Arc agent RPM..."
+if ! rpm -ivh "$rpm_file" 2>/dev/null && ! rpm -Uvh "$rpm_file" 2>/dev/null; then
+    echo "[WARN] Arc agent RPM installation encountered issues, continuing..."
+fi
+rm -f "$rpm_file"
+
 # PART 1: DNS AND GC CONFIG SETUP
+
+echo "[INFO] Configuring GuestConfig services..."
+mkdir -p /opt/GC_Service/GC /opt/GC_Ext/GC || true
 
 cat > /opt/GC_Service/GC/gc.config <<'EOF'
 {
@@ -42,64 +125,51 @@ cat > /opt/GC_Ext/GC/gc.config <<'EOF'
 }
 EOF
 
-cat > /etc/resolv.conf <<DNSEOF
-nameserver ${DNS_SERVER_1}
-nameserver ${DNS_SERVER_2}
-DNSEOF
-
-cat > /isan/etc/template/etc/resolv.conf <<DNSEOF
-nameserver ${DNS_SERVER_1}
-nameserver ${DNS_SERVER_2}
-DNSEOF
+echo "[INFO] Configuring DNS servers..."
+if [ -n "$DNS_SERVERS" ] && [ "$DNS_SERVERS" != "<DNS_SERVER_LIST>" ]; then
+    echo "[INFO] Using user-provided DNS servers: $DNS_SERVERS"
+    echo "# DNS configuration for Arc switch" > /etc/resolv.conf
+    for dns_server in $DNS_SERVERS; do
+        echo "nameserver $dns_server" >> /etc/resolv.conf
+    done
+    
+    # Also update template for NX-OS
+    mkdir -p /isan/etc/template/etc || true
+    cp /etc/resolv.conf /isan/etc/template/etc/resolv.conf
+    echo "[INFO] DNS servers configured: $DNS_SERVERS"
+else
+    echo "[INFO] DNS_SERVERS not provided, keeping system defaults"
+fi
 
 # PART 2: MAKE ARC BINARIES EXECUTABLE
 
-for binary in $(find /opt /var -type f -name "himds" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+echo "[INFO] Setting permissions for Arc binaries..."
+
+set_binary_permissions() {
+    local binary="$1"
     chmod +x "$binary" 2>/dev/null
     chmod 755 "$binary" 2>/dev/null
     chown root:root "$binary" 2>/dev/null
     chmod u+s "$binary" 2>/dev/null
     setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+}
+
+for binary_name in "himds" "arcproxy" "azcmagent" "gc_linux_service" "gc_worker"; do
+    while IFS= read -r binary; do
+        set_binary_permissions "$binary"
+    done < <(find /opt /var -type f -name "$binary_name" 2>/dev/null | grep -v ".bak\|.old\|.backup")
 done
 
-for binary in $(find /opt /var -type f -name "arcproxy" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
-    chmod +x "$binary" 2>/dev/null
-    chmod 755 "$binary" 2>/dev/null
-    chown root:root "$binary" 2>/dev/null
-    chmod u+s "$binary" 2>/dev/null
-    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
-done
-
-for binary in $(find /opt /var -type f -name "azcmagent" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
-    chmod +x "$binary" 2>/dev/null
-    chmod 755 "$binary" 2>/dev/null
-    chown root:root "$binary" 2>/dev/null
-    chmod u+s "$binary" 2>/dev/null
-    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
-done
-
-for binary in $(find /opt /var -type f -name "gc_linux_service" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
-    chmod +x "$binary" 2>/dev/null
-    chmod 755 "$binary" 2>/dev/null
-    chown root:root "$binary" 2>/dev/null
-    chmod u+s "$binary" 2>/dev/null
-    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
-done
-
-for binary in $(find /opt /var -type f -name "gc_worker" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
-    chmod +x "$binary" 2>/dev/null
-    chmod 755 "$binary" 2>/dev/null
-    chown root:root "$binary" 2>/dev/null
-    chmod u+s "$binary" 2>/dev/null
-    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
-done
+echo "[INFO] Binary permissions configured"
 
 
 # PART 3: CREATE SYSTEMD SHIMS
 
+echo "[INFO] Finding writable+executable directory for systemd shims..."
+
 SHIM_DIR=""
 for dir in /var/bin /tmp/bin /usr/local/bin /volatile/bin; do
-    mkdir -p "$dir" 2>/dev/null
+    mkdir -p "$dir" 2>/dev/null || continue
     if touch "$dir/.test" 2>/dev/null; then
         rm -f "$dir/.test"
         cat > "$dir/.test_exec.sh" <<'TEST_EOF'
@@ -118,9 +188,11 @@ TEST_EOF
 done
 
 if [ -z "$SHIM_DIR" ]; then
-    echo "ERROR: No writable+executable directory found"
+    echo "[ERROR] No writable+executable directory found for systemd shims"
     exit 1
 fi
+
+echo "[INFO] Using shim directory: $SHIM_DIR"
 
 cat > "$SHIM_DIR/systemctl" <<'SYSTEMCTL_EOF'
 #!/bin/bash
@@ -239,6 +311,8 @@ fi
 
 # PART 5: CONFIGURE SYSTEM ENVIRONMENT
 
+echo "[INFO] Configuring system environment (SHIM_DIR=$SHIM_DIR)..."
+
 cat > /etc/environment <<ENVEOF
 IMDS_ENDPOINT=http://localhost:40342
 IDENTITY_ENDPOINT=http://localhost:40342/metadata/identity/oauth2/token
@@ -275,7 +349,15 @@ export NODE_TLS_REJECT_UNAUTHORIZED=0
 PROFEOF
 
 chmod +x /etc/profile.d/arc-environment.sh
-source /etc/profile.d/arc-environment.sh
+
+# Source environment variables for immediate use
+if [ -f /etc/profile.d/arc-environment.sh ]; then
+    source /etc/profile.d/arc-environment.sh
+    echo "[INFO] Environment variables sourced successfully"
+else
+    echo "[ERROR] Failed to create environment file"
+    exit 1
+fi
 
 mkdir -p /var/opt/azcmagent/{log,tokens,arcproxy}
 mkdir -p /var/lib/{waagent,GuestConfig/Configuration,GuestConfig/Extension/{status,config}}
@@ -285,41 +367,49 @@ chmod 755 /var/lib/GuestConfig/{Extension,Configuration}
 
 # PART 6: CREATE INIT SCRIPTS
 
-cat > /etc/init.d/himdsd <<HIMDS_EOF
+create_service_script() {
+    local service_name="${1:-}"
+    local script_path="${2:-}"
+    local daemon_pattern="${3:-}"
+    local pidfile="/var/run/${service_name}.pid"
+    local logfile="/var/log/arc/${service_name}.log"
+
+    if [ "$service_name" = "himdsd" ]; then
+        cat > "$script_path" <<'HIMDS_EOF'
 #!/bin/bash
 DAEMON="himds"
 PIDFILE="/var/run/himds.pid"
 LOGFILE="/var/log/arc/himds.log"
 
-DAEMON_PATH=\$(find /opt /var 2>/dev/null | grep -E "/himds\$" | grep -v ".bak\|.old\|.backup" | head -1)
+DAEMON_PATH=$(find /opt /var 2>/dev/null | grep -E "/himds$" | grep -v ".bak\|.old\|.backup" | head -1)
 
-if [ -z "\$DAEMON_PATH" ]; then
+if [ -z "$DAEMON_PATH" ]; then
     echo "ERROR: himds binary not found"
     exit 1
 fi
 
 start() {
-    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
         return 0
     fi
     
-    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
     rm -f /var/opt/azcmagent/socks/himds.sock 2>/dev/null
     sleep 2
     
-    mkdir -p /var/opt/azcmagent/socks \$(dirname \$LOGFILE)
+    mkdir -p /var/opt/azcmagent/socks $(dirname $LOGFILE)
     
-    export PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin"
+    export PATH="/var/bin:/tmp/bin:/usr/local/bin:/volatile/bin:/usr/bin:/usr/sbin:/bin:/sbin"
     export IMDS_ENDPOINT="http://localhost:40342"
     export IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token"
     
-    cd \$(dirname \$DAEMON_PATH)
-    nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
-    PID=\$!
-    echo \$PID > \$PIDFILE
+    cd $(dirname $DAEMON_PATH)
+    nohup $DAEMON_PATH >> $LOGFILE 2>&1 &
+    PID=$!
+    echo $PID > $PIDFILE
     
     for i in {1..20}; do
-        if [ -e /var/opt/azcmagent/socks/himds.sock ] && ps -p \$PID > /dev/null 2>&1; then
+        if [ -e /var/opt/azcmagent/socks/himds.sock ] && ps -p $PID > /dev/null 2>&1; then
             return 0
         fi
         sleep 1
@@ -329,14 +419,14 @@ start() {
 }
 
 stop() {
-    [ -f \$PIDFILE ] && kill \$(cat \$PIDFILE) 2>/dev/null
-    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
-    rm -f \$PIDFILE
+    [ -f $PIDFILE ] && kill $(cat $PIDFILE) 2>/dev/null
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
+    rm -f $PIDFILE
 }
 
 status() {
-    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
-        echo "HIMDS is running (PID \$(cat \$PIDFILE))"
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
+        echo "HIMDS is running (PID $(cat $PIDFILE))"
         return 0
     else
         echo "HIMDS is stopped"
@@ -344,17 +434,101 @@ status() {
     fi
 }
 
-case "\$1" in
+case "$1" in
     start) start ;;
     stop) stop ;;
     restart) stop; sleep 2; start ;;
     status) status ;;
-    *) echo "Usage: \$0 {start|stop|restart|status}" ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" ;;
 esac
 HIMDS_EOF
+    else
+        # Generic service template for other services
+        cat > "$script_path" <<'GENERIC_EOF'
+#!/bin/bash
+SERVICE_NAME="{SERVICE_NAME}"
+PIDFILE="/var/run/{SERVICE_NAME}.pid"
+LOGFILE="/var/log/arc/{SERVICE_NAME}.log"
+DAEMON_PATTERN="{DAEMON_PATTERN}"
 
-chmod +x /etc/init.d/himdsd
+DAEMON_PATH=$(find /opt /var 2>/dev/null | grep -E "$DAEMON_PATTERN" | grep -v ".bak\|.old" | head -1)
 
+if [ -z "$DAEMON_PATH" ]; then
+    echo "ERROR: $DAEMON_PATTERN binary not found"
+    exit 1
+fi
+
+start() {
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
+        return 0
+    fi
+    
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
+    fuser -k -9 40343/tcp 2>/dev/null
+    fuser -k -9 40344/tcp 2>/dev/null
+    rm -f $PIDFILE
+    sleep 3
+    
+    mkdir -p $(dirname $LOGFILE)
+    [ -f /etc/profile.d/arc-environment.sh ] && source /etc/profile.d/arc-environment.sh
+    
+    nohup $DAEMON_PATH >> $LOGFILE 2>&1 &
+    PID=$!
+    echo $PID > $PIDFILE
+    sleep 5
+    
+    if ps -p $PID > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+stop() {
+    if [ -f $PIDFILE ]; then
+        kill -9 $(cat $PIDFILE) 2>/dev/null
+        rm -f $PIDFILE
+    fi
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
+    fuser -k -9 40343/tcp 2>/dev/null
+    fuser -k -9 40344/tcp 2>/dev/null
+    sleep 3
+}
+
+restart() {
+    stop
+    sleep 5
+    start
+}
+
+status() {
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
+        echo "$SERVICE_NAME is running (PID $(cat $PIDFILE))"
+        return 0
+    else
+        echo "$SERVICE_NAME is stopped"
+        return 3
+    fi
+}
+
+case "$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) restart ;;
+    status) status ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" ;;
+esac
+GENERIC_EOF
+        sed -i "s|{SERVICE_NAME}|$service_name|g; s|{DAEMON_PATTERN}|$daemon_pattern|g" "$script_path"
+    fi
+    
+    chmod +x "$script_path"
+}
+
+# Create HIMDS service
+create_service_script "himdsd" "/etc/init.d/himdsd"
+
+# Create ArcProxy service
 cat > /etc/init.d/arcproxyd <<'ARCPROXY_EOF'
 #!/bin/bash
 DAEMON="arcproxy"
@@ -432,74 +606,75 @@ ARCPROXY_EOF
 
 chmod +x /etc/init.d/arcproxyd
 
-cat > /etc/init.d/extd <<EXTD_EOF
+# Create EXTD service (Extension Service)
+cat > /etc/init.d/extd <<'EXTD_EOF'
 #!/bin/bash
 DAEMON="gc_linux_service"
 PIDFILE="/var/run/extd.pid"
 LOGFILE="/var/log/arc/extd.log"
 
-DAEMON_PATH=\$(find /opt /var 2>/dev/null | grep -E "/GC_Ext.*gc_linux_service\$" | grep -v ".bak\|.old" | head -1)
-GC_PATH=\$(dirname "\$DAEMON_PATH" 2>/dev/null)
+DAEMON_PATH=$(find /opt /var 2>/dev/null | grep -E "/GC_Ext.*gc_linux_service$" | grep -v ".bak\|.old" | head -1)
+GC_PATH=$(dirname "$DAEMON_PATH" 2>/dev/null)
 
-if [ -z "\$DAEMON_PATH" ] || [ ! -f "\$DAEMON_PATH" ]; then
+if [ -z "$DAEMON_PATH" ] || [ ! -f "$DAEMON_PATH" ]; then
     echo "ERROR: EXTD binary not found"
     exit 1
 fi
 
 start() {
-    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
         return 0
     fi
     
-    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
-    rm -f \$PIDFILE
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
+    rm -f $PIDFILE
     sleep 2
     
-    mkdir -p \$(dirname \$LOGFILE) /var/lib/GuestConfig/Extension/{status,config} /var/lib/waagent
-    cd \$GC_PATH
+    mkdir -p $(dirname $LOGFILE) /var/lib/GuestConfig/Extension/{status,config} /var/lib/waagent
+    cd $GC_PATH
     
     ARM_RES_ID=""
     if [ -f /var/opt/azcmagent/agentconfig.json ]; then
-        ARM_RES_ID=\$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+        ARM_RES_ID=$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
     fi
     
-    if [ -z "\$ARM_RES_ID" ]; then
-        ARM_RES_ID="${RESOURCE_ID}"
-    fi
+    [ -z "$ARM_RES_ID" ] && ARM_RES_ID="/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.HybridCompute/machines/${MACHINE_NAME}"
     
-    env - PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin" \
+    [ -f /etc/profile.d/arc-environment.sh ] && source /etc/profile.d/arc-environment.sh
+    
+    env - PATH="/var/bin:/tmp/bin:/usr/local/bin:/volatile/bin:/usr/bin:/usr/sbin:/bin:/sbin" \
         IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token" \
         IMDS_ENDPOINT="http://localhost:40342" \
         AZGUESTCONFIG_ENDPOINT="http://localhost:40343" \
         EXTENSION_SERVICE_URL="http://localhost:40343" \
-        ARM_RESOURCE_ID="\$ARM_RES_ID" \
-        LD_LIBRARY_PATH="\$GC_PATH" \
+        ARM_RESOURCE_ID="$ARM_RES_ID" \
+        LD_LIBRARY_PATH="$GC_PATH" \
         AZURE_GUEST_AGENT_EXTENSION_PATH="/var/lib/waagent" \
         AZURE_GUEST_AGENT_EXTENSION_SUPPORTED_FEATURES="ExtensionTelemetryPipeline,PersistentExtensions" \
         AZURE_HTTP_USER_AGENT="GuestConfiguration/Extension" \
-        nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
+        nohup $DAEMON_PATH >> $LOGFILE 2>&1 &
     
-    PID=\$!
-    echo \$PID > \$PIDFILE
+    PID=$!
+    echo $PID > $PIDFILE
     sleep 8
     
-    if ps -p \$PID > /dev/null 2>&1; then
+    if ps -p $PID > /dev/null 2>&1; then
         return 0
     else
-        rm -f \$PIDFILE
+        rm -f $PIDFILE
         return 1
     fi
 }
 
 stop() {
-    [ -f \$PIDFILE ] && kill \$(cat \$PIDFILE) 2>/dev/null
-    pkill -f "\$DAEMON_PATH" 2>/dev/null
-    rm -f \$PIDFILE
+    [ -f $PIDFILE ] && kill $(cat $PIDFILE) 2>/dev/null
+    pkill -f "$DAEMON_PATH" 2>/dev/null
+    rm -f $PIDFILE
 }
 
 status() {
-    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
-        echo "EXTD is running (PID \$(cat \$PIDFILE))"
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
+        echo "EXTD is running (PID $(cat $PIDFILE))"
         return 0
     else
         echo "EXTD is stopped"
@@ -507,83 +682,84 @@ status() {
     fi
 }
 
-case "\$1" in
+case "$1" in
     start) start ;;
     stop) stop ;;
     restart) stop; sleep 2; start ;;
     status) status ;;
-    *) echo "Usage: \$0 {start|stop|restart|status}" ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" ;;
 esac
 EXTD_EOF
 
 chmod +x /etc/init.d/extd
 
-cat > /etc/init.d/gcad <<GCAD_EOF
+# Create GCAD service (Guest Configuration Agent)
+cat > /etc/init.d/gcad <<'GCAD_EOF'
 #!/bin/bash
 DAEMON="gc_linux_service"
 PIDFILE="/var/run/gcad.pid"
 LOGFILE="/var/log/arc/gcad.log"
 
-DAEMON_PATH=\$(find /opt /var 2>/dev/null | grep -E "/GC_Service.*gc_linux_service\$" | grep -v ".bak\|.old" | head -1)
-GC_PATH=\$(dirname "\$DAEMON_PATH" 2>/dev/null)
+DAEMON_PATH=$(find /opt /var 2>/dev/null | grep -E "/GC_Service.*gc_linux_service$" | grep -v ".bak\|.old" | head -1)
+GC_PATH=$(dirname "$DAEMON_PATH" 2>/dev/null)
 
-if [ -z "\$DAEMON_PATH" ] || [ ! -f "\$DAEMON_PATH" ]; then
+if [ -z "$DAEMON_PATH" ] || [ ! -f "$DAEMON_PATH" ]; then
     echo "ERROR: GCAD binary not found"
     exit 1
 fi
 
 start() {
-    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
         return 0
     fi
     
-    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
-    rm -f \$PIDFILE
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
+    rm -f $PIDFILE
     sleep 2
     
-    mkdir -p \$(dirname \$LOGFILE) /var/lib/GuestConfig/Configuration
-    cd \$GC_PATH
+    mkdir -p $(dirname $LOGFILE) /var/lib/GuestConfig/Configuration
+    cd $GC_PATH
     
     ARM_RES_ID=""
     if [ -f /var/opt/azcmagent/agentconfig.json ]; then
-        ARM_RES_ID=\$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+        ARM_RES_ID=$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
     fi
     
-    if [ -z "\$ARM_RES_ID" ]; then
-        ARM_RES_ID="${RESOURCE_ID}"
-    fi
+    [ -z "$ARM_RES_ID" ] && ARM_RES_ID="/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.HybridCompute/machines/${MACHINE_NAME}"
     
-    env - PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin" \
+    [ -f /etc/profile.d/arc-environment.sh ] && source /etc/profile.d/arc-environment.sh
+    
+    env - PATH="/var/bin:/tmp/bin:/usr/local/bin:/volatile/bin:/usr/bin:/usr/sbin:/bin:/sbin" \
         IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token" \
         IMDS_ENDPOINT="http://localhost:40342" \
         AZGUESTCONFIG_ENDPOINT="http://localhost:40343" \
-        ARM_RESOURCE_ID="\$ARM_RES_ID" \
-        LD_LIBRARY_PATH="\$GC_PATH" \
+        ARM_RESOURCE_ID="$ARM_RES_ID" \
+        LD_LIBRARY_PATH="$GC_PATH" \
         AZURE_GUEST_CONFIGURATION_PATH="/var/lib/GuestConfig/Configuration" \
         AZURE_HTTP_USER_AGENT="GuestConfiguration/Agent" \
-        nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
+        nohup $DAEMON_PATH >> $LOGFILE 2>&1 &
     
-    PID=\$!
-    echo \$PID > \$PIDFILE
+    PID=$!
+    echo $PID > $PIDFILE
     sleep 8
     
-    if ps -p \$PID > /dev/null 2>&1; then
+    if ps -p $PID > /dev/null 2>&1; then
         return 0
     else
-        rm -f \$PIDFILE
+        rm -f $PIDFILE
         return 1
     fi
 }
 
 stop() {
-    [ -f \$PIDFILE ] && kill \$(cat \$PIDFILE) 2>/dev/null
-    pkill -f "\$DAEMON_PATH" 2>/dev/null
-    rm -f \$PIDFILE
+    [ -f $PIDFILE ] && kill $(cat $PIDFILE) 2>/dev/null
+    pkill -f "$DAEMON_PATH" 2>/dev/null
+    rm -f $PIDFILE
 }
 
 status() {
-    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
-        echo "GCAD is running (PID \$(cat \$PIDFILE))"
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
+        echo "GCAD is running (PID $(cat $PIDFILE))"
         return 0
     else
         echo "GCAD is stopped"
@@ -591,12 +767,12 @@ status() {
     fi
 }
 
-case "\$1" in
+case "$1" in
     start) start ;;
     stop) stop ;;
     restart) stop; sleep 2; start ;;
     status) status ;;
-    *) echo "Usage: \$0 {start|stop|restart|status}" ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" ;;
 esac
 GCAD_EOF
 
@@ -604,47 +780,105 @@ chmod +x /etc/init.d/gcad
 
 # PART 7: RESTART ALL SERVICES
 
-echo "Stopping services..."
+echo "[INFO] Stopping services..."
 for service in gcad extd arcproxyd himdsd; do
-    /etc/init.d/$service stop 2>/dev/null
+    if [ -f "/etc/init.d/$service" ]; then
+        echo "[INFO] Stopping $service..."
+        /etc/init.d/$service stop 2>/dev/null || echo "[WARN] Failed to stop $service (may not be running)"
+    else
+        echo "[WARN] Service script for $service not found at /etc/init.d/$service"
+    fi
 done
 
 sleep 5
-pkill -9 -f "gc_linux_service" 2>/dev/null
-pkill -9 -f "arcproxy" 2>/dev/null
-pkill -9 -f "himds" 2>/dev/null
+echo "[INFO] Force killing remaining processes..."
+pkill -9 -f "gc_linux_service" 2>/dev/null || true
+pkill -9 -f "arcproxy" 2>/dev/null || true
+pkill -9 -f "himds" 2>/dev/null || true
 for port in 40342 40343 40344; do
-    fuser -k -9 $port/tcp 2>/dev/null
+    echo "[INFO] Releasing port $port..."
+    fuser -k -9 $port/tcp 2>/dev/null || true
 done
-rm -f /var/run/*.pid 2>/dev/null
-rm -f /var/opt/azcmagent/socks/himds.sock 2>/dev/null
+rm -f /var/run/*.pid 2>/dev/null || true
+rm -f /var/opt/azcmagent/socks/himds.sock 2>/dev/null || true
 sleep 3
 
-echo "Starting services..."
-/etc/init.d/himdsd start
+echo "[INFO] Starting services..."
+if [ -f "/etc/init.d/himdsd" ]; then
+    echo "[INFO] Starting himdsd..."
+    /etc/init.d/himdsd start || echo "[WARN] Failed to start himdsd"
+else
+    echo "[ERROR] himdsd service script not found"
+fi
 sleep 5
 
-/etc/init.d/arcproxyd start
+if [ -f "/etc/init.d/arcproxyd" ]; then
+    echo "[INFO] Starting arcproxyd..."
+    /etc/init.d/arcproxyd start || echo "[WARN] Failed to start arcproxyd"
+else
+    echo "[ERROR] arcproxyd service script not found"
+fi
 sleep 5
 
-/etc/init.d/extd start
+if [ -f "/etc/init.d/extd" ]; then
+    echo "[INFO] Starting extd..."
+    /etc/init.d/extd start || echo "[WARN] Failed to start extd"
+else
+    echo "[ERROR] extd service script not found"
+fi
 sleep 8
 
-/etc/init.d/gcad start
+if [ -f "/etc/init.d/gcad" ]; then
+    echo "[INFO] Starting gcad..."
+    /etc/init.d/gcad start || echo "[WARN] Failed to start gcad"
+else
+    echo "[ERROR] gcad service script not found"
+fi
 sleep 8
 
-echo "Setup complete. Check service status:"
+echo "[INFO] Setup complete. Checking service status..."
 for service in himdsd arcproxyd extd gcad; do
-    /etc/init.d/$service status
+    if [ -f "/etc/init.d/$service" ]; then
+        echo "[INFO] Status of $service:"
+        /etc/init.d/$service status || echo "[WARN] Could not get status for $service"
+    else
+        echo "[WARN] Service script for $service not found"
+    fi
 done
 
 # PART 8: DOWNLOAD AND INSTALL PARSER
 
-wget -q "$PARSER_URL" -O parser.tar.gz
-tar -xzf parser.tar.gz
-rm -f parser.tar.gz
-find /opt/azcmagent -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null
-find /var/tmp -name "rpm-tmp.*" -type f -exec chmod +x {} \; 2>/dev/null
+echo "[INFO] Downloading and installing Cisco parser..."
+cd /opt
+parser_file="cisco-parser.tar.gz"
+if ! wget -q "$PARSER_URL" -O "$parser_file"; then
+    echo "[ERROR] Failed to download parser from $PARSER_URL"
+    exit 1
+fi
+
+if ! tar -xzf "$parser_file"; then
+    echo "[ERROR] Failed to extract parser archive"
+    rm -f "$parser_file"
+    exit 1
+fi
+rm -f "$parser_file"
+
+# Verify parser binary was extracted and is executable
+if [ ! -x "$PARSER_PATH" ]; then
+    echo "[ERROR] Parser binary not found or not executable at $PARSER_PATH"
+    exit 1
+fi
+echo "[INFO] Parser installed and verified at $PARSER_PATH"
+
+# Verify Arc installation succeeded
+if ! command -v azcmagent >/dev/null 2>&1; then
+    echo "[WARN] azcmagent command not found in PATH, checking /opt/azcmagent"
+fi
+
+# Set permissions on any newly installed Arc binaries
+echo "[INFO] Securing Arc agent binaries..."
+find /opt/azcmagent -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null || echo "[WARN] Could not set permissions on Arc scripts"
+find /var/tmp -name "rpm-tmp.*" -type f -exec chmod +x {} \; 2>/dev/null || true
 
 # PART 9: CREATE SIGNATURE GENERATOR
 
@@ -833,10 +1067,10 @@ log_message() {
 }
 
 run_and_process() {
-    local command_name="\$1"
-    local vsh_command="\$2"
-    local parser_type="\$3"
-    local table_name="\$4"
+    local command_name="${1:-}"
+    local vsh_command="${2:-}"
+    local parser_type="${3:-}"
+    local table_name="${4:-}"
     
     local temp_input="\$TEMP_DIR/\${command_name}-input.txt"
     local temp_output="\$TEMP_DIR/\${command_name}-output.json"
@@ -866,10 +1100,10 @@ run_and_process() {
 }
 
 process_command() {
-    local cmd_name="\$1"
-    local vsh_cmd="\$2"
-    local parser_type="\$3"
-    local table_name="\$4"
+    local cmd_name="${1:-}"
+    local vsh_cmd="${2:-}"
+    local parser_type="${3:-}"
+    local table_name="${4:-}"
     
     if run_and_process "\$cmd_name" "\$vsh_cmd" "\$parser_type" "\$table_name"; then
         return 0
@@ -884,61 +1118,33 @@ main() {
     local success_count=0
     local failure_count=0
     
-    process_command "class-map" "show class-map" "class-map" "CiscoClassMap"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
+    # Define commands: (command_name:vsh_command:parser_type:table_name)
+    local commands=(
+        "class-map:show class-map:class-map:CiscoClassMap"
+        "interface-counters:show interface counter:interface-counters:CiscoInterfaceCounter"
+        "inventory:show inventory all:inventory:CiscoInventory"
+        "ip-arp:show ip arp:ip-arp:CiscoIpArp"
+        "ip-route:show ip route:ip-route:CiscoIpRoute"
+        "lldp-neighbor:show lldp neighbor detail:lldp-neighbor:CiscoLldpNeighbor"
+        "mac-address:show mac address-table:mac-address:CiscoMacAddress"
+        "transceiver:show interface transceiver:transceiver:CiscoTransceiver"
+        "env-temp:show environment temperature:environment-temperature:CiscoEnvTemp"
+        "interface-errors:show interface counters errors:interface-error-counters:CiscoInterfaceErrors"
+        "env-power:show environment power detail:environment-power:CiscoEnvPower"
+        "system-resources:show system resources:system-resources:CiscoSystemResources"
+        "system-uptime:show system uptime:system-uptime:CiscoSystemUptime"
+        "bgp-all-summary:show bgp all summary:bgp-all-summary:CiscoBgpSummary"
+    )
     
-    process_command "interface-counters" "show interface counter" "interface-counters" "CiscoInterfaceCounter"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "inventory" "show inventory all" "inventory" "CiscoInventory"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "ip-arp" "show ip arp" "ip-arp" "CiscoIpArp"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "ip-route" "show ip route" "ip-route" "CiscoIpRoute"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "lldp-neighbor" "show lldp neighbor detail" "lldp-neighbor" "CiscoLldpNeighbor"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "mac-address" "show mac address-table" "mac-address" "CiscoMacAddress"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "transceiver" "show interface transceiver" "transceiver" "CiscoTransceiver"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "env-temp" "show environment temperature" "environment-temperature" "CiscoEnvTemp"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "interface-errors" "show interface counters errors" "interface-error-counters" "CiscoInterfaceErrors"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "env-power" "show environment power detail" "environment-power" "CiscoEnvPower"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "system-resources" "show system resources" "system-resources" "CiscoSystemResources"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "system-uptime" "show system uptime" "system-uptime" "CiscoSystemUptime"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-
-    process_command "bgp-all-summary" "show bgp all summary" "bgp-all-summary" "CiscoBgpSummary"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
+    for cmd_config in "\${commands[@]}"; do
+        IFS=':' read -r cmd_name vsh_cmd parser_type table_name <<< "\$cmd_config"
+        if process_command "\$cmd_name" "\$vsh_cmd" "\$parser_type" "\$table_name"; then
+            ((success_count++))
+        else
+            ((failure_count++))
+        fi
+        sleep 2
+    done
     
     log_message "Collection complete: \$success_count success, \$failure_count failures"
     
@@ -957,22 +1163,52 @@ chmod +x /opt/cisco-parser-collector.sh
 
 # PART 12: SETUP CRON JOB
 
-cat > /tmp/cisco-cron-temp << 'CRON_EOF'
+echo "[INFO] Configuring cron job for telemetry collection..."
+
+# Verify vsh is available before adding cron job
+if ! command -v vsh >/dev/null 2>&1; then
+    echo "[WARN] vsh command not found - this script must run on a Cisco switch"
+    echo "[WARN] Cron job setup skipped - vsh is required for parser collector"
+else
+    cat > /tmp/cisco-cron-temp << 'CRON_EOF'
 * * * * * /opt/cisco-parser-collector.sh
 CRON_EOF
 
-crontab -l > /tmp/current-cron 2>/dev/null || true
-cat /tmp/current-cron /tmp/cisco-cron-temp | crontab -
-rm -f /tmp/cisco-cron-temp /tmp/current-cron
+    crontab -l > /tmp/current-cron 2>/dev/null || true
+    if ! grep -q 'cisco-parser-collector' /tmp/current-cron; then
+        cat /tmp/current-cron /tmp/cisco-cron-temp | crontab -
+        echo "[INFO] Cron job added successfully"
+    else
+        echo "[INFO] Cron job already exists, skipping"
+    fi
+    rm -f /tmp/cisco-cron-temp /tmp/current-cron
+
+    # Verify cron job was added
+    if crontab -l 2>/dev/null | grep -q 'cisco-parser-collector'; then
+        echo "[INFO] Cron job verified and active"
+    else
+        echo "[WARN] Cron job may not be active, verify with: crontab -l"
+    fi
+fi
 
 echo "============================================================================"
-echo "Azure Arc Setup Script Completed Successfully!"
+echo "[SUCCESS] Azure Arc Setup Script Completed Successfully!"
 echo "============================================================================"
+echo ""
+echo "Configuration Summary:"
+echo "  Region: $REGION"
+echo "  Resource Group: $RESOURCE_GROUP"
+echo "  Machine Name: $MACHINE_NAME"
+echo "  Shim Directory: $SHIM_DIR"
+echo "  Parser Path: $PARSER_PATH"
+echo "  Workspace ID: ${WORKSPACE_ID:0:8}..." 
 echo ""
 echo "NEXT STEPS:"
 echo "1. Connect the Arc agent to Azure (see README.md for instructions)"
 echo "2. Verify Arc agent connection with: azcmagent show"
-echo "3. Check service status with: /etc/init.d/himdsd status"
-echo "4. View logs in /var/log/arc/"
+echo "3. Check service status with: for svc in himdsd arcproxyd extd gcad; do echo -n \"\$svc: \"; /etc/init.d/\$svc status | head -1; done"
+echo "4. Check cron job: crontab -l | grep cisco-parser-collector"
+echo "5. View logs in /var/log/arc/"
+echo "6. Run diagnostic: /opt/arc-diagnostics.sh (once created)"
 echo ""
 echo "============================================================================"
