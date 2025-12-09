@@ -71,42 +71,52 @@ for service in himdsd arcproxyd extd gcad; do
     fi
 done
 
-# Download and install Arc agent RPM
-echo "[INFO] Downloading Arc agent RPM..."
-cd /opt
-rpm_file="azcmagent.rpm"
-rpm_path="$(pwd)/$rpm_file"
-download_retries=3
-retry_count=0
+# Download and install Arc agent RPM (skip if already installed)
+if rpm -q azcmagent >/dev/null 2>&1; then
+    echo "[INFO] Arc agent already installed; skipping download and install"
+else
+    echo "[INFO] Preparing Arc agent RPM download..."
+    cd /opt
+    rpm_file="azcmagent.rpm"
+    rpm_path="$(pwd)/$rpm_file"
+    download_retries=3
+    retry_count=0
 
-# Attempt download with retry logic
-while [ $retry_count -lt $download_retries ]; do
-    echo "[INFO] Download attempt $((retry_count + 1))/$download_retries"
-    if wget --timeout=30 --tries=2 -q -O "$rpm_file" "$AZCMAGENT_RPM_URL" 2>&1; then
-        if [ -f "$rpm_file" ] && [ -s "$rpm_file" ]; then
-            file_size=$(du -h "$rpm_file" | cut -f1)
-            echo "[INFO] Arc agent RPM downloaded successfully ($file_size)"
-            break
+    # Reuse existing RPM if present and non-empty
+    if [ -f "$rpm_path" ] && [ -s "$rpm_path" ]; then
+        file_size=$(du -h "$rpm_path" | cut -f1)
+        echo "[INFO] Found existing Arc agent RPM ($file_size) at $rpm_path; reusing"
+    else
+        # Attempt download with retry logic
+        while [ $retry_count -lt $download_retries ]; do
+            echo "[INFO] Download attempt $((retry_count + 1))/$download_retries"
+            if wget --timeout=30 --tries=2 -q -O "$rpm_file" "$AZCMAGENT_RPM_URL" 2>&1; then
+                if [ -f "$rpm_file" ] && [ -s "$rpm_file" ]; then
+                    file_size=$(du -h "$rpm_file" | cut -f1)
+                    echo "[INFO] Arc agent RPM downloaded successfully ($file_size)"
+                    break
+                fi
+            fi
+            retry_count=$((retry_count + 1))
+            if [ $retry_count -lt $download_retries ]; then
+                echo "[WARN] Download attempt $retry_count failed, retrying in 5 seconds..."
+                sleep 5
+                rm -f "$rpm_file"
+            fi
+        done
+
+        if [ $retry_count -eq $download_retries ]; then
+            echo "[ERROR] Failed to download Arc agent RPM after $download_retries attempts"
+            exit 1
         fi
     fi
-    retry_count=$((retry_count + 1))
-    if [ $retry_count -lt $download_retries ]; then
-        echo "[WARN] Download attempt $retry_count failed, retrying in 5 seconds..."
-        sleep 5
-        rm -f "$rpm_file"
+
+    echo "[INFO] Installing Arc agent RPM..."
+    if ! rpm -ivh "$rpm_file" 2>/dev/null && ! rpm -Uvh "$rpm_file" 2>/dev/null; then
+        echo "[WARN] Arc agent RPM installation encountered issues, continuing..."
     fi
-done
-
-if [ $retry_count -eq $download_retries ]; then
-    echo "[ERROR] Failed to download Arc agent RPM after $download_retries attempts"
-    exit 1
+    rm -f "$rpm_file"
 fi
-
-echo "[INFO] Installing Arc agent RPM..."
-if ! rpm -ivh "$rpm_file" 2>/dev/null && ! rpm -Uvh "$rpm_file" 2>/dev/null; then
-    echo "[WARN] Arc agent RPM installation encountered issues, continuing..."
-fi
-rm -f "$rpm_file"
 
 # PART 1: DNS AND GC CONFIG SETUP
 
@@ -302,7 +312,7 @@ done
 
 RESOURCE_ID=""
 if [ -f /var/opt/azcmagent/agentconfig.json ]; then
-    RESOURCE_ID=$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+    RESOURCE_ID=$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1 || true)
 fi
 
 if [ -z "$RESOURCE_ID" ] || [ "$RESOURCE_ID" = "null" ]; then
