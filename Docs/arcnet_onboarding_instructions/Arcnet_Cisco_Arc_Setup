@@ -47,7 +47,7 @@ validate_configuration() {
     done
     
     # Validate WORKSPACE_ID format (should look like UUID)
-    if ! [[ "$WORKSPACE_ID" =~ ^[a-f0-9-]{36}$ ]]; then
+    if ! [[ "$WORKSPACE_ID" =~ ^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$ ]]; then
         echo "[WARN] WORKSPACE_ID does not appear to be a valid UUID format: $WORKSPACE_ID"
     fi
     
