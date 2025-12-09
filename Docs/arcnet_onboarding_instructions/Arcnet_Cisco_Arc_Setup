@@ -64,7 +64,7 @@ echo "[INFO] Configuration validation passed"
 # Check and handle existing services
 echo "[INFO] Checking for existing Arc services..."
 for service in himdsd arcproxyd extd gcad; do
-    if [ -f "/etc/init.d/$service" ] && /etc/init.d/$service status &>/dev/null 2>&1; then
+    if [ -f "/etc/init.d/$service" ] && /etc/init.d/$service status &>/dev/null; then
         echo "[INFO] Service '$service' is already running. Will refresh it with this setup."
         /etc/init.d/$service stop 2>/dev/null || true
         sleep 2
