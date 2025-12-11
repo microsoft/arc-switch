@@ -1,0 +1,94 @@
+CONTOSO-DC1-TOR-01# show version 
+Cisco Nexus Operating System (NX-OS) Software
+TAC support: http://www.cisco.com/tac
+Copyright (C) 2002-2025, Cisco and/or its affiliates.
+All rights reserved.
+The copyrights to certain works contained in this software are
+owned by other third parties and used and distributed under their own
+licenses, such as open source.  This software is provided "as is," and unless
+otherwise stated, there is no warranty, express or implied, including but not
+limited to warranties of merchantability and fitness for a particular purpose.
+Certain components of this software are licensed under
+the GNU General Public License (GPL) version 2.0 or
+GNU General Public License (GPL) version 3.0  or the GNU
+Lesser General Public License (LGPL) Version 2.1 or
+Lesser General Public License (LGPL) Version 2.0.
+A copy of each such license is available at
+http://www.opensource.org/licenses/gpl-2.0.php and
+http://opensource.org/licenses/gpl-3.0.html and
+http://www.opensource.org/licenses/lgpl-2.1.php and
+http://www.gnu.org/licenses/old-licenses/library.txt.
+
+Software
+  BIOS: version 05.53
+  NXOS: version 10.6(1) [Feature Release]
+  Host NXOS: version 10.6(1)
+  BIOS compile time:  01/22/2025
+  NXOS image file is: bootflash:///nxos64-cs.10.6.1.F.bin
+  NXOS compile time:  7/31/2025 12:00:00 [08/12/2025 14:18:15]
+  NXOS boot mode: LXC
+
+Hardware
+  cisco Nexus9000 C9336C-FX2 Chassis
+  Intel(R) Xeon(R) CPU D-1526 @ 1.80GHz with 24538812 kB of memory.
+  Processor Board ID FLM27210AP2
+  Device name: rr1-n42-r07-9336hl-13-1a
+  bootflash:  115805708 kB
+
+Kernel uptime is 2 day(s), 23 hour(s), 30 minute(s), 26 second(s)
+
+Last reset at 825938 usecs after Fri Oct 17 13:47:16 2025
+  Reason: Reset Requested by CLI command reload
+  System version: 10.6(1)
+  Service:
+
+plugin
+  Core Plugin, Ethernet Plugin
+
+Active Package(s):
+
+CONTOSO-DC1-TOR-01# show version | json-pretty
+{
+    "header_str": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nCopyright (C) 2002-2025, Cisco and/or its affiliates.\nAll rights reserved.\nThe copyrights to certain works
+ contained in this software are\nowned by other third parties and used and distributed under their own\nlicenses, such as open source.  This software is provided \"as is,\" and unless\notherwise stated, there is n
+o warranty, express or implied, including but not\nlimited to warranties of merchantability and fitness for a particular purpose.\nCertain components of this software are licensed under\nthe GNU General Public Lic
+ense (GPL) version 2.0 or \nGNU General Public License (GPL) version 3.0  or the GNU\nLesser General Public License (LGPL) Version 2.1 or \nLesser General Public License (LGPL) Version 2.0. \nA copy of each such l
+icense is available at\nhttp://www.opensource.org/licenses/gpl-2.0.php and\nhttp://opensource.org/licenses/gpl-3.0.html and\nhttp://www.opensource.org/licenses/lgpl-2.1.php and\nhttp://www.gnu.org/licenses/old-lic
+enses/library.txt.",
+    "bios_ver_str": "05.53",
+    "kickstart_ver_str": "10.6(1)",
+    "release_type": "Feature Release",
+    "nxos_ver_str": "10.6(1)",
+    "host_nxos_ver_str": "10.6(1)",
+    "bios_cmpl_time": "01/22/2025",
+    "kick_file_name": "bootflash:///nxos64-cs.10.6.1.F.bin",
+    "nxos_file_name": "bootflash:///nxos64-cs.10.6.1.F.bin",
+    "kick_cmpl_time": "7/31/2025 12:00:00",
+    "nxos_cmpl_time": "7/31/2025 12:00:00",
+    "kick_tmstmp": "08/12/2025 14:18:15",
+    "nxos_tmstmp": "08/12/2025 14:18:15",
+    "boot_lxc_mode": "LXC",
+    "chassis_id": "cisco Nexus9000 C9336C-FX2 Chassis",
+    "cpu_name": "Intel(R) Xeon(R) CPU D-1526 @ 1.80GHz",
+    "memory": "24538812",
+    "mem_type": "kB",
+    "proc_board_id": "FLM27210AP2",
+    "host_name": "rr1-n42-r07-9336hl-13-1a",
+    "bootflash_size": "115805708",
+    "kern_uptm_days": "2",
+    "kern_uptm_hrs": "23",
+    "kern_uptm_mins": "30",
+    "kern_uptm_secs": "35",
+    "rr_usecs": "825938",
+    "rr_ctime": "Fri Oct 17 20:47:16 2025",
+    "rr_reason": "Reset Requested by CLI command reload",
+    "rr_sys_ver": "10.6(1)",
+    "rr_service": null,
+    "plugins": "Core Plugin, Ethernet Plugin",
+    "manufacturer": "Cisco Systems, Inc.",
+    "TABLE_package_list": {
+        "ROW_package_list": {
+            "package_id": null
+        }
+    }
+}
