@@ -75,6 +75,10 @@
         {
             "name": "system-uptime",
             "command": "show system uptime"
+        },
+        {
+            "name": "interface-counter",
+            "command": "show interface status"
         }
     ]
 }

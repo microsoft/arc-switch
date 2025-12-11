@@ -899,18 +899,18 @@ main() {
     process_command "ip-arp" "show ip arp" "ip-arp" "CiscoIpArp"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
     sleep 2
-       
-#    process_command "ip-route" "show ip route" "ip-route" "CiscoIpRoute"
-#    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-#    sleep 2
+    
+    process_command "ip-route" "show ip route" "ip-route" "CiscoIpRoute"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
     
     process_command "lldp-neighbor" "show lldp neighbor detail" "lldp-neighbor" "CiscoLldpNeighbor"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
     sleep 2
     
-#    process_command "mac-address" "show mac address-table" "mac-address" "CiscoMacAddress"
-#    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-#    sleep 2
+    process_command "mac-address" "show mac address-table" "mac-address" "CiscoMacAddress"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
     
     process_command "transceiver" "show interface transceiver" "transceiver" "CiscoTransceiver"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
@@ -937,14 +937,6 @@ main() {
     sleep 2
 
     process_command "bgp-all-summary" "show bgp all summary" "bgp-all-summary" "CiscoBgpSummary"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "interface-status" "show interface status" "interface-status" "CiscoInterfaceStatus"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
-    
-    process_command "version" "show version" "version" "CiscoVersion"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
     sleep 2
     

@@ -24,6 +24,8 @@ import (
 	"system_resources_parser"
 	"system_uptime_parser"
 	"transceiver_parser"
+	"interface_status_parser"
+	"version_parser"
 )
 
 const version = "v1.0.0"
@@ -48,6 +50,8 @@ var parsers = map[string]func() Parser{
 	"system-resources":         func() Parser { return &system_resources_parser.UnifiedParser{} },
 	"system-uptime":            func() Parser { return &system_uptime_parser.UnifiedParser{} },
 	"transceiver":              func() Parser { return &transceiver_parser.UnifiedParser{} },
+	"interface-status":         func() Parser { return &interface_status_parser.UnifiedParser{} },
+	"version":                  func() Parser { return &version_parser.UnifiedParser{} },
 }
 
 func main() {
