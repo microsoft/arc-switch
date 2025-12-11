@@ -1,0 +1,95 @@
+rr1-n42-r07-9336hl-13-1b# show interface status
+
+--------------------------------------------------------------------------------
+Port          Name               Status    Vlan      Duplex  Speed   Type
+--------------------------------------------------------------------------------
+mgmt0         BMCMgmt_switch_vir disabled  routed    auto    auto    --
+
+--------------------------------------------------------------------------------
+Port          Name               Status    Vlan      Duplex  Speed   Type
+--------------------------------------------------------------------------------
+Eth1/1        Switched-Compute   connected trunk     full    100G    QSFP-100G-P
+CC
+Eth1/2        Switched-Compute   connected trunk     full    100G    QSFP-100G-P
+CC
+Eth1/3        Switched-Compute   connected trunk     full    100G    QSFP-100G-P
+CC
+Eth1/4        Switched-Compute   connected trunk     full    100G    QSFP-100G-P
+CC
+Eth1/5        Switched-Compute   connected trunk     full    100G    QSFP-100G-P
+CC
+Eth1/6        Switched-Compute   connected trunk     full    100G    QSFP-100G-P
+CC
+Eth1/7        Switched-Compute   notconnec trunk     auto    auto    QSFP-100G-P
+CC
+Eth1/8        Switched-Compute   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/9        Switched-Compute   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/10       Switched-Compute   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/11       Switched-Compute   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/12       Switched-Compute   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/13       Switched-Compute   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/14       Switched-Compute   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/15       Switched-Compute   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/16       Switched-Compute   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/17       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/18       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/19       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/20       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/21       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/22       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/23       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/24       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/25       Switched-Storage   notconnec trunk     auto    auto    QSFP-100G-PCC
+Eth1/26       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/27       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/28       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/29       Switched-Storage   notconnec trunk     auto    auto    QSFP-100G-PCC
+Eth1/30       Switched-Storage   notconnec trunk     auto    auto    QSFP-100G-PCC
+Eth1/31       Switched-Storage   connected trunk     full    100G    QSFP-100G-PCC
+Eth1/32       Switched-Storage   notconnec trunk     auto    auto    QSFP-100G-PCC
+Eth1/33       P2P_IBGP           connected routed    full    100G    QSFP-100G-CR4
+Eth1/34       MLAG_Peer          connected trunk     full    100G    QSFP-100G-CR4
+Eth1/35       MLAG_Peer          connected trunk     full    100G    QSFP-100G-CR4
+Eth1/36/1     P2P_Border1        connected routed    full    10G     QSFP-40G-CSR4
+Eth1/36/2     P2P_Border2        connected routed    full    10G     QSFP-40G-CSR4
+Eth1/36/3     --                 disabled  routed    auto    auto    QSFP-40G-CSR4
+Eth1/36/4     TOR_BMC            connected trunk     full    10G     QSFP-40G-CSR4
+
+--------------------------------------------------------------------------------
+Port          Name               Status    Vlan      Duplex  Speed   Type
+--------------------------------------------------------------------------------
+Po50          VPC:P2P_IBGP       connected routed    full    100G    --
+Po101         VPC:MLAG_PEER      connected trunk     full    100G    --
+Po102         VPC:TOR_BMC        connected trunk     full    10G     --
+
+--------------------------------------------------------------------------------
+Port          Name               Status    Vlan      Duplex  Speed   Type
+--------------------------------------------------------------------------------
+Lo0           Loopback0_Tor2     connected routed    auto    auto    --
+
+--------------------------------------------------------------------------------
+Port          Name               Status    Vlan      Duplex  Speed   Type
+--------------------------------------------------------------------------------
+Vlan1         --                 down      routed    auto    auto    --
+Vlan6         HNVPA_6            connected routed    auto    auto    --
+Vlan7         Infra_7            connected routed    auto    auto    --
+Vlan125       BMC_Mgmt_125       connected routed    auto    auto    --
+Vlan201       Tenant_201         connected routed    auto    auto    --
+Vlan301       LogicalTenant_301  connected routed    auto    auto    --
+Vlan401       DhcpTenant_401     connected routed    auto    auto    --
+Vlan501       L3forward_501      connected routed    auto    auto    --
+Vlan502       L3forward_502      connected routed    auto    auto    --
+Vlan503       L3forward_503      connected routed    auto    auto    --
+Vlan504       L3forward_504      connected routed    auto    auto    --
+Vlan505       L3forward_505      connected routed    auto    auto    --
+Vlan506       L3forward_506      connected routed    auto    auto    --
+Vlan507       L3forward_507      connected routed    auto    auto    --
+Vlan508       L3forward_508      connected routed    auto    auto    --
+Vlan509       L3forward_509      connected routed    auto    auto    --
+Vlan510       L3forward_510      connected routed    auto    auto    --
+Vlan511       L3forward_511      connected routed    auto    auto    --
+Vlan512       L3forward_512      connected routed    auto    auto    --
+Vlan513       L3forward_513      connected routed    auto    auto    --
+Vlan514       L3forward_514      connected routed    auto    auto    --
+Vlan515       L3forward_515      connected routed    auto    auto    --
+Vlan516       L3forward_516      connected routed    auto    auto    --
