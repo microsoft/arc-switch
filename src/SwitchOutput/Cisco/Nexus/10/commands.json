@@ -73,12 +73,12 @@
             "command": "show system resources"
         },
         {
-          "name": "system-uptime",
-          "command": "show system uptime"
+            "name": "system-uptime",
+            "command": "show system uptime"
         },
         {
-          "name": "interface-status",
-          "command": "show interface status"
+            "name": "interface-counter",
+            "command": "show interface status"
         }
     ]
 }
