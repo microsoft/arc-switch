@@ -17,6 +17,8 @@ require (
 	system_resources_parser v0.0.0
 	system_uptime_parser v0.0.0
 	transceiver_parser v0.0.0
+	interface_status_parser v0.0.0
+	version_parser v0.0.0
 )
 
 replace bgp_all_summary_parser => ../bgp_all_summary_parser
@@ -46,3 +48,7 @@ replace system_resources_parser => ../system-resources
 replace system_uptime_parser => ../system-uptime
 
 replace transceiver_parser => ../transceiver_parser
+
+replace interface_status_parser => ../interface_status_parser
+
+replace version_parser => ../version
