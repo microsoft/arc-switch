@@ -1,3 +1,3 @@
-module interface_status_parser
+module version_parser
 
 go 1.21
