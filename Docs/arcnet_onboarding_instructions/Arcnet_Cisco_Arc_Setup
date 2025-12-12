@@ -29,29 +29,27 @@ if [ $? -eq 0 ]; then
 fi
 
 # PART 1: DNS AND GC CONFIG SETUP
-<#
-cat > /opt/GC_Service/GC/gc.config <<'EOF'
-{
-    "ServiceType": "GCArc"
-}
-EOF
+# cat > /opt/GC_Service/GC/gc.config <<'EOF'
+# {
+#     "ServiceType": "GCArc"
+# }
+# EOF
 
-cat > /opt/GC_Ext/GC/gc.config <<'EOF'
-{
-    "ServiceType": "Extension"
-}
-EOF
+# cat > /opt/GC_Ext/GC/gc.config <<'EOF'
+# {
+#     "ServiceType": "Extension"
+# }
+# EOF
 
-cat > /etc/resolv.conf <<DNSEOF
-nameserver ${DNS_SERVER_1}
-nameserver ${DNS_SERVER_2}
-DNSEOF
+# cat > /etc/resolv.conf <<DNSEOF
+# nameserver ${DNS_SERVER_1}
+# nameserver ${DNS_SERVER_2}
+# DNSEOF
 
-cat > /isan/etc/template/etc/resolv.conf <<DNSEOF
-nameserver ${DNS_SERVER_1}
-nameserver ${DNS_SERVER_2}
-DNSEOF
-#>
+# cat > /isan/etc/template/etc/resolv.conf <<DNSEOF
+# nameserver ${DNS_SERVER_1}
+# nameserver ${DNS_SERVER_2}
+# DNSEOF
 
 # PART 2: MAKE ARC BINARIES EXECUTABLE
 
