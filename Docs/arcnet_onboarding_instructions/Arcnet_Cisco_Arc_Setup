@@ -898,7 +898,6 @@ main() {
     process_command "ip-arp" "show ip arp" "ip-arp" "CiscoIpArp"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
     sleep 2
-       
 #    process_command "ip-route" "show ip route" "ip-route" "CiscoIpRoute"
 #    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
 #    sleep 2
