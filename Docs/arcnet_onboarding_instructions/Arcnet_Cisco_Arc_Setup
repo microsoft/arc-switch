@@ -15,7 +15,7 @@ DNS_SERVER_2="<DNS_SERVER_2>"
 WORKSPACE_ID="<LOG_ANALYTICS_WORKSPACE_ID>"
 PRIMARY_KEY="<LOG_ANALYTICS_PRIMARY_KEY>"
 SECONDARY_KEY="<LOG_ANALYTICS_SECONDARY_KEY>"
-PARSER_URL="https://github.com/microsoft/arc-switch/releases/download/1.2510.3/cisco-nexus-unified-parser-1.2510.3-linux-amd64.tar.gz"
+PARSER_URL="https://github.com/microsoft/arc-switch/releases/download/1.2512.2/cisco-nexus-unified-parser-1.2512.2-linux-amd64.tar.gz"
 PARSER_PATH="/opt/cisco-parser"
 TEMP_DIR="/tmp/cisco-parser-output"
 AZURE_TEMP_DIR="/tmp/azure-logger"
@@ -29,7 +29,6 @@ if [ $? -eq 0 ]; then
 fi
 
 # PART 1: DNS AND GC CONFIG SETUP
-
 cat > /opt/GC_Service/GC/gc.config <<'EOF'
 {
     "ServiceType": "GCArc"
@@ -42,15 +41,15 @@ cat > /opt/GC_Ext/GC/gc.config <<'EOF'
 }
 EOF
 
-cat > /etc/resolv.conf <<DNSEOF
-nameserver ${DNS_SERVER_1}
-nameserver ${DNS_SERVER_2}
-DNSEOF
+# cat > /etc/resolv.conf <<DNSEOF
+# nameserver ${DNS_SERVER_1}
+# nameserver ${DNS_SERVER_2}
+# DNSEOF
 
-cat > /isan/etc/template/etc/resolv.conf <<DNSEOF
-nameserver ${DNS_SERVER_1}
-nameserver ${DNS_SERVER_2}
-DNSEOF
+# cat > /isan/etc/template/etc/resolv.conf <<DNSEOF
+# nameserver ${DNS_SERVER_1}
+# nameserver ${DNS_SERVER_2}
+# DNSEOF
 
 # PART 2: MAKE ARC BINARIES EXECUTABLE
 
@@ -899,18 +898,17 @@ main() {
     process_command "ip-arp" "show ip arp" "ip-arp" "CiscoIpArp"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
     sleep 2
-    
-    process_command "ip-route" "show ip route" "ip-route" "CiscoIpRoute"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
+#    process_command "ip-route" "show ip route" "ip-route" "CiscoIpRoute"
+#    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+#    sleep 2
     
     process_command "lldp-neighbor" "show lldp neighbor detail" "lldp-neighbor" "CiscoLldpNeighbor"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
     sleep 2
     
-    process_command "mac-address" "show mac address-table" "mac-address" "CiscoMacAddress"
-    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
-    sleep 2
+#    process_command "mac-address" "show mac address-table" "mac-address" "CiscoMacAddress"
+#    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+#    sleep 2
     
     process_command "transceiver" "show interface transceiver" "transceiver" "CiscoTransceiver"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
@@ -937,6 +935,14 @@ main() {
     sleep 2
 
     process_command "bgp-all-summary" "show bgp all summary" "bgp-all-summary" "CiscoBgpSummary"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "interface-status" "show interface status" "interface-status" "CiscoInterfaceStatus"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "version" "show version" "version" "CiscoVersion"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
     sleep 2
     
