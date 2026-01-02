@@ -12,7 +12,7 @@ WORKSPACE_ID="<LOG_ANALYTICS_WORKSPACE_ID>"
 PRIMARY_KEY="<LOG_ANALYTICS_PRIMARY_KEY>"
 SECONDARY_KEY="<LOG_ANALYTICS_SECONDARY_KEY>"
 PARSER_URL="https://github.com/microsoft/arc-switch/releases/download/1.2512.2/cisco-nexus-unified-parser-1.2512.2-linux-amd64.tar.gz"
-PARSER_PATH="/opt/cisco-parser"
+PARSER_PATH="/opt/arcnet/cisco-parser"
 TEMP_DIR="/tmp/cisco-parser-output"
 AZURE_TEMP_DIR="/tmp/azure-logger"
 AZCMAGENT_RPM_URL="https://github.com/microsoft/arc-switch/releases/download/v0.0.2-alpha-rpm/azcmagent-1.54.03131-2112.x86_64.rpm"
@@ -689,7 +689,7 @@ send_to_azure_custom_table() {
 
     local authorization=\$(generate_signature "\$WORKSPACE_ID" "\$SHARED_KEY" "\$timestamp" "\$content_length")
 
-    local response=\$(curl -k -s -w "\\nHTTP_CODE:%{http_code}" -X POST \\
+    local response=\$(curl -s -w "\\nHTTP_CODE:%{http_code}" -X POST \\
         -H "Content-Type: application/json" \\
         -H "Log-Type: \$table_name" \\
         -H "x-ms-date: \$timestamp" \\
@@ -955,7 +955,7 @@ echo "Configuring cron job..."
 
 # Remove any existing entry for the collector to prevent duplicates
 echo "Removing any existing cron jobs for cisco-parser-collector.sh..."
-crontab -l 2>/dev/null | grep -v "/opt/arcnet/cisco-parser-collector.sh" > /tmp/arc-cron-update || true
+crontab -l 2>/dev/null | grep -v "cisco-parser-collector.sh" > /tmp/arc-cron-update || true
 
 # Add the new job to run every 5 minutes
 echo "Adding new cron job to run every 5 minutes..."
