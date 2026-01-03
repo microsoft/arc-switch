@@ -17,6 +17,9 @@ TEMP_DIR="/tmp/cisco-parser-output"
 AZURE_TEMP_DIR="/tmp/azure-logger"
 AZCMAGENT_RPM_URL="https://github.com/microsoft/arc-switch/releases/download/v0.0.2-alpha-rpm/azcmagent-1.54.03131-2112.x86_64.rpm"
 
+# DNS_SERVER_1="<DNS_SERVER_1>"
+# DNS_SERVER_2="<DNS_SERVER_2>"
+
 mkdir -p /opt/arcnet
 cd /opt/arcnet
 wget -q "$AZCMAGENT_RPM_URL" -O azcmagent.rpm
