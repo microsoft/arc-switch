@@ -24,7 +24,8 @@ mkdir -p /opt/arcnet
 cd /opt/arcnet
 wget -q "$AZCMAGENT_RPM_URL" -O azcmagent.rpm
 if [ $? -eq 0 ]; then
-    rpm -ivh azcmagent.rpm 2>/dev/null || rpm -Uvh azcmagent.rpm 2>/dev/null
+    rpm -Uvh --nopost azcmagent.rpm 2>/dev/null
+    ln -sf /opt/azcmagent/bin/azcmagent /usr/bin/azcmagent
     rm -f azcmagent.rpm
 fi
 
