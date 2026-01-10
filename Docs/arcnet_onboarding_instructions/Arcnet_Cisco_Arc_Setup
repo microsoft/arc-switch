@@ -6,22 +6,22 @@ RESOURCE_GROUP="<YOUR_RESOURCE_GROUP>"
 SUBSCRIPTION_ID="<YOUR_SUBSCRIPTION_ID>"
 MACHINE_NAME="<YOUR_SWITCH_HOSTNAME>"
 TENANT_ID="<YOUR_TENANT_ID>"
+# Default: 10.10.240.23
+DNS_SERVER_1="<DNS_SERVER_1>"
+# Default: 10.10.240.24
+DNS_SERVER_2="<DNS_SERVER_2>"
 
 # Configuration Variables - EDIT THESE
 WORKSPACE_ID="<LOG_ANALYTICS_WORKSPACE_ID>"
 PRIMARY_KEY="<LOG_ANALYTICS_PRIMARY_KEY>"
 SECONDARY_KEY="<LOG_ANALYTICS_SECONDARY_KEY>"
 PARSER_URL="https://github.com/microsoft/arc-switch/releases/download/1.2512.2/cisco-nexus-unified-parser-1.2512.2-linux-amd64.tar.gz"
-PARSER_PATH="/opt/arcnet/cisco-parser"
+PARSER_PATH="/opt/cisco-parser"
 TEMP_DIR="/tmp/cisco-parser-output"
 AZURE_TEMP_DIR="/tmp/azure-logger"
 AZCMAGENT_RPM_URL="https://github.com/microsoft/arc-switch/releases/download/v0.0.2-alpha-rpm/azcmagent-1.54.03131-2112.x86_64.rpm"
 
-# DNS_SERVER_1="<DNS_SERVER_1>"
-# DNS_SERVER_2="<DNS_SERVER_2>"
-
-mkdir -p /opt/arcnet
-cd /opt/arcnet
+cd /opt
 wget -q "$AZCMAGENT_RPM_URL" -O azcmagent.rpm
 if [ $? -eq 0 ]; then
     rpm -Uvh --nopost azcmagent.rpm 2>/dev/null
@@ -30,7 +30,6 @@ if [ $? -eq 0 ]; then
 fi
 
 # PART 1: DNS AND GC CONFIG SETUP
-
 cat > /opt/GC_Service/GC/gc.config <<'EOF'
 {
     "ServiceType": "GCArc"
@@ -303,29 +302,29 @@ start() {
     if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
         return 0
     fi
-
+    
     pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
     rm -f /var/opt/azcmagent/socks/himds.sock 2>/dev/null
     sleep 2
-
+    
     mkdir -p /var/opt/azcmagent/socks \$(dirname \$LOGFILE)
-
+    
     export PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin"
     export IMDS_ENDPOINT="http://localhost:40342"
     export IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token"
-
+    
     cd \$(dirname \$DAEMON_PATH)
     nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
     PID=\$!
     echo \$PID > \$PIDFILE
-
+    
     for i in {1..20}; do
         if [ -e /var/opt/azcmagent/socks/himds.sock ] && ps -p \$PID > /dev/null 2>&1; then
             return 0
         fi
         sleep 1
     done
-
+    
     return 1
 }
 
@@ -373,21 +372,21 @@ start() {
     if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
         return 0
     fi
-
+    
     pkill -9 -f "$DAEMON_PATH" 2>/dev/null
     fuser -k -9 40343/tcp 2>/dev/null
     fuser -k -9 40344/tcp 2>/dev/null
     rm -f $PIDFILE
     sleep 3
-
+    
     mkdir -p $(dirname $LOGFILE)
     [ -f /etc/profile.d/arc-environment.sh ] && source /etc/profile.d/arc-environment.sh
-
+    
     nohup $DAEMON_PATH >> $LOGFILE 2>&1 &
     PID=$!
     echo $PID > $PIDFILE
     sleep 5
-
+    
     if ps -p $PID > /dev/null 2>&1; then
         return 0
     else
@@ -451,23 +450,23 @@ start() {
     if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
         return 0
     fi
-
+    
     pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
     rm -f \$PIDFILE
     sleep 2
-
+    
     mkdir -p \$(dirname \$LOGFILE) /var/lib/GuestConfig/Extension/{status,config} /var/lib/waagent
     cd \$GC_PATH
-
+    
     ARM_RES_ID=""
     if [ -f /var/opt/azcmagent/agentconfig.json ]; then
         ARM_RES_ID=\$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
     fi
-
+    
     if [ -z "\$ARM_RES_ID" ]; then
         ARM_RES_ID="${RESOURCE_ID}"
     fi
-
+    
     env - PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin" \
         IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token" \
         IMDS_ENDPOINT="http://localhost:40342" \
@@ -479,11 +478,11 @@ start() {
         AZURE_GUEST_AGENT_EXTENSION_SUPPORTED_FEATURES="ExtensionTelemetryPipeline,PersistentExtensions" \
         AZURE_HTTP_USER_AGENT="GuestConfiguration/Extension" \
         nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
-
+    
     PID=\$!
     echo \$PID > \$PIDFILE
     sleep 8
-
+    
     if ps -p \$PID > /dev/null 2>&1; then
         return 0
     else
@@ -537,23 +536,23 @@ start() {
     if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
         return 0
     fi
-
+    
     pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
     rm -f \$PIDFILE
     sleep 2
-
+    
     mkdir -p \$(dirname \$LOGFILE) /var/lib/GuestConfig/Configuration
     cd \$GC_PATH
-
+    
     ARM_RES_ID=""
     if [ -f /var/opt/azcmagent/agentconfig.json ]; then
         ARM_RES_ID=\$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
     fi
-
+    
     if [ -z "\$ARM_RES_ID" ]; then
         ARM_RES_ID="${RESOURCE_ID}"
     fi
-
+    
     env - PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin" \
         IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token" \
         IMDS_ENDPOINT="http://localhost:40342" \
@@ -563,11 +562,11 @@ start() {
         AZURE_GUEST_CONFIGURATION_PATH="/var/lib/GuestConfig/Configuration" \
         AZURE_HTTP_USER_AGENT="GuestConfiguration/Agent" \
         nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
-
+    
     PID=\$!
     echo \$PID > \$PIDFILE
     sleep 8
-
+    
     if ps -p \$PID > /dev/null 2>&1; then
         return 0
     else
@@ -641,7 +640,6 @@ done
 
 # PART 8: DOWNLOAD AND INSTALL PARSER
 
-cd /opt/arcnet
 wget -q "$PARSER_URL" -O parser.tar.gz
 tar -xzf parser.tar.gz
 rm -f parser.tar.gz
@@ -650,11 +648,11 @@ find /var/tmp -name "rpm-tmp.*" -type f -exec chmod +x {} \; 2>/dev/null
 
 # PART 9: CREATE SIGNATURE GENERATOR
 
-cat > /opt/arcnet/azure-signature-generator.sh << 'SIG_EOF'
+cat > /opt/azure-signature-generator.sh << 'SIG_EOF'
 #!/bin/bash
 generate_signature() {
     local workspace_id="$1"
-    local shared_key="$2"
+    local shared_key="$2" 
     local date="$3"
     local content_length="$4"
     local string_to_sign="POST\n${content_length}\napplication/json\nx-ms-date:${date}\n/api/logs"
@@ -665,11 +663,11 @@ generate_signature() {
 export -f generate_signature
 SIG_EOF
 
-chmod +x /opt/arcnet/azure-signature-generator.sh
+chmod +x /opt/azure-signature-generator.sh
 
 # PART 10: CREATE AZURE LOGGER
 
-cat > /opt/arcnet/cisco-azure-logger-v2.sh << LOGGER_EOF
+cat > /opt/cisco-azure-logger-v2.sh << LOGGER_EOF
 #!/bin/bash
 WORKSPACE_ID="${WORKSPACE_ID}"
 PRIMARY_KEY="${PRIMARY_KEY}"
@@ -679,32 +677,32 @@ TEMP_DIR="${AZURE_TEMP_DIR}"
 
 mkdir -p "\$TEMP_DIR"
 
-source /opt/arcnet/azure-signature-generator.sh
+source /opt/azure-signature-generator.sh
 
 send_to_azure_custom_table() {
     local json_data="\$1"
     local table_name="\$2"
     local timestamp=\$(date -u +"%a, %d %b %Y %H:%M:%S GMT")
-
+    
     local temp_payload="\$TEMP_DIR/payload_\$\$.json"
     echo -n "\$json_data" > "\$temp_payload"
-
+    
     local content_length=\$(stat -c%s "\$temp_payload" 2>/dev/null || stat -f%z "\$temp_payload" 2>/dev/null)
-
+    
     local authorization=\$(generate_signature "\$WORKSPACE_ID" "\$SHARED_KEY" "\$timestamp" "\$content_length")
-
-    local response=\$(curl -s -w "\\nHTTP_CODE:%{http_code}" -X POST \\
+    
+    local response=\$(curl -k -s -w "\\nHTTP_CODE:%{http_code}" -X POST \\
         -H "Content-Type: application/json" \\
         -H "Log-Type: \$table_name" \\
         -H "x-ms-date: \$timestamp" \\
         -H "Authorization: \$authorization" \\
         --data-binary "@\${temp_payload}" \\
         "https://\${WORKSPACE_ID}.ods.opinsights.azure.com/api/logs?api-version=2016-04-01")
-
+    
     rm -f "\$temp_payload"
-
+    
     local http_code=\$(echo "\$response" | grep "HTTP_CODE:" | cut -d: -f2)
-
+    
     if [ "\$http_code" = "200" ]; then
         return 0
     else
@@ -720,7 +718,7 @@ send_to_azure_custom_table() {
 add_metadata_simple() {
     local json_input="\$1"
     local hostname="\$2"
-
+    
     if command -v python3 >/dev/null 2>&1; then
         echo "\$json_input" | python3 -c "
 import sys, json
@@ -767,17 +765,17 @@ process_and_send() {
     local parser_output="\$1"
     local table_name="\$2"
     local hostname=\$(hostname)
-
+    
     if [ -z "\$parser_output" ]; then
         return 1
     fi
-
+    
     local azure_json=\$(add_metadata_simple "\$parser_output" "\$hostname")
-
+    
     if [ \$? -ne 0 ] || [ -z "\$azure_json" ]; then
         return 1
     fi
-
+    
     send_to_azure_custom_table "\$azure_json" "\$table_name"
     return \$?
 }
@@ -790,10 +788,10 @@ case "\$1" in
         if [ -z "\$2" ] || [ -z "\$3" ]; then
             exit 1
         fi
-
+        
         table_name="\$2"
         json_source="\$3"
-
+        
         if [ "\$json_source" = "-" ]; then
             json_data=\$(cat)
         elif [ -f "\$json_source" ]; then
@@ -801,7 +799,7 @@ case "\$1" in
         else
             exit 1
         fi
-
+        
         process_and_send "\$json_data" "\$table_name"
         ;;
     "test")
@@ -814,17 +812,17 @@ case "\$1" in
 esac
 LOGGER_EOF
 
-chmod +x /opt/arcnet/cisco-azure-logger-v2.sh
+chmod +x /opt/cisco-azure-logger-v2.sh
 
 
 # PART 11: CREATE PARSER COLLECTOR
 
-cat > /opt/arcnet/cisco-parser-collector.sh << COLLECTOR_EOF
+cat > /opt/cisco-parser-collector.sh << COLLECTOR_EOF
 #!/bin/bash
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/isan/bin:/isan/sbin:\$PATH
 
 PARSER_PATH="${PARSER_PATH}"
-LOGGER_PATH="/opt/arcnet/cisco-azure-logger-v2.sh"
+LOGGER_PATH="/opt/cisco-azure-logger-v2.sh"
 TEMP_DIR="${TEMP_DIR}"
 LOG_FILE="/var/log/cisco-parser-collector.log"
 
@@ -839,26 +837,26 @@ run_and_process() {
     local vsh_command="\$2"
     local parser_type="\$3"
     local table_name="\$4"
-
+    
     local temp_input="\$TEMP_DIR/\${command_name}-input.txt"
     local temp_output="\$TEMP_DIR/\${command_name}-output.json"
-
+    
     if ! vsh -c "\$vsh_command" > "\$temp_input" 2>&1; then
         return 1
     fi
-
+    
     if [ ! -s "\$temp_input" ]; then
         return 1
     fi
-
+    
     if ! "\$PARSER_PATH" -p "\$parser_type" -i "\$temp_input" -o "\$temp_output" >> "\$LOG_FILE" 2>&1; then
         return 1
     fi
-
+    
     if [ ! -s "\$temp_output" ]; then
         return 1
     fi
-
+    
     if "\$LOGGER_PATH" send "\$table_name" "\$temp_output" >> "\$LOG_FILE" 2>&1; then
         rm -f "\$temp_input" "\$temp_output"
         return 0
@@ -872,7 +870,7 @@ process_command() {
     local vsh_cmd="\$2"
     local parser_type="\$3"
     local table_name="\$4"
-
+    
     if run_and_process "\$cmd_name" "\$vsh_cmd" "\$parser_type" "\$table_name"; then
         return 0
     else
@@ -898,9 +896,20 @@ main() {
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
     sleep 2
     
+    process_command "ip-arp" "show ip arp" "ip-arp" "CiscoIpArp"
+    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+#    process_command "ip-route" "show ip route" "ip-route" "CiscoIpRoute"
+#    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+#    sleep 2
+    
     process_command "lldp-neighbor" "show lldp neighbor detail" "lldp-neighbor" "CiscoLldpNeighbor"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
     sleep 2
+    
+#    process_command "mac-address" "show mac address-table" "mac-address" "CiscoMacAddress"
+#    [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
+#    sleep 2
     
     process_command "transceiver" "show interface transceiver" "transceiver" "CiscoTransceiver"
     [ \$? -eq 0 ] && ((success_count++)) || ((failure_count++))
@@ -940,7 +949,7 @@ main() {
     
     log_message "Collection complete: \$success_count success, \$failure_count failures"
     
-    find "\$TEMP_DIR" -type f -mmin +30 -delete 2>/dev/null
+    find "\$TEMP_DIR" -type f -mmin +60 -delete 2>/dev/null
     
     if [ -f "\$LOG_FILE" ] && [ \$(stat -f%z "\$LOG_FILE" 2>/dev/null || stat -c%s "\$LOG_FILE" 2>/dev/null) -gt 10485760 ]; then
         mv "\$LOG_FILE" "\${LOG_FILE}.old"
@@ -951,27 +960,17 @@ main
 exit 0
 COLLECTOR_EOF
 
-chmod +x /opt/arcnet/cisco-parser-collector.sh
+chmod +x /opt/cisco-parser-collector.sh
 
 # PART 12: SETUP CRON JOB
 
-echo "Configuring cron job..."
+cat > /tmp/cisco-cron-temp << 'CRON_EOF'
+* * * * * /opt/cisco-parser-collector.sh
+CRON_EOF
 
-# Remove any existing entry for the collector to prevent duplicates
-echo "Removing any existing cron jobs for cisco-parser-collector.sh..."
-crontab -l 2>/dev/null | grep -v "cisco-parser-collector.sh" > /tmp/arc-cron-update || true
-
-# Add the new job to run every 5 minutes
-echo "Adding new cron job to run every 5 minutes..."
-echo "*/5 * * * * /opt/arcnet/cisco-parser-collector.sh" >> /tmp/arc-cron-update
-
-# Install the updated crontab
-if crontab /tmp/arc-cron-update; then
-    echo "Cron job updated successfully."
-else
-    echo "ERROR: Failed to update cron job."
-fi
-rm -f /tmp/arc-cron-update
+crontab -l > /tmp/current-cron 2>/dev/null || true
+cat /tmp/current-cron /tmp/cisco-cron-temp | crontab -
+rm -f /tmp/cisco-cron-temp /tmp/current-cron
 
 echo "============================================================================"
 echo "Azure Arc Setup Script Completed Successfully!"
