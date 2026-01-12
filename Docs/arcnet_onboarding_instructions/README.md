@@ -266,33 +266,10 @@ sudo rpm -e azcmagent
 
 ## Step 4.4.2
 
-Also remove all ArcNet-related files:
-
-**For new version (files organized in /opt/arcnet):**
-```bash
-rm -rf /opt/arcnet
-```
-
-**For previous version (files scattered in /opt root):**
-```bash
-# Remove old custom ArcNet scripts and files from /opt root
-cd /opt
-rm -f azure-signature-generator.sh
+Also remove all files related to ArcNet from /opt folder
 rm -f cisco-azure-logger-v2.sh
-rm -f cisco-parser-collector.sh
 rm -f cisco-parser
-rm -f README.md
-rm -f commands.json
-
-# Remove test/output files
-rm -f show-*.txt
-
-# Remove old cron job (if exists)
-crontab -l 2>/dev/null | grep -v "/opt/cisco-parser-collector.sh" | grep -v "/opt/arcnet/cisco-parser-collector.sh" | crontab - 2>/dev/null
-
-# Verify what remains (should only be GC_Service, GC_Ext, azcmagent)
-ls -la /opt/
-```
+.......
 
 Then delete the resource from the portal
 
@@ -305,7 +282,7 @@ Then delete the resource from the portal
 crontab -l | grep cisco-parser-collector
 
 # Manually run collector to test
-/opt/arcnet/cisco-parser-collector.sh
+/opt/cisco-parser-collector.sh
 
 # Check collector logs
 tail -f /var/log/cisco-parser-collector.log
@@ -320,13 +297,13 @@ Test the complete flow for one command:
 vsh -c "show class-map" > /tmp/test-output.txt
 
 # Step 2: Parse the output
-/opt/arcnet/cisco-parser -p class-map -i /tmp/test-output.txt -o /tmp/test-parsed.json
+/opt/cisco-parser -p class-map -i /tmp/test-output.txt -o /tmp/test-parsed.json
 
 # Step 3: View parsed JSON
 cat /tmp/test-parsed.json
 
 # Step 4: Send to Azure
-/opt/arcnet/cisco-azure-logger-v2.sh send CiscoClassMapTest /tmp/test-parsed.json
+/opt/cisco-azure-logger-v2.sh send CiscoClassMapTest /tmp/test-parsed.json
 
 # Step 5: Clean up
 rm /tmp/test-output.txt /tmp/test-parsed.json
@@ -362,19 +339,20 @@ The following custom tables will be created in your Log Analytics workspace:
 
 | Table Name | Description | Update Frequency |
 |------------|-------------|------------------|
-| `CiscoClassMap_CL` | QoS class maps configuration | Every 5 minutes |
-| `CiscoInterfaceCounter_CL` | Interface traffic statistics | Every 5 minutes |
-| `CiscoInventory_CL` | Hardware inventory | Every 5 minutes |
-| `CiscoLldpNeighbor_CL` | LLDP neighbor information | Every 5 minutes |
-| `CiscoTransceiver_CL` | SFP/QSFP module details | Every 5 minutes |
-| `CiscoEnvTemp_CL` | Temperature sensors | Every 5 minutes |
-| `CiscoInterfaceErrors_CL` | Interface error counters | Every 5 minutes |
-| `CiscoEnvPower_CL` | Power supply status | Every 5 minutes |
-| `CiscoSystemResources_CL` | CPU, memory utilization | Every 5 minutes |
-| `CiscoSystemUptime_CL` | System uptime | Every 5 minutes |
-| `CiscoBgpSummary_CL` | BGP neighbor summary | Every 5 minutes |
-| `CiscoInterfaceStatus_CL` | Interface status information | Every 5 minutes |
-| `CiscoVersion_CL` | Switch version and platform details | Every 5 minutes |
+| `CiscoClassMap_CL` | QoS class maps configuration | Every minute |
+| `CiscoInterfaceCounter_CL` | Interface traffic statistics | Every minute |
+| `CiscoInventory_CL` | Hardware inventory | Every minute |
+| `CiscoIpArp_CL` | ARP table entries | Every minute |
+| `CiscoIpRoute_CL` | Routing table | Every minute |
+| `CiscoLldpNeighbor_CL` | LLDP neighbor information | Every minute |
+| `CiscoMacAddress_CL` | MAC address table | Every minute |
+| `CiscoTransceiver_CL` | SFP/QSFP module details | Every minute |
+| `CiscoEnvTemp_CL` | Temperature sensors | Every minute |
+| `CiscoInterfaceErrors_CL` | Interface error counters | Every minute |
+| `CiscoEnvPower_CL` | Power supply status | Every minute |
+| `CiscoSystemResources_CL` | CPU, memory utilization | Every minute |
+| `CiscoSystemUptime_CL` | System uptime | Every minute |
+| `CiscoBgpSummary_CL` | BGP neighbor summary | Every minute |
 
 Note: Azure automatically appends _CL suffix to custom log table names.
 
@@ -474,7 +452,7 @@ Queries return no results after 15+ minutes
 Solution:
 ```bash
 # Test the logger manually
-/opt/arcnet/cisco-azure-logger-v2.sh test
+/opt/cisco-azure-logger-v2.sh test
 
 # Check collector is running
 ps aux | grep cisco-parser-collector
@@ -486,7 +464,7 @@ crontab -l
 tail -100 /var/log/cisco-parser-collector.log
 
 # Verify workspace credentials
-grep -E "WORKSPACE_ID|PRIMARY_KEY" /opt/arcnet/cisco-azure-logger-v2.sh
+grep -E "WORKSPACE_ID|PRIMARY_KEY" /opt/cisco-azure-logger-v2.sh
 ```
 
 ### Diagnostic Commands
