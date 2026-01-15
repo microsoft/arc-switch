@@ -960,7 +960,7 @@ COLLECTOR_EOF
 
 chmod +x /opt/cisco-parser-collector.sh
 
-# PART 12: SETUP CRON JOB
+# PART 12: SETUP CRON JOB FOR PARSER COLLECTOR
 
 cat > /tmp/cisco-cron-temp << 'CRON_EOF'
 */5 * * * * /opt/cisco-parser-collector.sh
