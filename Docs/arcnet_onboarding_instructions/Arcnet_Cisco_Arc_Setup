@@ -963,7 +963,7 @@ chmod +x /opt/cisco-parser-collector.sh
 # PART 12: SETUP CRON JOB
 
 cat > /tmp/cisco-cron-temp << 'CRON_EOF'
-* * * * * /opt/cisco-parser-collector.sh
+*/5 * * * * /opt/cisco-parser-collector.sh
 CRON_EOF
 
 crontab -l > /tmp/current-cron 2>/dev/null || true
