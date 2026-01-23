@@ -981,3 +981,42 @@ echo "3. Check service status with: /etc/init.d/himdsd status"
 echo "4. View logs in /var/log/arc/"
 echo ""
 echo "============================================================================"
+
+# PART 13: CREATE PERSISTENT AUTOSTART SCRIPT IN RPMSTORE
+
+echo "Configuring Persistent Boot Auto-Start..."
+
+mkdir -p /bootflash/.rpmstore/config/etc/rc3.d
+
+cat > /bootflash/.rpmstore/config/etc/init.d/arcnet-autostart << 'AUTOSTART_EOF'
+#!/bin/bash
+
+case "$1" in
+    start)
+        (
+            sleep 120
+            if [ ! -f /tmp/arcnet-boot-complete ]; then
+                touch /tmp/arcnet-boot-complete
+                echo "=== arcnet-autostart triggered at $(date) ===" >> /bootflash/arcnet-debug.log
+                /bin/bash /bootflash/arcnet-setup.sh >> /bootflash/arcnet-debug.log 2>&1
+                echo "=== arcnet-setup finished with code $? at $(date) ===" >> /bootflash/arcnet-debug.log
+            fi
+        ) &
+        ;;
+    stop)
+        ;;
+    *)
+        echo "Usage: $0 {start|stop}"
+        exit 1
+        ;;
+esac
+exit 0
+AUTOSTART_EOF
+
+chmod +x /bootflash/.rpmstore/config/etc/init.d/arcnet-autostart
+
+# Create symlink in persistent rc3.d
+ln -sf ../init.d/arcnet-autostart /bootflash/.rpmstore/config/etc/rc3.d/S99arcnet-autostart
+rm -f /bootflash/arcnet-debug.log 2>/dev/null
+
+echo "Persistent boot auto-start configured."
