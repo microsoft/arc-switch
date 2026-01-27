@@ -490,3 +490,54 @@ func TestJSONKeyAlignment(t *testing.T) {
 		}
 	}
 }
+
+func TestEmptyInput(t *testing.T) {
+	entries, err := parseVersion("")
+	if err != nil {
+		t.Fatalf("Empty input should not cause error: %v", err)
+	}
+	if len(entries) != 1 {
+		t.Errorf("Expected 1 entry for empty input, got %d", len(entries))
+	}
+}
+
+func TestPartialInput(t *testing.T) {
+	input := `Dell SmartFabric OS10 Enterprise
+OS Version: 10.6.0.5`
+	
+	entries, err := parseVersion(input)
+	if err != nil {
+		t.Fatalf("Partial input should not cause error: %v", err)
+	}
+	
+	if len(entries) != 1 {
+		t.Errorf("Expected 1 entry, got %d", len(entries))
+	}
+	
+	data := entries[0].Message
+	if data.OSName != "Dell SmartFabric OS10 Enterprise" {
+		t.Errorf("Expected OSName to be parsed correctly, got '%s'", data.OSName)
+	}
+	if data.OSVersion != "10.6.0.5" {
+		t.Errorf("Expected OSVersion to be parsed correctly, got '%s'", data.OSVersion)
+	}
+}
+
+func TestInvalidUptimeFormat(t *testing.T) {
+	input := `rr1-test# show version
+Up Time: invalid format`
+	
+	entries, err := parseVersion(input)
+	if err != nil {
+		t.Fatalf("Invalid uptime format should not cause fatal error: %v", err)
+	}
+	
+	data := entries[0].Message
+	if data.UpTime != "invalid format" {
+		t.Errorf("Expected UpTime string to be stored as-is, got '%s'", data.UpTime)
+	}
+	// Kernel uptime should be zero values when parsing fails
+	if data.KernelUptime.Weeks != 0 || data.KernelUptime.Days != 0 {
+		t.Errorf("Expected zero uptime values for invalid format")
+	}
+}

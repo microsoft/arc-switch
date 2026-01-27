@@ -5,12 +5,27 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+)
+
+// Pre-compiled regular expressions for better performance
+var (
+	osNamePattern        = regexp.MustCompile(`^(Dell SmartFabric OS10.*)$`)
+	copyrightPattern     = regexp.MustCompile(`^Copyright.*$`)
+	osVersionPattern     = regexp.MustCompile(`^OS Version:\s*(.+)$`)
+	buildVersionPattern  = regexp.MustCompile(`^Build Version:\s*(.+)$`)
+	buildTimePattern     = regexp.MustCompile(`^Build Time:\s*(.+)$`)
+	systemTypePattern    = regexp.MustCompile(`^System Type:\s*(.+)$`)
+	architecturePattern  = regexp.MustCompile(`^Architecture:\s*(.+)$`)
+	upTimePattern        = regexp.MustCompile(`^Up Time:\s*(.+)$`)
+	deviceNamePattern    = regexp.MustCompile(`^([a-zA-Z0-9\-]+)#\s*show version`)
+	uptimeDetailPattern  = regexp.MustCompile(`(?:(\d+)\s+weeks?)?\s*(?:(\d+)\s+days?)?\s*(\d+):(\d+):(\d+)`)
 )
 
 // StandardizedEntry represents the standardized JSON structure
@@ -53,22 +68,6 @@ func parseVersion(input string) ([]StandardizedEntry, error) {
 	date := now.Format("2006-01-02")
 
 	data := VersionData{}
-
-	// Regular expressions for parsing
-	osNamePattern := regexp.MustCompile(`^(Dell SmartFabric OS10.*)$`)
-	copyrightPattern := regexp.MustCompile(`^Copyright.*$`)
-	osVersionPattern := regexp.MustCompile(`^OS Version:\s*(.+)$`)
-	buildVersionPattern := regexp.MustCompile(`^Build Version:\s*(.+)$`)
-	buildTimePattern := regexp.MustCompile(`^Build Time:\s*(.+)$`)
-	systemTypePattern := regexp.MustCompile(`^System Type:\s*(.+)$`)
-	architecturePattern := regexp.MustCompile(`^Architecture:\s*(.+)$`)
-	upTimePattern := regexp.MustCompile(`^Up Time:\s*(.+)$`)
-	deviceNamePattern := regexp.MustCompile(`^([a-zA-Z0-9\-]+)#\s*show version`)
-	
-	// Pattern for parsing uptime with weeks, days, hours, minutes, seconds
-	// Format: "6 weeks 1 day 17:55:03" or "1 day 17:55:03" or "17:55:03"
-	uptimeDetailPattern := regexp.MustCompile(`(?:(\d+)\s+weeks?)?\s*(?:(\d+)\s+days?)?\s*(\d+):(\d+):(\d+)`)
-
 	var deviceName string
 
 	for scanner.Scan() {
@@ -142,19 +141,39 @@ func parseVersion(input string) ([]StandardizedEntry, error) {
 				seconds := 0
 				
 				if detailMatches[1] != "" {
-					weeks, _ = strconv.Atoi(detailMatches[1])
+					if w, err := strconv.Atoi(detailMatches[1]); err == nil {
+						weeks = w
+					} else {
+						log.Printf("Warning: failed to parse weeks from uptime: %v", err)
+					}
 				}
 				if detailMatches[2] != "" {
-					days, _ = strconv.Atoi(detailMatches[2])
+					if d, err := strconv.Atoi(detailMatches[2]); err == nil {
+						days = d
+					} else {
+						log.Printf("Warning: failed to parse days from uptime: %v", err)
+					}
 				}
 				if detailMatches[3] != "" {
-					hours, _ = strconv.Atoi(detailMatches[3])
+					if h, err := strconv.Atoi(detailMatches[3]); err == nil {
+						hours = h
+					} else {
+						log.Printf("Warning: failed to parse hours from uptime: %v", err)
+					}
 				}
 				if detailMatches[4] != "" {
-					minutes, _ = strconv.Atoi(detailMatches[4])
+					if m, err := strconv.Atoi(detailMatches[4]); err == nil {
+						minutes = m
+					} else {
+						log.Printf("Warning: failed to parse minutes from uptime: %v", err)
+					}
 				}
 				if detailMatches[5] != "" {
-					seconds, _ = strconv.Atoi(detailMatches[5])
+					if s, err := strconv.Atoi(detailMatches[5]); err == nil {
+						seconds = s
+					} else {
+						log.Printf("Warning: failed to parse seconds from uptime: %v", err)
+					}
 				}
 				
 				data.KernelUptime = KernelUptime{
