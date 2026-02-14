@@ -9,6 +9,7 @@ require (
 	environment_temperature_parser v0.0.0
 	interface_counters_error_parser v0.0.0
 	interface_counters_parser v0.0.0
+	interface_status_parser v0.0.0
 	inventory_parser v0.0.0
 	ip_arp_parser v0.0.0
 	ip_route_parser v0.0.0
@@ -17,7 +18,6 @@ require (
 	system_resources_parser v0.0.0
 	system_uptime_parser v0.0.0
 	transceiver_parser v0.0.0
-	interface_status_parser v0.0.0
 	version_parser v0.0.0
 )
 

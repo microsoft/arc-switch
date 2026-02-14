@@ -1,0 +1,10 @@
+rr1-s46-r06-5248hl-6-1a# show version
+Dell SmartFabric OS10 Enterprise
+Copyright (c) 1999-2025 by Dell Inc. All Rights Reserved.
+OS Version: 10.6.0.5
+Build Version: 10.6.0.5.139
+Build Time: 2025-07-02T19:13:52+0000
+System Type: S5248F-ON
+Architecture: x86_64
+Up Time: 6 weeks 1 day 17:55:03
+rr1-s46-r06-5248hl-6-1a#
