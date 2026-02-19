@@ -1,0 +1,9 @@
+Product               : S5248F-ON
+Description           : S5248F-ON 48x25GbE SFP28, 4x100GbE QSFP28, 2x200GbE QSFP-DD Interface Module
+Software version      : 10.6.0.5
+Product Base          :
+Product Serial Number :
+Product Part Number   :
+Unit Type                     Part Number  Rev  Piece Part ID             Svc Tag  Exprs Svc Code
+-------------------------------------------------------------------------------------------------
+* 1  S5248F-ON                006Y6V       A03  TH-006Y6V-CET00-332-60OZ  5M44SR3  122 211 099 03

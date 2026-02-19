@@ -1,24 +1,40 @@
 package main
 
 import (
-	"dell-os10-parser/parsers"
+	"bgp_summary_parser"
 	"encoding/json"
+	"environment_temperature_parser"
 	"flag"
 	"fmt"
+	"interface_status_parser"
+	"inventory_parser"
+	"lldp_neighbor_parser"
 	"os"
+	"processes_cpu_parser"
 	"sort"
+	"system_parser"
+	"system_uptime_parser"
+	"version_parser"
 )
 
-var parserRegistry = map[string]parsers.Parser{
-	"version":          &parsers.VersionParser{},
-	"lldp":             &parsers.LldpParser{},
-	"interface-status": &parsers.InterfaceStatusParser{},
-	"inventory":        &parsers.InventoryParser{},
-	"environment":      &parsers.EnvironmentParser{},
-	"system":           &parsers.SystemParser{},
-	"processes-cpu":    &parsers.ProcessesCpuParser{},
-	"uptime":           &parsers.UptimeParser{},
-	"bgp-summary":      &parsers.BgpSummaryParser{},
+// Parser is the interface each parser module satisfies via structural typing
+type Parser interface {
+	GetDescription() string
+	Parse(input []byte) (interface{}, error)
+}
+
+var version = "dev"
+
+var parserRegistry = map[string]Parser{
+	"version":          &version_parser.VersionParser{},
+	"lldp":             &lldp_neighbor_parser.LldpParser{},
+	"interface-status": &interface_status_parser.InterfaceStatusParser{},
+	"inventory":        &inventory_parser.InventoryParser{},
+	"environment":      &environment_temperature_parser.EnvironmentParser{},
+	"system":           &system_parser.SystemParser{},
+	"processes-cpu":    &processes_cpu_parser.ProcessesCpuParser{},
+	"uptime":           &system_uptime_parser.UptimeParser{},
+	"bgp-summary":      &bgp_summary_parser.BgpSummaryParser{},
 }
 
 func main() {
@@ -34,7 +50,7 @@ func main() {
 	flag.Parse()
 
 	if *showVersion {
-		fmt.Println("Dell OS10 Switch Output Parser v2.0.0")
+		fmt.Printf("Dell OS10 Switch Output Parser v%s\n", version)
 		os.Exit(0)
 	}
 

@@ -1,0 +1,19 @@
+
+Unit    State             Temperature
+-------------------------------------
+1       up                42
+
+Thermal sensors
+Unit   Sensor-Id        Sensor-name                               Temperature
+------------------------------------------------------------------------------
+1       1           CPU_temp                                          28
+1       2           NPU_Near_temp                                     30
+1       3           PT_Left_temp                                      30
+1       4           PT_Right_temp                                     31
+1       5           PT_Mid_temp                                       33
+1       6           ILET_AF_temp                                      25
+1       7           PSU1_temp                                         39
+1       8           PSU1_AF_temp                                      25
+1       9           PSU2_temp                                         42
+1       10          PSU2_AF_temp                                      24
+1       11          NPU temp sensor                                   41
