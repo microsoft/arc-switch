@@ -1,208 +1,104 @@
-package inventory_parser
+package main
 
 import (
 	"encoding/json"
 	"os"
+	"strings"
 	"testing"
 )
 
-func TestDetermineComponentType(t *testing.T) {
-	tests := []struct {
-		name     string
-		expected string
-	}{
-		{"Chassis", "chassis"},
-		{"Unit 1", "unit"},
-		{"Power Supply 1", "power_supply"},
-		{"PSU 1", "power_supply"},
-		{"Fan Tray 1", "fan"},
-		{"Ethernet1/1/1", "transceiver"},
-		{"SFP+ 10G", "transceiver"},
-		{"Module 1", "module"},
-		{"Unknown Component", "unknown"},
-	}
-
-	for _, test := range tests {
-		result := determineComponentType(test.name)
-		if result != test.expected {
-			t.Errorf("determineComponentType(%s) = %s; expected %s", test.name, result, test.expected)
-		}
-	}
-}
-
-func TestCleanQuotes(t *testing.T) {
-	tests := []struct {
-		input    string
-		expected string
-	}{
-		{`"Chassis"`, "Chassis"},
-		{`"Power Supply 1"`, "Power Supply 1"},
-		{"NoQuotes", "NoQuotes"},
-		{`  "Trimmed"  `, "Trimmed"},
-		{`""`, ""},
-	}
-
-	for _, test := range tests {
-		result := cleanQuotes(test.input)
-		if result != test.expected {
-			t.Errorf("cleanQuotes(%s) = %s; expected %s", test.input, result, test.expected)
-		}
-	}
-}
+const testInventoryInput = `Product               : S5248F-ON
+Description           : S5248F-ON 48x25GbE SFP28, 4x100GbE QSFP28, 2x200GbE QSFP-DD Interface Module
+Software version      : 10.6.0.5
+Product Base          :
+Product Serial Number :
+Product Part Number   :
+Unit Type                     Part Number  Rev  Piece Part ID             Svc Tag  Exprs Svc Code
+-------------------------------------------------------------------------------------------------
+* 1  S5248F-ON                006Y6V       A03  TH-006Y6V-CET00-332-60OZ  5M44SR3  122 211 099 03`
 
 func TestParseInventory(t *testing.T) {
-	sampleInput := `NAME: "Chassis", DESCR: "Dell EMC Networking S4148-ON"
-PID: S4148-ON          , VID: 01 , SN: ABC1234567
-
-NAME: "Unit 1", DESCR: "Dell EMC Networking S4148-ON"
-PID: S4148-ON          , VID: 01 , SN: ABC1234568
-
-NAME: "Power Supply 1", DESCR: "Dell EMC AC Power Supply"
-PID: DPS-550AB-39 A    , VID: 01 , SN: XYZ9876543`
-
-	entries := parseInventory(sampleInput)
-
-	if len(entries) != 3 {
-		t.Errorf("Expected 3 entries, got %d", len(entries))
-	}
-
-	// Verify first entry (Chassis)
-	if len(entries) > 0 {
-		entry := entries[0]
-		if entry.DataType != "dell_os10_inventory" {
-			t.Errorf("data_type: expected 'dell_os10_inventory', got '%s'", entry.DataType)
-		}
-		if entry.Message.Name != "Chassis" {
-			t.Errorf("Name: expected 'Chassis', got '%s'", entry.Message.Name)
-		}
-		if entry.Message.Description != "Dell EMC Networking S4148-ON" {
-			t.Errorf("Description: expected 'Dell EMC Networking S4148-ON', got '%s'", entry.Message.Description)
-		}
-		if entry.Message.ProductID != "S4148-ON" {
-			t.Errorf("ProductID: expected 'S4148-ON', got '%s'", entry.Message.ProductID)
-		}
-		if entry.Message.VersionID != "01" {
-			t.Errorf("VersionID: expected '01', got '%s'", entry.Message.VersionID)
-		}
-		if entry.Message.SerialNumber != "ABC1234567" {
-			t.Errorf("SerialNumber: expected 'ABC1234567', got '%s'", entry.Message.SerialNumber)
-		}
-		if entry.Message.ComponentType != "chassis" {
-			t.Errorf("ComponentType: expected 'chassis', got '%s'", entry.Message.ComponentType)
-		}
-	}
-
-	// Verify second entry (Unit)
-	if len(entries) > 1 {
-		entry := entries[1]
-		if entry.Message.Name != "Unit 1" {
-			t.Errorf("Name: expected 'Unit 1', got '%s'", entry.Message.Name)
-		}
-		if entry.Message.ComponentType != "unit" {
-			t.Errorf("ComponentType: expected 'unit', got '%s'", entry.Message.ComponentType)
-		}
-	}
-
-	// Verify third entry (Power Supply)
-	if len(entries) > 2 {
-		entry := entries[2]
-		if entry.Message.Name != "Power Supply 1" {
-			t.Errorf("Name: expected 'Power Supply 1', got '%s'", entry.Message.Name)
-		}
-		if entry.Message.ComponentType != "power_supply" {
-			t.Errorf("ComponentType: expected 'power_supply', got '%s'", entry.Message.ComponentType)
-		}
-	}
-
-	// Test JSON marshaling
-	jsonData, err := json.Marshal(entries)
+	entries, err := parseInventory(testInventoryInput)
 	if err != nil {
-		t.Errorf("Failed to marshal entries to JSON: %v", err)
+		t.Fatalf("parseInventory returned error: %v", err)
+	}
+	if len(entries) != 1 {
+		t.Fatalf("Expected 1 entry, got %d", len(entries))
 	}
 
-	var unmarshaledEntries []StandardizedEntry
-	err = json.Unmarshal(jsonData, &unmarshaledEntries)
+	e := entries[0]
+	if e.DataType != "dell_os10_inventory" {
+		t.Errorf("DataType: expected 'dell_os10_inventory', got '%s'", e.DataType)
+	}
+	if e.Message.Product != "S5248F-ON" {
+		t.Errorf("Product: expected 'S5248F-ON', got '%s'", e.Message.Product)
+	}
+	if e.Message.SoftwareVersion != "10.6.0.5" {
+		t.Errorf("SoftwareVersion: expected '10.6.0.5', got '%s'", e.Message.SoftwareVersion)
+	}
+	if !strings.Contains(e.Message.Description, "48x25GbE") {
+		t.Errorf("Description should contain '48x25GbE', got '%s'", e.Message.Description)
+	}
+	if len(e.Message.Units) != 1 {
+		t.Fatalf("Expected 1 unit, got %d", len(e.Message.Units))
+	}
+	if e.Message.Units[0].UnitID != "1" {
+		t.Errorf("Unit ID: expected '1', got '%s'", e.Message.Units[0].UnitID)
+	}
+	if e.Message.Units[0].Type != "S5248F-ON" {
+		t.Errorf("Unit Type: expected 'S5248F-ON', got '%s'", e.Message.Units[0].Type)
+	}
+	if e.Message.Units[0].ServiceTag != "5M44SR3" {
+		t.Errorf("ServiceTag: expected '5M44SR3', got '%s'", e.Message.Units[0].ServiceTag)
+	}
+	if e.Message.Units[0].Revision != "A03" {
+		t.Errorf("Revision: expected 'A03', got '%s'", e.Message.Units[0].Revision)
+	}
+}
+
+func TestParseInventoryEmpty(t *testing.T) {
+	entries, err := parseInventory("")
 	if err != nil {
-		t.Errorf("Failed to unmarshal JSON: %v", err)
+		t.Fatalf("Error on empty: %v", err)
+	}
+	if len(entries) != 1 {
+		t.Fatalf("Expected 1 entry even for empty, got %d", len(entries))
 	}
 }
 
-func TestParseInventoryEmptyInput(t *testing.T) {
-	entries := parseInventory("")
-	if len(entries) != 0 {
-		t.Errorf("Expected 0 entries for empty input, got %d", len(entries))
+func TestParseInventoryJSON(t *testing.T) {
+	entries, err := parseInventory(testInventoryInput)
+	if err != nil {
+		t.Fatalf("Error: %v", err)
 	}
-}
-
-func TestParseInventoryFanTray(t *testing.T) {
-	sampleInput := `NAME: "Fan Tray 1", DESCR: "Dell EMC Fan Tray"
-PID: FAN-S4148         , VID: 01 , SN: FAN1234567
-
-NAME: "Fan Tray 2", DESCR: "Dell EMC Fan Tray"
-PID: FAN-S4148         , VID: 01 , SN: FAN1234568`
-
-	entries := parseInventory(sampleInput)
-
-	if len(entries) != 2 {
-		t.Errorf("Expected 2 entries, got %d", len(entries))
+	jsonBytes, err := json.Marshal(entries)
+	if err != nil {
+		t.Fatalf("JSON marshal failed: %v", err)
 	}
-
-	for _, entry := range entries {
-		if entry.Message.ComponentType != "fan" {
-			t.Errorf("ComponentType: expected 'fan', got '%s'", entry.Message.ComponentType)
-		}
-	}
-}
-
-func TestParseInventoryTransceivers(t *testing.T) {
-	sampleInput := `NAME: "Ethernet1/1/1", DESCR: "SFP+ 10GBASE-SR"
-PID: SFP-10G-SR        , VID: V02, SN: TRANS123456
-
-NAME: "Ethernet1/1/2", DESCR: "SFP+ 10GBASE-LR"
-PID: SFP-10G-LR        , VID: V01, SN: TRANS654321`
-
-	entries := parseInventory(sampleInput)
-
-	if len(entries) != 2 {
-		t.Errorf("Expected 2 entries, got %d", len(entries))
-	}
-
-	for _, entry := range entries {
-		if entry.Message.ComponentType != "transceiver" {
-			t.Errorf("ComponentType: expected 'transceiver', got '%s'", entry.Message.ComponentType)
-		}
+	var unmarshaled []StandardizedEntry
+	if err := json.Unmarshal(jsonBytes, &unmarshaled); err != nil {
+		t.Fatalf("JSON unmarshal failed: %v", err)
 	}
 }
 
 func TestLoadCommandsFromFile(t *testing.T) {
 	tempFile := "test_commands.json"
-	commandsData := `{
-		"commands": [
-			{
-				"name": "inventory",
-				"command": "show inventory"
-			}
-		]
-	}`
-
-	err := os.WriteFile(tempFile, []byte(commandsData), 0644)
+	err := os.WriteFile(tempFile, []byte(`{"commands":[{"name":"inventory","command":"show inventory"}]}`), 0644)
 	if err != nil {
-		t.Fatalf("Failed to create test commands file: %v", err)
+		t.Fatalf("Failed to create test file: %v", err)
 	}
 	defer os.Remove(tempFile)
 
 	config, err := loadCommandsFromFile(tempFile)
 	if err != nil {
-		t.Errorf("Failed to load commands from file: %v", err)
+		t.Errorf("Failed to load: %v", err)
 	}
-
-	command, err := findInventoryCommand(config)
+	command, err := findCommand(config, "inventory")
 	if err != nil {
-		t.Errorf("Failed to find command: %v", err)
+		t.Errorf("Failed to find: %v", err)
 	}
-
 	if command != "show inventory" {
-		t.Errorf("Expected command 'show inventory', got '%s'", command)
+		t.Errorf("Expected 'show inventory', got '%s'", command)
 	}
 }
 

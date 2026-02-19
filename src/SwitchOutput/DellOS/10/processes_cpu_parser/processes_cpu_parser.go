@@ -17,23 +17,26 @@ type StandardizedEntry struct {
 	DataType  string          `json:"data_type"`
 	Timestamp string          `json:"timestamp"`
 	Date      string          `json:"date"`
-	Message   EnvironmentData `json:"message"`
+	Message   ProcessesCpuData `json:"message"`
 }
 
-// EnvironmentData represents parsed show environment output
-type EnvironmentData struct {
-	UnitID          int             `json:"unit_id"`
-	UnitState       string          `json:"unit_state"`
-	UnitTemperature int             `json:"unit_temperature"`
-	ThermalSensors  []ThermalSensor `json:"thermal_sensors"`
+// ProcessesCpuData represents parsed show processes cpu output
+type ProcessesCpuData struct {
+	UnitID         int           `json:"unit_id"`
+	OverallCPU5Sec float64      `json:"overall_cpu_5sec_pct"`
+	OverallCPU1Min float64      `json:"overall_cpu_1min_pct"`
+	OverallCPU5Min float64      `json:"overall_cpu_5min_pct"`
+	Processes      []ProcessInfo `json:"processes"`
 }
 
-// ThermalSensor represents a single thermal sensor reading
-type ThermalSensor struct {
-	UnitID      int    `json:"unit_id"`
-	SensorID    int    `json:"sensor_id"`
-	SensorName  string `json:"sensor_name"`
-	Temperature int    `json:"temperature"`
+// ProcessInfo represents a single process entry
+type ProcessInfo struct {
+	PID        int     `json:"pid"`
+	Name       string  `json:"name"`
+	RuntimeSec int64   `json:"runtime_seconds"`
+	CPU5Sec    float64 `json:"cpu_5sec_pct"`
+	CPU1Min    float64 `json:"cpu_1min_pct"`
+	CPU5Min    float64 `json:"cpu_5min_pct"`
 }
 
 type CommandConfig struct {
@@ -45,18 +48,17 @@ type Command struct {
 	Command string `json:"command"`
 }
 
-// parseEnvironmentTemperature parses Dell OS10 show environment output
-func parseEnvironmentTemperature(content string) ([]StandardizedEntry, error) {
-	data := EnvironmentData{}
+// parseProcessesCpu parses Dell OS10 show processes cpu output
+func parseProcessesCpu(content string) ([]StandardizedEntry, error) {
+	data := ProcessesCpuData{}
 	lines := strings.Split(content, "\n")
 	timestamp := time.Now().UTC()
 
-	separatorRegex := regexp.MustCompile(`^-{10,}$`)
-	unitSummaryRegex := regexp.MustCompile(`^(\d+)\s+(up|down)\s+(\d+)$`)
-	// Sensor name can contain spaces (e.g., "NPU temp sensor"), so use {2,} gap before temp
-	sensorRegex := regexp.MustCompile(`^(\d+)\s+(\d+)\s+(.+?)\s{2,}(\d+)$`)
+	unitRegex := regexp.MustCompile(`CPU Statistics of Unit (\d+)`)
+	overallRegex := regexp.MustCompile(`^Overall\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)`)
+	processRegex := regexp.MustCompile(`^(\d+)\s+(\S+)\s+(\d+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)`)
 
-	inThermalSection := false
+	inProcessTable := false
 
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
@@ -64,46 +66,40 @@ func parseEnvironmentTemperature(content string) ([]StandardizedEntry, error) {
 			continue
 		}
 
-		if separatorRegex.MatchString(trimmed) {
+		if match := unitRegex.FindStringSubmatch(trimmed); match != nil {
+			data.UnitID, _ = strconv.Atoi(match[1])
 			continue
 		}
 
-		if strings.HasPrefix(trimmed, "Thermal sensors") {
-			inThermalSection = true
+		if match := overallRegex.FindStringSubmatch(trimmed); match != nil {
+			data.OverallCPU5Sec, _ = strconv.ParseFloat(match[1], 64)
+			data.OverallCPU1Min, _ = strconv.ParseFloat(match[2], 64)
+			data.OverallCPU5Min, _ = strconv.ParseFloat(match[3], 64)
 			continue
 		}
 
-		if strings.HasPrefix(trimmed, "Unit") && strings.Contains(trimmed, "State") {
-			continue
-		}
-		if strings.HasPrefix(trimmed, "Unit") && strings.Contains(trimmed, "Sensor-Id") {
+		if strings.HasPrefix(trimmed, "PID") && strings.Contains(trimmed, "Process") {
+			inProcessTable = true
 			continue
 		}
 
-		if !inThermalSection {
-			if match := unitSummaryRegex.FindStringSubmatch(trimmed); match != nil {
-				data.UnitID, _ = strconv.Atoi(match[1])
-				data.UnitState = match[2]
-				data.UnitTemperature, _ = strconv.Atoi(match[3])
-				continue
-			}
-		}
-
-		if inThermalSection {
-			if match := sensorRegex.FindStringSubmatch(trimmed); match != nil {
-				sensor := ThermalSensor{
-					SensorName: match[3],
+		if inProcessTable {
+			if match := processRegex.FindStringSubmatch(trimmed); match != nil {
+				proc := ProcessInfo{
+					Name: match[2],
 				}
-				sensor.UnitID, _ = strconv.Atoi(match[1])
-				sensor.SensorID, _ = strconv.Atoi(match[2])
-				sensor.Temperature, _ = strconv.Atoi(match[4])
-				data.ThermalSensors = append(data.ThermalSensors, sensor)
+				proc.PID, _ = strconv.Atoi(match[1])
+				proc.RuntimeSec, _ = strconv.ParseInt(match[3], 10, 64)
+				proc.CPU5Sec, _ = strconv.ParseFloat(match[4], 64)
+				proc.CPU1Min, _ = strconv.ParseFloat(match[5], 64)
+				proc.CPU5Min, _ = strconv.ParseFloat(match[6], 64)
+				data.Processes = append(data.Processes, proc)
 			}
 		}
 	}
 
 	entry := StandardizedEntry{
-		DataType:  "dell_os10_environment_temperature",
+		DataType:  "dell_os10_processes_cpu",
 		Timestamp: timestamp.Format(time.RFC3339),
 		Date:      timestamp.Format("2006-01-02"),
 		Message:   data,
@@ -142,15 +138,15 @@ func findCommand(config *CommandConfig, name string) (string, error) {
 }
 
 func main() {
-	inputFile := flag.String("input", "", "Input file containing 'show environment' output")
+	inputFile := flag.String("input", "", "Input file containing 'show processes cpu' output")
 	outputFile := flag.String("output", "", "Output file for JSON data (optional, defaults to stdout)")
 	commandsFile := flag.String("commands", "", "Commands JSON file")
 	help := flag.Bool("help", false, "Show help message")
 	flag.Parse()
 
 	if *help {
-		fmt.Println("Dell OS10 Environment Temperature Parser")
-		fmt.Println("Parses 'show environment' output and converts to JSON format.")
+		fmt.Println("Dell OS10 Processes CPU Parser")
+		fmt.Println("Parses 'show processes cpu' output and converts to JSON format.")
 		fmt.Println("\nOptions:")
 		fmt.Println("  -input <file>     Input file")
 		fmt.Println("  -output <file>    Output file (optional, defaults to stdout)")
@@ -175,7 +171,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
-		command, err := findCommand(config, "environment-temperature")
+		command, err := findCommand(config, "processes-cpu")
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
@@ -190,7 +186,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	entries, err := parseEnvironmentTemperature(inputData)
+	entries, err := parseProcessesCpu(inputData)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
@@ -220,9 +216,9 @@ func main() {
 type UnifiedParser struct{}
 
 func (p *UnifiedParser) GetDescription() string {
-	return "Parses 'show environment' output for Dell OS10"
+	return "Parses 'show processes cpu' output for Dell OS10"
 }
 
 func (p *UnifiedParser) Parse(input []byte) (interface{}, error) {
-	return parseEnvironmentTemperature(string(input))
+	return parseProcessesCpu(string(input))
 }

@@ -7,34 +7,27 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
 )
 
 // StandardizedEntry represents the standardized JSON structure
 type StandardizedEntry struct {
-	DataType  string           `json:"data_type"`
-	Timestamp string           `json:"timestamp"`
-	Date      string           `json:"date"`
-	Message   LldpNeighborData `json:"message"`
+	DataType  string      `json:"data_type"`
+	Timestamp string      `json:"timestamp"`
+	Date      string      `json:"date"`
+	Message   VersionData `json:"message"`
 }
 
-// LldpNeighborData represents a single LLDP neighbor entry
-type LldpNeighborData struct {
-	RemoteChassisIDSubtype string `json:"remote_chassis_id_subtype"`
-	RemoteChassisID        string `json:"remote_chassis_id"`
-	RemotePortSubtype      string `json:"remote_port_subtype"`
-	RemotePortID           string `json:"remote_port_id"`
-	RemotePortDescription  string `json:"remote_port_description"`
-	LocalPortID            string `json:"local_port_id"`
-	RemoteNeighborIndex    int    `json:"remote_neighbor_index"`
-	RemoteTTL              int    `json:"remote_ttl"`
-	RemoteSystemName       string `json:"remote_system_name"`
-	RemoteSystemDesc       string `json:"remote_system_desc"`
-	RemoteMaxFrameSize     int    `json:"remote_max_frame_size"`
-	AutoNegSupported       int    `json:"auto_neg_supported"`
-	AutoNegEnabled         int    `json:"auto_neg_enabled"`
+// VersionData represents parsed show version output
+type VersionData struct {
+	OSName       string `json:"os_name"`
+	OSVersion    string `json:"os_version"`
+	BuildVersion string `json:"build_version"`
+	BuildTime    string `json:"build_time"`
+	SystemType   string `json:"system_type"`
+	Architecture string `json:"architecture"`
+	UpTime       string `json:"up_time"`
 }
 
 // CommandConfig represents the structure of the commands.json file
@@ -48,89 +41,54 @@ type Command struct {
 	Command string `json:"command"`
 }
 
-// parseLldpNeighbor parses Dell OS10 show lldp neighbors detail output
-func parseLldpNeighbor(content string) ([]StandardizedEntry, error) {
-	var entries []StandardizedEntry
+// parseVersion parses Dell OS10 show version output
+func parseVersion(content string) ([]StandardizedEntry, error) {
+	data := VersionData{}
 	lines := strings.Split(content, "\n")
 	timestamp := time.Now().UTC()
 
 	kvRegex := regexp.MustCompile(`^(.+?):\s+(.+)$`)
-	separatorRegex := regexp.MustCompile(`^-{10,}$`)
-
-	var current *LldpNeighborData
 
 	for _, line := range lines {
-		trimmed := strings.TrimSpace(line)
-		if trimmed == "" {
+		line = strings.TrimSpace(line)
+		if line == "" {
 			continue
 		}
 
-		// Separator means end of current neighbor block
-		if separatorRegex.MatchString(trimmed) {
-			if current != nil {
-				entry := StandardizedEntry{
-					DataType:  "dell_os10_lldp_neighbor",
-					Timestamp: timestamp.Format(time.RFC3339),
-					Date:      timestamp.Format("2006-01-02"),
-					Message:   *current,
-				}
-				entries = append(entries, entry)
-			}
-			current = nil
+		// First line is the OS name (e.g. "Dell SmartFabric OS10 Enterprise")
+		if strings.HasPrefix(line, "Dell ") && data.OSName == "" {
+			data.OSName = line
 			continue
 		}
 
-		if match := kvRegex.FindStringSubmatch(trimmed); match != nil {
+		if match := kvRegex.FindStringSubmatch(line); match != nil {
 			key := strings.TrimSpace(match[1])
 			value := strings.TrimSpace(match[2])
 
-			if current == nil {
-				current = &LldpNeighborData{}
-			}
-
 			switch key {
-			case "Remote Chassis ID Subtype":
-				current.RemoteChassisIDSubtype = value
-			case "Remote Chassis ID":
-				current.RemoteChassisID = value
-			case "Remote Port Subtype":
-				current.RemotePortSubtype = value
-			case "Remote Port ID":
-				current.RemotePortID = value
-			case "Remote Port Description":
-				current.RemotePortDescription = value
-			case "Local Port ID":
-				current.LocalPortID = value
-			case "Locally assigned remote Neighbor Index":
-				current.RemoteNeighborIndex, _ = strconv.Atoi(value)
-			case "Remote TTL":
-				current.RemoteTTL, _ = strconv.Atoi(value)
-			case "Remote System Name":
-				current.RemoteSystemName = value
-			case "Remote System Desc":
-				current.RemoteSystemDesc = value
-			case "Remote Max Frame Size":
-				current.RemoteMaxFrameSize, _ = strconv.Atoi(value)
-			case "Auto-neg supported":
-				current.AutoNegSupported, _ = strconv.Atoi(value)
-			case "Auto-neg enabled":
-				current.AutoNegEnabled, _ = strconv.Atoi(value)
+			case "OS Version":
+				data.OSVersion = value
+			case "Build Version":
+				data.BuildVersion = value
+			case "Build Time":
+				data.BuildTime = value
+			case "System Type":
+				data.SystemType = value
+			case "Architecture":
+				data.Architecture = value
+			case "Up Time":
+				data.UpTime = value
 			}
 		}
 	}
 
-	// Handle last block if no trailing separator
-	if current != nil {
-		entry := StandardizedEntry{
-			DataType:  "dell_os10_lldp_neighbor",
-			Timestamp: timestamp.Format(time.RFC3339),
-			Date:      timestamp.Format("2006-01-02"),
-			Message:   *current,
-		}
-		entries = append(entries, entry)
+	entry := StandardizedEntry{
+		DataType:  "dell_os10_version",
+		Timestamp: timestamp.Format(time.RFC3339),
+		Date:      timestamp.Format("2006-01-02"),
+		Message:   data,
 	}
-
-	return entries, nil
+	return []StandardizedEntry{entry}, nil
 }
 
 // runCommand executes a command on the Dell OS10 switch using clish
@@ -167,21 +125,21 @@ func findCommand(config *CommandConfig, name string) (string, error) {
 }
 
 func main() {
-	inputFile := flag.String("input", "", "Input file containing 'show lldp neighbors detail' output")
+	inputFile := flag.String("input", "", "Input file containing 'show version' output")
 	outputFile := flag.String("output", "", "Output file for JSON data (optional, defaults to stdout)")
 	commandsFile := flag.String("commands", "", "Commands JSON file (used when no input file is specified)")
 	help := flag.Bool("help", false, "Show help message")
 	flag.Parse()
 
 	if *help {
-		fmt.Println("Dell OS10 LLDP Neighbor Parser")
-		fmt.Println("Parses 'show lldp neighbors detail' output and converts to JSON format.")
+		fmt.Println("Dell OS10 Version Parser")
+		fmt.Println("Parses 'show version' output and converts to JSON format.")
 		fmt.Println("")
 		fmt.Println("Usage:")
-		fmt.Println("  lldp_neighbor_parser [options]")
+		fmt.Println("  version_parser [options]")
 		fmt.Println("")
 		fmt.Println("Options:")
-		fmt.Println("  -input <file>     Input file containing 'show lldp neighbors detail' output")
+		fmt.Println("  -input <file>     Input file containing 'show version' output")
 		fmt.Println("  -output <file>    Output file for JSON data (optional, defaults to stdout)")
 		fmt.Println("  -commands <file>  Commands JSON file (used when no input file is specified)")
 		fmt.Println("  -help             Show this help message")
@@ -203,7 +161,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error loading commands file: %v\n", err)
 			os.Exit(1)
 		}
-		command, err := findCommand(config, "lldp-neighbor")
+		command, err := findCommand(config, "version")
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
@@ -219,9 +177,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	entries, err := parseLldpNeighbor(inputData)
+	entries, err := parseVersion(inputData)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error parsing LLDP neighbors: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error parsing version: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -250,9 +208,9 @@ func main() {
 type UnifiedParser struct{}
 
 func (p *UnifiedParser) GetDescription() string {
-	return "Parses 'show lldp neighbors detail' output for Dell OS10"
+	return "Parses 'show version' output for Dell OS10"
 }
 
 func (p *UnifiedParser) Parse(input []byte) (interface{}, error) {
-	return parseLldpNeighbor(string(input))
+	return parseVersion(string(input))
 }

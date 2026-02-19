@@ -7,33 +7,29 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
-	"strconv"
 	"strings"
 	"time"
 )
 
 // StandardizedEntry represents the standardized JSON structure
 type StandardizedEntry struct {
-	DataType  string          `json:"data_type"`
-	Timestamp string          `json:"timestamp"`
-	Date      string          `json:"date"`
-	Message   EnvironmentData `json:"message"`
+	DataType  string              `json:"data_type"`
+	Timestamp string              `json:"timestamp"`
+	Date      string              `json:"date"`
+	Message   InterfaceStatusData `json:"message"`
 }
 
-// EnvironmentData represents parsed show environment output
-type EnvironmentData struct {
-	UnitID          int             `json:"unit_id"`
-	UnitState       string          `json:"unit_state"`
-	UnitTemperature int             `json:"unit_temperature"`
-	ThermalSensors  []ThermalSensor `json:"thermal_sensors"`
-}
-
-// ThermalSensor represents a single thermal sensor reading
-type ThermalSensor struct {
-	UnitID      int    `json:"unit_id"`
-	SensorID    int    `json:"sensor_id"`
-	SensorName  string `json:"sensor_name"`
-	Temperature int    `json:"temperature"`
+// InterfaceStatusData represents a single interface status entry
+type InterfaceStatusData struct {
+	Port        string `json:"port"`
+	Description string `json:"description"`
+	Status      string `json:"status"`
+	Speed       string `json:"speed"`
+	Duplex      string `json:"duplex"`
+	Mode        string `json:"mode"`
+	Vlan        string `json:"vlan"`
+	TaggedVlans string `json:"tagged_vlans"`
+	IsUp        bool   `json:"is_up"`
 }
 
 type CommandConfig struct {
@@ -45,18 +41,17 @@ type Command struct {
 	Command string `json:"command"`
 }
 
-// parseEnvironmentTemperature parses Dell OS10 show environment output
-func parseEnvironmentTemperature(content string) ([]StandardizedEntry, error) {
-	data := EnvironmentData{}
+// parseInterfaceStatus parses Dell OS10 show interface status output
+func parseInterfaceStatus(content string) ([]StandardizedEntry, error) {
+	var entries []StandardizedEntry
 	lines := strings.Split(content, "\n")
 	timestamp := time.Now().UTC()
 
 	separatorRegex := regexp.MustCompile(`^-{10,}$`)
-	unitSummaryRegex := regexp.MustCompile(`^(\d+)\s+(up|down)\s+(\d+)$`)
-	// Sensor name can contain spaces (e.g., "NPU temp sensor"), so use {2,} gap before temp
-	sensorRegex := regexp.MustCompile(`^(\d+)\s+(\d+)\s+(.+?)\s{2,}(\d+)$`)
+	portRegex := regexp.MustCompile(`^((?:Eth|Po|Vl|Lo|Ma)\s*\S+)\s+(.+)$`)
 
-	inThermalSection := false
+	headerSeen := false
+	headerPassed := false
 
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
@@ -65,50 +60,79 @@ func parseEnvironmentTemperature(content string) ([]StandardizedEntry, error) {
 		}
 
 		if separatorRegex.MatchString(trimmed) {
+			if headerSeen {
+				headerPassed = true
+			}
 			continue
 		}
 
-		if strings.HasPrefix(trimmed, "Thermal sensors") {
-			inThermalSection = true
+		if strings.Contains(trimmed, "Port") && strings.Contains(trimmed, "Status") && strings.Contains(trimmed, "Speed") {
+			headerSeen = true
 			continue
 		}
 
-		if strings.HasPrefix(trimmed, "Unit") && strings.Contains(trimmed, "State") {
-			continue
-		}
-		if strings.HasPrefix(trimmed, "Unit") && strings.Contains(trimmed, "Sensor-Id") {
-			continue
-		}
-
-		if !inThermalSection {
-			if match := unitSummaryRegex.FindStringSubmatch(trimmed); match != nil {
-				data.UnitID, _ = strconv.Atoi(match[1])
-				data.UnitState = match[2]
-				data.UnitTemperature, _ = strconv.Atoi(match[3])
+		if headerPassed {
+			match := portRegex.FindStringSubmatch(trimmed)
+			if match == nil {
 				continue
 			}
-		}
 
-		if inThermalSection {
-			if match := sensorRegex.FindStringSubmatch(trimmed); match != nil {
-				sensor := ThermalSensor{
-					SensorName: match[3],
-				}
-				sensor.UnitID, _ = strconv.Atoi(match[1])
-				sensor.SensorID, _ = strconv.Atoi(match[2])
-				sensor.Temperature, _ = strconv.Atoi(match[4])
-				data.ThermalSensors = append(data.ThermalSensors, sensor)
+			port := strings.TrimSpace(match[1])
+			rest := match[2]
+			fields := strings.Fields(rest)
+			if len(fields) < 5 {
+				continue
 			}
+
+			data := InterfaceStatusData{Port: port}
+
+			// Find status field (up/down/admin-down)
+			statusIdx := -1
+			for i, f := range fields {
+				lower := strings.ToLower(f)
+				if lower == "up" || lower == "down" || lower == "admin-down" {
+					statusIdx = i
+					break
+				}
+			}
+			if statusIdx < 0 {
+				continue
+			}
+
+			if statusIdx > 0 {
+				data.Description = strings.Join(fields[:statusIdx], " ")
+			}
+			data.Status = fields[statusIdx]
+			data.IsUp = strings.ToLower(data.Status) == "up"
+
+			remaining := fields[statusIdx+1:]
+			if len(remaining) >= 1 {
+				data.Speed = remaining[0]
+			}
+			if len(remaining) >= 2 {
+				data.Duplex = remaining[1]
+			}
+			if len(remaining) >= 3 {
+				data.Mode = remaining[2]
+			}
+			if len(remaining) >= 4 {
+				data.Vlan = remaining[3]
+			}
+			if len(remaining) >= 5 {
+				data.TaggedVlans = strings.Join(remaining[4:], ",")
+			}
+
+			entry := StandardizedEntry{
+				DataType:  "dell_os10_interface_status",
+				Timestamp: timestamp.Format(time.RFC3339),
+				Date:      timestamp.Format("2006-01-02"),
+				Message:   data,
+			}
+			entries = append(entries, entry)
 		}
 	}
 
-	entry := StandardizedEntry{
-		DataType:  "dell_os10_environment_temperature",
-		Timestamp: timestamp.Format(time.RFC3339),
-		Date:      timestamp.Format("2006-01-02"),
-		Message:   data,
-	}
-	return []StandardizedEntry{entry}, nil
+	return entries, nil
 }
 
 func runCommand(command string) (string, error) {
@@ -142,15 +166,15 @@ func findCommand(config *CommandConfig, name string) (string, error) {
 }
 
 func main() {
-	inputFile := flag.String("input", "", "Input file containing 'show environment' output")
+	inputFile := flag.String("input", "", "Input file containing 'show interface status' output")
 	outputFile := flag.String("output", "", "Output file for JSON data (optional, defaults to stdout)")
 	commandsFile := flag.String("commands", "", "Commands JSON file")
 	help := flag.Bool("help", false, "Show help message")
 	flag.Parse()
 
 	if *help {
-		fmt.Println("Dell OS10 Environment Temperature Parser")
-		fmt.Println("Parses 'show environment' output and converts to JSON format.")
+		fmt.Println("Dell OS10 Interface Status Parser")
+		fmt.Println("Parses 'show interface status' output and converts to JSON format.")
 		fmt.Println("\nOptions:")
 		fmt.Println("  -input <file>     Input file")
 		fmt.Println("  -output <file>    Output file (optional, defaults to stdout)")
@@ -175,7 +199,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
-		command, err := findCommand(config, "environment-temperature")
+		command, err := findCommand(config, "interface-status")
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
@@ -190,7 +214,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	entries, err := parseEnvironmentTemperature(inputData)
+	entries, err := parseInterfaceStatus(inputData)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
@@ -220,9 +244,9 @@ func main() {
 type UnifiedParser struct{}
 
 func (p *UnifiedParser) GetDescription() string {
-	return "Parses 'show environment' output for Dell OS10"
+	return "Parses 'show interface status' output for Dell OS10"
 }
 
 func (p *UnifiedParser) Parse(input []byte) (interface{}, error) {
-	return parseEnvironmentTemperature(string(input))
+	return parseInterfaceStatus(string(input))
 }
