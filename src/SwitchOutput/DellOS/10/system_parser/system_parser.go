@@ -1,26 +1,19 @@
-package main
+package system_parser
 
 import (
-	"encoding/json"
-	"flag"
-	"fmt"
-	"os"
-	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 )
 
-// StandardizedEntry represents the standardized JSON structure
 type StandardizedEntry struct {
-	DataType  string     `json:"data_type"`
-	Timestamp string     `json:"timestamp"`
-	Date      string     `json:"date"`
-	Message   SystemData `json:"message"`
+	DataType  string      `json:"data_type"`
+	Timestamp string      `json:"timestamp"`
+	Date      string      `json:"date"`
+	Message   interface{} `json:"message"`
 }
 
-// SystemData represents parsed show system output
 type SystemData struct {
 	NodeID        int           `json:"node_id"`
 	MAC           string        `json:"mac"`
@@ -33,7 +26,6 @@ type SystemData struct {
 	FanTrays      []FanTray     `json:"fan_trays"`
 }
 
-// SystemUnit represents a unit in the system
 type SystemUnit struct {
 	UnitID           int    `json:"unit_id"`
 	Status           string `json:"status"`
@@ -45,7 +37,6 @@ type SystemUnit struct {
 	PhysicalPorts    string `json:"physical_ports"`
 }
 
-// PowerSupply represents a PSU entry
 type PowerSupply struct {
 	PSUID     int    `json:"psu_id"`
 	Status    string `json:"status"`
@@ -57,7 +48,6 @@ type PowerSupply struct {
 	FanStatus string `json:"fan_status"`
 }
 
-// FanTray represents a fan tray entry
 type FanTray struct {
 	TrayID  int       `json:"tray_id"`
 	Status  string    `json:"status"`
@@ -65,28 +55,21 @@ type FanTray struct {
 	Fans    []FanInfo `json:"fans"`
 }
 
-// FanInfo represents an individual fan within a tray
 type FanInfo struct {
 	FanID  int    `json:"fan_id"`
 	Speed  int    `json:"speed_rpm"`
 	Status string `json:"status"`
 }
 
-type CommandConfig struct {
-	Commands []Command `json:"commands"`
+type SystemParser struct{}
+
+func (p *SystemParser) GetDescription() string {
+	return "Parses 'show system' output (hardware, power supplies, fans)"
 }
 
-type Command struct {
-	Name    string `json:"name"`
-	Command string `json:"command"`
-}
-
-// parseSystem parses Dell OS10 show system output
-func parseSystem(content string) ([]StandardizedEntry, error) {
+func (p *SystemParser) Parse(input []byte) (interface{}, error) {
 	data := SystemData{}
-	lines := strings.Split(content, "\n")
-	timestamp := time.Now().UTC()
-
+	lines := strings.Split(string(input), "\n")
 	kvRegex := regexp.MustCompile(`^(.+?)\s*:\s+(.+)$`)
 	sectionRegex := regexp.MustCompile(`^--\s+(.+)\s+--$`)
 	separatorRegex := regexp.MustCompile(`^-{10,}$`)
@@ -100,19 +83,11 @@ func parseSystem(content string) ([]StandardizedEntry, error) {
 
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
-
-		if trimmed == "" {
+		if trimmed == "" || separatorRegex.MatchString(trimmed) {
 			continue
 		}
-
-		if separatorRegex.MatchString(trimmed) {
-			continue
-		}
-
-		// Detect section headers
 		if match := sectionRegex.FindStringSubmatch(trimmed); match != nil {
 			sectionName := strings.TrimSpace(match[1])
-
 			if currentUnit != nil {
 				data.Units = append(data.Units, *currentUnit)
 				currentUnit = nil
@@ -121,7 +96,6 @@ func parseSystem(content string) ([]StandardizedEntry, error) {
 				data.FanTrays = append(data.FanTrays, *currentFanTray)
 				currentFanTray = nil
 			}
-
 			if strings.HasPrefix(sectionName, "Unit") {
 				currentSection = "unit"
 				currentUnit = &SystemUnit{}
@@ -136,8 +110,6 @@ func parseSystem(content string) ([]StandardizedEntry, error) {
 			}
 			continue
 		}
-
-		// Skip table header lines
 		if strings.HasPrefix(trimmed, "PSU-ID") || strings.HasPrefix(trimmed, "FanTray") {
 			continue
 		}
@@ -162,7 +134,6 @@ func parseSystem(content string) ([]StandardizedEntry, error) {
 					data.PCIeVersion = value
 				}
 			}
-
 		case "unit":
 			if currentUnit != nil {
 				if match := kvRegex.FindStringSubmatch(trimmed); match != nil {
@@ -186,24 +157,16 @@ func parseSystem(content string) ([]StandardizedEntry, error) {
 					}
 				}
 			}
-
 		case "power":
 			if match := psuRegex.FindStringSubmatch(trimmed); match != nil {
-				psu := PowerSupply{
-					Status:  match[2],
-					Type:    match[3],
-					AirFlow: match[6],
-				}
+				psu := PowerSupply{Status: match[2], Type: match[3], AirFlow: match[6], FanStatus: match[9]}
 				psu.PSUID, _ = strconv.Atoi(match[1])
 				psu.Power, _ = strconv.Atoi(match[4])
 				psu.AvgPower, _ = strconv.Atoi(match[5])
 				psu.FanSpeed, _ = strconv.Atoi(match[8])
-				psu.FanStatus = match[9]
 				data.PowerSupplies = append(data.PowerSupplies, psu)
 			}
-
 		case "fan":
-			// Check for fan continuation line first (indented)
 			if strings.HasPrefix(line, " ") || strings.HasPrefix(line, "\t") {
 				if match := fanContinueRegex.FindStringSubmatch(line); match != nil {
 					if currentFanTray != nil {
@@ -215,15 +178,11 @@ func parseSystem(content string) ([]StandardizedEntry, error) {
 					continue
 				}
 			}
-			// Fan tray header line
 			if match := fanTrayRegex.FindStringSubmatch(trimmed); match != nil {
 				if currentFanTray != nil {
 					data.FanTrays = append(data.FanTrays, *currentFanTray)
 				}
-				currentFanTray = &FanTray{
-					Status:  match[2],
-					AirFlow: match[3],
-				}
+				currentFanTray = &FanTray{Status: match[2], AirFlow: match[3]}
 				currentFanTray.TrayID, _ = strconv.Atoi(match[1])
 				fan := FanInfo{Status: match[6]}
 				fan.FanID, _ = strconv.Atoi(match[4])
@@ -232,135 +191,15 @@ func parseSystem(content string) ([]StandardizedEntry, error) {
 			}
 		}
 	}
-
 	if currentUnit != nil {
 		data.Units = append(data.Units, *currentUnit)
 	}
 	if currentFanTray != nil {
 		data.FanTrays = append(data.FanTrays, *currentFanTray)
 	}
-
-	entry := StandardizedEntry{
-		DataType:  "dell_os10_system",
-		Timestamp: timestamp.Format(time.RFC3339),
-		Date:      timestamp.Format("2006-01-02"),
-		Message:   data,
-	}
-	return []StandardizedEntry{entry}, nil
-}
-
-func runCommand(command string) (string, error) {
-	cmd := exec.Command("/opt/dell/os10/bin/clish", "-c", command)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return "", fmt.Errorf("clish error: %v, output: %s", err, string(output))
-	}
-	return string(output), nil
-}
-
-func loadCommandsFromFile(filename string) (*CommandConfig, error) {
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, fmt.Errorf("error reading commands file: %v", err)
-	}
-	var config CommandConfig
-	if err := json.Unmarshal(data, &config); err != nil {
-		return nil, fmt.Errorf("error parsing commands file: %v", err)
-	}
-	return &config, nil
-}
-
-func findCommand(config *CommandConfig, name string) (string, error) {
-	for _, cmd := range config.Commands {
-		if cmd.Name == name {
-			return cmd.Command, nil
-		}
-	}
-	return "", fmt.Errorf("%s command not found in commands file", name)
-}
-
-func main() {
-	inputFile := flag.String("input", "", "Input file containing 'show system' output")
-	outputFile := flag.String("output", "", "Output file for JSON data (optional, defaults to stdout)")
-	commandsFile := flag.String("commands", "", "Commands JSON file")
-	help := flag.Bool("help", false, "Show help message")
-	flag.Parse()
-
-	if *help {
-		fmt.Println("Dell OS10 System Parser")
-		fmt.Println("Parses 'show system' output and converts to JSON format.")
-		fmt.Println("\nOptions:")
-		fmt.Println("  -input <file>     Input file")
-		fmt.Println("  -output <file>    Output file (optional, defaults to stdout)")
-		fmt.Println("  -commands <file>  Commands JSON file")
-		fmt.Println("  -help             Show this help message")
-		return
-	}
-
-	var inputData string
-	var err error
-
-	if *inputFile != "" {
-		data, err := os.ReadFile(*inputFile)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error reading input file: %v\n", err)
-			os.Exit(1)
-		}
-		inputData = string(data)
-	} else if *commandsFile != "" {
-		config, err := loadCommandsFromFile(*commandsFile)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-		command, err := findCommand(config, "system")
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-		inputData, err = runCommand(command)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-	} else {
-		fmt.Fprintln(os.Stderr, "Error: You must specify either -input or -commands.")
-		os.Exit(1)
-	}
-
-	entries, err := parseSystem(inputData)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
-	}
-
-	var output *os.File
-	if *outputFile == "" {
-		output = os.Stdout
-	} else {
-		output, err = os.Create(*outputFile)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-		defer output.Close()
-	}
-
-	encoder := json.NewEncoder(output)
-	for _, entry := range entries {
-		if err := encoder.Encode(entry); err != nil {
-			fmt.Fprintf(os.Stderr, "Error encoding: %v\n", err)
-			os.Exit(1)
-		}
-	}
-}
-
-type UnifiedParser struct{}
-
-func (p *UnifiedParser) GetDescription() string {
-	return "Parses 'show system' output for Dell OS10"
-}
-
-func (p *UnifiedParser) Parse(input []byte) (interface{}, error) {
-	return parseSystem(string(input))
+	now := time.Now().UTC()
+	return []StandardizedEntry{{
+		DataType: "dell_os10_system", Timestamp: now.Format(time.RFC3339),
+		Date: now.Format("2006-01-02"), Message: data,
+	}}, nil
 }

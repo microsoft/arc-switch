@@ -1,0 +1,37 @@
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: c8:4b:d6:90:c7:27
+Remote Port Subtype: Mac address (3)
+Remote Port ID: c8:4b:d6:90:c7:27
+Remote Port Description: NIC 25Gb QSFP
+Local Port ID: ethernet1/1/1:1
+Locally assigned remote Neighbor Index: 4064
+Remote TTL: 121
+Information valid for next 98 seconds
+Time since last information change of this neighbor: 3 weeks 4 days 21:30:16
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------
+
+Remote Chassis ID Subtype: Mac address (4)
+Remote Chassis ID: c8:4b:d6:90:c8:0d
+Remote Port Subtype: Mac address (3)
+Remote Port ID: c8:4b:d6:90:c8:0d
+Remote Port Description: NIC 25Gb QSFP
+Local Port ID: ethernet1/1/2:1
+Locally assigned remote Neighbor Index: 4051
+Remote TTL: 121
+Information valid for next 119 seconds
+Time since last information change of this neighbor: 3 weeks 4 days 21:43:04
+Remote System Name: Not Advertised
+Remote System Desc: Not Advertised
+Remote Max Frame Size: 0
+Remote Aggregation Status: false
+MAC PHY Configuration:
+    Auto-neg supported: 0
+    Auto-neg enabled: 0
+---------------------------------------------------------------------------

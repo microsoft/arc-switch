@@ -1,0 +1,51 @@
+Node Id              : 1
+MAC                  : c4:5a:b1:36:bb:85
+Number of MACs       : 256
+Up Time              : 9 weeks 3 days 01:30:55
+DiagOS               : 3.40.4.1-9
+PCIe Version         : 2.6
+
+-- Unit 1 --
+Status                     : up
+System Identifier          : 1
+Down Reason                : unknown
+Digital Optical Monitoring : disable
+System Location LED        : off
+Required Type              : S5248F
+Current Type               : S5248F
+Hardware Revision          : A03
+Software Version           : 10.6.0.5
+Physical Ports             : 48x25GbE, 4x100GbE, 2x200GbE
+BIOS                          :   3.40.0.9-15
+BMC                           :   1.07
+ONIE                          :   3.40.1.1-9
+SSD                           :   L20B12
+OCORE-FPGA@pci_0000_04_00.0   :   3.4
+System CPLD                   : 0.8
+Secondary CPLD 1              : 1.0
+Secondary CPLD 2              : 1.0
+Secondary CPLD 3              : 0.0
+Secondary CPLD 4              : 0.0
+
+-- Power Supplies --
+PSU-ID  Status      Type    Power(w) AvgPower(w) AvgPowerStartTime AirFlow   Fan  Speed(rpm)  Status
+-------------------------------------------------------------------------------------------------------
+1       up          AC      50       50          12/14/2025-19:27  REVERSE   1    8280        up
+
+2       up          AC      70       70          12/14/2025-19:27  REVERSE   1    8280        up
+
+
+-- Fan Status --
+FanTray  Status      AirFlow   Fan  Speed(rpm)  Status
+----------------------------------------------------------------
+1        up          REVERSE   1    8520        up
+                               2    7680        up
+
+2        up          REVERSE   1    8400        up
+                               2    7800        up
+
+3        up          REVERSE   1    8520        up
+                               2    7680        up
+
+4        up          REVERSE   1    8520        up
+                               2    7800        up

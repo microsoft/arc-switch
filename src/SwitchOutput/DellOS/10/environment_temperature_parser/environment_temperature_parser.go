@@ -1,26 +1,19 @@
-package main
+package environment_temperature_parser
 
 import (
-	"encoding/json"
-	"flag"
-	"fmt"
-	"os"
-	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 )
 
-// StandardizedEntry represents the standardized JSON structure
 type StandardizedEntry struct {
-	DataType  string          `json:"data_type"`
-	Timestamp string          `json:"timestamp"`
-	Date      string          `json:"date"`
-	Message   EnvironmentData `json:"message"`
+	DataType  string      `json:"data_type"`
+	Timestamp string      `json:"timestamp"`
+	Date      string      `json:"date"`
+	Message   interface{} `json:"message"`
 }
 
-// EnvironmentData represents parsed show environment output
 type EnvironmentData struct {
 	UnitID          int             `json:"unit_id"`
 	UnitState       string          `json:"unit_state"`
@@ -28,7 +21,6 @@ type EnvironmentData struct {
 	ThermalSensors  []ThermalSensor `json:"thermal_sensors"`
 }
 
-// ThermalSensor represents a single thermal sensor reading
 type ThermalSensor struct {
 	UnitID      int    `json:"unit_id"`
 	SensorID    int    `json:"sensor_id"`
@@ -36,26 +28,18 @@ type ThermalSensor struct {
 	Temperature int    `json:"temperature"`
 }
 
-type CommandConfig struct {
-	Commands []Command `json:"commands"`
+type EnvironmentParser struct{}
+
+func (p *EnvironmentParser) GetDescription() string {
+	return "Parses 'show environment' output (thermal sensors)"
 }
 
-type Command struct {
-	Name    string `json:"name"`
-	Command string `json:"command"`
-}
-
-// parseEnvironmentTemperature parses Dell OS10 show environment output
-func parseEnvironmentTemperature(content string) ([]StandardizedEntry, error) {
+func (p *EnvironmentParser) Parse(input []byte) (interface{}, error) {
 	data := EnvironmentData{}
-	lines := strings.Split(content, "\n")
-	timestamp := time.Now().UTC()
-
+	lines := strings.Split(string(input), "\n")
 	separatorRegex := regexp.MustCompile(`^-{10,}$`)
 	unitSummaryRegex := regexp.MustCompile(`^(\d+)\s+(up|down)\s+(\d+)$`)
-	// Sensor name can contain spaces (e.g., "NPU temp sensor"), so use {2,} gap before temp
 	sensorRegex := regexp.MustCompile(`^(\d+)\s+(\d+)\s+(.+?)\s{2,}(\d+)$`)
-
 	inThermalSection := false
 
 	for _, line := range lines {
@@ -63,37 +47,26 @@ func parseEnvironmentTemperature(content string) ([]StandardizedEntry, error) {
 		if trimmed == "" {
 			continue
 		}
-
 		if separatorRegex.MatchString(trimmed) {
 			continue
 		}
-
 		if strings.HasPrefix(trimmed, "Thermal sensors") {
 			inThermalSection = true
 			continue
 		}
-
-		if strings.HasPrefix(trimmed, "Unit") && strings.Contains(trimmed, "State") {
+		if strings.HasPrefix(trimmed, "Unit") && (strings.Contains(trimmed, "State") || strings.Contains(trimmed, "Sensor-Id")) {
 			continue
 		}
-		if strings.HasPrefix(trimmed, "Unit") && strings.Contains(trimmed, "Sensor-Id") {
-			continue
-		}
-
 		if !inThermalSection {
 			if match := unitSummaryRegex.FindStringSubmatch(trimmed); match != nil {
 				data.UnitID, _ = strconv.Atoi(match[1])
 				data.UnitState = match[2]
 				data.UnitTemperature, _ = strconv.Atoi(match[3])
-				continue
 			}
 		}
-
 		if inThermalSection {
 			if match := sensorRegex.FindStringSubmatch(trimmed); match != nil {
-				sensor := ThermalSensor{
-					SensorName: match[3],
-				}
+				sensor := ThermalSensor{SensorName: match[3]}
 				sensor.UnitID, _ = strconv.Atoi(match[1])
 				sensor.SensorID, _ = strconv.Atoi(match[2])
 				sensor.Temperature, _ = strconv.Atoi(match[4])
@@ -101,128 +74,9 @@ func parseEnvironmentTemperature(content string) ([]StandardizedEntry, error) {
 			}
 		}
 	}
-
-	entry := StandardizedEntry{
-		DataType:  "dell_os10_environment_temperature",
-		Timestamp: timestamp.Format(time.RFC3339),
-		Date:      timestamp.Format("2006-01-02"),
-		Message:   data,
-	}
-	return []StandardizedEntry{entry}, nil
-}
-
-func runCommand(command string) (string, error) {
-	cmd := exec.Command("/opt/dell/os10/bin/clish", "-c", command)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return "", fmt.Errorf("clish error: %v, output: %s", err, string(output))
-	}
-	return string(output), nil
-}
-
-func loadCommandsFromFile(filename string) (*CommandConfig, error) {
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, fmt.Errorf("error reading commands file: %v", err)
-	}
-	var config CommandConfig
-	if err := json.Unmarshal(data, &config); err != nil {
-		return nil, fmt.Errorf("error parsing commands file: %v", err)
-	}
-	return &config, nil
-}
-
-func findCommand(config *CommandConfig, name string) (string, error) {
-	for _, cmd := range config.Commands {
-		if cmd.Name == name {
-			return cmd.Command, nil
-		}
-	}
-	return "", fmt.Errorf("%s command not found in commands file", name)
-}
-
-func main() {
-	inputFile := flag.String("input", "", "Input file containing 'show environment' output")
-	outputFile := flag.String("output", "", "Output file for JSON data (optional, defaults to stdout)")
-	commandsFile := flag.String("commands", "", "Commands JSON file")
-	help := flag.Bool("help", false, "Show help message")
-	flag.Parse()
-
-	if *help {
-		fmt.Println("Dell OS10 Environment Temperature Parser")
-		fmt.Println("Parses 'show environment' output and converts to JSON format.")
-		fmt.Println("\nOptions:")
-		fmt.Println("  -input <file>     Input file")
-		fmt.Println("  -output <file>    Output file (optional, defaults to stdout)")
-		fmt.Println("  -commands <file>  Commands JSON file")
-		fmt.Println("  -help             Show this help message")
-		return
-	}
-
-	var inputData string
-	var err error
-
-	if *inputFile != "" {
-		data, err := os.ReadFile(*inputFile)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error reading input file: %v\n", err)
-			os.Exit(1)
-		}
-		inputData = string(data)
-	} else if *commandsFile != "" {
-		config, err := loadCommandsFromFile(*commandsFile)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-		command, err := findCommand(config, "environment-temperature")
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-		inputData, err = runCommand(command)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-	} else {
-		fmt.Fprintln(os.Stderr, "Error: You must specify either -input or -commands.")
-		os.Exit(1)
-	}
-
-	entries, err := parseEnvironmentTemperature(inputData)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
-	}
-
-	var output *os.File
-	if *outputFile == "" {
-		output = os.Stdout
-	} else {
-		output, err = os.Create(*outputFile)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-		defer output.Close()
-	}
-
-	encoder := json.NewEncoder(output)
-	for _, entry := range entries {
-		if err := encoder.Encode(entry); err != nil {
-			fmt.Fprintf(os.Stderr, "Error encoding: %v\n", err)
-			os.Exit(1)
-		}
-	}
-}
-
-type UnifiedParser struct{}
-
-func (p *UnifiedParser) GetDescription() string {
-	return "Parses 'show environment' output for Dell OS10"
-}
-
-func (p *UnifiedParser) Parse(input []byte) (interface{}, error) {
-	return parseEnvironmentTemperature(string(input))
+	now := time.Now().UTC()
+	return []StandardizedEntry{{
+		DataType: "dell_os10_environment", Timestamp: now.Format(time.RFC3339),
+		Date: now.Format("2006-01-02"), Message: data,
+	}}, nil
 }
