@@ -1,144 +1,113 @@
 package main
 
 import (
-    "encoding/json"
-    "flag"
-    "fmt"
-    "io/ioutil"
-    "log"
-    "os"
-    "path/filepath"
-    "strings"
+	"dell-os10-parser/parsers"
+	"encoding/json"
+	"flag"
+	"fmt"
+	"os"
+	"sort"
 )
 
-const version = "v1.0.0"
-
-type Parser interface {
-    Parse(input []byte) (interface{}, error)
-    GetDescription() string
-}
-
-var parsers = map[string]func() Parser{
-    "interface":      func() Parser { return &InterfaceParser{} },
-    "interface-phy":  func() Parser { return &InterfacePhyParser{} },
-    "lldp":          func() Parser { return &LLDPParser{} },
-    "version":       func() Parser { return &VersionParser{} },
+var parserRegistry = map[string]parsers.Parser{
+	"version":          &parsers.VersionParser{},
+	"lldp":             &parsers.LldpParser{},
+	"interface-status": &parsers.InterfaceStatusParser{},
+	"inventory":        &parsers.InventoryParser{},
+	"environment":      &parsers.EnvironmentParser{},
+	"system":           &parsers.SystemParser{},
+	"processes-cpu":    &parsers.ProcessesCpuParser{},
+	"uptime":           &parsers.UptimeParser{},
+	"bgp-summary":      &parsers.BgpSummaryParser{},
 }
 
 func main() {
-    var (
-        parserType  string
-        inputFile   string
-        outputFile  string
-        listParsers bool
-        showVersion bool
-    )
+	parserType := flag.String("parser", "", "Parser type to use")
+	parserTypeShort := flag.String("p", "", "Parser type to use (shorthand)")
+	inputFile := flag.String("input", "", "Input file path")
+	inputFileShort := flag.String("i", "", "Input file path (shorthand)")
+	outputFile := flag.String("output", "", "Output file path (default: stdout)")
+	outputFileShort := flag.String("o", "", "Output file path (shorthand)")
+	listParsers := flag.Bool("list", false, "List available parsers")
+	showVersion := flag.Bool("version", false, "Show version")
 
-    flag.StringVar(&parserType, "parser", "", "Parser type to use")
-    flag.StringVar(&parserType, "p", "", "Parser type to use (shorthand)")
-    flag.StringVar(&inputFile, "input", "", "Input file path")
-    flag.StringVar(&inputFile, "i", "", "Input file path (shorthand)")
-    flag.StringVar(&outputFile, "output", "", "Output file path (default: stdout)")
-    flag.StringVar(&outputFile, "o", "", "Output file path (shorthand)")
-    flag.BoolVar(&listParsers, "list", false, "List available parsers")
-    flag.BoolVar(&showVersion, "version", false, "Show version")
+	flag.Parse()
 
-    flag.Usage = func() {
-        fmt.Fprintf(os.Stderr, "Dell OS10 Switch Output Parser %s\n\n", version)
-        fmt.Fprintf(os.Stderr, "Usage: %s -parser <type> -input <file> [-output <file>]\n\n", os.Args[0])
-        fmt.Fprintf(os.Stderr, "Options:\n")
-        flag.PrintDefaults()
-        fmt.Fprintf(os.Stderr, "\nAvailable parsers:\n")
-        for name, parserFunc := range parsers {
-            parser := parserFunc()
-            fmt.Fprintf(os.Stderr, "  %-20s %s\n", name, parser.GetDescription())
-        }
-    }
+	if *showVersion {
+		fmt.Println("Dell OS10 Switch Output Parser v2.0.0")
+		os.Exit(0)
+	}
 
-    flag.Parse()
+	if *listParsers {
+		fmt.Println("Available parsers:")
+		names := make([]string, 0, len(parserRegistry))
+		for name := range parserRegistry {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		for _, name := range names {
+			p := parserRegistry[name]
+			fmt.Printf("  %-20s %s\n", name, p.GetDescription())
+		}
+		os.Exit(0)
+	}
 
-    if showVersion {
-        fmt.Printf("dell-parser %s\n", version)
-        os.Exit(0)
-    }
+	pType := *parserType
+	if pType == "" {
+		pType = *parserTypeShort
+	}
+	if pType == "" {
+		fmt.Fprintln(os.Stderr, "Error: parser type is required. Use -p or -parser.")
+		fmt.Fprintln(os.Stderr, "Use -list to see available parsers.")
+		os.Exit(1)
+	}
 
-    if listParsers {
-        fmt.Println("Available parsers:")
-        for name, parserFunc := range parsers {
-            parser := parserFunc()
-            fmt.Printf("  %-20s %s\n", name, parser.GetDescription())
-        }
-        os.Exit(0)
-    }
+	inFile := *inputFile
+	if inFile == "" {
+		inFile = *inputFileShort
+	}
+	if inFile == "" {
+		fmt.Fprintln(os.Stderr, "Error: input file is required. Use -i or -input.")
+		os.Exit(1)
+	}
 
-    if parserType == "" || inputFile == "" {
-        flag.Usage()
-        os.Exit(1)
-    }
+	outFile := *outputFile
+	if outFile == "" {
+		outFile = *outputFileShort
+	}
 
-    // Get parser
-    parserFunc, exists := parsers[strings.ToLower(parserType)]
-    if !exists {
-        log.Fatalf("Unknown parser type: %s", parserType)
-    }
-    parser := parserFunc()
+	p, ok := parserRegistry[pType]
+	if !ok {
+		fmt.Fprintf(os.Stderr, "Unknown parser type: %s\n", pType)
+		fmt.Fprintln(os.Stderr, "Use -list to see available parsers.")
+		os.Exit(1)
+	}
 
-    // Read input
-    input, err := ioutil.ReadFile(inputFile)
-    if err != nil {
-        log.Fatalf("Failed to read input file: %v", err)
-    }
+	data, err := os.ReadFile(inFile)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading input file: %v\n", err)
+		os.Exit(1)
+	}
 
-    // Parse
-    result, err := parser.Parse(input)
-    if err != nil {
-        log.Fatalf("Parse error: %v", err)
-    }
+	result, err := p.Parse(data)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error parsing input: %v\n", err)
+		os.Exit(1)
+	}
 
-    // Marshal to JSON
-    jsonData, err := json.MarshalIndent(result, "", "  ")
-    if err != nil {
-        log.Fatalf("Failed to marshal JSON: %v", err)
-    }
+	jsonBytes, err := json.Marshal(result)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error marshaling JSON: %v\n", err)
+		os.Exit(1)
+	}
 
-    // Write output
-    if outputFile != "" {
-        err = ioutil.WriteFile(outputFile, jsonData, 0644)
-        if err != nil {
-            log.Fatalf("Failed to write output file: %v", err)
-        }
-        fmt.Printf("Successfully parsed %s\n", filepath.Base(inputFile))
-        fmt.Printf("Output written to: %s\n", outputFile)
-    } else {
-        fmt.Println(string(jsonData))
-    }
-}
-
-// Parser implementations
-type InterfaceParser struct{}
-func (p *InterfaceParser) GetDescription() string { return "Parses 'show interface' output" }
-func (p *InterfaceParser) Parse(input []byte) (interface{}, error) {
-    // TODO: Implement based on existing interface parser
-    return []map[string]string{}, nil
-}
-
-type InterfacePhyParser struct{}
-func (p *InterfacePhyParser) GetDescription() string { return "Parses 'show interface phy-eth' output" }
-func (p *InterfacePhyParser) Parse(input []byte) (interface{}, error) {
-    // TODO: Implement based on existing interface_phyeth parser
-    return []map[string]string{}, nil
-}
-
-type LLDPParser struct{}
-func (p *LLDPParser) GetDescription() string { return "Parses 'show lldp neighbors detail' output" }
-func (p *LLDPParser) Parse(input []byte) (interface{}, error) {
-    // TODO: Implement based on existing lldp parser
-    return []map[string]string{}, nil
-}
-
-type VersionParser struct{}
-func (p *VersionParser) GetDescription() string { return "Parses 'show version' output" }
-func (p *VersionParser) Parse(input []byte) (interface{}, error) {
-    // TODO: Implement based on existing version parser
-    return []map[string]string{}, nil
+	if outFile != "" {
+		err = os.WriteFile(outFile, jsonBytes, 0644)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error writing output file: %v\n", err)
+			os.Exit(1)
+		}
+	} else {
+		fmt.Println(string(jsonBytes))
+	}
 }

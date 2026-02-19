@@ -1,4 +1,4 @@
-package system_uptime_parser
+package main
 
 import (
 	"encoding/json"
@@ -6,149 +6,137 @@ import (
 	"testing"
 )
 
-func TestParseSystemUptimeWithDays(t *testing.T) {
-	sampleInput := ` 10:23:45 up 45 days, 3:12, 2 users, load average: 0.15, 0.10, 0.05`
-
-	entry, err := parseSystemUptime(sampleInput)
+func TestParseSystemUptime(t *testing.T) {
+	entries, err := parseSystemUptime("9 weeks 3 days 01:24:11")
 	if err != nil {
-		t.Errorf("Failed to parse system uptime: %v", err)
+		t.Fatalf("parseSystemUptime returned error: %v", err)
+	}
+	if len(entries) != 1 {
+		t.Fatalf("Expected 1 entry, got %d", len(entries))
 	}
 
-	if entry == nil {
-		t.Fatal("Expected non-nil entry")
+	e := entries[0]
+	if e.DataType != "dell_os10_system_uptime" {
+		t.Errorf("DataType: expected 'dell_os10_system_uptime', got '%s'", e.DataType)
+	}
+	if e.Message.Weeks != 9 {
+		t.Errorf("Weeks: expected 9, got %d", e.Message.Weeks)
+	}
+	if e.Message.Days != 3 {
+		t.Errorf("Days: expected 3, got %d", e.Message.Days)
+	}
+	if e.Message.Hours != 1 {
+		t.Errorf("Hours: expected 1, got %d", e.Message.Hours)
+	}
+	if e.Message.Minutes != 24 {
+		t.Errorf("Minutes: expected 24, got %d", e.Message.Minutes)
+	}
+	if e.Message.Seconds != 11 {
+		t.Errorf("Seconds: expected 11, got %d", e.Message.Seconds)
 	}
 
-	if entry.DataType != "dell_os10_system_uptime" {
-		t.Errorf("data_type: expected 'dell_os10_system_uptime', got '%s'", entry.DataType)
-	}
-
-	msg := entry.Message
-	if msg.UptimeDays != 45 {
-		t.Errorf("UptimeDays: expected 45, got %d", msg.UptimeDays)
-	}
-	if msg.UptimeHours != 3 {
-		t.Errorf("UptimeHours: expected 3, got %d", msg.UptimeHours)
-	}
-	if msg.UptimeMinutes != 12 {
-		t.Errorf("UptimeMinutes: expected 12, got %d", msg.UptimeMinutes)
-	}
-	if msg.Users != 2 {
-		t.Errorf("Users: expected 2, got %d", msg.Users)
-	}
-	if msg.LoadAvg1Min != "0.15" {
-		t.Errorf("LoadAvg1Min: expected '0.15', got '%s'", msg.LoadAvg1Min)
-	}
-	if msg.LoadAvg5Min != "0.10" {
-		t.Errorf("LoadAvg5Min: expected '0.10', got '%s'", msg.LoadAvg5Min)
-	}
-	if msg.LoadAvg15Min != "0.05" {
-		t.Errorf("LoadAvg15Min: expected '0.05', got '%s'", msg.LoadAvg15Min)
-	}
-	if msg.UptimeTotalHours != 45*24+3 {
-		t.Errorf("UptimeTotalHours: expected %d, got %d", 45*24+3, msg.UptimeTotalHours)
-	}
-
-	// Test JSON marshaling
-	jsonData, err := json.Marshal(entry)
-	if err != nil {
-		t.Errorf("Failed to marshal entry to JSON: %v", err)
-	}
-
-	var unmarshaledEntry StandardizedEntry
-	err = json.Unmarshal(jsonData, &unmarshaledEntry)
-	if err != nil {
-		t.Errorf("Failed to unmarshal JSON: %v", err)
+	// 9*7*24*3600 + 3*24*3600 + 1*3600 + 24*60 + 11 = 5707451
+	expected := int64(9*7*24*3600 + 3*24*3600 + 1*3600 + 24*60 + 11)
+	if e.Message.TotalSeconds != expected {
+		t.Errorf("TotalSeconds: expected %d, got %d", expected, e.Message.TotalSeconds)
 	}
 }
 
 func TestParseSystemUptimeNoDays(t *testing.T) {
-	sampleInput := ` 10:23:45 up 3:12, 2 users, load average: 0.15, 0.10, 0.05`
-
-	entry, err := parseSystemUptime(sampleInput)
+	entries, err := parseSystemUptime("2 weeks 05:30:00")
 	if err != nil {
-		t.Errorf("Failed to parse system uptime: %v", err)
+		t.Fatalf("Error: %v", err)
 	}
 
-	if entry == nil {
-		t.Fatal("Expected non-nil entry")
+	e := entries[0]
+	if e.Message.Weeks != 2 {
+		t.Errorf("Weeks: expected 2, got %d", e.Message.Weeks)
 	}
-
-	msg := entry.Message
-	if msg.UptimeDays != 0 {
-		t.Errorf("UptimeDays: expected 0, got %d", msg.UptimeDays)
+	if e.Message.Days != 0 {
+		t.Errorf("Days: expected 0, got %d", e.Message.Days)
 	}
-	if msg.UptimeHours != 3 {
-		t.Errorf("UptimeHours: expected 3, got %d", msg.UptimeHours)
-	}
-	if msg.UptimeMinutes != 12 {
-		t.Errorf("UptimeMinutes: expected 12, got %d", msg.UptimeMinutes)
+	if e.Message.Hours != 5 {
+		t.Errorf("Hours: expected 5, got %d", e.Message.Hours)
 	}
 }
 
-func TestParseSystemUptimeMinutesOnly(t *testing.T) {
-	sampleInput := ` 10:23:45 up 45 min, 1 user, load average: 0.15, 0.10, 0.05`
-
-	entry, err := parseSystemUptime(sampleInput)
+func TestParseSystemUptimeOnlyTime(t *testing.T) {
+	entries, err := parseSystemUptime("12:34:56")
 	if err != nil {
-		t.Errorf("Failed to parse system uptime: %v", err)
+		t.Fatalf("Error: %v", err)
 	}
 
-	if entry == nil {
-		t.Fatal("Expected non-nil entry")
+	e := entries[0]
+	if e.Message.Hours != 12 {
+		t.Errorf("Hours: expected 12, got %d", e.Message.Hours)
 	}
-
-	msg := entry.Message
-	if msg.UptimeMinutes != 45 {
-		t.Errorf("UptimeMinutes: expected 45, got %d", msg.UptimeMinutes)
+	if e.Message.Minutes != 34 {
+		t.Errorf("Minutes: expected 34, got %d", e.Message.Minutes)
 	}
-	if msg.Users != 1 {
-		t.Errorf("Users: expected 1, got %d", msg.Users)
+	expected := int64(12*3600 + 34*60 + 56)
+	if e.Message.TotalSeconds != expected {
+		t.Errorf("TotalSeconds: expected %d, got %d", expected, e.Message.TotalSeconds)
 	}
 }
 
-func TestParseSystemUptimeEmptyInput(t *testing.T) {
-	_, err := parseSystemUptime("")
-	if err == nil {
-		t.Error("Expected error for empty input")
+func TestParseSystemUptimeSingularUnits(t *testing.T) {
+	entries, err := parseSystemUptime("1 week 1 day 00:00:01")
+	if err != nil {
+		t.Fatalf("Error: %v", err)
+	}
+
+	e := entries[0]
+	if e.Message.Weeks != 1 {
+		t.Errorf("Weeks: expected 1, got %d", e.Message.Weeks)
+	}
+	if e.Message.Days != 1 {
+		t.Errorf("Days: expected 1, got %d", e.Message.Days)
 	}
 }
 
-func TestParseSystemUptimeInvalidInput(t *testing.T) {
-	_, err := parseSystemUptime("some random text")
-	if err == nil {
-		t.Error("Expected error for invalid input")
+func TestParseSystemUptimeEmpty(t *testing.T) {
+	entries, err := parseSystemUptime("")
+	if err != nil {
+		t.Fatalf("Error on empty: %v", err)
+	}
+	if len(entries) != 1 {
+		t.Fatalf("Expected 1 entry even for empty, got %d", len(entries))
+	}
+}
+
+func TestParseSystemUptimeJSON(t *testing.T) {
+	entries, err := parseSystemUptime("9 weeks 3 days 01:24:11")
+	if err != nil {
+		t.Fatalf("Error: %v", err)
+	}
+	jsonBytes, err := json.Marshal(entries)
+	if err != nil {
+		t.Fatalf("JSON marshal failed: %v", err)
+	}
+	var unmarshaled []StandardizedEntry
+	if err := json.Unmarshal(jsonBytes, &unmarshaled); err != nil {
+		t.Fatalf("JSON unmarshal failed: %v", err)
 	}
 }
 
 func TestLoadCommandsFromFile(t *testing.T) {
 	tempFile := "test_commands.json"
-	commandsData := `{
-		"commands": [
-			{
-				"name": "system-uptime",
-				"command": "show uptime"
-			}
-		]
-	}`
-
-	err := os.WriteFile(tempFile, []byte(commandsData), 0644)
+	err := os.WriteFile(tempFile, []byte(`{"commands":[{"name":"system-uptime","command":"show uptime"}]}`), 0644)
 	if err != nil {
-		t.Fatalf("Failed to create test commands file: %v", err)
+		t.Fatalf("Failed to create test file: %v", err)
 	}
 	defer os.Remove(tempFile)
 
 	config, err := loadCommandsFromFile(tempFile)
 	if err != nil {
-		t.Errorf("Failed to load commands from file: %v", err)
+		t.Errorf("Failed to load: %v", err)
 	}
-
-	command, err := findSystemUptimeCommand(config)
+	command, err := findCommand(config, "system-uptime")
 	if err != nil {
-		t.Errorf("Failed to find command: %v", err)
+		t.Errorf("Failed to find: %v", err)
 	}
-
 	if command != "show uptime" {
-		t.Errorf("Expected command 'show uptime', got '%s'", command)
+		t.Errorf("Expected 'show uptime', got '%s'", command)
 	}
 }
 

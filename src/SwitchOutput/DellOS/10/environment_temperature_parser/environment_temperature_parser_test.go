@@ -1,4 +1,4 @@
-package environment_temperature_parser
+package main
 
 import (
 	"encoding/json"
@@ -6,110 +6,126 @@ import (
 	"testing"
 )
 
-func TestParseTemperature(t *testing.T) {
-	sampleInput := `Unit  Sensor        Current   Minor     Major     Status
-----  ------        -------   -----     -----     ------
-1     CPU           45        70        80        Ok
-1     FRONT         28        55        65        Ok
-1     BACK          32        60        70        Ok`
+const testEnvironmentInput = `
+Unit    State             Temperature
+-------------------------------------
+1       up                42
 
-	entries := parseTemperature(sampleInput)
+Thermal sensors
+Unit   Sensor-Id        Sensor-name                               Temperature
+------------------------------------------------------------------------------
+1       1           CPU_temp                                          28
+1       2           NPU_Near_temp                                     30
+1       3           PT_Left_temp                                      30
+1       4           PT_Right_temp                                     31
+1       5           PT_Mid_temp                                       33
+1       6           ILET_AF_temp                                      25
+1       7           PSU1_temp                                         39
+1       8           PSU1_AF_temp                                      25
+1       9           PSU2_temp                                         42
+1       10          PSU2_AF_temp                                      24
+1       11          NPU temp sensor                                   41`
 
-	if len(entries) != 3 {
-		t.Errorf("Expected 3 entries, got %d", len(entries))
-	}
-
-	// Verify first entry
-	if len(entries) > 0 {
-		entry := entries[0]
-		if entry.DataType != "dell_os10_environment_temperature" {
-			t.Errorf("data_type: expected 'dell_os10_environment_temperature', got '%s'", entry.DataType)
-		}
-		if entry.Message.Unit != "1" {
-			t.Errorf("Unit: expected '1', got '%s'", entry.Message.Unit)
-		}
-		if entry.Message.Sensor != "CPU" {
-			t.Errorf("Sensor: expected 'CPU', got '%s'", entry.Message.Sensor)
-		}
-		if entry.Message.CurrentTemp != 45 {
-			t.Errorf("CurrentTemp: expected 45, got %f", entry.Message.CurrentTemp)
-		}
-		if entry.Message.MinorThreshold != 70 {
-			t.Errorf("MinorThreshold: expected 70, got %f", entry.Message.MinorThreshold)
-		}
-		if entry.Message.MajorThreshold != 80 {
-			t.Errorf("MajorThreshold: expected 80, got %f", entry.Message.MajorThreshold)
-		}
-		if entry.Message.Status != "Ok" {
-			t.Errorf("Status: expected 'Ok', got '%s'", entry.Message.Status)
-		}
-	}
-
-	// Test JSON marshaling
-	jsonData, err := json.Marshal(entries)
+func TestParseEnvironmentTemperature(t *testing.T) {
+	entries, err := parseEnvironmentTemperature(testEnvironmentInput)
 	if err != nil {
-		t.Errorf("Failed to marshal entries to JSON: %v", err)
+		t.Fatalf("parseEnvironmentTemperature returned error: %v", err)
 	}
-
-	var unmarshaledEntries []StandardizedEntry
-	err = json.Unmarshal(jsonData, &unmarshaledEntries)
-	if err != nil {
-		t.Errorf("Failed to unmarshal JSON: %v", err)
-	}
-}
-
-func TestParseTemperatureEmptyInput(t *testing.T) {
-	entries := parseTemperature("")
-	if len(entries) != 0 {
-		t.Errorf("Expected 0 entries for empty input, got %d", len(entries))
-	}
-}
-
-func TestParseTemperatureAlertStatus(t *testing.T) {
-	sampleInput := `Unit  Sensor        Current   Minor     Major     Status
-----  ------        -------   -----     -----     ------
-1     CPU           75        70        80        Alert`
-
-	entries := parseTemperature(sampleInput)
-
 	if len(entries) != 1 {
-		t.Errorf("Expected 1 entry, got %d", len(entries))
+		t.Fatalf("Expected 1 entry, got %d", len(entries))
 	}
 
-	if len(entries) > 0 && entries[0].Message.Status != "Alert" {
-		t.Errorf("Status: expected 'Alert', got '%s'", entries[0].Message.Status)
+	e := entries[0]
+	if e.DataType != "dell_os10_environment_temperature" {
+		t.Errorf("DataType: expected 'dell_os10_environment_temperature', got '%s'", e.DataType)
+	}
+	if e.Message.UnitID != 1 {
+		t.Errorf("UnitID: expected 1, got %d", e.Message.UnitID)
+	}
+	if e.Message.UnitState != "up" {
+		t.Errorf("UnitState: expected 'up', got '%s'", e.Message.UnitState)
+	}
+	if e.Message.UnitTemperature != 42 {
+		t.Errorf("UnitTemperature: expected 42, got %d", e.Message.UnitTemperature)
+	}
+	if len(e.Message.ThermalSensors) != 11 {
+		t.Fatalf("Expected 11 thermal sensors, got %d", len(e.Message.ThermalSensors))
+	}
+
+	// Verify first sensor
+	s0 := e.Message.ThermalSensors[0]
+	if s0.SensorName != "CPU_temp" {
+		t.Errorf("First sensor name: expected 'CPU_temp', got '%s'", s0.SensorName)
+	}
+	if s0.Temperature != 28 {
+		t.Errorf("First sensor temp: expected 28, got %d", s0.Temperature)
+	}
+	if s0.SensorID != 1 {
+		t.Errorf("First sensor ID: expected 1, got %d", s0.SensorID)
+	}
+
+	// Verify sensor with spaces in name (NPU temp sensor)
+	s10 := e.Message.ThermalSensors[10]
+	if s10.SensorName != "NPU temp sensor" {
+		t.Errorf("Sensor 11 name: expected 'NPU temp sensor', got '%s'", s10.SensorName)
+	}
+	if s10.Temperature != 41 {
+		t.Errorf("Sensor 11 temp: expected 41, got %d", s10.Temperature)
+	}
+
+	// Verify last underscore sensor
+	s9 := e.Message.ThermalSensors[9]
+	if s9.SensorName != "PSU2_AF_temp" {
+		t.Errorf("Sensor 10 name: expected 'PSU2_AF_temp', got '%s'", s9.SensorName)
+	}
+	if s9.Temperature != 24 {
+		t.Errorf("Sensor 10 temp: expected 24, got %d", s9.Temperature)
+	}
+}
+
+func TestParseEnvironmentTemperatureEmpty(t *testing.T) {
+	entries, err := parseEnvironmentTemperature("")
+	if err != nil {
+		t.Fatalf("Error on empty: %v", err)
+	}
+	if len(entries) != 1 {
+		t.Fatalf("Expected 1 entry even for empty, got %d", len(entries))
+	}
+}
+
+func TestParseEnvironmentTemperatureJSON(t *testing.T) {
+	entries, err := parseEnvironmentTemperature(testEnvironmentInput)
+	if err != nil {
+		t.Fatalf("Error: %v", err)
+	}
+	jsonBytes, err := json.Marshal(entries)
+	if err != nil {
+		t.Fatalf("JSON marshal failed: %v", err)
+	}
+	var unmarshaled []StandardizedEntry
+	if err := json.Unmarshal(jsonBytes, &unmarshaled); err != nil {
+		t.Fatalf("JSON unmarshal failed: %v", err)
 	}
 }
 
 func TestLoadCommandsFromFile(t *testing.T) {
 	tempFile := "test_commands.json"
-	commandsData := `{
-		"commands": [
-			{
-				"name": "environment-temperature",
-				"command": "show environment temperature"
-			}
-		]
-	}`
-
-	err := os.WriteFile(tempFile, []byte(commandsData), 0644)
+	err := os.WriteFile(tempFile, []byte(`{"commands":[{"name":"environment-temperature","command":"show environment"}]}`), 0644)
 	if err != nil {
-		t.Fatalf("Failed to create test commands file: %v", err)
+		t.Fatalf("Failed to create test file: %v", err)
 	}
 	defer os.Remove(tempFile)
 
 	config, err := loadCommandsFromFile(tempFile)
 	if err != nil {
-		t.Errorf("Failed to load commands from file: %v", err)
+		t.Errorf("Failed to load: %v", err)
 	}
-
-	command, err := findTemperatureCommand(config)
+	command, err := findCommand(config, "environment-temperature")
 	if err != nil {
-		t.Errorf("Failed to find command: %v", err)
+		t.Errorf("Failed to find: %v", err)
 	}
-
-	if command != "show environment temperature" {
-		t.Errorf("Expected command 'show environment temperature', got '%s'", command)
+	if command != "show environment" {
+		t.Errorf("Expected 'show environment', got '%s'", command)
 	}
 }
 
