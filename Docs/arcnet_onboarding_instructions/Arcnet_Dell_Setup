@@ -1,0 +1,456 @@
+﻿#!/bin/bash
+
+# Configuration Variables - EDIT THESE
+WORKSPACE_ID="<WORKSPACE_ID>"
+PRIMARY_KEY="<PRIMARY_KEY>"
+SECONDARY_KEY="<SECONDARY_KEY>"
+PARSER_URL="https://github.com/microsoft/arc-switch/releases/download/1.2602.2/dell-os10-unified-parser-1.2602.2-linux-amd64.tar.gz"
+PARSER_PATH="/opt/dell-parser"
+TEMP_DIR="/tmp/dell-parser-output"
+AZURE_TEMP_DIR="/tmp/azure-logger"
+
+# Dell OS10 CLI wrapper path
+# NOTE: On Dell OS10, CLI commands are executed from the Linux shell using clish.
+#       Default location: /opt/dell/os10/bin/clish
+#       If your switch uses a different path, update CLISH_PATH below.
+CLISH_PATH="/opt/dell/os10/bin/clish"
+
+# ============================================================================
+# PART 1: DOWNLOAD AND INSTALL PARSER
+# ============================================================================
+
+echo "============================================================================"
+echo "Dell OS10 - Azure Log Analytics Onboarding"
+echo "============================================================================"
+echo ""
+echo "Downloading and installing Dell OS10 parser..."
+
+cd /opt
+wget -q "$PARSER_URL" -O dell-parser.tar.gz
+if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to download parser from $PARSER_URL"
+    exit 1
+fi
+
+tar -xzf dell-parser.tar.gz
+rm -f dell-parser.tar.gz
+
+if [ ! -f "$PARSER_PATH" ] && [ ! -d "$PARSER_PATH" ]; then
+    # If the tarball extracts to a different name, find and link it
+    EXTRACTED=$(find /opt -maxdepth 1 -name "dell-os10*" -type f -o -name "dell-os10*" -type d 2>/dev/null | head -1)
+    if [ -n "$EXTRACTED" ]; then
+        if [ -d "$EXTRACTED" ]; then
+            PARSER_PATH="$EXTRACTED"
+        else
+            PARSER_PATH="$EXTRACTED"
+        fi
+    fi
+fi
+
+chmod +x "$PARSER_PATH" 2>/dev/null
+find /opt -name "dell-os10*" -type f -exec chmod +x {} \; 2>/dev/null
+
+echo "Parser installed at: $PARSER_PATH"
+
+# ============================================================================
+# PART 2: CREATE SIGNATURE GENERATOR
+# ============================================================================
+
+echo "Creating Azure signature generator..."
+
+cat > /opt/azure-signature-generator.sh << 'SIG_EOF'
+#!/bin/bash
+generate_signature() {
+    local workspace_id="$1"
+    local shared_key="$2"
+    local date="$3"
+    local content_length="$4"
+    local string_to_sign="POST\n${content_length}\napplication/json\nx-ms-date:${date}\n/api/logs"
+    local decoded_key=$(echo -n "$shared_key" | base64 -d)
+    local signature=$(echo -en "$string_to_sign" | openssl dgst -sha256 -mac hmac -macopt key:"$decoded_key" -binary | base64)
+    echo "SharedKey ${workspace_id}:${signature}"
+}
+export -f generate_signature
+SIG_EOF
+
+chmod +x /opt/azure-signature-generator.sh
+
+# ============================================================================
+# PART 3: CREATE AZURE LOGGER
+# ============================================================================
+
+echo "Creating Azure logger..."
+
+cat > /opt/dell-azure-logger.sh << LOGGER_EOF
+#!/bin/bash
+WORKSPACE_ID="${WORKSPACE_ID}"
+PRIMARY_KEY="${PRIMARY_KEY}"
+SECONDARY_KEY="${SECONDARY_KEY}"
+SHARED_KEY="\$PRIMARY_KEY"
+TEMP_DIR="${AZURE_TEMP_DIR}"
+
+mkdir -p "\$TEMP_DIR"
+
+source /opt/azure-signature-generator.sh
+
+send_to_azure_custom_table() {
+    local json_data="\$1"
+    local table_name="\$2"
+    local timestamp=\$(date -u +"%a, %d %b %Y %H:%M:%S GMT")
+    
+    local temp_payload="\$TEMP_DIR/payload_\$\$.json"
+    echo -n "\$json_data" > "\$temp_payload"
+    
+    local content_length=\$(stat -c%s "\$temp_payload" 2>/dev/null || stat -f%z "\$temp_payload" 2>/dev/null)
+    
+    local authorization=\$(generate_signature "\$WORKSPACE_ID" "\$SHARED_KEY" "\$timestamp" "\$content_length")
+    
+    local response=\$(curl -k -s -w "\\nHTTP_CODE:%{http_code}" -X POST \\
+        -H "Content-Type: application/json" \\
+        -H "Log-Type: \$table_name" \\
+        -H "x-ms-date: \$timestamp" \\
+        -H "Authorization: \$authorization" \\
+        --data-binary "@\${temp_payload}" \\
+        "https://\${WORKSPACE_ID}.ods.opinsights.azure.com/api/logs?api-version=2016-04-01")
+    
+    rm -f "\$temp_payload"
+    
+    local http_code=\$(echo "\$response" | grep "HTTP_CODE:" | cut -d: -f2)
+    
+    if [ "\$http_code" = "200" ]; then
+        return 0
+    else
+        if [ "\$SHARED_KEY" = "\$PRIMARY_KEY" ] && [ ! -z "\$SECONDARY_KEY" ]; then
+            SHARED_KEY="\$SECONDARY_KEY"
+            send_to_azure_custom_table "\$json_data" "\$table_name"
+            return \$?
+        fi
+        return 1
+    fi
+}
+
+add_metadata_simple() {
+    local json_input="\$1"
+    local hostname="\$2"
+    
+    if command -v python3 >/dev/null 2>&1; then
+        echo "\$json_input" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    if isinstance(data, list):
+        for item in data:
+            item['hostname'] = '\$hostname'
+            item['device_type'] = 'dell-os10'
+    else:
+        data['hostname'] = '\$hostname'
+        data['device_type'] = 'dell-os10'
+        data = [data]
+    print(json.dumps(data))
+except:
+    sys.exit(1)
+"
+        return \$?
+    elif command -v python >/dev/null 2>&1; then
+        echo "\$json_input" | python -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    if isinstance(data, list):
+        for item in data:
+            item['hostname'] = '\$hostname'
+            item['device_type'] = 'dell-os10'
+    else:
+        data['hostname'] = '\$hostname'
+        data['device_type'] = 'dell-os10'
+        data = [data]
+    print(json.dumps(data))
+except:
+    sys.exit(1)
+"
+        return \$?
+    else
+        echo "\$json_input"
+        return 0
+    fi
+}
+
+process_and_send() {
+    local parser_output="\$1"
+    local table_name="\$2"
+    local hostname=\$(hostname)
+    
+    if [ -z "\$parser_output" ]; then
+        return 1
+    fi
+    
+    local azure_json=\$(add_metadata_simple "\$parser_output" "\$hostname")
+    
+    if [ \$? -ne 0 ] || [ -z "\$azure_json" ]; then
+        return 1
+    fi
+    
+    send_to_azure_custom_table "\$azure_json" "\$table_name"
+    return \$?
+}
+
+export -f send_to_azure_custom_table
+export -f process_and_send
+
+case "\$1" in
+    "send")
+        if [ -z "\$2" ] || [ -z "\$3" ]; then
+            exit 1
+        fi
+        
+        table_name="\$2"
+        json_source="\$3"
+        
+        if [ "\$json_source" = "-" ]; then
+            json_data=\$(cat)
+        elif [ -f "\$json_source" ]; then
+            json_data=\$(cat "\$json_source")
+        else
+            exit 1
+        fi
+        
+        process_and_send "\$json_data" "\$table_name"
+        ;;
+    "test")
+        test_data='[{"test":"connection","timestamp":"'\$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"}]'
+        send_to_azure_custom_table "\$test_data" "DellOS10SwitchTest"
+        ;;
+    *)
+        exit 1
+        ;;
+esac
+LOGGER_EOF
+
+chmod +x /opt/dell-azure-logger.sh
+
+# ============================================================================
+# PART 4: CREATE PARSER COLLECTOR
+# ============================================================================
+
+echo "Creating parser collector..."
+
+cat > /opt/dell-parser-collector.sh << 'COLLECTOR_EOF'
+#!/bin/bash
+# --------------------------------------------------------------------------
+# Dell OS10 environment for cron context
+# --------------------------------------------------------------------------
+# When cron runs this script, none of the interactive login environment
+# exists. The clish wrapper (/opt/dell/os10/bin/clish) sources brand_env
+# and sets LD_LIBRARY_PATH, PYTHONPATH, CLISH_PATH internally. However
+# the following login/PAM-provided variables are NOT set by the wrapper
+# and the .clish binary segfaults (exit 139) without them:
+#   CLISH_ROLE, PRIV_LVL  - authorization context for CLI commands
+#   TERM                   - terminal type (required by .clish binary)
+#   USER, LOGNAME, SHELL   - standard POSIX identity vars
+#   HOSTNAME               - needed for SYSTEM_NAME in clish wrapper
+#
+# Confirmed working on: S5248F-ON, OS10 10.6.0.5, cron context
+# --------------------------------------------------------------------------
+export HOME=/root
+export HOSTNAME=$(hostname)
+export CLISH_ROLE=sysadmin
+export PRIV_LVL=15
+export TERM=xterm
+export USER=root
+export LOGNAME=root
+export SHELL=/bin/bash
+
+# Source the Dell brand environment (same as clish wrapper line 54)
+if [ -f /etc/opt/dell/os10/brand_env ]; then
+    set -a
+    source /etc/opt/dell/os10/brand_env
+    set +a
+fi
+
+# Ensure Dell OS10 paths and libraries are available
+export PATH=/opt/dell/os10/bin:/opt/dell/os10/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export LD_LIBRARY_PATH=/opt/dell/os10/lib:/opt/dell/os10/lib
+export PYTHONPATH=/opt/dell/os10/cli/scripts:/opt/dell/os10/lib:${PYTHONPATH:-}
+export RUBYLIB=/opt/dell/os10/lib/netdev:/opt/dell/os10/lib/netdev/gen-rb:/var/lib/gems/1.9.1/gems/thrift-0.9.1/lib
+
+PARSER_PATH="/opt/dell-parser"
+LOGGER_PATH="/opt/dell-azure-logger.sh"
+TEMP_DIR="/tmp/dell-parser-output"
+LOG_FILE="/var/log/dell-parser-collector.log"
+CLISH_PATH="/opt/dell/os10/bin/clish"
+
+mkdir -p "$TEMP_DIR"
+
+log_message() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
+}
+
+run_and_process() {
+    local command_name="$1"
+    local cli_command="$2"
+    local parser_type="$3"
+    local table_name="$4"
+    
+    local temp_input="$TEMP_DIR/${command_name}-input.txt"
+    local temp_output="$TEMP_DIR/${command_name}-output.json"
+    
+    if ! $CLISH_PATH -c "$cli_command" > "$temp_input" 2>&1; then
+        log_message "ERROR: Failed to run CLI command: $cli_command"
+        return 1
+    fi
+    
+    if [ ! -s "$temp_input" ]; then
+        log_message "WARNING: Empty output for command: $cli_command"
+        return 1
+    fi
+    
+    if ! "$PARSER_PATH" -p "$parser_type" -i "$temp_input" -o "$temp_output" >> "$LOG_FILE" 2>&1; then
+        log_message "ERROR: Parser failed for type: $parser_type"
+        return 1
+    fi
+    
+    if [ ! -s "$temp_output" ]; then
+        log_message "WARNING: Parser produced empty output for type: $parser_type"
+        return 1
+    fi
+    
+    if "$LOGGER_PATH" send "$table_name" "$temp_output" >> "$LOG_FILE" 2>&1; then
+        rm -f "$temp_input" "$temp_output"
+        return 0
+    else
+        log_message "ERROR: Failed to send data for table: $table_name"
+        return 1
+    fi
+}
+
+process_command() {
+    local cmd_name="$1"
+    local cli_cmd="$2"
+    local parser_type="$3"
+    local table_name="$4"
+    
+    if run_and_process "$cmd_name" "$cli_cmd" "$parser_type" "$table_name"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+main() {
+    log_message "Collection cycle started"
+    
+    local success_count=0
+    local failure_count=0
+    
+    # ---- 9 verified commands for OS10 10.6.0.5 (S5248F-ON) ----
+    
+    process_command "version" "show version" "version" "DellOS10Version"
+    [ $? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "lldp" "show lldp neighbors detail" "lldp" "DellOS10LldpNeighbor"
+    [ $? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "interface-status" "show interface status" "interface-status" "DellOS10InterfaceStatus"
+    [ $? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "inventory" "show inventory" "inventory" "DellOS10Inventory"
+    [ $? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "environment" "show environment" "environment" "DellOS10Environment"
+    [ $? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "system" "show system" "system" "DellOS10System"
+    [ $? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "processes-cpu" "show processes cpu" "processes-cpu" "DellOS10ProcessesCpu"
+    [ $? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "uptime" "show uptime" "uptime" "DellOS10Uptime"
+    [ $? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    process_command "bgp-summary" "show ip bgp summary" "bgp-summary" "DellOS10BgpSummary"
+    [ $? -eq 0 ] && ((success_count++)) || ((failure_count++))
+    sleep 2
+    
+    log_message "Collection complete: $success_count success, $failure_count failures"
+    
+    find "$TEMP_DIR" -type f -mmin +60 -delete 2>/dev/null
+    
+    if [ -f "$LOG_FILE" ] && [ $(stat -c%s "$LOG_FILE" 2>/dev/null || stat -f%z "$LOG_FILE" 2>/dev/null) -gt 10485760 ]; then
+        mv "$LOG_FILE" "${LOG_FILE}.old"
+    fi
+}
+
+main
+exit 0
+COLLECTOR_EOF
+
+chmod +x /opt/dell-parser-collector.sh
+
+# ============================================================================
+# PART 5: SETUP CRON JOB
+# ============================================================================
+
+echo "Configuring cron job (every 5 minutes)..."
+
+cat > /tmp/dell-cron-temp << 'CRON_EOF'
+*/5 * * * * /opt/dell-parser-collector.sh
+CRON_EOF
+
+crontab -l > /tmp/current-cron 2>/dev/null || true
+
+# Avoid duplicate entries
+if ! grep -q "dell-parser-collector" /tmp/current-cron 2>/dev/null; then
+    cat /tmp/current-cron /tmp/dell-cron-temp | crontab -
+fi
+
+rm -f /tmp/dell-cron-temp /tmp/current-cron
+
+# ============================================================================
+# PART 6: VALIDATE SETUP
+# ============================================================================
+
+echo ""
+echo "============================================================================"
+echo "Dell OS10 - Azure Log Analytics Onboarding Complete!"
+echo "============================================================================"
+echo ""
+echo "INSTALLED COMPONENTS:"
+echo "  Parser:    $PARSER_PATH"
+echo "  Signature: /opt/azure-signature-generator.sh"
+echo "  Logger:    /opt/dell-azure-logger.sh"
+echo "  Collector: /opt/dell-parser-collector.sh"
+echo "  Cron:      */5 * * * * /opt/dell-parser-collector.sh"
+echo ""
+echo "QUICK VALIDATION:"
+echo "  1. Test Log Analytics connectivity:"
+echo "     /opt/dell-azure-logger.sh test"
+echo ""
+echo "  2. Run a manual collection cycle:"
+echo "     /opt/dell-parser-collector.sh"
+echo ""
+echo "  3. Check collector logs:"
+echo "     tail -f /var/log/dell-parser-collector.log"
+echo ""
+echo "  4. Verify cron is scheduled:"
+echo "     crontab -l | grep dell"
+echo ""
+echo "LOG ANALYTICS TABLES (will appear after first successful push):"
+echo "  DellOS10Version_CL             DellOS10LldpNeighbor_CL"
+echo "  DellOS10InterfaceStatus_CL     DellOS10Inventory_CL"
+echo "  DellOS10Environment_CL         DellOS10System_CL"
+echo "  DellOS10ProcessesCpu_CL        DellOS10Uptime_CL"
+echo "  DellOS10BgpSummary_CL"
+echo ""
+echo "NOTE: BGP summary will show as empty/failed if BGP is not configured"
+echo "      on this switch. This is expected behavior."
+echo ""
+echo "============================================================================"
