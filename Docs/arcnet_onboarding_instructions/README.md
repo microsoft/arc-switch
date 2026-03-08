@@ -281,9 +281,6 @@ Then delete the resource from the portal
 # Check if cron job is configured
 crontab -l | grep cisco-parser-collector
 
-# Manually run collector to test
-/opt/cisco-parser-collector.sh
-
 # Check collector logs
 tail -f /var/log/cisco-parser-collector.log
 ```
@@ -339,20 +336,22 @@ The following custom tables will be created in your Log Analytics workspace:
 
 | Table Name | Description | Update Frequency |
 |------------|-------------|------------------|
+| `CiscoBgpSummary_CL` | BGP neighbor summary | Every minute |
 | `CiscoClassMap_CL` | QoS class maps configuration | Every minute |
+| `CiscoEnvPower_CL` | Power supply status | Every minute |
+| `CiscoEnvTemp_CL` | Temperature sensors | Every minute |
 | `CiscoInterfaceCounter_CL` | Interface traffic statistics | Every minute |
+| `CiscoInterfaceErrors_CL` | Interface error counters | Every minute |
+| `CiscoInterfaceStatus_CL` | Interface status (up/down, speed, duplex) | Every minute |
 | `CiscoInventory_CL` | Hardware inventory | Every minute |
 | `CiscoIpArp_CL` | ARP table entries | Every minute |
 | `CiscoIpRoute_CL` | Routing table | Every minute |
 | `CiscoLldpNeighbor_CL` | LLDP neighbor information | Every minute |
 | `CiscoMacAddress_CL` | MAC address table | Every minute |
-| `CiscoTransceiver_CL` | SFP/QSFP module details | Every minute |
-| `CiscoEnvTemp_CL` | Temperature sensors | Every minute |
-| `CiscoInterfaceErrors_CL` | Interface error counters | Every minute |
-| `CiscoEnvPower_CL` | Power supply status | Every minute |
 | `CiscoSystemResources_CL` | CPU, memory utilization | Every minute |
 | `CiscoSystemUptime_CL` | System uptime | Every minute |
-| `CiscoBgpSummary_CL` | BGP neighbor summary | Every minute |
+| `CiscoTransceiver_CL` | SFP/QSFP module details | Every minute |
+| `CiscoVersion_CL` | NX-OS version, hardware info, uptime | Every minute |
 
 Note: Azure automatically appends _CL suffix to custom log table names.
 
@@ -581,5 +580,6 @@ Here are some existing panels we have:
 - Error Metrics: Interface errors, discards, error rate distribution
 - ARP & MAC Tracking: Table size trends
 - LLDP & Inventory: Neighbor discovery, transceiver monitoring
+- System Information: NX-OS version, hardware details, kernel uptime, last reset info
 
 
