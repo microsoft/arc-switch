@@ -325,7 +325,6 @@ with no runtime dependencies.
 - Update `Arcnet_Cisco_Arc_Setup` to optionally deploy the gNMI collector
   instead of the cron-based collector
 - Test on NX-OS 9.x and 10.x; validate all telemetry tables receive data
-- Dual-mode transition period: both collectors run in parallel
 
 ---
 
@@ -362,7 +361,7 @@ the management namespace.
 
 ---
 
-### Option A: Enable gNMI on Default VRF (`grpc use-vrf default`)
+### Option A: Enable gNMI on Default VRF (`grpc use-vrf default`) - Current workaround
 
 **NX-OS supports running gNMI on two VRFs simultaneously.** The `grpc use-vrf
 default` command (documented in the [NX-OS Programmability Guide](https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/104x/programmability/cisco-nexus-9000-series-nx-os-programmability-guide-104x/m-grpc-agent.html))
@@ -399,15 +398,15 @@ With this, the collector runs entirely in default VRF:
 
 #### Action items to validate
 
-1. Test `grpc use-vrf default` on rr1-n42-r07-9336hl-13-1a
-2. Verify `gNMI Capabilities` works from default VRF
+1. Test `grpc use-vrf default` on rr1-n42-r07-9336hl-13-1a ✅
+2. Verify `gNMI Capabilities` works from default VRF ✅
 3. Confirm no disruption to management VRF gNMI
 4. Get security team sign-off on gRPC in default VRF
-5. Check if default VRF gNMI uses the same TLS cert or needs a separate one
+5. Check if default VRF gNMI uses the same TLS cert or needs a separate one ✅
 
 ---
 
-### Option B: Two-Phase Wrapper Script (Current Workaround)
+### Option B: Two-Phase Wrapper Script 
 
 The collector writes transformed JSON to disk from management VRF; a wrapper
 script sends them from default VRF using the existing azure-logger.
@@ -463,27 +462,6 @@ rm -rf "$OUTPUT_DIR"
 
 ---
 
-### Recommendation
-
-```text
-                          Streaming    Complexity    Risk
-                          ─────────    ──────────    ────
-A. use-vrf default           ✅         Very Low      Med     ★ Long-term goal
-B. Two-phase wrapper         ❌         Low           Low     ★ Immediate / production
-```
-
-**Phased approach:**
-
-1. **Now → Validation**: Use **Option B** (wrapper script). It mirrors the
-   existing cron pipeline, is already tested, and lets us validate data quality
-   in the `GnmiTest*` Azure tables with zero risk.
-
-2. **After validation**: Test **Option A** (`grpc use-vrf default`) on the
-   test switch. If it works and is approved by security, migrate the collector
-   to run standalone in default VRF. This eliminates the wrapper script, temp
-   files, and enables future streaming.
-
----
 
 ## Risks and Considerations
 
@@ -500,7 +478,7 @@ B. Two-phase wrapper         ❌         Low           Low     ★ Immediate / p
 5. **Dual-mode transition** — During migration, both cron-based and gNMI
    collectors may need to coexist to avoid data gaps.
 
-### Open Challenges
+## Open Challenges
 
 The following operational challenges have been identified during prototyping
 and need to be resolved before production deployment:
@@ -520,11 +498,7 @@ and need to be resolved before production deployment:
 3. **gRPC credential management** — gNMI authentication requires NX-OS
    username and password passed as gRPC metadata on every connection. Currently
    these are stored as environment variables (`$GNMI_USER`, `$GNMI_PASS`) on
-   the switch. For production, we need a secure credential strategy: dedicated
-   service account with least-privilege RBAC role, secret storage (e.g., Azure
-   Key Vault retrieval at startup, encrypted config file, or integration with
-   the switch's AAA/TACACS+ infrastructure), and credential rotation without
-   service interruption.
+   the switch. For production, we need a secure credential strategy.
 
 4. **Daemon lifecycle management** — Once the collector moves to Subscribe
    (streaming) mode, it becomes a long-running daemon rather than a cron job.
@@ -544,13 +518,6 @@ and need to be resolved before production deployment:
 > for telemetry to also **push configuration** to switches, replacing manual CLI
 > sessions and ad-hoc scripts.
 
-### What We Have Today
-
-The entire ArcNet project is **read-only**. Both the legacy cron pipeline
-(`vsh -c "show ..."`) and the new gNMI collector (Get only) observe switch
-state but never modify it. There are no configuration push mechanisms, no
-Ansible playbooks, no Terraform providers, and no NETCONF/RESTCONF usage in
-the codebase. Switch configuration changes are done manually via CLI.
 
 ### What gNMI Set Provides
 
@@ -577,109 +544,6 @@ Example: gNMI Set request (single atomic transaction)
 │ → All succeed or all fail. No partial state.                        │
 └─────────────────────────────────────────────────────────────────────┘
 ```
-
-### Configuration Paths Available on NX-OS
-
-YANG models separate **config** (read-write) and **state** (read-only)
-containers. Our telemetry collector reads from `state` paths; configuration
-management would write to `config` paths on the same models:
-
-| Use Case | YANG Path (`config` container) |
-|----------|-------------------------------|
-| Enable/disable interface | `/openconfig-interfaces:interfaces/interface[name=...]/config/enabled` |
-| Set interface description | `.../interface[name=...]/config/description` |
-| Set MTU | `.../interface[name=...]/config/mtu` |
-| Configure BGP peer | `/openconfig-network-instance:.../bgp/neighbors/neighbor[neighbor-address=...]/config` |
-| Set BGP peer ASN | `.../config/peer-as` |
-| Add static route | `/openconfig-network-instance:.../static-routes/static[prefix=...]/config` |
-| Create/delete VLAN | `/openconfig-network-instance:.../vlans/vlan[vlan-id=...]/config` |
-| Set system hostname | `/openconfig-system:system/config/hostname` |
-| Configure NTP server | `/openconfig-system:system/ntp/servers/server[address=...]/config` |
-| Configure DNS | `/openconfig-system:system/dns/servers/server[address=...]/config` |
-| Set LLDP admin status | `/openconfig-lldp:lldp/config/enabled` |
-
-> **Note**: Not all config paths are writable on every NX-OS version. OpenConfig
-> models may be read-only for some features on Cisco; the Cisco native YANG
-> models (`Cisco-NX-OS-device`) tend to have broader write support. This must
-> be validated per switch model and NX-OS version.
-
-### Advantages Over CLI-Based Configuration
-
-| Aspect | CLI (current) | gNMI Set (proposed) |
-|--------|--------------|---------------------|
-| **Atomicity** | None — commands execute sequentially; partial failure leaves inconsistent state | Full — all-or-nothing transaction per Set request |
-| **Validation** | Runtime only — syntax errors caught one-at-a-time | YANG schema enforces types, ranges, and enums before applying |
-| **Idempotency** | Imperative — "add this", "remove that" | Declarative — "desired state is X" |
-| **Versioning** | Output format changes across NX-OS versions break scripts | YANG models are versioned; paths are stable |
-| **Auditability** | Requires scraping `show configuration session` | Every Set is a structured gRPC call with full request/response logging |
-| **Automation** | Expect scripts, SSH screen-scraping | Native gRPC client in any language (Go, Python, etc.) |
-| **Rollback** | `checkpoint` / `rollback running-config` (NX-OS native) | Re-issue a Set with previous state (no native rollback RPC) |
-
-### Risks and Considerations
-
-1. **Write access is high-risk** — A bad Set can take down interfaces, break
-   BGP peering, or cause a network outage. Must have robust testing, staging,
-   and approval workflows.
-
-2. **RBAC enforcement** — The gNMI user credentials must have appropriate NX-OS
-   role privileges. Consider a dedicated read-write user with scoped
-   permissions, separate from the telemetry read-only user.
-
-3. **Writable path coverage** — OpenConfig `config` containers may be read-only
-   on NX-OS for some features. Cisco native YANG paths typically have better
-   write coverage. Must audit which paths are actually writable.
-
-4. **No native rollback** — gNMI does not have a `Rollback` RPC. NX-OS
-   `checkpoint`/`rollback` is a CLI feature. A config management tool would
-   need to implement its own rollback by storing previous state and re-issuing
-   Set on failure.
-
-5. **Collision with other config sources** — If operators also make changes via
-   CLI, there's no conflict detection. Need a clear ownership model: either
-   gNMI owns certain subtrees, or changes are coordinated through a single
-   source of truth.
-
-6. **Startup config persistence** — gNMI Set modifies running-config. A
-   `copy running-config startup-config` equivalent may be needed. NX-OS
-   supports this via `Cisco-NX-OS-device` YANG model or gNOI (gRPC Network
-   Operations Interface).
-
-### Incremental Path from Telemetry to Configuration
-
-The gNMI client, TLS setup, authentication, and connection management we built
-for telemetry in `src/TelemetryClient/` are reusable. Adding Set support is
-incremental:
-
-```text
-Phase    Scope                          Risk
-─────    ─────                          ────
-Current  gNMI Get (telemetry)           Read-only, safe
-  ↓
-Next     gNMI Set (description, MTU)    Low-risk leaf changes
-  ↓
-Later    gNMI Set (BGP, VLANs, routes)  High-risk, needs staging
-  ↓
-Future   gNMI Subscribe + Set (closed   Full automation loop
-         loop automation)
-```
-
-### Validation Steps Before Implementation
-
-1. **Audit writable paths** — Run `gNMI Set` with dry-run / test-only against
-   non-critical paths (e.g., interface description) on the test switch to
-   confirm which OpenConfig and native paths accept writes.
-
-2. **Compare with gNOI** — NX-OS also supports gNOI (gRPC Network Operations
-   Interface) for operational tasks like `System.Reboot`, `OS.Install`,
-   `Cert.Rotate`. Evaluate whether gNOI complements gNMI Set for our needs.
-
-3. **Define ownership model** — Decide which config domains gNMI Set would own
-   vs. what remains CLI-managed. Start with low-risk, high-frequency changes
-   (descriptions, enable/disable).
-
-4. **Build a read-before-write pattern** — For any Set, first Get the current
-   state, store it as a checkpoint, then Set the new state. This enables
-   rollback.
 
 ---
 
