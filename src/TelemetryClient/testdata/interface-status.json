@@ -1,0 +1,2900 @@
+[
+  {
+    "timestamp": 1773862273012075510,
+    "updates": [
+      {
+        "path": "/interfaces/interface[name=vlan207]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060687,
+          "oper-status": "UP",
+          "description": "Tenant_207",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan207",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan206]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060686,
+          "oper-status": "UP",
+          "description": "Tenant_206",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan206",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan205]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060685,
+          "oper-status": "UP",
+          "description": "Tenant_205",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan205",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan204]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060684,
+          "oper-status": "UP",
+          "description": "Tenant_204",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan204",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan230]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060710,
+          "oper-status": "UP",
+          "description": "Tenant_230",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan230",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan6]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060486,
+          "oper-status": "UP",
+          "description": "HNVPA_6",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan6",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan203]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060683,
+          "oper-status": "UP",
+          "description": "Tenant_203",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan203",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan229]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060709,
+          "oper-status": "UP",
+          "description": "Tenant_229",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan229",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan215]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060695,
+          "oper-status": "UP",
+          "description": "Tenant_215",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan215",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan510]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060990,
+          "oper-status": "UP",
+          "description": "L3forward_510",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan510",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan227]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060707,
+          "oper-status": "UP",
+          "description": "Tenant_227",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan227",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan209]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060689,
+          "oper-status": "UP",
+          "description": "Tenant_209",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan209",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan226]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060706,
+          "oper-status": "UP",
+          "description": "Tenant_226",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan226",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan225]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060705,
+          "oper-status": "UP",
+          "description": "Tenant_225",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan225",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan507]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060987,
+          "oper-status": "UP",
+          "description": "L3forward_507",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan507",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan222]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060702,
+          "oper-status": "UP",
+          "description": "Tenant_222",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan222",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan223]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060703,
+          "oper-status": "UP",
+          "description": "Tenant_223",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan223",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan7]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060487,
+          "oper-status": "UP",
+          "description": "Infra_7",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan7",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan125]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060605,
+          "oper-status": "UP",
+          "description": "BMC_Mgmt_125",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan125",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan211]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060691,
+          "oper-status": "UP",
+          "description": "Tenant_211",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan211",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan228]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060708,
+          "oper-status": "UP",
+          "description": "Tenant_228",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan228",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan515]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060995,
+          "oper-status": "UP",
+          "description": "L3forward_515",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan515",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan224]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060704,
+          "oper-status": "UP",
+          "description": "Tenant_224",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan224",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan214]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060694,
+          "oper-status": "UP",
+          "description": "Tenant_214",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan214",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan216]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060696,
+          "oper-status": "UP",
+          "description": "Tenant_216",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan216",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan213]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060693,
+          "oper-status": "UP",
+          "description": "Tenant_213",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan213",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan1]/state",
+        "value": {
+          "admin-status": "DOWN",
+          "ifindex": 151060481,
+          "oper-status": "DOWN",
+          "description": "",
+          "enabled": false,
+          "mtu": 1500,
+          "name": "vlan1",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan220]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060700,
+          "oper-status": "UP",
+          "description": "Tenant_220",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan220",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan231]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060711,
+          "oper-status": "UP",
+          "description": "Tenant_231",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan231",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan502]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060982,
+          "oper-status": "UP",
+          "description": "L3forward_502",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan502",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan301]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060781,
+          "oper-status": "UP",
+          "description": "LogicalTenant_301",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan301",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan511]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060991,
+          "oper-status": "UP",
+          "description": "L3forward_511",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan511",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan513]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060993,
+          "oper-status": "UP",
+          "description": "L3forward_513",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan513",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan221]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060701,
+          "oper-status": "UP",
+          "description": "Tenant_221",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan221",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan201]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060681,
+          "oper-status": "UP",
+          "description": "Tenant_201",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan201",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan514]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060994,
+          "oper-status": "UP",
+          "description": "L3forward_514",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan514",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan208]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060688,
+          "oper-status": "UP",
+          "description": "Tenant_208",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan208",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan218]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060698,
+          "oper-status": "UP",
+          "description": "Tenant_218",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan218",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan210]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060690,
+          "oper-status": "UP",
+          "description": "Tenant_210",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan210",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan219]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060699,
+          "oper-status": "UP",
+          "description": "Tenant_219",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan219",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan217]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060697,
+          "oper-status": "UP",
+          "description": "Tenant_217",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan217",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan509]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060989,
+          "oper-status": "UP",
+          "description": "L3forward_509",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan509",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan401]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060881,
+          "oper-status": "UP",
+          "description": "DhcpTenant_401",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan401",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan506]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060986,
+          "oper-status": "UP",
+          "description": "L3forward_506",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan506",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan504]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060984,
+          "oper-status": "UP",
+          "description": "L3forward_504",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan504",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan501]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060981,
+          "oper-status": "UP",
+          "description": "L3forward_501",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan501",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan503]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060983,
+          "oper-status": "UP",
+          "description": "L3forward_503",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan503",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan505]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060985,
+          "oper-status": "UP",
+          "description": "L3forward_505",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan505",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan508]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060988,
+          "oper-status": "UP",
+          "description": "L3forward_508",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan508",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan212]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060692,
+          "oper-status": "UP",
+          "description": "Tenant_212",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan212",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan512]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060992,
+          "oper-status": "UP",
+          "description": "L3forward_512",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan512",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan516]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060996,
+          "oper-status": "UP",
+          "description": "L3forward_516",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan516",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=vlan202]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 151060682,
+          "oper-status": "UP",
+          "description": "Tenant_202",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "vlan202",
+          "type": "l2vlan"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=lo0]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 335544320,
+          "oper-status": "UP",
+          "description": "Loopback0_Tor1",
+          "enabled": true,
+          "mtu": 1500,
+          "name": "lo0",
+          "type": "softwareLoopback"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/36/4]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940969984,
+          "last-change": "1769434150987000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "11170",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "1953665",
+            "in-octets": "2089821607965",
+            "in-pkts": "1479625198",
+            "in-unicast-pkts": "1477660363",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "1796995",
+            "out-octets": "602362016283",
+            "out-pkts": "697697101",
+            "out-unicast-pkts": "695900105"
+          },
+          "description": "TOR_BMC",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/36/4",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/36/2]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940961792,
+          "last-change": "1769433980003000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "2",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "219978",
+            "in-octets": "276369494816",
+            "in-pkts": "304933269",
+            "in-unicast-pkts": "304713289",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "3",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "146651",
+            "out-octets": "134630642003",
+            "out-pkts": "151423825",
+            "out-unicast-pkts": "151277171"
+          },
+          "description": "P2P_Border2",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/36/2",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/36/1]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940957696,
+          "last-change": "1769433979692000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "3",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "219978",
+            "in-octets": "259736580420",
+            "in-pkts": "282862325",
+            "in-unicast-pkts": "282642344",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "2",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "146651",
+            "out-octets": "582102223007",
+            "out-pkts": "767769064",
+            "out-unicast-pkts": "767622411"
+          },
+          "description": "P2P_Border1",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/36/1",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/35]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436225024,
+          "last-change": "1769433974557000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "1271247",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "26902989",
+            "in-octets": "73547053570",
+            "in-pkts": "139773542",
+            "in-unicast-pkts": "111599306",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "61212",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "35657034",
+            "out-octets": "11773191736",
+            "out-pkts": "45212309",
+            "out-unicast-pkts": "9494063"
+          },
+          "description": "MLAG_Peer",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/35",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/31]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436222976,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/31",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/30]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436222464,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/30",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/28]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436221440,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/28",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/27]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436220928,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/27",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/26]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436220416,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/26",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/32]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436223488,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/32",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/24]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436219392,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/24",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/1/2]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939528192,
+          "last-change": "1773103038911000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "3782",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "314654",
+            "in-octets": "54045181011",
+            "in-pkts": "111537919",
+            "in-unicast-pkts": "111219482",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1834324",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113394295",
+            "out-octets": "194409246541",
+            "out-pkts": "292914981",
+            "out-unicast-pkts": "177686362"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/1/2",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/17/3]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940187648,
+          "last-change": "1773102775552000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "50469",
+            "in-discards": "1",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "330095",
+            "in-octets": "1127688532037",
+            "in-pkts": "1329541878",
+            "in-unicast-pkts": "1329161314",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "34238",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "6027813",
+            "out-octets": "1176709315039",
+            "out-pkts": "1398631057",
+            "out-unicast-pkts": "1392569006"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/17/3",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/4/4]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939659264,
+          "last-change": "1773104559856000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "6047",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "411760",
+            "in-octets": "33254248363",
+            "in-pkts": "95852640",
+            "in-unicast-pkts": "95434832",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1838880",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113506021",
+            "out-octets": "204722719095",
+            "out-pkts": "305224177",
+            "out-unicast-pkts": "189879276"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/4/4",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/29]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436221952,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/29",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/2/1]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939565056,
+          "last-change": "1773102773277000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "5134",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "401935",
+            "in-octets": "38431626529",
+            "in-pkts": "100897268",
+            "in-unicast-pkts": "100490198",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1835480",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113509237",
+            "out-octets": "197440639805",
+            "out-pkts": "304169309",
+            "out-unicast-pkts": "188824592"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/2/1",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/19/2]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940265472,
+          "last-change": "1773102748781000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "51035",
+            "in-discards": "8",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "329793",
+            "in-octets": "1188091055819",
+            "in-pkts": "1462516433",
+            "in-unicast-pkts": "1462135605",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "35040",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "6596273",
+            "out-octets": "1460393916119",
+            "out-pkts": "1664595037",
+            "out-unicast-pkts": "1657963724"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/19/2",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/1/3]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939532288,
+          "last-change": "1773102782801000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "5333",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "409566",
+            "in-octets": "41585752337",
+            "in-pkts": "103877918",
+            "in-unicast-pkts": "103463018",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1832188",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113339398",
+            "out-octets": "224761700648",
+            "out-pkts": "323196058",
+            "out-unicast-pkts": "208024472"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/1/3",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/2/4]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939577344,
+          "last-change": "1773104564362000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "3573",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "300999",
+            "in-octets": "38045927890",
+            "in-pkts": "92722983",
+            "in-unicast-pkts": "92418410",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1833644",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113304080",
+            "out-octets": "206632462159",
+            "out-pkts": "296380934",
+            "out-unicast-pkts": "181243210"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/2/4",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/18/4]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940232704,
+          "last-change": "1773104563591000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "80452",
+            "in-discards": "14",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "267207",
+            "in-octets": "756709918636",
+            "in-pkts": "883852041",
+            "in-unicast-pkts": "883504382",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "36722",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "5021880",
+            "out-octets": "675112081566",
+            "out-pkts": "785974347",
+            "out-unicast-pkts": "780915745"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/18/4",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/36/3]/state",
+        "value": {
+          "admin-status": "DOWN",
+          "ifindex": 940965888,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "2452",
+            "in-pkts": "4",
+            "in-unicast-pkts": "4",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "2452",
+            "out-pkts": "4",
+            "out-unicast-pkts": "4"
+          },
+          "description": "",
+          "enabled": false,
+          "mtu": 1500,
+          "name": "eth1/36/3",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/20/4]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940314624,
+          "last-change": "1773104559420000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "51423",
+            "in-discards": "4",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "331479",
+            "in-octets": "1767157021469",
+            "in-pkts": "2258429345",
+            "in-unicast-pkts": "2258046443",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "35204",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "5944118",
+            "out-octets": "1478275469819",
+            "out-pkts": "1960949075",
+            "out-unicast-pkts": "1954969753"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/20/4",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/18/3]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940228608,
+          "last-change": "1773104579795000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "71281",
+            "in-discards": "5",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "267467",
+            "in-octets": "767184032594",
+            "in-pkts": "900402935",
+            "in-unicast-pkts": "900064187",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "36634",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "5533388",
+            "out-octets": "767357616734",
+            "out-pkts": "862570499",
+            "out-unicast-pkts": "857000477"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/18/3",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/17/4]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940191744,
+          "last-change": "1773108506770000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "69368",
+            "in-discards": "3",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "263012",
+            "in-octets": "863481442559",
+            "in-pkts": "1008367937",
+            "in-unicast-pkts": "1008035557",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "36146",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "5553077",
+            "out-octets": "836023289666",
+            "out-pkts": "953798414",
+            "out-unicast-pkts": "948209191"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/17/4",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/22]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436218368,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/22",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/1/1]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939524096,
+          "last-change": "1773106349462000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "33037",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "526146",
+            "in-octets": "160587629650",
+            "in-pkts": "323359493",
+            "in-unicast-pkts": "322800308",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1806578",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113287296",
+            "out-octets": "1209722932056",
+            "out-pkts": "1066952180",
+            "out-unicast-pkts": "951858306"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/1/1",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/4/1]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939646976,
+          "last-change": "1773102774926000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "5688",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "410483",
+            "in-octets": "33259880833",
+            "in-pkts": "94920615",
+            "in-unicast-pkts": "94504443",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1824229",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113077895",
+            "out-octets": "195869671993",
+            "out-pkts": "298339847",
+            "out-unicast-pkts": "183437723"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/4/1",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/20/2]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940306432,
+          "last-change": "1773104569934000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "80168",
+            "in-discards": "7",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "267423",
+            "in-octets": "713721795556",
+            "in-pkts": "817203498",
+            "in-unicast-pkts": "816855911",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "37139",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "5886177",
+            "out-octets": "861852392542",
+            "out-pkts": "959348018",
+            "out-unicast-pkts": "953424702"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/20/2",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/3/4]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939618304,
+          "last-change": "1773110320367000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "5719",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "410134",
+            "in-octets": "31431360134",
+            "in-pkts": "92402029",
+            "in-unicast-pkts": "91986175",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1825228",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113208740",
+            "out-octets": "220632058874",
+            "out-pkts": "312775303",
+            "out-unicast-pkts": "197741335"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/3/4",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/19/3]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940269568,
+          "last-change": "1773110316965000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "80366",
+            "in-discards": "4",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "267128",
+            "in-octets": "790758081801",
+            "in-pkts": "920883089",
+            "in-unicast-pkts": "920535595",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "37020",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "5207234",
+            "out-octets": "659244878059",
+            "out-pkts": "762152392",
+            "out-unicast-pkts": "756908138"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/19/3",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/6]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436210176,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/6",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/2/2]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939569152,
+          "last-change": "1773102771000000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "3578",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "312901",
+            "in-octets": "35277998591",
+            "in-pkts": "91901227",
+            "in-unicast-pkts": "91584747",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1835736",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113394781",
+            "out-octets": "221088793552",
+            "out-pkts": "305973108",
+            "out-unicast-pkts": "190742591"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/2/2",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/3/2]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939610112,
+          "last-change": "1773102752501000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "5543",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "411112",
+            "in-octets": "37223340274",
+            "in-pkts": "100669455",
+            "in-unicast-pkts": "100252799",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1825504",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113149699",
+            "out-octets": "213488779971",
+            "out-pkts": "312630419",
+            "out-unicast-pkts": "197655216"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/3/2",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/4/3]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939655168,
+          "last-change": "1773104854192000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "3881",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "312557",
+            "in-octets": "35141281072",
+            "in-pkts": "91039038",
+            "in-unicast-pkts": "90722599",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1824053",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "112991563",
+            "out-octets": "215431640752",
+            "out-pkts": "302251979",
+            "out-unicast-pkts": "187436363"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/4/3",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/3/1]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939606016,
+          "last-change": "1773102767034000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "5485",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "409704",
+            "in-octets": "49899886541",
+            "in-pkts": "113017294",
+            "in-unicast-pkts": "112602104",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1825349",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113164321",
+            "out-octets": "245499035171",
+            "out-pkts": "341447715",
+            "out-unicast-pkts": "226458045"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/3/1",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/10]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436212224,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/10",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/17/1]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940179456,
+          "last-change": "1773106349279000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "53629",
+            "in-discards": "5",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "340024",
+            "in-octets": "2085564808242",
+            "in-pkts": "2359506500",
+            "in-unicast-pkts": "2359112847",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "33926",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "6534465",
+            "out-octets": "1838206654450",
+            "out-pkts": "2420984425",
+            "out-unicast-pkts": "2414416034"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/17/1",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/25]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436219904,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/25",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/17/2]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940183552,
+          "last-change": "1773103036771000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "80170",
+            "in-discards": "10",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "269071",
+            "in-octets": "818122989060",
+            "in-pkts": "962480656",
+            "in-unicast-pkts": "962131415",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "35882",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "5809191",
+            "out-octets": "892980686948",
+            "out-pkts": "994092758",
+            "out-unicast-pkts": "988247685"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/17/2",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/2/3]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939573248,
+          "last-change": "1773104579701000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "3567",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "312744",
+            "in-octets": "35136219739",
+            "in-pkts": "91231291",
+            "in-unicast-pkts": "90914979",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1834044",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113244395",
+            "out-octets": "213284105190",
+            "out-pkts": "300618407",
+            "out-unicast-pkts": "185539968"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/2/3",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/34]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436224512,
+          "last-change": "1769433974527000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "859462",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "38296734",
+            "in-octets": "1908549264808",
+            "in-pkts": "1391045743",
+            "in-unicast-pkts": "1351889547",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "61676",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "32180406",
+            "out-octets": "11205205792",
+            "out-pkts": "42524831",
+            "out-unicast-pkts": "10282749"
+          },
+          "description": "MLAG_Peer",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/34",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/19/1]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940261376,
+          "last-change": "1773102756210000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "54294",
+            "in-discards": "16",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "329882",
+            "in-octets": "1351785288065",
+            "in-pkts": "1634970046",
+            "in-unicast-pkts": "1634585870",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "35062",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "6456929",
+            "out-octets": "1405479348710",
+            "out-pkts": "1699398959",
+            "out-unicast-pkts": "1692906968"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/19/1",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/3/3]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939614208,
+          "last-change": "1773110317112000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "3774",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "312373",
+            "in-octets": "35114872018",
+            "in-pkts": "91965176",
+            "in-unicast-pkts": "91649028",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1827106",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113041181",
+            "out-octets": "221764566238",
+            "out-pkts": "306751162",
+            "out-unicast-pkts": "191882875"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/3/3",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/19/4]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940273664,
+          "last-change": "1773110320165000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "49631",
+            "in-discards": "8",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "330076",
+            "in-octets": "1306183773506",
+            "in-pkts": "1575558838",
+            "in-unicast-pkts": "1575179131",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "35094",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "6574220",
+            "out-octets": "1357542066524",
+            "out-pkts": "1574153965",
+            "out-unicast-pkts": "1567544651"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/19/4",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/33]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436224000,
+          "last-change": "1769433975891000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "2",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "293288",
+            "in-octets": "144310490822",
+            "in-pkts": "134821476",
+            "in-unicast-pkts": "134528186",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "3",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "293291",
+            "out-octets": "587727668",
+            "out-pkts": "5166065",
+            "out-unicast-pkts": "4872771"
+          },
+          "description": "P2P_IBGP",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/33",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/23]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436218880,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/23",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/20/1]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940302336,
+          "last-change": "1773102770923000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "49628",
+            "in-discards": "5",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "330077",
+            "in-octets": "1566577313798",
+            "in-pkts": "1853010783",
+            "in-unicast-pkts": "1852631078",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "35498",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "6132635",
+            "out-octets": "1442055278985",
+            "out-pkts": "1732538042",
+            "out-unicast-pkts": "1726369909"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/20/1",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/5]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436209664,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/5",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/7]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436210688,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/7",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/8]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436211200,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/8",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/9]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436211712,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/9",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/1/4]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939536384,
+          "last-change": "1773108506827000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "3483",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "308369",
+            "in-octets": "33778389022",
+            "in-pkts": "87557880",
+            "in-unicast-pkts": "87246027",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1841714",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113528135",
+            "out-octets": "213253049253",
+            "out-pkts": "299079801",
+            "out-unicast-pkts": "183709952"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/1/4",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/11]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436212736,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/11",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/21]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436217856,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Storage",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/21",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/18/2]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940224512,
+          "last-change": "1773102760179000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "75295",
+            "in-discards": "4",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "267199",
+            "in-octets": "762813187461",
+            "in-pkts": "853658915",
+            "in-unicast-pkts": "853316421",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "36514",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "5387260",
+            "out-octets": "753757720529",
+            "out-pkts": "865923340",
+            "out-unicast-pkts": "860499566"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/18/2",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/12]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436213248,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/12",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/18/1]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940220416,
+          "last-change": "1773102760860000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "47377",
+            "in-discards": "2",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "322284",
+            "in-octets": "1067442720892",
+            "in-pkts": "1274617539",
+            "in-unicast-pkts": "1274247878",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "34585",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "6179806",
+            "out-octets": "1143656357722",
+            "out-pkts": "1375681613",
+            "out-unicast-pkts": "1369467222"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/18/1",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/13]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436213760,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/13",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/14]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436214272,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/14",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/4/2]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 939651072,
+          "last-change": "1773104570610000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "3839",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "307726",
+            "in-octets": "37425207666",
+            "in-pkts": "89694883",
+            "in-unicast-pkts": "89383317",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1828754",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "113138868",
+            "out-octets": "220536853958",
+            "out-pkts": "302700522",
+            "out-unicast-pkts": "187732900"
+          },
+          "description": "Switched-Compute",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/4/2",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/15]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436214784,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/15",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/20/3]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 940310528,
+          "last-change": "1773104853330000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "71017",
+            "in-discards": "4",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "267118",
+            "in-octets": "814211949665",
+            "in-pkts": "933246791",
+            "in-unicast-pkts": "932908656",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "37104",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "5835911",
+            "out-octets": "1007322990115",
+            "out-pkts": "1107311833",
+            "out-unicast-pkts": "1101438818"
+          },
+          "description": "Switched-Storage",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "eth1/20/3",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=eth1/16]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 436215296,
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "counters": {
+            "in-broadcast-pkts": "0",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "0",
+            "in-octets": "0",
+            "in-pkts": "0",
+            "in-unicast-pkts": "0",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "0",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "0",
+            "out-octets": "0",
+            "out-pkts": "0",
+            "out-unicast-pkts": "0"
+          },
+          "description": "Switched-Compute",
+          "enabled": false,
+          "mtu": 9216,
+          "name": "eth1/16",
+          "type": "ethernetCsmacd",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=po102]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 369098853,
+          "last-change": "1769434151022000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "11170",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "1953665",
+            "in-octets": "2089821607965",
+            "in-pkts": "1479625198",
+            "in-unicast-pkts": "1477660363",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "1",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "1796995",
+            "out-octets": "602362016283",
+            "out-pkts": "697697101",
+            "out-unicast-pkts": "695900105"
+          },
+          "description": "VPC:TOR_BMC",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "po102",
+          "type": "ieee8023adLag",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=po101]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 369098852,
+          "last-change": "1769433974549000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "2130709",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "65199723",
+            "in-octets": "1982096318378",
+            "in-pkts": "1530819285",
+            "in-unicast-pkts": "1463488853",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "122888",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "67837440",
+            "out-octets": "22978397528",
+            "out-pkts": "87737140",
+            "out-unicast-pkts": "19776812"
+          },
+          "description": "VPC:MLAG_PEER",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "po101",
+          "type": "ieee8023adLag",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=po50]/state",
+        "value": {
+          "admin-status": "UP",
+          "ifindex": 369098801,
+          "last-change": "1769433975898000000",
+          "oper-status": "UP",
+          "counters": {
+            "in-broadcast-pkts": "2",
+            "in-discards": "0",
+            "in-errors": "0",
+            "in-fcs-errors": "0",
+            "in-multicast-pkts": "293288",
+            "in-octets": "144310490822",
+            "in-pkts": "134821476",
+            "in-unicast-pkts": "134528186",
+            "in-unknown-protos": "0",
+            "out-broadcast-pkts": "3",
+            "out-discards": "0",
+            "out-errors": "0",
+            "out-multicast-pkts": "293291",
+            "out-octets": "587727668",
+            "out-pkts": "5166065",
+            "out-unicast-pkts": "4872771"
+          },
+          "description": "VPC:P2P_IBGP",
+          "enabled": true,
+          "mtu": 9216,
+          "name": "po50",
+          "type": "ieee8023adLag",
+          "tpid": "TPID_0X8100"
+        }
+      },
+      {
+        "path": "/interfaces/interface[name=mgmt0]/state",
+        "value": {
+          "admin-status": "DOWN",
+          "last-change": "18446715273709551616",
+          "oper-status": "DOWN",
+          "description": "BMCMgmt_switch_virtual_interface",
+          "enabled": false,
+          "mtu": 1500,
+          "name": "mgmt0",
+          "type": "ethernetCsmacd"
+        }
+      }
+    ]
+  }
+]

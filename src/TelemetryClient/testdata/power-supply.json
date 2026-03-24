@@ -1,0 +1,35 @@
+[
+  {
+    "timestamp": 1773862275010635013,
+    "updates": [
+      {
+        "path": "/components/component[name=psu2]/power-supply",
+        "value": {
+          "state": {
+            "enabled": true,
+            "capacity": "RIl9cQ==",
+            "input-current": "P1AAAA==",
+            "input-voltage": "Q0+AAA==",
+            "output-current": "QUIAAA==",
+            "output-power": "QxAAAA==",
+            "output-voltage": "QT/4AA=="
+          }
+        }
+      },
+      {
+        "path": "/components/component[name=psu1]/power-supply",
+        "value": {
+          "state": {
+            "enabled": true,
+            "capacity": "RIl9cQ==",
+            "input-current": "PzgAAA==",
+            "input-voltage": "Q0+AAA==",
+            "output-current": "QSwAAA==",
+            "output-power": "QwAAAA==",
+            "output-voltage": "QUAAAA=="
+          }
+        }
+      }
+    ]
+  }
+]

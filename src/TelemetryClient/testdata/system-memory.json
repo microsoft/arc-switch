@@ -1,0 +1,16 @@
+[
+  {
+    "timestamp": 1773862275966793639,
+    "updates": [
+      {
+        "path": "/system/memory",
+        "value": {
+          "state": {
+            "physical": "25134624768",
+            "reserved": "1296510976"
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,136 @@
+[
+  {
+    "timestamp": 1773862273601163507,
+    "updates": [
+      {
+        "path": "/network-instances/network-instance[name=default]/protocols/protocol[name=bgp][identifier=BGP]/bgp/neighbors/neighbor[neighbor-address=100.71.182.128/25]/state",
+        "value": {
+          "description": "TO_MUX",
+          "peer-as": 64670,
+          "send-community": "NONE",
+          "neighbor-address": "100.71.182.128/25"
+        }
+      },
+      {
+        "path": "/network-instances/network-instance[name=default]/protocols/protocol[name=bgp][identifier=BGP]/bgp/neighbors/neighbor[neighbor-address=100.71.34.146]/state",
+        "value": {
+          "description": "TO_TOR2",
+          "peer-as": 64781,
+          "peer-type": "INTERNAL",
+          "send-community": "NONE",
+          "enabled": true,
+          "neighbor-address": "100.71.34.146",
+          "dynamically-configured": false,
+          "established-transitions": "1",
+          "last-established": "1771869748",
+          "messages": {
+            "received": {
+              "NOTIFICATION": "0",
+              "UPDATE": "63",
+              "last-notification-time": "1769433702"
+            },
+            "sent": {
+              "NOTIFICATION": "0",
+              "UPDATE": "21802",
+              "last-notification-time": "1769433702"
+            }
+          },
+          "queues": {
+            "input": 0,
+            "output": 1396712
+          },
+          "session-state": "ESTABLISHED",
+          "supported-capabilities": [
+            "ASN32",
+            "GRACEFUL_RESTART",
+            "MPBGP",
+            "ROUTE_REFRESH",
+            "GRACEFUL_RESTART",
+            "ROUTE_REFRESH",
+            "ROUTE_REFRESH"
+          ]
+        }
+      },
+      {
+        "path": "/network-instances/network-instance[name=default]/protocols/protocol[name=bgp][identifier=BGP]/bgp/neighbors/neighbor[neighbor-address=100.71.34.137]/state",
+        "value": {
+          "description": "TO_Border2",
+          "peer-as": 64841,
+          "peer-type": "EXTERNAL",
+          "send-community": "NONE",
+          "enabled": true,
+          "neighbor-address": "100.71.34.137",
+          "dynamically-configured": false,
+          "established-transitions": "1",
+          "last-established": "1773833281",
+          "messages": {
+            "received": {
+              "NOTIFICATION": "0",
+              "UPDATE": "23333",
+              "last-notification-time": "1769433702"
+            },
+            "sent": {
+              "NOTIFICATION": "0",
+              "UPDATE": "32",
+              "last-notification-time": "1769433702"
+            }
+          },
+          "queues": {
+            "input": 0,
+            "output": 2818004
+          },
+          "session-state": "ESTABLISHED",
+          "supported-capabilities": [
+            "ASN32",
+            "GRACEFUL_RESTART",
+            "MPBGP",
+            "ROUTE_REFRESH",
+            "GRACEFUL_RESTART",
+            "ROUTE_REFRESH",
+            "ROUTE_REFRESH"
+          ]
+        }
+      },
+      {
+        "path": "/network-instances/network-instance[name=default]/protocols/protocol[name=bgp][identifier=BGP]/bgp/neighbors/neighbor[neighbor-address=100.71.34.129]/state",
+        "value": {
+          "description": "TO_Border1",
+          "peer-as": 64841,
+          "peer-type": "EXTERNAL",
+          "send-community": "NONE",
+          "enabled": true,
+          "neighbor-address": "100.71.34.129",
+          "dynamically-configured": false,
+          "established-transitions": "1",
+          "last-established": "1773833281",
+          "messages": {
+            "received": {
+              "NOTIFICATION": "0",
+              "UPDATE": "23065",
+              "last-notification-time": "1769433702"
+            },
+            "sent": {
+              "NOTIFICATION": "0",
+              "UPDATE": "32",
+              "last-notification-time": "1769433702"
+            }
+          },
+          "queues": {
+            "input": 0,
+            "output": 2782526
+          },
+          "session-state": "ESTABLISHED",
+          "supported-capabilities": [
+            "ASN32",
+            "GRACEFUL_RESTART",
+            "MPBGP",
+            "ROUTE_REFRESH",
+            "GRACEFUL_RESTART",
+            "ROUTE_REFRESH",
+            "ROUTE_REFRESH"
+          ]
+        }
+      }
+    ]
+  }
+]
