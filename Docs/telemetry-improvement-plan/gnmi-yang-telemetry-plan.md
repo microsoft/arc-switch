@@ -328,12 +328,21 @@ with no runtime dependencies.
   Subscribe mode deferred until prefix handling and container reconstruction
   are implemented.
 
-### Phase 5 — Integration and Deployment (planned)
+### Phase 5 — Integration and Deployment (in progress)
 
-- Update `Arcnet_Cisco_Arc_Setup` to optionally deploy the gNMI collector
-  instead of the cron-based collector
-- Create init.d service wrapper for poll mode daemon
-- Test on NX-OS 9.x and 10.x; validate all telemetry tables receive data
+- Created CI/CD workflow (`build-gnmi-collector.yml`) that cross-compiles the
+  collector, packages it with config and init.d script, and publishes a GitHub
+  release with `gnmi-` prefixed version tags
+- Created init.d service script (`tools/gnmi-collector/gnmi-collectord`) with
+  `start|stop|restart|status`, PID tracking, graceful SIGTERM shutdown, log
+  rotation, and credential validation
+- Created deployment script (`Docs/arcnet_onboarding_instructions/Arcnet_Cisco_gNMI_Setup`)
+  that downloads the release, installs to `/opt/gnmi-collector/`, configures
+  credentials, runs a dry-run connectivity test, starts the service, and sets
+  up boot persistence via `/bootflash/.rpmstore/config/etc/init.d/`
+- ⬜ Test on NX-OS 9.x and 10.x; validate all telemetry tables receive data
+- ⬜ Rename Azure tables from `GnmiTest*` to production names once validated
+- ⬜ Security team sign-off for gRPC on default VRF
 
 ---
 
