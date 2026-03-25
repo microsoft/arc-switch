@@ -83,6 +83,31 @@ Both workflows will create:
 - The `src/SwitchOutput/Cisco/Nexus/10/mac_address_parser/` directory structure
 - Uses latest GitHub Actions (checkout@v4, setup-go@v4, upload/download-artifact@v4)
 
+### 3. Build gNMI Collector (`build-gnmi-collector.yml`)
+
+**Purpose**: Builds and releases the gNMI telemetry collector for Cisco Nexus
+switches.
+
+**Trigger**: Manual dispatch from GitHub Actions tab
+
+**Inputs**:
+- `prerelease`: Mark as pre-release (default: false)
+
+**What it does**:
+1. Generates a version number using `gnmi-MAJOR.YYMM.INCREMENT` tag scheme
+2. Runs all unit tests in `src/TelemetryClient/`
+3. Cross-compiles the collector for Linux AMD64 (static binary)
+4. Packages the binary with `config.example.yaml` and `gnmi-collectord`
+   init.d script
+5. Creates a git tag (`gnmi-X.YYMM.N`) and GitHub release
+
+**Generated Assets**:
+- `gnmi-collector-VERSION-linux-amd64.tar.gz` containing:
+  - `gnmi-collector` executable
+  - `config.example.yaml` reference configuration
+  - `gnmi-collectord` init.d service script
+  - `README.md` with setup instructions
+
 ## Notes
 
 - All releases are marked as **pre-releases** by default
