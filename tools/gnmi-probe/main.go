@@ -7,9 +7,12 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	gpb "github.com/openconfig/gnmi/proto/gnmi"
@@ -70,6 +73,9 @@ func main() {
 	nativeOnly := flag.Bool("native-only", false, "only validate native Cisco YANG paths")
 	ocOnly := flag.Bool("oc-only", false, "only validate OpenConfig paths")
 	queryPath := flag.String("get", "", "single gNMI Get for the given YANG path, print result and exit")
+	subscribePath := flag.String("subscribe", "", "subscribe to a YANG path and print updates as JSON")
+	subMode := flag.String("sub-mode", "once", "subscribe mode: once, sample, on_change")
+	sampleInterval := flag.Int("interval", 10, "sample interval in seconds (for sample mode)")
 	flag.Parse()
 
 	fmt.Println("============================================")
@@ -116,6 +122,12 @@ func main() {
 	if *queryPath != "" {
 		fmt.Printf("\n--- Single Get: %s ---\n\n", *queryPath)
 		doGet(client, rpcCtx, *queryPath, *timeout, *dumpDir, "query")
+		os.Exit(0)
+	}
+
+	// --- Subscribe mode ---
+	if *subscribePath != "" {
+		doSubscribe(client, rpcCtx, *subscribePath, *subMode, *sampleInterval, *dumpDir)
 		os.Exit(0)
 	}
 
@@ -293,6 +305,211 @@ func doGet(client gpb.GNMIClient, rpcCtx context.Context, yangPath string, timeo
 	}
 }
 
+// doSubscribe opens a gNMI Subscribe stream and prints each response as JSON.
+func doSubscribe(client gpb.GNMIClient, rpcCtx context.Context, yangPath, mode string, intervalSec int, dumpDir string) {
+	pathElems := parsePath(yangPath)
+
+	// Determine subscription mode
+	var subMode gpb.SubscriptionMode
+	var listMode gpb.SubscriptionList_Mode
+
+	switch strings.ToLower(mode) {
+	case "once":
+		listMode = gpb.SubscriptionList_ONCE
+		subMode = gpb.SubscriptionMode_TARGET_DEFINED
+	case "sample":
+		listMode = gpb.SubscriptionList_STREAM
+		subMode = gpb.SubscriptionMode_SAMPLE
+	case "on_change":
+		listMode = gpb.SubscriptionList_STREAM
+		subMode = gpb.SubscriptionMode_ON_CHANGE
+	default:
+		fmt.Fprintf(os.Stderr, "ERROR: unknown sub-mode %q (use: once, sample, on_change)\n", mode)
+		os.Exit(1)
+	}
+
+	sub := &gpb.Subscription{
+		Path: pathElems,
+		Mode: subMode,
+	}
+	if subMode == gpb.SubscriptionMode_SAMPLE {
+		sub.SampleInterval = uint64(time.Duration(intervalSec) * time.Second)
+	}
+
+	req := &gpb.SubscribeRequest{
+		Request: &gpb.SubscribeRequest_Subscribe{
+			Subscribe: &gpb.SubscriptionList{
+				Subscription: []*gpb.Subscription{sub},
+				Mode:         listMode,
+				Encoding:     gpb.Encoding_JSON,
+			},
+		},
+	}
+
+	fmt.Printf("\n--- Subscribe: %s ---\n", yangPath)
+	fmt.Printf("Mode: %s", strings.ToUpper(mode))
+	if subMode == gpb.SubscriptionMode_SAMPLE {
+		fmt.Printf(", Interval: %ds", intervalSec)
+	}
+	fmt.Printf("\nPress Ctrl+C to stop\n\n")
+
+	// Trap Ctrl+C for clean exit
+	ctx, cancel := context.WithCancel(rpcCtx)
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-sigCh
+		fmt.Fprintf(os.Stderr, "\n[Interrupted] Closing subscribe stream...\n")
+		cancel()
+	}()
+
+	stream, err := client.Subscribe(ctx)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "ERROR: opening subscribe stream: %v\n", err)
+		return
+	}
+
+	if err := stream.Send(req); err != nil {
+		fmt.Fprintf(os.Stderr, "ERROR: sending subscribe request: %v\n", err)
+		return
+	}
+
+	updateNum := 0
+	dumpNum := 0
+	for {
+		resp, err := stream.Recv()
+		if err != nil {
+			if ctx.Err() != nil {
+				// Clean shutdown via Ctrl+C
+				break
+			}
+			if err == io.EOF {
+				fmt.Println("[Stream closed by server]")
+				break
+			}
+			fmt.Fprintf(os.Stderr, "ERROR: recv: %v\n", err)
+			break
+		}
+
+		switch r := resp.GetResponse().(type) {
+		case *gpb.SubscribeResponse_Update:
+			updateNum++
+			ts := time.Unix(0, r.Update.GetTimestamp())
+			fmt.Printf("=== Update #%d @ %s ===\n", updateNum, ts.Format("15:04:05.000"))
+
+			for _, u := range r.Update.GetUpdate() {
+				path := pathToString(u.GetPath())
+				fmt.Printf("  Path: %s\n", path)
+
+				if val := u.GetVal(); val != nil {
+					printTypedValue(val)
+				}
+				fmt.Println()
+			}
+
+			// Also show deletes if any
+			for _, d := range r.Update.GetDelete() {
+				fmt.Printf("  DELETE: %s\n", pathToString(d))
+			}
+
+			// Dump to file if requested
+			if dumpDir != "" {
+				dumpNum++
+				dumpSubscribeUpdate(dumpDir, dumpNum, r.Update)
+			}
+
+		case *gpb.SubscribeResponse_SyncResponse:
+			fmt.Println("--- [sync] initial state complete ---\n")
+			if listMode == gpb.SubscriptionList_ONCE {
+				fmt.Println("[Done] ONCE mode — received all initial data.")
+				return
+			}
+
+		default:
+			fmt.Printf("(unknown response type: %T)\n", resp.GetResponse())
+		}
+	}
+
+	fmt.Printf("\nReceived %d update(s) total.\n", updateNum)
+}
+
+// printTypedValue pretty-prints a gNMI TypedValue to stdout.
+func printTypedValue(val *gpb.TypedValue) {
+	switch v := val.GetValue().(type) {
+	case *gpb.TypedValue_JsonVal:
+		var pretty interface{}
+		if err := json.Unmarshal(v.JsonVal, &pretty); err == nil {
+			out, _ := json.MarshalIndent(pretty, "", "    ")
+			fmt.Printf("  Value (JSON):\n    %s\n", strings.ReplaceAll(string(out), "\n", "\n    "))
+		} else {
+			fmt.Printf("  Value (raw): %s\n", string(v.JsonVal))
+		}
+	case *gpb.TypedValue_JsonIetfVal:
+		var pretty interface{}
+		if err := json.Unmarshal(v.JsonIetfVal, &pretty); err == nil {
+			out, _ := json.MarshalIndent(pretty, "", "    ")
+			fmt.Printf("  Value (JSON_IETF):\n    %s\n", strings.ReplaceAll(string(out), "\n", "\n    "))
+		} else {
+			fmt.Printf("  Value (raw): %s\n", string(v.JsonIetfVal))
+		}
+	case *gpb.TypedValue_StringVal:
+		fmt.Printf("  Value (string): %s\n", v.StringVal)
+	case *gpb.TypedValue_IntVal:
+		fmt.Printf("  Value (int): %d\n", v.IntVal)
+	case *gpb.TypedValue_UintVal:
+		fmt.Printf("  Value (uint): %d\n", v.UintVal)
+	case *gpb.TypedValue_BoolVal:
+		fmt.Printf("  Value (bool): %v\n", v.BoolVal)
+	case *gpb.TypedValue_FloatVal:
+		fmt.Printf("  Value (float): %f\n", v.FloatVal)
+	case *gpb.TypedValue_BytesVal:
+		fmt.Printf("  Value (bytes): %d bytes\n", len(v.BytesVal))
+	default:
+		fmt.Printf("  Value (unknown type): %v\n", val)
+	}
+}
+
+// dumpSubscribeUpdate saves a single subscribe notification to a JSON file.
+func dumpSubscribeUpdate(dir string, num int, notif *gpb.Notification) {
+	type updateEntry struct {
+		Path  string      `json:"path"`
+		Value interface{} `json:"value"`
+	}
+	out := struct {
+		Timestamp string        `json:"timestamp"`
+		Updates   []updateEntry `json:"updates"`
+		Deletes   []string      `json:"deletes,omitempty"`
+	}{
+		Timestamp: time.Unix(0, notif.GetTimestamp()).Format(time.RFC3339Nano),
+	}
+
+	for _, u := range notif.GetUpdate() {
+		entry := updateEntry{Path: pathToString(u.GetPath())}
+		if val := u.GetVal(); val != nil {
+			switch v := val.GetValue().(type) {
+			case *gpb.TypedValue_JsonVal:
+				var parsed interface{}
+				json.Unmarshal(v.JsonVal, &parsed)
+				entry.Value = parsed
+			case *gpb.TypedValue_JsonIetfVal:
+				var parsed interface{}
+				json.Unmarshal(v.JsonIetfVal, &parsed)
+				entry.Value = parsed
+			default:
+				entry.Value = val.String()
+			}
+		}
+		out.Updates = append(out.Updates, entry)
+	}
+	for _, d := range notif.GetDelete() {
+		out.Deletes = append(out.Deletes, pathToString(d))
+	}
+
+	data, _ := json.MarshalIndent(out, "", "  ")
+	filename := fmt.Sprintf("subscribe-%04d.json", num)
+	os.WriteFile(filepath.Join(dir, filename), data, 0644)
+}
+
 // validatePath tests a single path and returns a status string.
 func validatePath(client gpb.GNMIClient, rpcCtx context.Context, name, yangPath string, timeout int, dumpDir string) string {
 	pathElems := parsePath(yangPath)
@@ -333,12 +550,14 @@ func runInteractive(client gpb.GNMIClient, rpcCtx context.Context, timeout int, 
 	fmt.Println("\n============================================")
 	fmt.Println("  Interactive Mode")
 	fmt.Println("  Type a YANG path to query (gNMI Get)")
+	fmt.Println("  Prefix with 'sub ' to subscribe (ONCE)")
+	fmt.Println("  Prefix with 'stream ' to subscribe (SAMPLE, 10s)")
 	fmt.Println("  Type 'quit' or Ctrl+C to exit")
 	fmt.Println("============================================")
 	fmt.Println("\nExamples:")
 	fmt.Println("  /openconfig-interfaces:interfaces/interface/state")
-	fmt.Println("  /System/intf-items/phys-items/PhysIf-list/phys-items")
-	fmt.Println("  /openconfig-platform:components/component/transceiver")
+	fmt.Println("  sub /openconfig-system:system/cpus")
+	fmt.Println("  stream /openconfig-interfaces:interfaces/interface/state/counters")
 	fmt.Println()
 
 	for {
@@ -363,6 +582,29 @@ func runInteractive(client gpb.GNMIClient, rpcCtx context.Context, timeout int, 
 			continue
 		}
 
+		// Handle "sub <path>" and "stream <path>" prefixes
+		if strings.HasPrefix(line, "sub ") {
+			subPath := strings.TrimSpace(strings.TrimPrefix(line, "sub"))
+			if !strings.HasPrefix(subPath, "/") {
+				subPath = "/" + subPath
+			}
+			fmt.Printf("\nSubscribing (ONCE): %s\n\n", subPath)
+			doSubscribe(client, rpcCtx, subPath, "once", 10, dumpDir)
+			fmt.Println()
+			continue
+		}
+		if strings.HasPrefix(line, "stream ") {
+			subPath := strings.TrimSpace(strings.TrimPrefix(line, "stream"))
+			if !strings.HasPrefix(subPath, "/") {
+				subPath = "/" + subPath
+			}
+			fmt.Printf("\nSubscribing (STREAM/SAMPLE 10s): %s\n", subPath)
+			fmt.Println("Press Ctrl+C to stop the stream\n")
+			doSubscribe(client, rpcCtx, subPath, "sample", 10, dumpDir)
+			fmt.Println()
+			continue
+		}
+
 		// Ensure path starts with /
 		if !strings.HasPrefix(line, "/") {
 			line = "/" + line
@@ -382,10 +624,12 @@ func runInteractive(client gpb.GNMIClient, rpcCtx context.Context, timeout int, 
 
 func printInteractiveHelp() {
 	fmt.Println("\nCommands:")
-	fmt.Println("  <yang-path>   Do a gNMI Get on the given path")
-	fmt.Println("  paths         List all built-in OpenConfig and native Cisco paths")
-	fmt.Println("  help / ?      Show this help")
-	fmt.Println("  quit / q      Exit interactive mode")
+	fmt.Println("  <yang-path>          Do a gNMI Get on the given path")
+	fmt.Println("  sub <yang-path>      Subscribe ONCE (get initial state, then exit)")
+	fmt.Println("  stream <yang-path>   Subscribe STREAM/SAMPLE every 10s (Ctrl+C to stop)")
+	fmt.Println("  paths                List all built-in OpenConfig and native Cisco paths")
+	fmt.Println("  help / ?             Show this help")
+	fmt.Println("  quit / q             Exit interactive mode")
 	fmt.Println()
 }
 

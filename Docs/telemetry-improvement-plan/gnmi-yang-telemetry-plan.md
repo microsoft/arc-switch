@@ -4,9 +4,10 @@
 
 This document proposes replacing the current cron-based CLI scraping telemetry
 pipeline with a **gRPC/gNMI + YANG model** approach for Cisco Nexus switches.
-The new architecture eliminates fragile text parsing, enables real-time streaming
-telemetry, and provides a more scalable and version-resilient data collection
-framework.
+The new architecture eliminates fragile text parsing, provides structured YANG
+data models, and offers a more scalable and version-resilient data collection
+framework. Real-time streaming via gNMI Subscribe is a future goal (currently
+using poll mode with gNMI Get — see Open Challenges §5).
 
 ## Current Architecture
 
@@ -307,23 +308,31 @@ with no runtime dependencies.
   output compatible with existing Azure tables and Grafana dashboards
 - 35 unit tests pass; binary cross-compiles to 12 MB Linux amd64 executable
 
-### Phase 3 — On-Switch Validation (in progress)
+### Phase 3 — On-Switch Validation ✅
 
-- Deploy collector to switch, run side-by-side with existing cron pipeline
-- Compare `GnmiTest*_CL` tables against `Cisco*_CL` production data
-- Resolve VRF split (see proposal above)
-- Validate data quality over 24–48 hours
+- Deployed collector to switch, ran side-by-side with existing cron pipeline
+- Compared `GnmiTest*_CL` tables against `Cisco*_CL` production data
+- Resolved VRF split with `grpc use-vrf default` (see proposal above)
+- Poll mode (`--once` / `collection.mode: poll`) produces correct data
+- Audited field coverage: ~83% match (140/168 fields), 4 tables at 100%
 
-### Phase 4 — Subscription Engine (planned)
+### Phase 4 — Subscription Engine (code complete, not production-ready)
 
-- Implement subscription manager supporting SAMPLE and ON_CHANGE modes
-- Implement batching/buffering for Azure Log Analytics API
-- Implement reconnection, retry, and dead-letter logging for failed sends
+- Implemented subscription manager supporting SAMPLE and ON_CHANGE modes
+- Implemented batching/buffering for Azure Log Analytics API
+- Implemented reconnection, retry, and dead-letter logging for failed sends
+- ❌ **Subscribe RPC produces empty/incomplete rows** — NX-OS sends leaf-level
+  updates even in SAMPLE mode, and the decoder ignores `Notification.Prefix`.
+  See **Open Challenges §5** for root cause analysis and fix plan.
+- **Current decision**: Use poll mode (gNMI Get loop) for production.
+  Subscribe mode deferred until prefix handling and container reconstruction
+  are implemented.
 
 ### Phase 5 — Integration and Deployment (planned)
 
 - Update `Arcnet_Cisco_Arc_Setup` to optionally deploy the gNMI collector
   instead of the cron-based collector
+- Create init.d service wrapper for poll mode daemon
 - Test on NX-OS 9.x and 10.x; validate all telemetry tables receive data
 
 ---
@@ -509,6 +518,132 @@ and need to be resolved before production deployment:
    restart on crash, and persistence across switch reboots. Until then, the
    process is managed manually via `nohup` / `kill` and the binary already
    handles `SIGTERM` for graceful shutdown.
+
+5. **Subscribe mode (gNMI Subscribe RPC)** — The entire Subscribe RPC path is
+   not currently production-ready. Both SAMPLE and ON_CHANGE modes produce
+   empty/incomplete rows in Azure because the collector's Subscribe handler
+   has three unresolved issues:
+
+   - `DecodeSubscribeResponse` ignores `Notification.Prefix`, causing paths
+     to be empty/relative and breaking key extraction and transformer routing
+   - NX-OS sends leaf-level updates even in SAMPLE mode, but transformers
+     expect full container JSON blobs (as returned by gNMI Get)
+   - `RunStream` lacks the `mergeByDataType` logic that `RunOnce` uses to
+     combine entries sharing the same table and data_type
+
+   The config currently uses `collection.mode: poll`, which loops gNMI Get
+   requests and produces correct data.
+
+   **Possible approaches to fix Subscribe mode:**
+
+   - **Fix prefix handling + container reconstruction** — Combine
+     `notification.prefix` + `update.path` for full paths. Accumulate leaf
+     updates into complete containers before passing to transformers. Add
+     `mergeByDataType` to the flush path. This is the proper fix and enables
+     true streaming telemetry with lower latency than polling.
+
+   - **Hybrid Subscribe + Get** — Use Subscribe notifications as a trigger
+     only. When an update arrives, discard it and issue a full Get for that
+     path. Guarantees data completeness but doubles gRPC traffic. Could be
+     combined with debouncing to avoid Get storms.
+
+   - **State cache with delta merging** — Maintain an in-memory cache of the
+     last complete state per path (seeded via initial Get). Merge incoming
+     deltas into the cache and pass the merged result to transformers. Most
+     efficient but adds complexity: cache invalidation, memory management for
+     large tables (e.g., MAC table), and handling deletion events.
+
+   - **Leaf-aware transformers** — Redesign transformers to accept partial
+     updates and produce partial rows. Azure queries would use `arg_max()`
+     to reconstruct full state. Pushes complexity to the query layer.
+
+   Until one of these is implemented, poll mode is the production-safe
+   default. See the **Open Question** section below for detailed analysis.
+
+---
+
+## Open Question: Subscribe Mode Data Completeness
+
+> **Status**: Confirmed — Subscribe RPC not production-ready (March 24, 2026)
+> **Impact**: Both SAMPLE and ON_CHANGE Subscribe modes produce empty/incomplete rows
+> **Decision**: Use **poll mode** (`collection.mode: poll`) which uses gNMI Get
+
+### Problem
+
+The `--once` flag and the persistent streaming mode use **completely different gRPC
+RPCs**, which is the root cause of the data difference:
+
+- **`--once` / poll mode** → `RunOnce()` → calls `client.GetWithTimeout()` → **gNMI Get RPC**
+  - Returns the entire container as a single JSON blob per request
+  - Transformers receive a complete `map[string]interface{}` with all fields populated
+  - This works perfectly
+
+- **No `--once` / subscribe mode** → `RunStream()` → calls `client.Subscribe()` → **gNMI Subscribe RPC**
+  - Even with `mode: sample`, NX-OS sends data differently than Get:
+    1. **Notification prefix is ignored** — Subscribe responses put the subscription path
+       in `Notification.Prefix`, with relative/empty paths in updates. Our
+       `DecodeSubscribeResponse` ignores the prefix entirely, so paths come out empty,
+       breaking key extraction (e.g., interface names)
+    2. **Leaf-level fragmentation** — NX-OS may send individual leaf updates within a
+       single Notification rather than one JSON container blob, even in SAMPLE mode. The
+       transformer expects `map[string]interface{}` but receives scalars
+    3. **No mergeByDataType** — `RunOnce` merges entries sharing the same `data_type`
+       (e.g., CPU + memory → one system_resources row). `RunStream`'s flush path has no
+       equivalent merge step
+
+  Result: transformers produce rows with all empty fields → empty rows in Azure.
+
+### Current Decision
+
+The config uses `collection.mode: poll`, which runs `RunOnce()` (gNMI Get) on a timer.
+This is functionally equivalent to the old cron pipeline and produces correct data. The
+`mode: sample` and `sample_interval` settings on individual paths are retained for future
+use when Subscribe mode is fixed, but have no effect in poll mode.
+
+### To fix Subscribe mode in the future
+
+Three issues must be addressed in the collector code:
+
+1. **Handle Notification.Prefix** — In `DecodeSubscribeResponse`, combine
+   `notification.prefix` + `update.path` to reconstruct the full YANG path. This fixes
+   path-based key extraction and transformer routing.
+
+2. **Reconstruct containers from leaf updates** — Accumulate leaf-level updates within a
+   single Notification into a `map[string]interface{}` before passing to the transformer.
+   If updates span multiple SubscribeResponses for the same sample interval, buffer them
+   until the sync marker or a timeout.
+
+3. **Add mergeByDataType to the flush path** — Port the merge logic from `RunOnce` into
+   `RunStream`'s `flushBatch` so that entries sharing a table and data_type get combined
+   into single rows.
+
+### Option A: Poll mode ✅ (current approach)
+
+Poll mode calls `RunOnce()` periodically using gNMI Get. It produces identical results
+to the old cron pipeline and is the production-safe default.
+
+```yaml
+collection:
+  mode: poll       # Uses gNMI Get every interval
+  interval: 300s   # 5 minutes, matching old cron
+```
+
+### Option B: Hybrid Subscribe + Get
+
+Use Subscribe as a **scheduling trigger** only. When a Subscribe notification arrives for
+a path, discard the (potentially incomplete) update and instead perform a full `Get`
+request for that path. This guarantees complete data while retaining Subscribe's
+streaming transport and reconnection benefits.
+
+```
+Subscribe notification arrives (possibly incomplete)
+  → Trigger Get request for the same path
+  → Transform the complete Get response
+  → Send to Azure
+```
+
+**Trade-off**: Doubles the gRPC traffic (Subscribe + Get per interval), but guarantees
+data completeness. May add latency compared to pure Subscribe.
 
 ---
 
