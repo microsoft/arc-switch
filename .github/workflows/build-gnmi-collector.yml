@@ -1,0 +1,258 @@
+name: Build gNMI Collector
+
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Mark as pre-release'
+        required: true
+        default: false
+        type: boolean
+
+env:
+  MAJOR_VERSION: 1
+
+permissions:
+  contents: write
+
+jobs:
+  generate-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate build number
+      id: version
+      run: |
+        YYMM=$(date +"%y%m")
+        echo "Current YYMM: ${YYMM}"
+
+        # Match gnmi-collector-specific tags
+        PATTERN="gnmi-${MAJOR_VERSION}.${YYMM}."
+        echo "Searching for tags matching: ${PATTERN}*"
+
+        LAST_INCREMENT=$(git tag -l "${PATTERN}*" | \
+          sed "s/${PATTERN//./\\.}//" | \
+          grep -E '^[0-9]+$' | \
+          sort -n | \
+          tail -1)
+
+        if [ -z "$LAST_INCREMENT" ]; then
+          INCREMENT=1
+        else
+          INCREMENT=$((LAST_INCREMENT + 1))
+        fi
+
+        VERSION="${MAJOR_VERSION}.${YYMM}.${INCREMENT}"
+        TAG="gnmi-${VERSION}"
+        echo "Generated version: ${VERSION} (tag: ${TAG})"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
+  build-collector:
+    needs: generate-version
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version-file: src/TelemetryClient/go.mod
+
+    - name: Run tests
+      run: |
+        cd src/TelemetryClient
+        go test -v -count=1 ./...
+
+    - name: Build gnmi-collector (linux-amd64)
+      run: |
+        cd src/TelemetryClient
+        VERSION="${{ needs.generate-version.outputs.version }}"
+
+        echo "========================================="
+        echo "Building: gnmi-collector"
+        echo "Version: ${VERSION}"
+        echo "========================================="
+
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+          -ldflags="-s -w -X main.version=${VERSION}" \
+          -o gnmi-collector ./cmd/gnmi-collector/
+
+        echo "Binary built successfully:"
+        ls -lh gnmi-collector
+
+    - name: Create release package
+      run: |
+        VERSION="${{ needs.generate-version.outputs.version }}"
+        DIST="dist"
+        mkdir -p "${DIST}"
+
+        # Binary
+        cp src/TelemetryClient/gnmi-collector "${DIST}/"
+
+        # Configuration and deployment files
+        cp src/TelemetryClient/config.example.yaml "${DIST}/"
+        cp tools/gnmi-collector/gnmi-collectord "${DIST}/"
+
+        # README
+        cat > "${DIST}/README.md" << 'EOF'
+        # gNMI Telemetry Collector
+
+        Version: ${VERSION}
+
+        Collects telemetry from Cisco Nexus switches via gNMI/YANG and sends
+        structured JSON to Azure Log Analytics.
+
+        ## Quick Start
+
+        ```bash
+        # Extract
+        tar -xzf gnmi-collector-${VERSION}-linux-amd64.tar.gz
+
+        # Copy binary
+        cp gnmi-collector /opt/gnmi-collector/gnmi-collector
+
+        # Edit configuration
+        cp config.example.yaml /opt/gnmi-collector/config.yaml
+        # Set credentials as environment variables (see config.example.yaml)
+
+        # Test with dry-run
+        /opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
+
+        # Install init.d service
+        cp gnmi-collectord /etc/init.d/gnmi-collectord
+        chmod +x /etc/init.d/gnmi-collectord
+        /etc/init.d/gnmi-collectord start
+        ```
+
+        ## CLI Flags
+
+        | Flag | Description |
+        |------|-------------|
+        | `--config` | Path to YAML config file (default: config.yaml) |
+        | `--once` | Run a single collection cycle then exit |
+        | `--dry-run` | Print to stdout instead of sending to Azure |
+        | `--output DIR` | Write JSON files to directory (for external sender) |
+        | `--dump DIR` | Save raw gNMI JSON responses |
+        | `--verbose` | Print exact JSON payload sent to Azure |
+        | `--version` | Show version and exit |
+
+        ## Files
+
+        - `gnmi-collector` — Collector binary (linux-amd64)
+        - `config.example.yaml` — Reference configuration with all YANG paths
+        - `gnmi-collectord` — init.d service script for daemon management
+        EOF
+
+        # Fix the inline variable in README
+        sed -i "s/\${VERSION}/${VERSION}/g" "${DIST}/README.md"
+
+        # Create tarball
+        cd "${DIST}"
+        tar -czf "../gnmi-collector-${VERSION}-linux-amd64.tar.gz" *
+        cd ..
+
+        echo "Package created:"
+        ls -lh "gnmi-collector-${VERSION}-linux-amd64.tar.gz"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: gnmi-collector
+        path: "gnmi-collector-*.tar.gz"
+
+  create-release:
+    needs: [generate-version, build-collector]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+
+    - name: Prepare release assets
+      run: |
+        mkdir -p release-assets
+        find artifacts -name "*.tar.gz" -type f -exec mv {} release-assets/ \;
+
+        echo "Release assets:"
+        ls -la release-assets/
+
+    - name: Create Git Tag
+      run: |
+        VERSION="${{ needs.generate-version.outputs.version }}"
+        TAG="gnmi-${VERSION}"
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -a "${TAG}" -m "gNMI Collector Release ${VERSION}"
+        git push origin "${TAG}"
+
+    - name: Generate release notes
+      run: |
+        VERSION="${{ needs.generate-version.outputs.version }}"
+        cat > release_notes.md << EOF
+        # gNMI Telemetry Collector - ${VERSION}
+
+        ## 🎯 Overview
+
+        Collects telemetry from Cisco Nexus switches via gNMI/YANG and sends
+        structured JSON to Azure Log Analytics. Replaces the cron-based CLI
+        scraping pipeline with structured YANG data collection.
+
+        ## 📦 Package Contents
+
+        - **File**: \`gnmi-collector-${VERSION}-linux-amd64.tar.gz\`
+        - **Binary**: \`gnmi-collector\` (static linux-amd64, ~12 MB)
+        - **Config**: \`config.example.yaml\` with all YANG paths
+        - **Service**: \`gnmi-collectord\` init.d script
+
+        ## 🔧 Telemetry Paths
+
+        Collects 16 YANG paths covering:
+        - Interface counters, status, and errors
+        - BGP neighbor state
+        - LLDP neighbors
+        - Transceiver DOM
+        - Environment (temperature, power)
+        - System resources (CPU, memory, uptime)
+        - ARP and MAC tables
+        - Inventory
+
+        ## 🚀 Quick Start
+
+        \`\`\`bash
+        tar -xzf gnmi-collector-${VERSION}-linux-amd64.tar.gz
+        cp gnmi-collector /opt/gnmi-collector/gnmi-collector
+        cp config.example.yaml /opt/gnmi-collector/config.yaml
+        # Edit config.yaml and set environment variables
+        /opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
+        \`\`\`
+
+        ## 📋 Requirements
+
+        - NX-OS 9.3(x)+ with \`feature grpc\` enabled
+        - \`grpc use-vrf default\` for single-VRF deployment
+        - Azure Log Analytics workspace credentials
+        EOF
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: gnmi-${{ needs.generate-version.outputs.version }}
+        name: gNMI Collector ${{ needs.generate-version.outputs.version }}
+        body_path: release_notes.md
+        prerelease: ${{ github.event.inputs.prerelease }}
+        files: release-assets/*
+        token: ${{ secrets.GITHUB_TOKEN }}
