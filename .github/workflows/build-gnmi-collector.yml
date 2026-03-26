@@ -66,6 +66,11 @@ jobs:
       with:
         go-version-file: src/TelemetryClient/go.mod
 
+    - name: Tidy modules
+      run: |
+        cd src/TelemetryClient
+        go mod tidy
+
     - name: Run tests
       run: |
         cd src/TelemetryClient
