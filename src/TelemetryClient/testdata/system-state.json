@@ -1,0 +1,16 @@
+[
+  {
+    "timestamp": 1773862276235423274,
+    "updates": [
+      {
+        "path": "/system/state",
+        "value": {
+          "hostname": "rr1-n42-r07-9336hl-13-1a",
+          "motd-banner": "#\\nNOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE\\n\\nhostname rr1-n42-r07-9336hl-13-1a\\nBuildVersion: 1.2407.41\\nUnauthorized access and/or use prohibited.\\nAll access and/or use subject to monitoring.\\n\\nNOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE   NOTICE\\n#",
+          "boot-time": "1769462502000000000",
+          "current-datetime": "2026-03-18T11:31:12.151+00:00"
+        }
+      }
+    ]
+  }
+]

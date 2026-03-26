@@ -1,0 +1,489 @@
+[
+  {
+    "timestamp": 1773862274044823416,
+    "updates": [
+      {
+        "path": "/lldp/interfaces/interface[name=eth1/36/4]/neighbors",
+        "value": {
+          "neighbor": [
+            {
+              "id": "1",
+              "capabilities": {
+                "capability": [
+                  {
+                    "name": "OTHER",
+                    "state": {
+                      "enabled": false,
+                      "name": "OTHER"
+                    }
+                  },
+                  {
+                    "name": "REPEATER",
+                    "state": {
+                      "enabled": false,
+                      "name": "REPEATER"
+                    }
+                  },
+                  {
+                    "name": "MAC_BRIDGE",
+                    "state": {
+                      "enabled": true,
+                      "name": "MAC_BRIDGE"
+                    }
+                  },
+                  {
+                    "name": "WLAN_ACCESS_POINT",
+                    "state": {
+                      "enabled": false,
+                      "name": "WLAN_ACCESS_POINT"
+                    }
+                  },
+                  {
+                    "name": "ROUTER",
+                    "state": {
+                      "enabled": true,
+                      "name": "ROUTER"
+                    }
+                  },
+                  {
+                    "name": "TELEPHONE",
+                    "state": {
+                      "enabled": false,
+                      "name": "TELEPHONE"
+                    }
+                  },
+                  {
+                    "name": "DOCSIS_CABLE_DEVICE",
+                    "state": {
+                      "enabled": false,
+                      "name": "DOCSIS_CABLE_DEVICE"
+                    }
+                  },
+                  {
+                    "name": "STATION_ONLY",
+                    "state": {
+                      "enabled": false,
+                      "name": "STATION_ONLY"
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "id": "1",
+                "port-description": "TOR_BMC",
+                "port-id": "Ethernet1/51",
+                "port-id-type": "INTERFACE_NAME",
+                "chassis-id": "a410.b6bc.047a",
+                "chassis-id-type": "MAC_ADDRESS",
+                "system-description": "Cisco Nexus Operating System (NX-OS) Software 10.4(5)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.",
+                "system-name": "rr1-n42-r07-9348bmc-13-1"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "path": "/lldp/interfaces/interface[name=eth1/36/1]/neighbors",
+        "value": {
+          "neighbor": [
+            {
+              "id": "1",
+              "capabilities": {
+                "capability": [
+                  {
+                    "name": "OTHER",
+                    "state": {
+                      "enabled": false,
+                      "name": "OTHER"
+                    }
+                  },
+                  {
+                    "name": "REPEATER",
+                    "state": {
+                      "enabled": false,
+                      "name": "REPEATER"
+                    }
+                  },
+                  {
+                    "name": "MAC_BRIDGE",
+                    "state": {
+                      "enabled": true,
+                      "name": "MAC_BRIDGE"
+                    }
+                  },
+                  {
+                    "name": "WLAN_ACCESS_POINT",
+                    "state": {
+                      "enabled": false,
+                      "name": "WLAN_ACCESS_POINT"
+                    }
+                  },
+                  {
+                    "name": "ROUTER",
+                    "state": {
+                      "enabled": true,
+                      "name": "ROUTER"
+                    }
+                  },
+                  {
+                    "name": "TELEPHONE",
+                    "state": {
+                      "enabled": false,
+                      "name": "TELEPHONE"
+                    }
+                  },
+                  {
+                    "name": "DOCSIS_CABLE_DEVICE",
+                    "state": {
+                      "enabled": false,
+                      "name": "DOCSIS_CABLE_DEVICE"
+                    }
+                  },
+                  {
+                    "name": "STATION_ONLY",
+                    "state": {
+                      "enabled": false,
+                      "name": "STATION_ONLY"
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "id": "1",
+                "management-address": "10.218.68.194",
+                "port-description": "INFRA:PTP:rr1-n42-r07-93180hl-13-1a:Eth1/36/1:HL",
+                "port-id": "Ethernet1/4/3",
+                "port-id-type": "INTERFACE_NAME",
+                "chassis-id": "f86b.d922.9376",
+                "chassis-id-type": "MAC_ADDRESS",
+                "system-description": "Cisco Nexus Operating System (NX-OS) Software 10.4(5)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.",
+                "system-name": "RR1-N42-R12-9336ssp-1a.corp.microsoft.com"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "path": "/lldp/interfaces/interface[name=eth1/36/2]/neighbors",
+        "value": {
+          "neighbor": [
+            {
+              "id": "1",
+              "capabilities": {
+                "capability": [
+                  {
+                    "name": "OTHER",
+                    "state": {
+                      "enabled": false,
+                      "name": "OTHER"
+                    }
+                  },
+                  {
+                    "name": "REPEATER",
+                    "state": {
+                      "enabled": false,
+                      "name": "REPEATER"
+                    }
+                  },
+                  {
+                    "name": "MAC_BRIDGE",
+                    "state": {
+                      "enabled": true,
+                      "name": "MAC_BRIDGE"
+                    }
+                  },
+                  {
+                    "name": "WLAN_ACCESS_POINT",
+                    "state": {
+                      "enabled": false,
+                      "name": "WLAN_ACCESS_POINT"
+                    }
+                  },
+                  {
+                    "name": "ROUTER",
+                    "state": {
+                      "enabled": true,
+                      "name": "ROUTER"
+                    }
+                  },
+                  {
+                    "name": "TELEPHONE",
+                    "state": {
+                      "enabled": false,
+                      "name": "TELEPHONE"
+                    }
+                  },
+                  {
+                    "name": "DOCSIS_CABLE_DEVICE",
+                    "state": {
+                      "enabled": false,
+                      "name": "DOCSIS_CABLE_DEVICE"
+                    }
+                  },
+                  {
+                    "name": "STATION_ONLY",
+                    "state": {
+                      "enabled": false,
+                      "name": "STATION_ONLY"
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "id": "1",
+                "management-address": "10.218.68.195",
+                "port-description": "INFRA:PTP:rr1-n42-r07-93180hl-13-1a:Eth1/36/2:HL",
+                "port-id": "Ethernet1/4/3",
+                "port-id-type": "INTERFACE_NAME",
+                "chassis-id": "f86b.d922.bff2",
+                "chassis-id-type": "MAC_ADDRESS",
+                "system-description": "Cisco Nexus Operating System (NX-OS) Software 10.4(5)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.",
+                "system-name": "RR1-N42-R12-9336ssp-1b.corp.microsoft.com"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "path": "/lldp/interfaces/interface[name=eth1/34]/neighbors",
+        "value": {
+          "neighbor": [
+            {
+              "id": "1",
+              "capabilities": {
+                "capability": [
+                  {
+                    "name": "OTHER",
+                    "state": {
+                      "enabled": false,
+                      "name": "OTHER"
+                    }
+                  },
+                  {
+                    "name": "REPEATER",
+                    "state": {
+                      "enabled": false,
+                      "name": "REPEATER"
+                    }
+                  },
+                  {
+                    "name": "MAC_BRIDGE",
+                    "state": {
+                      "enabled": true,
+                      "name": "MAC_BRIDGE"
+                    }
+                  },
+                  {
+                    "name": "WLAN_ACCESS_POINT",
+                    "state": {
+                      "enabled": false,
+                      "name": "WLAN_ACCESS_POINT"
+                    }
+                  },
+                  {
+                    "name": "ROUTER",
+                    "state": {
+                      "enabled": true,
+                      "name": "ROUTER"
+                    }
+                  },
+                  {
+                    "name": "TELEPHONE",
+                    "state": {
+                      "enabled": false,
+                      "name": "TELEPHONE"
+                    }
+                  },
+                  {
+                    "name": "DOCSIS_CABLE_DEVICE",
+                    "state": {
+                      "enabled": false,
+                      "name": "DOCSIS_CABLE_DEVICE"
+                    }
+                  },
+                  {
+                    "name": "STATION_ONLY",
+                    "state": {
+                      "enabled": false,
+                      "name": "STATION_ONLY"
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "id": "1",
+                "port-description": "MLAG_Peer",
+                "port-id": "Ethernet1/34",
+                "port-id-type": "INTERFACE_NAME",
+                "chassis-id": "e80a.b91a.aa60",
+                "chassis-id-type": "MAC_ADDRESS",
+                "system-description": "Cisco Nexus Operating System (NX-OS) Software 10.4(5)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.",
+                "system-name": "rr1-n42-r07-9336hl-13-1b"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "path": "/lldp/interfaces/interface[name=eth1/33]/neighbors",
+        "value": {
+          "neighbor": [
+            {
+              "id": "1",
+              "capabilities": {
+                "capability": [
+                  {
+                    "name": "OTHER",
+                    "state": {
+                      "enabled": false,
+                      "name": "OTHER"
+                    }
+                  },
+                  {
+                    "name": "REPEATER",
+                    "state": {
+                      "enabled": false,
+                      "name": "REPEATER"
+                    }
+                  },
+                  {
+                    "name": "MAC_BRIDGE",
+                    "state": {
+                      "enabled": true,
+                      "name": "MAC_BRIDGE"
+                    }
+                  },
+                  {
+                    "name": "WLAN_ACCESS_POINT",
+                    "state": {
+                      "enabled": false,
+                      "name": "WLAN_ACCESS_POINT"
+                    }
+                  },
+                  {
+                    "name": "ROUTER",
+                    "state": {
+                      "enabled": true,
+                      "name": "ROUTER"
+                    }
+                  },
+                  {
+                    "name": "TELEPHONE",
+                    "state": {
+                      "enabled": false,
+                      "name": "TELEPHONE"
+                    }
+                  },
+                  {
+                    "name": "DOCSIS_CABLE_DEVICE",
+                    "state": {
+                      "enabled": false,
+                      "name": "DOCSIS_CABLE_DEVICE"
+                    }
+                  },
+                  {
+                    "name": "STATION_ONLY",
+                    "state": {
+                      "enabled": false,
+                      "name": "STATION_ONLY"
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "id": "1",
+                "port-description": "P2P_IBGP",
+                "port-id": "Ethernet1/33",
+                "port-id-type": "INTERFACE_NAME",
+                "chassis-id": "e80a.b91a.aa5c",
+                "chassis-id-type": "MAC_ADDRESS",
+                "system-description": "Cisco Nexus Operating System (NX-OS) Software 10.4(5)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.",
+                "system-name": "rr1-n42-r07-9336hl-13-1b"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "path": "/lldp/interfaces/interface[name=eth1/35]/neighbors",
+        "value": {
+          "neighbor": [
+            {
+              "id": "1",
+              "capabilities": {
+                "capability": [
+                  {
+                    "name": "OTHER",
+                    "state": {
+                      "enabled": false,
+                      "name": "OTHER"
+                    }
+                  },
+                  {
+                    "name": "REPEATER",
+                    "state": {
+                      "enabled": false,
+                      "name": "REPEATER"
+                    }
+                  },
+                  {
+                    "name": "MAC_BRIDGE",
+                    "state": {
+                      "enabled": true,
+                      "name": "MAC_BRIDGE"
+                    }
+                  },
+                  {
+                    "name": "WLAN_ACCESS_POINT",
+                    "state": {
+                      "enabled": false,
+                      "name": "WLAN_ACCESS_POINT"
+                    }
+                  },
+                  {
+                    "name": "ROUTER",
+                    "state": {
+                      "enabled": true,
+                      "name": "ROUTER"
+                    }
+                  },
+                  {
+                    "name": "TELEPHONE",
+                    "state": {
+                      "enabled": false,
+                      "name": "TELEPHONE"
+                    }
+                  },
+                  {
+                    "name": "DOCSIS_CABLE_DEVICE",
+                    "state": {
+                      "enabled": false,
+                      "name": "DOCSIS_CABLE_DEVICE"
+                    }
+                  },
+                  {
+                    "name": "STATION_ONLY",
+                    "state": {
+                      "enabled": false,
+                      "name": "STATION_ONLY"
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "id": "1",
+                "port-description": "MLAG_Peer",
+                "port-id": "Ethernet1/35",
+                "port-id-type": "INTERFACE_NAME",
+                "chassis-id": "e80a.b91a.aa64",
+                "chassis-id-type": "MAC_ADDRESS",
+                "system-description": "Cisco Nexus Operating System (NX-OS) Software 10.4(5)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2025, Cisco Systems, Inc. All rights reserved.",
+                "system-name": "rr1-n42-r07-9336hl-13-1b"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
