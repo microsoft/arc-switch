@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"gnmi-collector/internal/azure"
@@ -24,51 +25,27 @@ type Collector struct {
 	dryRun       bool
 	dumpDir      string
 	outputDir    string // Write transformed JSON files for external sender
+	verbose      bool
 }
 
-// New creates a Collector with all transformers registered.
-func New(cfg *config.Config, client *gnmiclient.Client, logger *azure.Logger, dryRun bool, dumpDir, outputDir string) *Collector {
-	transformers := map[string]transform.Transformer{
-		// OpenConfig transformers
-		"interface-counters": &transform.InterfaceCountersTransformer{},
-		"interface-status":   &transform.InterfaceStatusTransformer{},
-		"bgp-neighbors":     &transform.BgpSummaryTransformer{},
-		"lldp-neighbors":    &transform.LldpNeighborTransformer{},
-		"mac-table":         &transform.MacAddressTransformer{},
-		"temperature":       &transform.EnvironmentTempTransformer{},
-		"power-supply":      &transform.EnvironmentPowerTransformer{},
-		"platform-inventory": &transform.InventoryTransformer{},
-		"transceiver":       &transform.TransceiverTransformer{},
-		"system-cpus":       &transform.SystemResourcesTransformer{},
-		"system-memory":     &transform.SystemResourcesTransformer{},
-		"system-state":      &transform.SystemUptimeTransformer{},
-		"arp-table":         &transform.ArpTransformer{},
-
-		// Supplementary OpenConfig transformers
-		"if-ethernet":         &transform.InterfaceEthernetTransformer{},
-		"bgp-global":          &transform.BgpGlobalTransformer{},
-		"transceiver-channel": &transform.TransceiverChannelTransformer{},
-
-		// Native Cisco YANG transformers (Cisco-NX-OS-device model)
-		"nx-transceiver":  &transform.NativeTransceiverTransformer{},
-		"nx-arp":          &transform.NativeArpTransformer{},
-		"nx-bgp-peers":    &transform.NativeBgpTransformer{},
-		"nx-env-sensor":   &transform.NativeEnvTempTransformer{},
-		"nx-env-psu":      &transform.NativeEnvPowerTransformer{},
-		"nx-sys-cpu":      &transform.NativeSystemCpuTransformer{},
-		"nx-sys-memory":   &transform.NativeSystemMemoryTransformer{},
-		"nx-mac-table":    &transform.NativeMacTransformer{},
-		"nx-lldp":         &transform.NativeLldpTransformer{},
+// New creates a Collector with all registered transformers.
+// Transformers self-register via init() in their source files, so adding
+// a new vendor's transformers only requires creating new files — no
+// changes to this function needed.
+func New(cfg *config.Config, client *gnmiclient.Client, logger *azure.Logger, dryRun bool, dumpDir, outputDir string, verbose ...bool) *Collector {
+	v := false
+	if len(verbose) > 0 {
+		v = verbose[0]
 	}
-
 	return &Collector{
 		cfg:          cfg,
 		client:       client,
 		logger:       logger,
-		transformers: transformers,
+		transformers: transform.BuildMap(),
 		dryRun:       dryRun,
 		dumpDir:      dumpDir,
 		outputDir:    outputDir,
+		verbose:      v,
 	}
 }
 
@@ -161,6 +138,11 @@ func (c *Collector) RunOnce() error {
 // mergeByDataType merges entries with the same DataType into a single entry
 // by combining their Message maps. This is used to combine CPU + memory
 // into one system_resources row matching the old CLI parser output.
+//
+// Entries are only merged when their message maps have non-overlapping keys
+// (complementary data for the same entity, e.g. CPU + memory). When maps
+// share keys they represent separate entities (e.g. per-interface counters)
+// and are kept as individual entries.
 func mergeByDataType(entries []transform.CommonFields) []transform.CommonFields {
 	// Group by data_type
 	groups := map[string][]transform.CommonFields{}
@@ -190,7 +172,14 @@ func mergeByDataType(entries []transform.CommonFields) []transform.CommonFields 
 		}
 
 		if !allMaps {
-			// Can't merge non-map messages — keep as separate entries
+			merged = append(merged, group...)
+			continue
+		}
+
+		// Only merge if maps have non-overlapping keys (complementary data).
+		// If any pair of maps shares a key, the entries represent separate
+		// entities and must be kept apart.
+		if mapsOverlap(group) {
 			merged = append(merged, group...)
 			continue
 		}
@@ -210,13 +199,60 @@ func mergeByDataType(entries []transform.CommonFields) []transform.CommonFields 
 	return merged
 }
 
+// mapsOverlap returns true if any two entries in the group share a message
+// map key, indicating they are separate entities rather than complementary
+// fragments to be merged.
+func mapsOverlap(group []transform.CommonFields) bool {
+	if len(group) < 2 {
+		return false
+	}
+	first := group[0].Message.(map[string]interface{})
+	second := group[1].Message.(map[string]interface{})
+	for k := range first {
+		if _, exists := second[k]; exists {
+			return true
+		}
+	}
+	return false
+}
+
 // fetchAndTransform fetches gNMI data for a path and transforms it,
 // returning the entries without sending them.
+// If a Get request returns empty values (common on SONiC for list paths),
+// it automatically falls back to Subscribe ONCE mode which retrieves the
+// full current state via the subscription mechanism.
 func (c *Collector) fetchAndTransform(pathCfg config.PathConfig) ([]transform.CommonFields, error) {
 	// Fetch gNMI data
 	notifications, err := c.client.GetWithTimeout(pathCfg.YANGPath)
 	if err != nil {
-		return nil, fmt.Errorf("gNMI Get: %w", err)
+		// Some devices (e.g., SONiC) return errors for Get on list paths
+		// that lack specific entity keys. Fall back to Subscribe ONCE.
+		log.Printf("INFO [%s]: Get failed (%v), trying Subscribe ONCE fallback", pathCfg.Name, err)
+		subNotifs, subErr := c.client.SubscribeOnceWithTimeout(pathCfg.YANGPath)
+		if subErr != nil {
+			// Both Get and Subscribe ONCE failed — return the original Get error
+			return nil, fmt.Errorf("gNMI Get: %w", err)
+		}
+		if len(subNotifs) > 0 {
+			notifications = subNotifs
+			err = nil
+		} else {
+			return nil, fmt.Errorf("gNMI Get: %w", err)
+		}
+	}
+
+	// Fallback: if Get returned notifications but all values are empty
+	// (e.g., SONiC returns {} for bulk list queries), try Subscribe ONCE
+	// which retrieves the full current state via the subscription mechanism.
+	if len(notifications) > 0 && !gnmiclient.HasNonEmptyValues(notifications) {
+		log.Printf("INFO [%s]: Get returned empty values, falling back to Subscribe ONCE", pathCfg.Name)
+		subNotifs, subErr := c.client.SubscribeOnceWithTimeout(pathCfg.YANGPath)
+		if subErr != nil {
+			log.Printf("WARN [%s]: Subscribe ONCE fallback failed: %v", pathCfg.Name, subErr)
+			// Continue with the original (empty) Get notifications
+		} else if len(subNotifs) > 0 {
+			notifications = subNotifs
+		}
 	}
 
 	if len(notifications) == 0 {
@@ -264,6 +300,11 @@ func (c *Collector) fetchAndTransform(pathCfg config.PathConfig) ([]transform.Co
 		return nil, nil
 	}
 
+	// Apply vendor-specific data_type prefix from config.
+	// Transformers always produce "cisco_nexus_*" data types internally;
+	// this replaces the prefix for other vendors (e.g., "sonic_*").
+	applyDataTypePrefix(entries, c.cfg.DataTypePrefix())
+
 	return entries, nil
 }
 
@@ -302,4 +343,22 @@ func (c *Collector) writeTransformed(table string, entries []transform.CommonFie
 
 	path := filepath.Join(c.outputDir, table+".json")
 	return os.WriteFile(path, data, 0644)
+}
+
+// applyDataTypePrefix replaces the default "cisco_nexus_" prefix in data_type
+// fields with the configured vendor prefix. This allows the same transformer
+// code to produce vendor-appropriate output (e.g., "sonic_interface_counters").
+// If the configured prefix is already "cisco_nexus", this is a no-op.
+func applyDataTypePrefix(entries []transform.CommonFields, prefix string) {
+	const defaultPrefix = "cisco_nexus"
+	if prefix == defaultPrefix {
+		return
+	}
+	for i := range entries {
+		dt := entries[i].DataType
+		if strings.HasPrefix(dt, defaultPrefix+"_") {
+			category := dt[len(defaultPrefix)+1:]
+			entries[i].DataType = prefix + "_" + category
+		}
+	}
 }

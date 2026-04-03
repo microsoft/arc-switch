@@ -8,6 +8,10 @@ import (
 
 const dataTypeNativeMac = "cisco_nexus_mac_table"
 
+func init() {
+	Register("nx-mac-table", func() Transformer { return &NativeMacTransformer{} })
+}
+
 type NativeMacTransformer struct{}
 
 func (t *NativeMacTransformer) DataType() string {

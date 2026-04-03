@@ -9,6 +9,11 @@ import (
 
 const dataTypeEnvTemp = "cisco_nexus_environment_temperature"
 
+func init() {
+	Register("temperature", func() Transformer { return &EnvironmentTempTransformer{} })
+	Register("power-supply", func() Transformer { return &EnvironmentPowerTransformer{} })
+}
+
 type EnvironmentTempTransformer struct{}
 
 func (t *EnvironmentTempTransformer) DataType() string { return dataTypeEnvTemp }

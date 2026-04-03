@@ -8,6 +8,11 @@ import (
 // from /System/ch-items/supslot-items/SupCSlot-list/sup-items/sensor-items.
 type NativeEnvTempTransformer struct{}
 
+func init() {
+	Register("nx-env-sensor", func() Transformer { return &NativeEnvTempTransformer{} })
+	Register("nx-env-psu", func() Transformer { return &NativeEnvPowerTransformer{} })
+}
+
 func (t *NativeEnvTempTransformer) DataType() string { return dataTypeEnvTemp }
 
 func (t *NativeEnvTempTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {

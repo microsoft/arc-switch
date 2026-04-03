@@ -6,6 +6,10 @@ import (
 
 const dataTypeInventory = "cisco_nexus_inventory"
 
+func init() {
+	Register("platform-inventory", func() Transformer { return &InventoryTransformer{} })
+}
+
 type InventoryTransformer struct{}
 
 func (t *InventoryTransformer) DataType() string { return dataTypeInventory }

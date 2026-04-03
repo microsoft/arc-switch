@@ -1,8 +1,8 @@
-# Azure Arc for Cisco Nexus Switches
+# Azure Arc for Network Switches
 
 ## Overview
 
-This project enables Azure Arc management and monitoring for Cisco Nexus switches running NX-OS. By onboarding Cisco switches to Azure Arc, you can:
+This project enables Azure Arc management and monitoring for network switches. By onboarding switches to Azure Arc, you can:
 
 - Centralized Management: Manage network devices alongside other Azure resources
 - Monitoring & Telemetry: Collect and analyze switch telemetry in Azure Log Analytics
@@ -10,17 +10,78 @@ This project enables Azure Arc management and monitoring for Cisco Nexus switche
 - Compliance & Governance: Apply Azure policies and track configuration changes
 - Hybrid Infrastructure: Unified view of cloud and on-premises network devices
 
+## Supported Platforms
+
+| Platform | Setup Script | Telemetry | Status |
+|----------|-------------|-----------|--------|
+| **Cisco NX-OS** | `Arcnet_Cisco_gNMI_Setup` | gNMI (recommended) | ✅ Production |
+| **Cisco NX-OS** | `Arcnet_Cisco_Arc_Setup` | CLI parser (deprecated) | ⚠️ Legacy |
+| **Dell Enterprise SONiC** | `Arcnet_Sonic_gNMI_Setup` | gNMI | ✅ Production |
+| **Dell OS10** | `Arcnet_Dell_Setup` | CLI parser | ✅ Production |
+
+## Installation Paths
+
+### Cisco NX-OS
+
+There are **two telemetry collector options** when onboarding a Cisco switch.
+
+| | Legacy (CLI Parser) | gNMI (Recommended) |
+|---|---|---|
+| **Script** | `Arcnet_Cisco_Arc_Setup` | `Arcnet_Cisco_gNMI_Setup` |
+| **Collection** | `vsh -c "show ..."` CLI commands | gNMI Get/Subscribe over gRPC |
+| **Parsing** | Go regex parser (`cisco-parser`) | YANG models (structured JSON) |
+| **Shipping** | Bash `curl` via `cisco-azure-logger-v2.sh` | Go Azure logger (built into binary) |
+| **Scheduling** | Cron job every 5 minutes | Long-running init.d service |
+| **Resilience** | Breaks when CLI output format changes | Version-resilient YANG models |
+
+> **TODO**: The legacy CLI parser path (`Arcnet_Cisco_Arc_Setup`) is
+> deprecated and will be removed in a future release. All new switch
+> onboardings should use the gNMI path (`Arcnet_Cisco_gNMI_Setup`).
+> Once all existing switches have been migrated, the legacy script and
+> its dependencies (`cisco-parser`, `cisco-azure-logger-v2.sh`,
+> `cisco-parser-collector.sh`) will be retired.
+
+### Dell Enterprise SONiC
+
+Use `Arcnet_Sonic_gNMI_Setup`. SONiC only supports the gNMI path (no
+legacy CLI parser). Key differences from Cisco:
+
+| | Cisco NX-OS | SONiC |
+|---|---|---|
+| **OS base** | Custom Linux (no systemd) | Debian (systemd) |
+| **Arc agent install** | RPM + systemctl shim + init.d | Standard `install_linux_azcmagent.sh` |
+| **gNMI port** | 50051 | 8080 |
+| **Encoding** | JSON | JSON_IETF |
+| **YANG paths** | OpenConfig + Cisco native | OpenConfig only |
+| **Service management** | init.d scripts | systemd (`systemctl`) |
+| **Persistence** | `/bootflash/.rpmstore/` | systemd enable (standard) |
+
+### Dell OS10
+
+Use `Arcnet_Dell_Setup`. Dell OS10 does not support gNMI in production
+mode (requires SmartFabric Director mode). Uses CLI parser + cron.
+
+For details on adding support for a new switch vendor, see
+[adding_new_vendor.md](adding_new_vendor.md).
+
 ## Architecture
 
 The solution consists of several components:
 
 1. Azure Arc Agent - Connects the switch to Azure and provides identity
 2. Azure Arc Services - Himdsd, Arcproxyd, Extd, GCAD and GAS manages security, policies and extensions
-3. Parsers - Extracts structured data from Cisco show commands
-4. Azure Logger - Sends parsed telemetry to Log Analytics workspace
-5. Cron-based Collector - Runs every minute to gather and send metrics
+3. Telemetry Collector - Gathers switch metrics and sends them to Azure
 
-### Data Flow
+### Data Flow — gNMI (Cisco + SONiC, Recommended)
+
+```
+Network Switch (Cisco NX-OS or Dell SONiC)
+    ├─> gNMI Get/Subscribe (gRPC, structured YANG data)
+    ├─> gnmi-collector (transforms + ships in one binary)
+    └─> Azure Log Analytics Workspace
+```
+
+### Data Flow — Legacy CLI (Cisco + Dell OS10, Deprecated for Cisco)
 
 ```
 Cisco Switch (NX-OS)

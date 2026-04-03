@@ -6,6 +6,10 @@ import (
 
 const dataTypeInterfaceStatus = "cisco_nexus_interface_status"
 
+func init() {
+	Register("interface-status", func() Transformer { return &InterfaceStatusTransformer{} })
+}
+
 // InterfaceStatusTransformer converts gNMI interface state data to the
 // schema matching the existing cisco-parser interface-status output.
 type InterfaceStatusTransformer struct{}

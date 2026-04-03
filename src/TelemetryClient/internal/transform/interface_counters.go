@@ -6,6 +6,10 @@ import (
 
 const dataTypeInterfaceCounters = "cisco_nexus_interface_counters"
 
+func init() {
+	Register("interface-counters", func() Transformer { return &InterfaceCountersTransformer{} })
+}
+
 // InterfaceCountersTransformer converts gNMI interface counter data
 // to the schema matching the existing cisco-parser interface-counters output.
 type InterfaceCountersTransformer struct{}

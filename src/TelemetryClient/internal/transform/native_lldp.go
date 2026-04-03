@@ -9,6 +9,10 @@ import (
 
 const dataTypeNativeLldp = "cisco_nexus_lldp_neighbor"
 
+func init() {
+	Register("nx-lldp", func() Transformer { return &NativeLldpTransformer{} })
+}
+
 type NativeLldpTransformer struct{}
 
 func (t *NativeLldpTransformer) DataType() string {

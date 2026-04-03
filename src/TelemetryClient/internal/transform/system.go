@@ -10,6 +10,12 @@ import (
 
 const dataTypeSystemResources = "cisco_nexus_system_resources"
 
+func init() {
+	Register("system-cpus", func() Transformer { return &SystemResourcesTransformer{} })
+	Register("system-memory", func() Transformer { return &SystemResourcesTransformer{} })
+	Register("system-state", func() Transformer { return &SystemUptimeTransformer{} })
+}
+
 // SystemResourcesTransformer combines CPU and memory gNMI data into the
 // schema matching the current system-resources parser.
 type SystemResourcesTransformer struct{}
@@ -40,7 +46,10 @@ func (t *SystemResourcesTransformer) Transform(notifications []gnmi.Notification
 					}
 
 					cpuEntry := map[string]interface{}{
-						"cpuid":  GetString(state, "index"),
+						// In poll mode, index is inside state; in subscribe
+						// mode, array-aware normalization puts the list key
+						// ("index") at the CPU entry level.
+						"cpuid":  getCpuId(cpu, state),
 						"user":   getStatInstant(state, "user"),
 						"kernel": getStatInstant(state, "kernel"),
 						"idle":   getStatInstant(state, "idle"),
@@ -93,9 +102,32 @@ func (t *SystemResourcesTransformer) Transform(notifications []gnmi.Notification
 	return []CommonFields{result}, nil
 }
 
+// getCpuId extracts the CPU identifier, checking the entry level first
+// (subscribe mode puts the list key at the entry level) then state level
+// (poll mode has index inside the state container).
+func getCpuId(cpu, state map[string]interface{}) string {
+	if id := GetString(cpu, "index"); id != "" {
+		return id
+	}
+	return GetString(state, "index")
+}
+
+// getStatInstant extracts the instantaneous value for a CPU stat.
+// In poll mode (OpenConfig Get), the structure is nested:
+//
+//	state["idle"] = {"instant": 72.0}
+//
+// In subscribe mode, the structure may already be flat if the gNMI
+// server sends the value directly at the leaf level:
+//
+//	state["idle"] = 72
 func getStatInstant(state map[string]interface{}, key string) interface{} {
 	if sub := GetMap(state, key); sub != nil {
 		return sub["instant"]
+	}
+	// Fallback: the value may be at this level directly (subscribe mode)
+	if v, ok := state[key]; ok {
+		return v
 	}
 	return 0
 }
@@ -104,7 +136,17 @@ func toFloat(v interface{}) float64 {
 	switch n := v.(type) {
 	case float64:
 		return n
+	case float32:
+		return float64(n)
 	case int:
+		return float64(n)
+	case int64:
+		return float64(n)
+	case uint64:
+		return float64(n)
+	case int32:
+		return float64(n)
+	case uint32:
 		return float64(n)
 	default:
 		return 0

@@ -76,7 +76,14 @@ func main() {
 	subscribePath := flag.String("subscribe", "", "subscribe to a YANG path and print updates as JSON")
 	subMode := flag.String("sub-mode", "once", "subscribe mode: once, sample, on_change")
 	sampleInterval := flag.Int("interval", 10, "sample interval in seconds (for sample mode)")
+	encodingStr := flag.String("encoding", "JSON", "gNMI encoding: JSON or JSON_IETF")
 	flag.Parse()
+
+	// Resolve encoding
+	gnmiEncoding := gpb.Encoding_JSON
+	if strings.EqualFold(*encodingStr, "JSON_IETF") {
+		gnmiEncoding = gpb.Encoding_JSON_IETF
+	}
 
 	fmt.Println("============================================")
 	fmt.Println("  gNMI Probe — YANG Path Validator")
@@ -121,19 +128,19 @@ func main() {
 	// --- Single path query mode ---
 	if *queryPath != "" {
 		fmt.Printf("\n--- Single Get: %s ---\n\n", *queryPath)
-		doGet(client, rpcCtx, *queryPath, *timeout, *dumpDir, "query")
+		doGet(client, rpcCtx, *queryPath, *timeout, *dumpDir, "query", gnmiEncoding)
 		os.Exit(0)
 	}
 
 	// --- Subscribe mode ---
 	if *subscribePath != "" {
-		doSubscribe(client, rpcCtx, *subscribePath, *subMode, *sampleInterval, *dumpDir)
+		doSubscribe(client, rpcCtx, *subscribePath, *subMode, *sampleInterval, *dumpDir, gnmiEncoding)
 		os.Exit(0)
 	}
 
 	// --- Interactive mode ---
 	if *interactive {
-		runInteractive(client, rpcCtx, *timeout, *dumpDir)
+		runInteractive(client, rpcCtx, *timeout, *dumpDir, gnmiEncoding)
 		os.Exit(0)
 	}
 
@@ -157,7 +164,7 @@ func main() {
 	passed := 0
 	failed := 0
 	for _, yp := range paths {
-		status := validatePath(client, rpcCtx, yp.name, yp.path, *timeout, *dumpDir)
+		status := validatePath(client, rpcCtx, yp.name, yp.path, *timeout, *dumpDir, gnmiEncoding)
 		if strings.HasPrefix(status, "OK") {
 			passed++
 		} else {
@@ -242,7 +249,7 @@ func printCapabilities(caps *gpb.CapabilityResponse) {
 }
 
 // doGet performs a single gNMI Get and pretty-prints the result.
-func doGet(client gpb.GNMIClient, rpcCtx context.Context, yangPath string, timeout int, dumpDir string, dumpName string) {
+func doGet(client gpb.GNMIClient, rpcCtx context.Context, yangPath string, timeout int, dumpDir string, dumpName string, encoding gpb.Encoding) {
 	pathElems := parsePath(yangPath)
 	getCtx, getCancel := context.WithTimeout(rpcCtx, time.Duration(timeout)*time.Second)
 	defer getCancel()
@@ -250,7 +257,7 @@ func doGet(client gpb.GNMIClient, rpcCtx context.Context, yangPath string, timeo
 	req := &gpb.GetRequest{
 		Path:     []*gpb.Path{pathElems},
 		Type:     gpb.GetRequest_STATE,
-		Encoding: gpb.Encoding_JSON,
+		Encoding: encoding,
 	}
 
 	resp, err := client.Get(getCtx, req)
@@ -306,7 +313,7 @@ func doGet(client gpb.GNMIClient, rpcCtx context.Context, yangPath string, timeo
 }
 
 // doSubscribe opens a gNMI Subscribe stream and prints each response as JSON.
-func doSubscribe(client gpb.GNMIClient, rpcCtx context.Context, yangPath, mode string, intervalSec int, dumpDir string) {
+func doSubscribe(client gpb.GNMIClient, rpcCtx context.Context, yangPath, mode string, intervalSec int, dumpDir string, encoding gpb.Encoding) {
 	pathElems := parsePath(yangPath)
 
 	// Determine subscription mode
@@ -341,7 +348,7 @@ func doSubscribe(client gpb.GNMIClient, rpcCtx context.Context, yangPath, mode s
 			Subscribe: &gpb.SubscriptionList{
 				Subscription: []*gpb.Subscription{sub},
 				Mode:         listMode,
-				Encoding:     gpb.Encoding_JSON,
+				Encoding:     encoding,
 			},
 		},
 	}
@@ -511,7 +518,7 @@ func dumpSubscribeUpdate(dir string, num int, notif *gpb.Notification) {
 }
 
 // validatePath tests a single path and returns a status string.
-func validatePath(client gpb.GNMIClient, rpcCtx context.Context, name, yangPath string, timeout int, dumpDir string) string {
+func validatePath(client gpb.GNMIClient, rpcCtx context.Context, name, yangPath string, timeout int, dumpDir string, encoding gpb.Encoding) string {
 	pathElems := parsePath(yangPath)
 	getCtx, getCancel := context.WithTimeout(rpcCtx, time.Duration(timeout)*time.Second)
 	defer getCancel()
@@ -519,7 +526,7 @@ func validatePath(client gpb.GNMIClient, rpcCtx context.Context, name, yangPath 
 	req := &gpb.GetRequest{
 		Path:     []*gpb.Path{pathElems},
 		Type:     gpb.GetRequest_STATE,
-		Encoding: gpb.Encoding_JSON,
+		Encoding: encoding,
 	}
 
 	resp, err := client.Get(getCtx, req)
@@ -543,7 +550,7 @@ func validatePath(client gpb.GNMIClient, rpcCtx context.Context, name, yangPath 
 }
 
 // runInteractive enters a REPL loop where the user types YANG paths to query.
-func runInteractive(client gpb.GNMIClient, rpcCtx context.Context, timeout int, dumpDir string) {
+func runInteractive(client gpb.GNMIClient, rpcCtx context.Context, timeout int, dumpDir string, encoding gpb.Encoding) {
 	scanner := bufio.NewScanner(os.Stdin)
 	queryNum := 0
 
@@ -589,7 +596,7 @@ func runInteractive(client gpb.GNMIClient, rpcCtx context.Context, timeout int, 
 				subPath = "/" + subPath
 			}
 			fmt.Printf("\nSubscribing (ONCE): %s\n\n", subPath)
-			doSubscribe(client, rpcCtx, subPath, "once", 10, dumpDir)
+			doSubscribe(client, rpcCtx, subPath, "once", 10, dumpDir, encoding)
 			fmt.Println()
 			continue
 		}
@@ -600,7 +607,7 @@ func runInteractive(client gpb.GNMIClient, rpcCtx context.Context, timeout int, 
 			}
 			fmt.Printf("\nSubscribing (STREAM/SAMPLE 10s): %s\n", subPath)
 			fmt.Println("Press Ctrl+C to stop the stream\n")
-			doSubscribe(client, rpcCtx, subPath, "sample", 10, dumpDir)
+			doSubscribe(client, rpcCtx, subPath, "sample", 10, dumpDir, encoding)
 			fmt.Println()
 			continue
 		}
@@ -617,7 +624,7 @@ func runInteractive(client gpb.GNMIClient, rpcCtx context.Context, timeout int, 
 		}
 
 		fmt.Printf("\nQuerying: %s\n\n", line)
-		doGet(client, rpcCtx, line, timeout, dumpDir, dumpName)
+		doGet(client, rpcCtx, line, timeout, dumpDir, dumpName, encoding)
 		fmt.Println()
 	}
 }

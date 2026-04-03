@@ -10,6 +10,10 @@ import (
 // from /System/intf-items/phys-items/PhysIf-list/phys-items.
 type NativeTransceiverTransformer struct{}
 
+func init() {
+	Register("nx-transceiver", func() Transformer { return &NativeTransceiverTransformer{} })
+}
+
 func (t *NativeTransceiverTransformer) DataType() string { return dataTypeTransceiver }
 
 func (t *NativeTransceiverTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {

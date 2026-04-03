@@ -77,12 +77,20 @@ func TestNormalizeInterfaceName(t *testing.T) {
 		input string
 		want  string
 	}{
+		// Cisco NX-OS names
 		{"eth1/1", "Eth1/1"},
 		{"eth1/36/4", "Eth1/36/4"},
 		{"mgmt0", "mgmt0"},
 		{"vlan207", "Vlan207"},
 		{"port-channel50", "Po50"},
 		{"lo0", "lo0"},
+		// SONiC names (already canonical — returned as-is)
+		{"Ethernet0", "Ethernet0"},
+		{"Ethernet48", "Ethernet48"},
+		{"PortChannel001", "PortChannel001"},
+		{"Loopback0", "Loopback0"},
+		{"Management0", "Management0"},
+		{"Vlan100", "Vlan100"},
 	}
 	for _, tt := range tests {
 		got := NormalizeInterfaceName(tt.input)
@@ -97,6 +105,7 @@ func TestInterfaceType(t *testing.T) {
 		name string
 		want string
 	}{
+		// Cisco NX-OS names
 		{"Eth1/1", "ethernet"},
 		{"eth1/36/4", "ethernet"},
 		{"Po50", "port-channel"},
@@ -105,6 +114,12 @@ func TestInterfaceType(t *testing.T) {
 		{"lo0", "loopback"},
 		{"tunnel1", "tunnel"},
 		{"nve1", "other"},
+		// SONiC names
+		{"Ethernet0", "ethernet"},
+		{"Ethernet48", "ethernet"},
+		{"PortChannel001", "port-channel"},
+		{"Loopback0", "loopback"},
+		{"Vlan100", "vlan"},
 	}
 	for _, tt := range tests {
 		got := InterfaceType(tt.name)
