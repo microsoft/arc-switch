@@ -4,12 +4,16 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
+const dataTypeTransceiverChannel = "cisco_nexus_transceiver_dom"
+
+func init() {
+	Register("transceiver-channel", func() Transformer { return &TransceiverChannelTransformer{} })
+}
+
 // TransceiverChannelTransformer extracts per-channel DOM diagnostics from
 // the OpenConfig transceiver physical-channels path.
 // Path: /openconfig-platform:components/component/transceiver/physical-channels
 type TransceiverChannelTransformer struct{}
-
-const dataTypeTransceiverChannel = "cisco_nexus_transceiver_dom"
 
 func (t *TransceiverChannelTransformer) DataType() string { return dataTypeTransceiverChannel }
 

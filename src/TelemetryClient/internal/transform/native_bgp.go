@@ -11,6 +11,10 @@ import (
 // to the schema matching the existing bgp-all-summary parser.
 type NativeBgpTransformer struct{}
 
+func init() {
+	Register("nx-bgp-peers", func() Transformer { return &NativeBgpTransformer{} })
+}
+
 func (t *NativeBgpTransformer) DataType() string { return dataTypeBgpSummary }
 
 func (t *NativeBgpTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {

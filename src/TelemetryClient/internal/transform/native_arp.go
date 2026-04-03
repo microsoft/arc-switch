@@ -10,6 +10,10 @@ import (
 // from /System/arp-items/inst-items/dom-items/Dom-list/db-items/Db-list/adj-items/AdjEp-list.
 type NativeArpTransformer struct{}
 
+func init() {
+	Register("nx-arp", func() Transformer { return &NativeArpTransformer{} })
+}
+
 func (t *NativeArpTransformer) DataType() string { return dataTypeArp }
 
 func (t *NativeArpTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {

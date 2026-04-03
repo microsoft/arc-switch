@@ -6,6 +6,10 @@ import (
 
 const dataTypeLldpNeighbor = "cisco_nexus_lldp_neighbor"
 
+func init() {
+	Register("lldp-neighbors", func() Transformer { return &LldpNeighborTransformer{} })
+}
+
 // LldpNeighborTransformer converts gNMI LLDP neighbor data to the schema
 // matching the existing lldp-neighbor parser.
 type LldpNeighborTransformer struct{}
@@ -26,8 +30,17 @@ func (t *LldpNeighborTransformer) Transform(notifications []gnmi.Notification) (
 
 			localPort := ExtractInterfaceName(u.Path)
 
-			// The gNMI response nests neighbors under "neighbor" array
+			// Two response formats:
+			// 1) Bulk: vals = {"neighbor": [...]}, the full neighbors list
+			// 2) Per-neighbor (Subscribe ONCE): vals IS a single neighbor map
+			//    with "state", "capabilities", etc. directly
 			neighbors := getSlice(vals, "neighbor")
+			if neighbors == nil {
+				// Single-neighbor: check if vals has a "state" sub-map
+				if GetMap(vals, "state") != nil || GetString(vals, "id") != "" {
+					neighbors = []interface{}{vals}
+				}
+			}
 			for _, raw := range neighbors {
 				nbr, ok := raw.(map[string]interface{})
 				if !ok {

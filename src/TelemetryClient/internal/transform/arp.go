@@ -6,6 +6,10 @@ import (
 
 const dataTypeArp = "cisco_nexus_arp_entry"
 
+func init() {
+	Register("arp-table", func() Transformer { return &ArpTransformer{} })
+}
+
 type ArpTransformer struct{}
 
 func (t *ArpTransformer) DataType() string { return dataTypeArp }

@@ -99,7 +99,7 @@ func main() {
 	}
 
 	// Create collector
-	c := collector.New(cfg, client, logger, *dryRun, *dump, *output)
+	c := collector.New(cfg, client, logger, *dryRun, *dump, *output, *verbose)
 
 	if *once {
 		if err := c.RunOnce(); err != nil {

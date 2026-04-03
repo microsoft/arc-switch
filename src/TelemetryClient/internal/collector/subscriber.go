@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -157,7 +158,9 @@ func (c *Collector) subscribeOnce(
 	updateCount := 0
 
 	return c.client.Subscribe(ctx, subPaths, func(resp *gpb.SubscribeResponse) error {
-		notifications, err := gnmiclient.DecodeSubscribeResponse(resp)
+		// Decode WITH prefix preservation so entity keys (e.g.,
+		// [name=Ethernet0]) are included in the full update paths.
+		notifications, err := gnmiclient.DecodeSubscribeResponseWithPrefix(resp)
 		if err != nil {
 			log.Printf("WARN: decode subscribe response: %v", err)
 			return nil // Don't kill stream on decode errors
@@ -166,9 +169,16 @@ func (c *Collector) subscribeOnce(
 			return nil // Sync response, no data
 		}
 
-		// Route notifications to the correct transformer based on path prefix
+		// Normalize leaf-level scalar updates into nested tree maps.
+		// Subscribe responses send individual leaf values, but
+		// transformers expect nested maps (same as Get responses).
+		notifications = gnmiclient.NormalizeSubscribeNotifications(notifications)
+
+		// Route notifications to the correct transformer based on path prefix.
+		// Use drillDown to navigate nested subscribe-stream data to the
+		// subscribed path level that transformers expect.
 		for _, sp := range subPaths {
-			matching := filterNotificationsForPath(notifications, sp.YANGPath)
+			matching := drillDownToSubscribedPath(notifications, sp.YANGPath)
 			if len(matching) == 0 {
 				continue
 			}
@@ -187,6 +197,9 @@ func (c *Collector) subscribeOnce(
 				continue
 			}
 
+			// Apply vendor-specific data_type prefix (same as poll mode).
+			applyDataTypePrefix(entries, c.cfg.DataTypePrefix())
+
 			batch := batches[sp.Table]
 			batch.add(entries)
 			updateCount++
@@ -202,7 +215,9 @@ func (c *Collector) subscribeOnce(
 }
 
 // filterNotificationsForPath returns notifications whose update paths
-// match the given YANG path prefix.
+// match the given YANG path prefix. After normalization, update paths
+// contain full entity paths (with prefix), so substring matching on the
+// last path element is reliable.
 func filterNotificationsForPath(notifs []gnmiclient.Notification, yangPath string) []gnmiclient.Notification {
 	// Normalize the path for comparison
 	yangPath = strings.TrimPrefix(yangPath, "/")
@@ -216,6 +231,10 @@ func filterNotificationsForPath(notifs []gnmiclient.Notification, yangPath strin
 	if idx := strings.Index(lastElem, ":"); idx != -1 {
 		lastElem = lastElem[idx+1:]
 	}
+	// Strip key selectors for matching (e.g., "component[name=X]" → "component")
+	if idx := strings.Index(lastElem, "["); idx != -1 {
+		lastElem = lastElem[:idx]
+	}
 
 	var matched []gnmiclient.Notification
 	for _, n := range notifs {
@@ -227,12 +246,190 @@ func filterNotificationsForPath(notifs []gnmiclient.Notification, yangPath strin
 		}
 	}
 
-	// If no specific match, return all (single-path subscription responses
-	// don't always include the full path prefix in updates)
+	// If no specific match and only subscribed to a single path, the
+	// response is likely for that path (some servers omit path prefix).
 	if len(matched) == 0 {
 		return notifs
 	}
 	return matched
+}
+
+// drillDownToSubscribedPath takes subscribe-stream notifications (which
+// may arrive at a root-level path with deeply nested values) and drills
+// into the nested map to reach the subscribed YANG path level.
+//
+// NX-OS subscribe STREAM returns entire subtrees, e.g.:
+//
+//	path=/System, value={procsys-items:{syscpusummary-items:{idle:74.0, ...}}}
+//
+// But transformers expect data at the subscribed sub-path level, e.g.:
+//
+//	path=/System/procsys-items/syscpusummary-items, value={idle:74.0, ...}
+//
+// For list paths (arrays), this creates separate notifications per element:
+//
+//	path=/interfaces, value={interface:[{name:eth1/1, state:{counters:{...}}}]}
+//	→ path=/interfaces/interface[name=eth1/1]/state/counters, value={in-octets:...}
+func drillDownToSubscribedPath(notifs []gnmiclient.Notification, yangPath string) []gnmiclient.Notification {
+	cleanYang := stripPathModulePrefixes(yangPath)
+
+	var result []gnmiclient.Notification
+	for _, n := range notifs {
+		for _, u := range n.Updates {
+			cleanUpdatePath := stripPathModulePrefixes(u.Path)
+
+			// Strip key selectors for comparison so that
+			// /interfaces/interface[name=Ethernet0]/state/counters
+			// matches the YANG path /interfaces/interface/state/counters.
+			// Keep the original cleanUpdatePath (with keys) for the
+			// notification output so transformers can extract entity names.
+			cleanUpdatePathNoKeys := stripKeySelectors(cleanUpdatePath)
+
+			// Already at subscribed path — pass through as-is
+			if cleanUpdatePathNoKeys == cleanYang {
+				result = append(result, gnmiclient.Notification{
+					Timestamp: n.Timestamp,
+					Updates:   []gnmiclient.Update{u},
+				})
+				continue
+			}
+
+			// Below subscribed path — wrap value in remaining path
+			// segments so transformers see the same structure as poll mode.
+			// E.g., subscribe sends path=/system/memory/state, value={physical:X}
+			// but transformer expects path=/system/memory, value={state:{physical:X}}
+			if strings.HasPrefix(cleanUpdatePathNoKeys, cleanYang+"/") {
+				remaining := strings.TrimPrefix(cleanUpdatePathNoKeys, cleanYang+"/")
+				wrapped := wrapValueInPath(u.Value, remaining)
+				result = append(result, gnmiclient.Notification{
+					Timestamp: n.Timestamp,
+					Updates: []gnmiclient.Update{{
+						Path:  yangPath,
+						Value: wrapped,
+					}},
+				})
+				continue
+			}
+
+			// Check if update path is a prefix of yang path — need to drill down
+			if !strings.HasPrefix(cleanYang, cleanUpdatePathNoKeys) {
+				continue
+			}
+
+			vals, ok := u.Value.(map[string]interface{})
+			if !ok {
+				continue
+			}
+
+			remaining := strings.TrimPrefix(cleanYang, cleanUpdatePathNoKeys)
+			remaining = strings.TrimPrefix(remaining, "/")
+			segments := strings.Split(remaining, "/")
+
+			drilled := drillIntoMap(vals, segments, cleanUpdatePath)
+			for _, d := range drilled {
+				result = append(result, gnmiclient.Notification{
+					Timestamp: n.Timestamp,
+					Updates:   []gnmiclient.Update{d},
+				})
+			}
+		}
+	}
+	return result
+}
+
+// drillIntoMap navigates into a nested map following path segments.
+// When a segment resolves to a list ([]interface{}), it iterates each
+// element and continues drilling, creating separate Updates per entity.
+func drillIntoMap(vals map[string]interface{}, segments []string, currentPath string) []gnmiclient.Update {
+	if len(segments) == 0 {
+		return []gnmiclient.Update{{Path: currentPath, Value: vals}}
+	}
+
+	seg := segments[0]
+	rest := segments[1:]
+
+	v, ok := vals[seg]
+	if !ok {
+		return nil
+	}
+
+	newPath := currentPath + "/" + seg
+
+	switch typedV := v.(type) {
+	case map[string]interface{}:
+		return drillIntoMap(typedV, rest, newPath)
+	case []interface{}:
+		// List — iterate each element and add entity key to path
+		var results []gnmiclient.Update
+		for _, item := range typedV {
+			itemMap, ok := item.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			name := getEntityName(itemMap)
+			elemPath := newPath
+			if name != "" {
+				elemPath = newPath + "[name=" + name + "]"
+			}
+			results = append(results, drillIntoMap(itemMap, rest, elemPath)...)
+		}
+		return results
+	default:
+		// Leaf value — can't drill further
+		if len(rest) == 0 {
+			return []gnmiclient.Update{{Path: newPath, Value: v}}
+		}
+		return nil
+	}
+}
+
+// getEntityName tries common key fields to extract an entity identity.
+func getEntityName(m map[string]interface{}) string {
+	for _, key := range []string{"name", "id", "index"} {
+		if v, ok := m[key]; ok {
+			return fmt.Sprintf("%v", v)
+		}
+	}
+	return ""
+}
+
+// stripPathModulePrefixes removes YANG module prefixes from path segments.
+// e.g., "/openconfig-interfaces:interfaces/interface" → "/interfaces/interface"
+func stripPathModulePrefixes(path string) string {
+	parts := strings.Split(path, "/")
+	for i, p := range parts {
+		if idx := strings.Index(p, ":"); idx != -1 {
+			// Preserve key selectors: "interface[name=X]" stays unchanged
+			if bracketIdx := strings.Index(p, "["); bracketIdx != -1 && bracketIdx < idx {
+				continue
+			}
+			parts[i] = p[idx+1:]
+		}
+	}
+	return strings.Join(parts, "/")
+}
+
+// stripKeySelectors removes YANG list key selectors from path segments.
+// e.g., "/interfaces/interface[name=Ethernet0]/state/counters"
+//
+//	→ "/interfaces/interface/state/counters"
+func stripKeySelectors(path string) string {
+	// Use a simple regex to strip [...] from all path segments
+	re := regexp.MustCompile(`\[[^\]]*\]`)
+	return re.ReplaceAllString(path, "")
+}
+
+// wrapValueInPath wraps a value in nested maps following a relative path.
+// E.g., wrapValueInPath({"physical": 100}, "state") → {"state": {"physical": 100}}
+// E.g., wrapValueInPath(val, "a/b") → {"a": {"b": val}}
+func wrapValueInPath(value interface{}, relativePath string) interface{} {
+	segments := strings.Split(relativePath, "/")
+	// Build inside-out: start from the deepest segment
+	var current interface{} = value
+	for i := len(segments) - 1; i >= 0; i-- {
+		current = map[string]interface{}{segments[i]: current}
+	}
+	return current
 }
 
 func (c *Collector) flushAll(batches map[string]*tableBatch) {
@@ -246,6 +443,10 @@ func (c *Collector) flushBatch(batch *tableBatch) {
 	if len(entries) == 0 {
 		return
 	}
+
+	// Merge complementary entries (e.g. CPU + memory → single system row),
+	// same as poll mode does in RunOnce.
+	entries = mergeByDataType(entries)
 
 	if c.dryRun {
 		for _, e := range entries {

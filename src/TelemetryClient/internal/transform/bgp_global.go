@@ -6,6 +6,10 @@ import (
 
 const dataTypeBgpGlobal = "cisco_nexus_bgp_global"
 
+func init() {
+	Register("bgp-global", func() Transformer { return &BgpGlobalTransformer{} })
+}
+
 type BgpGlobalTransformer struct{}
 
 func (t *BgpGlobalTransformer) DataType() string {
@@ -24,12 +28,19 @@ func (t *BgpGlobalTransformer) Transform(notifications []gnmi.Notification) ([]C
 
 			vrfName := extractKey(u.Path, "name")
 
+			// SONiC wraps values under a "state" sub-container when
+			// querying .../global instead of .../global/state.
+			stateVals := vals
+			if state := GetMap(vals, "state"); state != nil {
+				stateVals = state
+			}
+
 			msg := map[string]interface{}{
 				"vrf_name":       vrfName,
-				"local_as":       GetString(vals, "as"),
-				"router_id":      GetString(vals, "router-id"),
-				"total_paths":    GetString(vals, "total-paths"),
-				"total_prefixes": GetString(vals, "total-prefixes"),
+				"local_as":       GetString(stateVals, "as"),
+				"router_id":      GetString(stateVals, "router-id"),
+				"total_paths":    GetString(stateVals, "total-paths"),
+				"total_prefixes": GetString(stateVals, "total-prefixes"),
 			}
 
 			results = append(results, NewCommonFields(dataTypeBgpGlobal, msg))

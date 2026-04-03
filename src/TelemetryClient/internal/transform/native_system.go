@@ -8,6 +8,11 @@ import (
 // from /System/procsys-items/syscpusummary-items.
 type NativeSystemCpuTransformer struct{}
 
+func init() {
+	Register("nx-sys-cpu", func() Transformer { return &NativeSystemCpuTransformer{} })
+	Register("nx-sys-memory", func() Transformer { return &NativeSystemMemoryTransformer{} })
+}
+
 func (t *NativeSystemCpuTransformer) DataType() string { return dataTypeSystemResources }
 
 func (t *NativeSystemCpuTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {

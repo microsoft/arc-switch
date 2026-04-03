@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strings"
 	"testing"
 	"time"
 )
@@ -76,6 +77,8 @@ func TestParseDefaults(t *testing.T) {
 target:
   address: 10.0.0.1
   port: 50051
+azure:
+  device_type: cisco-nx-os
 paths:
   - name: test
     yang_path: /test/path
@@ -98,8 +101,25 @@ paths:
 	if cfg.Collection.Mode != "poll" {
 		t.Errorf("default mode = %q, want poll", cfg.Collection.Mode)
 	}
-	if cfg.Azure.DeviceType != "cisco-nx-os" {
-		t.Errorf("default device_type = %q, want cisco-nx-os", cfg.Azure.DeviceType)
+}
+
+func TestParseMissingDeviceType(t *testing.T) {
+	yaml := []byte(`
+target:
+  address: 10.0.0.1
+  port: 50051
+paths:
+  - name: test
+    yang_path: /test/path
+    table: TestTable
+    enabled: true
+`)
+	_, err := Parse(yaml)
+	if err == nil {
+		t.Fatal("expected error for missing device_type, got nil")
+	}
+	if !strings.Contains(err.Error(), "device_type") {
+		t.Errorf("error should mention device_type, got: %v", err)
 	}
 }
 
@@ -111,6 +131,8 @@ func TestParseInvalidConfigs(t *testing.T) {
 		{"missing address", `
 target:
   port: 50051
+azure:
+  device_type: cisco-nx-os
 paths:
   - name: test
     yang_path: /test
@@ -120,6 +142,8 @@ paths:
 target:
   address: 127.0.0.1
   port: 0
+azure:
+  device_type: cisco-nx-os
 paths:
   - name: test
     yang_path: /test
@@ -129,6 +153,8 @@ paths:
 target:
   address: 127.0.0.1
   port: 50051
+azure:
+  device_type: cisco-nx-os
 paths:
   - name: test
     yang_path: /test
@@ -138,6 +164,8 @@ paths:
 target:
   address: 127.0.0.1
   port: 50051
+azure:
+  device_type: cisco-nx-os
 paths:
   - name: test
     yang_path: ""
@@ -147,6 +175,8 @@ paths:
 target:
   address: 127.0.0.1
   port: 50051
+azure:
+  device_type: cisco-nx-os
 paths:
   - name: test
     yang_path: /test
@@ -211,5 +241,39 @@ func TestResolveAzureKeys(t *testing.T) {
 	}
 	if sk != "secondary-key" {
 		t.Errorf("secondary = %q, want secondary-key", sk)
+	}
+}
+
+func TestDataTypePrefix(t *testing.T) {
+	tests := []struct {
+		deviceType string
+		want       string
+	}{
+		{"cisco-nx-os", "cisco_nexus"},
+		{"sonic", "sonic"},
+		{"arista-eos", "arista_eos"},       // fallback: hyphen→underscore
+		{"juniper-junos", "juniper_junos"}, // fallback: hyphen→underscore
+	}
+	for _, tt := range tests {
+		t.Run(tt.deviceType, func(t *testing.T) {
+			cfg := &Config{Azure: AzureConfig{DeviceType: tt.deviceType}}
+			got := cfg.DataTypePrefix()
+			if got != tt.want {
+				t.Errorf("DataTypePrefix() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDeviceTypeToPrefix(t *testing.T) {
+	if got := DeviceTypeToPrefix("cisco-nx-os"); got != "cisco_nexus" {
+		t.Errorf("got %q, want cisco_nexus", got)
+	}
+	if got := DeviceTypeToPrefix("sonic"); got != "sonic" {
+		t.Errorf("got %q, want sonic", got)
+	}
+	// Fallback for unknown types
+	if got := DeviceTypeToPrefix("some-new-vendor"); got != "some_new_vendor" {
+		t.Errorf("got %q, want some_new_vendor", got)
 	}
 }

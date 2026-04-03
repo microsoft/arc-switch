@@ -188,9 +188,16 @@ func extractKey(path, key string) string {
 	return path[start : start+end]
 }
 
-// NormalizeInterfaceName converts gNMI interface names (eth1/1) to the
-// format used by current parsers (Eth1/1).
+// NormalizeInterfaceName converts gNMI interface names to a canonical format.
+// Handles both Cisco NX-OS names (eth1/1 → Eth1/1) and SONiC/Dell names
+// (Ethernet0, PortChannel001 — returned as-is since they're already canonical).
 func NormalizeInterfaceName(name string) string {
+	// SONiC names are already in canonical format
+	if strings.HasPrefix(name, "Ethernet") || strings.HasPrefix(name, "PortChannel") ||
+		strings.HasPrefix(name, "Loopback") || strings.HasPrefix(name, "Management") {
+		return name
+	}
+	// Cisco NX-OS names need normalization
 	if strings.HasPrefix(name, "eth") {
 		return "Eth" + name[3:]
 	}

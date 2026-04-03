@@ -6,6 +6,10 @@ import (
 
 const dataTypeMacTable = "cisco_nexus_mac_table"
 
+func init() {
+	Register("mac-table", func() Transformer { return &MacAddressTransformer{} })
+}
+
 type MacAddressTransformer struct{}
 
 func (t *MacAddressTransformer) DataType() string { return dataTypeMacTable }

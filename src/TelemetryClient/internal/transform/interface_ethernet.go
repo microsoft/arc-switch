@@ -8,6 +8,10 @@ import (
 
 const dataTypeInterfaceEthernet = "cisco_nexus_interface_ethernet"
 
+func init() {
+	Register("if-ethernet", func() Transformer { return &InterfaceEthernetTransformer{} })
+}
+
 type InterfaceEthernetTransformer struct{}
 
 func (t *InterfaceEthernetTransformer) DataType() string {

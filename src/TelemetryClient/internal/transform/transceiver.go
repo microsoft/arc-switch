@@ -6,6 +6,10 @@ import (
 
 const dataTypeTransceiver = "cisco_nexus_transceiver"
 
+func init() {
+	Register("transceiver", func() Transformer { return &TransceiverTransformer{} })
+}
+
 type TransceiverTransformer struct{}
 
 func (t *TransceiverTransformer) DataType() string { return dataTypeTransceiver }
