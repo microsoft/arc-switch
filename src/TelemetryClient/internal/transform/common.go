@@ -86,6 +86,10 @@ func GetFloat(m map[string]interface{}, key string) float64 {
 		case int64:
 			return float64(n)
 		case string:
+			// Try parsing as plain decimal first (e.g., "1.73" from NX-OS)
+			if f, err := strconv.ParseFloat(n, 64); err == nil {
+				return f
+			}
 			// Try parsing as base64 float
 			if f, err := DecodeBase64Float32(n); err == nil {
 				return f

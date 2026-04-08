@@ -58,6 +58,41 @@ func (t *NativeTransceiverTransformer) Transform(notifications []gnmi.Notificati
 			msg["cisco_version_id"] = GetString(fcot, "versionId")
 			msg["dom_supported"] = nativeIntVal(fcot, "diagMonType") != 0
 
+			// Extract DOM sensor data when diagnostics monitoring is supported
+			if nativeIntVal(fcot, "diagMonType") != 0 {
+				laneItems := GetMap(fcot, "lane-items")
+				if laneItems != nil {
+					sensors := AsMapSlice(laneItems["FcotSensor-list"])
+
+					domData := map[string]interface{}{}
+					sensorNames := map[string]string{
+						"1": "temperature", "2": "voltage", "3": "current",
+						"4": "tx_power", "5": "rx_power",
+					}
+
+					for _, sensor := range sensors {
+						sensorId := GetString(sensor, "sensorId")
+						name, exists := sensorNames[sensorId]
+						if !exists {
+							continue
+						}
+
+						domData[name+"_instant"] = GetFloat(sensor, "value")
+						domData[name+"_high_alarm"] = GetFloat(sensor, "highAlarm")
+						domData[name+"_high_warn"] = GetFloat(sensor, "highWarn")
+						domData[name+"_low_alarm"] = GetFloat(sensor, "lowAlarm")
+						domData[name+"_low_warn"] = GetFloat(sensor, "lowWarn")
+						domData[name+"_min"] = GetFloat(sensor, "min")
+						domData[name+"_max"] = GetFloat(sensor, "max")
+						domData[name+"_avg"] = GetFloat(sensor, "avg")
+						domData[name+"_alert"] = GetString(sensor, "alert")
+					}
+					if len(domData) > 0 {
+						msg["dom_data"] = domData
+					}
+				}
+			}
+
 			results = append(results, NewCommonFields(dataTypeTransceiver, msg))
 		}
 	}
