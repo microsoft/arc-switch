@@ -37,6 +37,13 @@ func TestRegistryHasAllTransformers(t *testing.T) {
 		"nx-sys-memory",
 		"nx-mac-table",
 		"nx-lldp",
+		"nx-version",
+		"nx-intf-errors",
+		"nx-route-summary",
+		"nx-sys-load",
+		// SONiC native YANG transformers
+		"sonic-platform",
+		"sonic-device-metadata",
 	}
 	sort.Strings(expected)
 

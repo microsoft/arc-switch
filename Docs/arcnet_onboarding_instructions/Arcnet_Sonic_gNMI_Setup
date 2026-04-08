@@ -132,11 +132,12 @@ echo "gNMI collector installed to ${GNMI_INSTALL_DIR}"
 
 cat > "${GNMI_INSTALL_DIR}/env" << GNMIENV_EOF
 # gNMI Collector credentials — sourced by the systemd service.
-GNMI_USER=${GNMI_USER}
-GNMI_PASS=${GNMI_PASS}
-WORKSPACE_ID=${WORKSPACE_ID}
-PRIMARY_KEY=${PRIMARY_KEY}
-SECONDARY_KEY=${SECONDARY_KEY}
+# Values are quoted to handle special characters in passwords/keys.
+GNMI_USER="${GNMI_USER}"
+GNMI_PASS="${GNMI_PASS}"
+WORKSPACE_ID="${WORKSPACE_ID}"
+PRIMARY_KEY="${PRIMARY_KEY}"
+SECONDARY_KEY="${SECONDARY_KEY}"
 GNMIENV_EOF
 
 chmod 600 "${GNMI_INSTALL_DIR}/env"

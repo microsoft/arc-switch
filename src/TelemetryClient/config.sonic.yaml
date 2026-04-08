@@ -148,6 +148,27 @@ paths:
     sample_interval: 300s
 
   # ============================================================
+  # SONiC native YANG — sonic-platform returns ALL temperature,
+  # PSU, and fan data in a single query. No component keys needed.
+  # ============================================================
+  - name: sonic-platform
+    yang_path: /sonic-platform:sonic-platform
+    table: SonicPlatform_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # SONiC native YANG — device metadata (hostname, hwsku, etc.)
+  # ============================================================
+  - name: sonic-device-metadata
+    yang_path: /sonic-device-metadata:sonic-device-metadata
+    table: SonicDeviceMetadata_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
   # Temperature — requires specific component keys (TEMP 1..8).
   # Disabled: temperature data is already available in the
   # platform-inventory response (components include temp sensors).

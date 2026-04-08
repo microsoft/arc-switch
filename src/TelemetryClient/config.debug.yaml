@@ -1,0 +1,42 @@
+# Scoped debug config — only 2 representative metrics for comparing
+# gNMI output vs old CLI cron pipeline.
+
+target:
+  address: 127.0.0.1
+  port: 50051
+  tls:
+    enabled: true
+    skip_verify: true
+  credentials:
+    username_env: GNMI_USER
+    password_env: GNMI_PASS
+
+collection:
+  mode: poll
+  interval: 300s
+  timeout: 30s
+  encoding: JSON
+
+azure:
+  workspace_id_env: WORKSPACE_ID
+  primary_key_env: PRIMARY_KEY
+  secondary_key_env: SECONDARY_KEY
+  device_type: cisco-nx-os
+
+paths:
+  # --- Native Cisco YANG: System Resources (CPU + Memory) ---
+  - name: nx-sys-cpu
+    yang_path: /System/procsys-items/syscpusummary-items
+    table: GnmiTestSystemResources
+    enabled: true
+
+  - name: nx-sys-memory
+    yang_path: /System/procsys-items/sysmem-items
+    table: GnmiTestSystemResources
+    enabled: true
+
+  # --- OpenConfig: Interface Counters (well-understood, good baseline) ---
+  - name: interface-counters
+    yang_path: /openconfig-interfaces:interfaces/interface/state/counters
+    table: GnmiTestInterfaceCounter
+    enabled: true

@@ -11,6 +11,7 @@ type NativeSystemCpuTransformer struct{}
 func init() {
 	Register("nx-sys-cpu", func() Transformer { return &NativeSystemCpuTransformer{} })
 	Register("nx-sys-memory", func() Transformer { return &NativeSystemMemoryTransformer{} })
+	Register("nx-sys-load", func() Transformer { return &NativeSystemLoadTransformer{} })
 }
 
 func (t *NativeSystemCpuTransformer) DataType() string { return dataTypeSystemResources }
@@ -67,6 +68,35 @@ func (t *NativeSystemCpuTransformer) Transform(notifications []gnmi.Notification
 					msg["cpu_history"] = history
 				}
 			}
+		}
+	}
+
+	result := NewCommonFields(dataTypeSystemResources, msg)
+	return []CommonFields{result}, nil
+}
+
+// NativeSystemLoadTransformer handles native Cisco NX-OS YANG load average data
+// from /System/procsys-items/sysload-items.
+type NativeSystemLoadTransformer struct{}
+
+func (t *NativeSystemLoadTransformer) DataType() string { return dataTypeSystemResources }
+
+func (t *NativeSystemLoadTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
+	msg := map[string]interface{}{}
+
+	for _, n := range notifications {
+		for _, u := range n.Updates {
+			vals, ok := u.Value.(map[string]interface{})
+			if !ok {
+				continue
+			}
+
+			msg["load_avg_1min"] = GetFloat(vals, "loadAverage1m")
+			msg["load_avg_5min"] = GetFloat(vals, "loadAverage5m")
+			msg["load_avg_15min"] = GetFloat(vals, "loadAverage15m")
+			msg["load_avg_5sec"] = GetFloat(vals, "loadAverage5sec")
+			msg["processes_running"] = GetInt64(vals, "runProc")
+			msg["processes_total"] = GetInt64(vals, "totalProc")
 		}
 	}
 
