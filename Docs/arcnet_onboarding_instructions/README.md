@@ -64,6 +64,55 @@ mode (requires SmartFabric Director mode). Uses CLI parser + cron.
 For details on adding support for a new switch vendor, see
 [adding_new_vendor.md](adding_new_vendor.md).
 
+## Automated Onboarding (Copilot Skill)
+
+For quick onboarding, use the **arc-onboarding** Copilot skill. Tell
+Copilot something like:
+
+> "Onboard the switch at 10.0.0.1"
+
+The skill will:
+
+1. SSH into the switch and auto-detect the vendor (Cisco NX-OS or SONiC)
+2. Resolve Azure parameters from `az CLI` and environment variables
+3. Fill in the setup script template with all configuration values
+4. Upload and execute the script on the switch (installs Arc agent + gNMI collector)
+5. **Pause and display the `azcmagent connect` command** for you to run
+6. You complete Device Code Flow (DCF) in your browser
+7. Tell the skill to continue — it validates Arc connection + gNMI collector
+
+### Prerequisites
+
+```powershell
+# Azure CLI login
+az login
+
+# Required environment variables
+$env:WORKSPACE_ID = "<your-workspace-id>"
+$env:PRIMARY_KEY   = "<your-primary-key>"
+```
+
+### Direct usage
+
+```powershell
+# Auto-detect vendor
+.\.github\skills\arc-onboarding\onboard-switch.ps1 -SwitchIP "10.0.0.1"
+
+# Specify vendor and credentials
+.\.github\skills\arc-onboarding\onboard-switch.ps1 -SwitchIP "10.0.0.1" `
+  -Vendor cisco -SshUser admin -SshPassword "secret"
+
+# Dry-run: generate filled-in script without executing
+.\.github\skills\arc-onboarding\onboard-switch.ps1 -SwitchIP "10.0.0.1" -DryRun
+```
+
+> [!NOTE]
+> The `azcmagent connect` step requires interactive browser authentication
+> (Device Code Flow). The skill will pause and show you exactly what to run.
+> Once you've completed DCF, tell the skill to continue and it will validate
+> the full setup. In the future, this will be replaced with service principal
+> auth to make the entire flow fully automated.
+
 ## Architecture
 
 The solution consists of several components:
@@ -248,6 +297,10 @@ After the setup script completes, you need to connect the agent to Azure.
 
 The portal will generate a script similar to this:
 
+> [!WARNING]
+> The Azure Portal script uses `wget` which is **not installed** on Cisco
+> NX-OS or some SONiC switches. Replace `wget` with `curl` as shown below.
+
 ```bash
 export subscriptionId="<YOUR_SUBSCRIPTION_ID>";
 export resourceGroup="ARCNET";
@@ -259,9 +312,10 @@ export cloud="AzureCloud";
 
 LINUX_INSTALL_SCRIPT="/tmp/install_linux_azcmagent.sh"
 if [ -f "$LINUX_INSTALL_SCRIPT" ]; then rm -f "$LINUX_INSTALL_SCRIPT"; fi;
-output=$(wget https://gbl.his.arc.azure.com/azcmagent-linux -O "$LINUX_INSTALL_SCRIPT" 2>&1);
-if [ $? != 0 ]; then 
-    wget -qO- --method=PUT --body-data="{\"subscriptionId\":\"$subscriptionId\",\"resourceGroup\":\"$resourceGroup\",\"tenantId\":\"$tenantId\",\"location\":\"$location\",\"correlationId\":\"$correlationId\",\"authType\":\"$authType\",\"operation\":\"onboarding\",\"messageType\":\"DownloadScriptFailed\",\"message\":\"$output\"}" "https://gbl.his.arc.azure.com/log" &> /dev/null || true;
+# NOTE: Azure Portal generates wget here — use curl instead (wget not available on switches)
+output=$(curl -sSL https://gbl.his.arc.azure.com/azcmagent-linux -o "$LINUX_INSTALL_SCRIPT" 2>&1);
+if [ $? != 0 ]; then
+    curl -s -X PUT -d "{\"subscriptionId\":\"$subscriptionId\",\"resourceGroup\":\"$resourceGroup\",\"tenantId\":\"$tenantId\",\"location\":\"$location\",\"correlationId\":\"$correlationId\",\"authType\":\"$authType\",\"operation\":\"onboarding\",\"messageType\":\"DownloadScriptFailed\",\"message\":\"$output\"}" "https://gbl.his.arc.azure.com/log" &> /dev/null || true;
 fi;
 echo "$output";
 bash "$LINUX_INSTALL_SCRIPT";

@@ -141,9 +141,37 @@ paths:
     mode: sample
     sample_interval: 300s
 
+  - name: nx-sys-load
+    yang_path: /System/procsys-items/sysload-items
+    table: GnmiTestSystemResources
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-route-summary
+    yang_path: /System/urib-items/table4-items/Table4-list/sum-items
+    table: GnmiTestRouteSummary
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
   - name: nx-mac-table
     yang_path: /System/mac-items
     table: GnmiTestMacTable
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-version
+    yang_path: /System/showversion-items
+    table: GnmiTestVersion
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-intf-errors
+    yang_path: /System/intf-items/phys-items/PhysIf-list/dbgEtherStats-items
+    table: GnmiTestInterfaceErrors
     enabled: true
     mode: sample
     sample_interval: 300s

@@ -26,7 +26,7 @@ echo ""
 echo "Downloading and installing Dell OS10 parser..."
 
 cd /opt
-wget -q "$PARSER_URL" -O dell-parser.tar.gz
+curl -sSL "$PARSER_URL" -o dell-parser.tar.gz
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to download parser from $PARSER_URL"
     exit 1

@@ -20,7 +20,7 @@ AZURE_TEMP_DIR="/tmp/azure-logger"
 AZCMAGENT_RPM_URL="https://github.com/microsoft/arc-switch/releases/download/v0.0.2-alpha-rpm/azcmagent-1.54.03131-2112.x86_64.rpm"
 
 cd /opt
-wget -q "$AZCMAGENT_RPM_URL" -O azcmagent.rpm
+curl -sSL "$AZCMAGENT_RPM_URL" -o azcmagent.rpm
 if [ $? -eq 0 ]; then
     rpm -Uvh --nopost azcmagent.rpm 2>/dev/null
     ln -sf /opt/azcmagent/bin/azcmagent /usr/bin/azcmagent
@@ -638,7 +638,7 @@ done
 
 # PART 8: DOWNLOAD AND INSTALL PARSER
 
-wget -q "$PARSER_URL" -O parser.tar.gz
+curl -sSL "$PARSER_URL" -o parser.tar.gz
 tar -xzf parser.tar.gz
 rm -f parser.tar.gz
 find /opt/azcmagent -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null

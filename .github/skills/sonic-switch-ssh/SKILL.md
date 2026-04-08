@@ -25,7 +25,7 @@ gnmi-collector and other telemetry tools developed in this repository.
 | Setting  | Env Variable        | Default           |
 |----------|---------------------|-------------------|
 | Host     | `SONIC_SSH_HOST`    | `100.100.47.95`   |
-| User     | `SONIC_SSH_USER`    | `camilose`        |
+| User     | `SONIC_SSH_USER`    | `admin`        |
 | Password | `SONIC_PASSWORD`    | *(from Key Vault)* |
 
 The switch uses **keyboard-interactive** authentication. The password is
@@ -46,7 +46,7 @@ natively — no CLI wrapper needed.
 .\ssh-command.ps1 -Command "show version"
 .\ssh-command.ps1 -Command "docker ps | grep gnmi"
 .\ssh-command.ps1 -Command "ps aux | grep gnmi"
-.\ssh-command.ps1 -Command "ls -la /home/camilose/"
+.\ssh-command.ps1 -Command "ls -la /home/admin/"
 ```
 
 ### `scp-file.ps1` — Transfer files to/from the switch
@@ -54,13 +54,13 @@ natively — no CLI wrapper needed.
 **Upload a new build of gnmi-collector:**
 
 ```powershell
-.\scp-file.ps1 -LocalPath ".\gnmi-collector" -RemotePath "/home/camilose/gnmi-collector" -Direction upload
+.\scp-file.ps1 -LocalPath ".\gnmi-collector" -RemotePath "/home/admin/gnmi-collector" -Direction upload
 ```
 
 **Download a file from the switch:**
 
 ```powershell
-.\scp-file.ps1 -LocalPath ".\remote-file" -RemotePath "/home/camilose/some-file" -Direction download
+.\scp-file.ps1 -LocalPath ".\remote-file" -RemotePath "/home/admin/some-file" -Direction download
 ```
 
 ## Common Workflows
@@ -77,19 +77,19 @@ natively — no CLI wrapper needed.
 2. Upload to the switch:
 
    ```powershell
-   .\scp-file.ps1 -LocalPath ".\gnmi-collector" -RemotePath "/home/camilose/gnmi-collector" -Direction upload
+   .\scp-file.ps1 -LocalPath ".\gnmi-collector" -RemotePath "/home/admin/gnmi-collector" -Direction upload
    ```
 
 3. Make it executable and verify:
 
    ```powershell
-   .\ssh-command.ps1 -BashCommand "chmod +x /home/camilose/gnmi-collector; /home/camilose/gnmi-collector --version"
+   .\ssh-command.ps1 -BashCommand "chmod +x /home/admin/gnmi-collector; /home/admin/gnmi-collector --version"
    ```
 
 4. Stop the old process and start the new one:
 
    ```powershell
-   .\ssh-command.ps1 -BashCommand "pkill gnmi-collector; sleep 1; /home/camilose/gnmi-collector &"
+   .\ssh-command.ps1 -BashCommand "pkill gnmi-collector; sleep 1; /home/admin/gnmi-collector &"
    ```
 
 ### Check switch status
@@ -113,8 +113,10 @@ natively — no CLI wrapper needed.
 
 - The switch runs **Dell OS10** which is SONiC-based. SSH drops into a
   CLI shell (not bash). Use `-BashCommand` for Linux commands.
-- The gnmi-collector binary should be deployed to `/home/camilose/`.
+- The gnmi-collector binary should be deployed to `/home/admin/`.
 - Use `GNMI_USER` / `GNMI_PASS` env vars for gNMI authentication
   (separate from SSH credentials).
 - Always run scripts from the skill's directory or provide the full
   path to the script.
+- Scripts depend on shared modules in `.github/skills/`:
+  `resolve-password.ps1` (Key Vault) and `ssh-helpers.ps1` (SSH/SCP).

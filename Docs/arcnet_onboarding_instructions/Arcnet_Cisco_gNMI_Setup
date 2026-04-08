@@ -20,7 +20,7 @@ GNMI_INSTALL_DIR="/opt/gnmi-collector"
 AZCMAGENT_RPM_URL="https://github.com/microsoft/arc-switch/releases/download/v0.0.2-alpha-rpm/azcmagent-1.54.03131-2112.x86_64.rpm"
 
 cd /opt
-wget -q "$AZCMAGENT_RPM_URL" -O azcmagent.rpm
+curl -sSL "$AZCMAGENT_RPM_URL" -o azcmagent.rpm
 if [ $? -eq 0 ]; then
     rpm -Uvh --nopost azcmagent.rpm 2>/dev/null
     ln -sf /opt/azcmagent/bin/azcmagent /usr/bin/azcmagent
@@ -648,7 +648,7 @@ mkdir -p "$GNMI_TEMP_DIR"
 
 cd "$GNMI_TEMP_DIR" || exit 1
 
-wget -q "$COLLECTOR_URL" -O gnmi-collector.tar.gz
+curl -sSL "$COLLECTOR_URL" -o gnmi-collector.tar.gz
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to download gNMI collector from ${COLLECTOR_URL}"
     exit 1

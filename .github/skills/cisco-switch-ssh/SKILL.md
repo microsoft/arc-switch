@@ -21,7 +21,7 @@ and other telemetry tools developed in this repository.
 | Setting  | Env Variable       | Default           |
 |----------|--------------------|-------------------|
 | Host     | `SWITCH_SSH_HOST`  | `100.71.34.149`   |
-| User     | `SWITCH_SSH_USER`  | `camilose`        |
+| User     | `SWITCH_SSH_USER`  | `admin`        |
 | Password | `SWITCH_PASSWORD`  | *(from Key Vault)* |
 
 The switch uses **keyboard-interactive** authentication. The password is
@@ -109,3 +109,5 @@ unavailable. Requires `az login` for Key Vault access.
   (separate from SSH credentials).
 - Always run scripts from the skill's directory or provide the full
   path to the script.
+- Scripts depend on shared modules in `.github/skills/`:
+  `resolve-password.ps1` (Key Vault) and `ssh-helpers.ps1` (SSH/SCP).

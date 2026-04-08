@@ -46,7 +46,7 @@ echo "==========================================================================
 echo "--- Installing Azure Arc Agent ---"
 
 # SONiC is Debian-based — use the standard installer
-wget -q https://aka.ms/azcmagent -O /tmp/install_linux_azcmagent.sh
+curl -sSL https://aka.ms/azcmagent -o /tmp/install_linux_azcmagent.sh
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to download Arc agent installer"
     exit 1
@@ -97,7 +97,7 @@ mkdir -p "$GNMI_TEMP_DIR"
 
 cd "$GNMI_TEMP_DIR" || exit 1
 
-wget -q "$COLLECTOR_URL" -O gnmi-collector.tar.gz
+curl -sSL "$COLLECTOR_URL" -o gnmi-collector.tar.gz
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to download gNMI collector from ${COLLECTOR_URL}"
     exit 1
