@@ -127,7 +127,7 @@ src/TelemetryClient/
 │   └── collector/
 │       ├── collector.go           # Poll orchestrator (RunOnce)
 │       └── subscriber.go          # Subscribe orchestrator (RunStream)
-├── config.example.yaml            # Cisco NX-OS config
+├── config.cisco.yaml              # Cisco NX-OS config
 ├── config.sonic.yaml              # SONiC config
 └── go.mod
 ```
@@ -138,7 +138,7 @@ src/TelemetryClient/
 
 | Platform | gNMI Support | Port | Encoding | YANG Models | Config File | Status |
 |---|---|---|---|---|---|---|
-| Cisco NX-OS | `feature grpc` | 50051 | JSON | OpenConfig + Cisco native | config.example.yaml | ✅ Validated |
+| Cisco NX-OS | `feature grpc` | 50051 | JSON | OpenConfig + Cisco native | config.cisco.yaml | ✅ Validated |
 | SONiC (Dell Enterprise) | `sonic-gnmi` container | 8080 | JSON_IETF | OpenConfig only | config.sonic.yaml | ✅ Validated |
 | Dell OS10 | Requires SFD mode | — | — | — | — | ❌ Not supported |
 

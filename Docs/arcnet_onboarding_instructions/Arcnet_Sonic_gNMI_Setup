@@ -112,7 +112,7 @@ fi
 cp gnmi-collector "$GNMI_INSTALL_DIR/gnmi-collector"
 chmod +x "$GNMI_INSTALL_DIR/gnmi-collector"
 
-# Install SONiC config (not the Cisco config.example.yaml)
+# Install SONiC config (not the Cisco config.cisco.yaml)
 if [ ! -f "$GNMI_INSTALL_DIR/config.yaml" ]; then
     cp config.sonic.yaml "$GNMI_INSTALL_DIR/config.yaml"
     echo "Installed config.sonic.yaml as config.yaml"

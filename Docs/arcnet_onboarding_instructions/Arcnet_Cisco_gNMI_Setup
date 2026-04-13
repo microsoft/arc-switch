@@ -23,6 +23,18 @@ cd /opt
 curl -sSL "$AZCMAGENT_RPM_URL" -o azcmagent.rpm
 if [ $? -eq 0 ]; then
     rpm -Uvh --nopost azcmagent.rpm 2>/dev/null
+    # NX-OS installs RPM contents to /bootflash/rpm_test/ instead of /.
+    # Relocate to the expected paths if needed.
+    if [ -d /bootflash/rpm_test/opt/azcmagent ] && [ ! -f /opt/azcmagent/bin/azcmagent ]; then
+        echo "Relocating RPM contents from /bootflash/rpm_test/ ..."
+        cp -r /bootflash/rpm_test/opt/azcmagent /opt/azcmagent
+        cp -r /bootflash/rpm_test/opt/GC_Ext /opt/GC_Ext 2>/dev/null
+        cp -r /bootflash/rpm_test/opt/GC_Service /opt/GC_Service 2>/dev/null
+        cp -r /bootflash/rpm_test/var/opt/azcmagent /var/opt/azcmagent 2>/dev/null
+    fi
+    # Ensure all required azcmagent subdirectories exist (RPM relocation may miss empty dirs)
+    mkdir -p /var/opt/azcmagent/{certs,log,tokens,socks,arcproxy}
+    chmod 700 /var/opt/azcmagent/certs /var/opt/azcmagent/tokens
     ln -sf /opt/azcmagent/bin/azcmagent /usr/bin/azcmagent
     rm -f azcmagent.rpm
 fi
@@ -643,37 +655,40 @@ echo ""
 echo "--- Installing gNMI Telemetry Collector ---"
 
 mkdir -p "$GNMI_INSTALL_DIR"
-GNMI_TEMP_DIR="/tmp/gnmi-collector-install"
-mkdir -p "$GNMI_TEMP_DIR"
 
-cd "$GNMI_TEMP_DIR" || exit 1
-
-curl -sSL "$COLLECTOR_URL" -o gnmi-collector.tar.gz
-if [ $? -ne 0 ]; then
-    echo "ERROR: Failed to download gNMI collector from ${COLLECTOR_URL}"
-    exit 1
-fi
-
-tar -xzf gnmi-collector.tar.gz
-if [ $? -ne 0 ]; then
-    echo "ERROR: Failed to extract gNMI collector archive"
-    exit 1
-fi
-
-cp gnmi-collector "$GNMI_INSTALL_DIR/gnmi-collector"
-chmod +x "$GNMI_INSTALL_DIR/gnmi-collector"
-
-if [ ! -f "$GNMI_INSTALL_DIR/config.yaml" ]; then
-    cp config.example.yaml "$GNMI_INSTALL_DIR/config.yaml"
-    echo "Installed default config.yaml"
+# If collector binary already exists, skip download
+if [ -x "$GNMI_INSTALL_DIR/gnmi-collector" ]; then
+    echo "gNMI collector already installed at ${GNMI_INSTALL_DIR}/gnmi-collector — skipping download"
+    "$GNMI_INSTALL_DIR/gnmi-collector" --version 2>/dev/null
 else
-    echo "Existing config.yaml preserved (not overwritten)"
+    GNMI_TEMP_DIR="/tmp/gnmi-collector-install"
+    mkdir -p "$GNMI_TEMP_DIR"
+    cd "$GNMI_TEMP_DIR" || exit 1
+
+    echo "Downloading gNMI collector from ${COLLECTOR_URL} ..."
+    curl -sSL -f "$COLLECTOR_URL" -o gnmi-collector.tar.gz
+    if [ $? -ne 0 ]; then
+        echo "WARNING: Failed to download gNMI collector from ${COLLECTOR_URL}"
+        echo "         You can manually upload the binary to ${GNMI_INSTALL_DIR}/gnmi-collector later."
+    else
+        tar -xzf gnmi-collector.tar.gz
+        if [ $? -ne 0 ]; then
+            echo "WARNING: Failed to extract gNMI collector archive"
+        else
+            cp gnmi-collector "$GNMI_INSTALL_DIR/gnmi-collector"
+            chmod +x "$GNMI_INSTALL_DIR/gnmi-collector"
+            if [ ! -f "$GNMI_INSTALL_DIR/config.yaml" ]; then
+                cp config.cisco.yaml "$GNMI_INSTALL_DIR/config.yaml" 2>/dev/null
+                echo "Installed default config.yaml"
+            else
+                echo "Existing config.yaml preserved (not overwritten)"
+            fi
+            echo "gNMI collector installed to ${GNMI_INSTALL_DIR}"
+            "$GNMI_INSTALL_DIR/gnmi-collector" --version 2>/dev/null
+        fi
+    fi
+    rm -rf "$GNMI_TEMP_DIR"
 fi
-
-rm -rf "$GNMI_TEMP_DIR"
-
-echo "gNMI collector installed to ${GNMI_INSTALL_DIR}"
-"$GNMI_INSTALL_DIR/gnmi-collector" --version
 
 find /opt/azcmagent -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null
 find /var/tmp -name "rpm-tmp.*" -type f -exec chmod +x {} \; 2>/dev/null

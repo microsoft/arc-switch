@@ -97,15 +97,16 @@ switches.
 1. Generates a version number using `gnmi-MAJOR.YYMM.INCREMENT` tag scheme
 2. Runs all unit tests in `src/TelemetryClient/`
 3. Cross-compiles the collector for Linux AMD64 (static binary)
-4. Packages the binary with `config.example.yaml` and `gnmi-collectord`
-   init.d script
+4. Packages the binary with `config.cisco.yaml`, `config.sonic.yaml`, and
+   `gnmi-collectord` init.d script
 5. Creates a git tag (`gnmi-X.YYMM.N`) and GitHub release
 
 **Generated Assets**:
 - `gnmi-collector-VERSION-linux-amd64.tar.gz` containing:
   - `gnmi-collector` executable
-  - `config.example.yaml` reference configuration
-  - `gnmi-collectord` init.d service script
+  - `config.cisco.yaml` — Cisco NX-OS reference configuration (20 paths)
+  - `config.sonic.yaml` — Dell Enterprise SONiC reference configuration (14 paths)
+  - `gnmi-collectord` init.d service script (Cisco)
   - `README.md` with setup instructions
 
 ## Notes

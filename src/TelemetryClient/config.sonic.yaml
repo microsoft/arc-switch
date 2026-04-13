@@ -215,6 +215,6 @@ paths:
   # ============================================================
   # NOTE: SONiC does not use Cisco-native /System/... YANG paths.
   # All telemetry is collected via OpenConfig models above.
-  # The nx-* paths from config.example.yaml should NOT be enabled
+  # The nx-* paths from config.cisco.yaml should NOT be enabled
   # for SONiC switches.
   # ============================================================

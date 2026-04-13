@@ -103,7 +103,8 @@ jobs:
         cp src/TelemetryClient/gnmi-collector "${DIST}/"
 
         # Configuration and deployment files
-        cp src/TelemetryClient/config.example.yaml "${DIST}/"
+        cp src/TelemetryClient/config.cisco.yaml "${DIST}/"
+        cp src/TelemetryClient/config.sonic.yaml "${DIST}/"
         cp tools/gnmi-collector/gnmi-collectord "${DIST}/"
 
         # README
@@ -112,8 +113,12 @@ jobs:
 
         Version: ${VERSION}
 
-        Collects telemetry from Cisco Nexus switches via gNMI/YANG and sends
+        Collects telemetry from network switches via gNMI/YANG and sends
         structured JSON to Azure Log Analytics.
+
+        Supported platforms:
+        - Cisco NX-OS (config.cisco.yaml, port 50051, JSON encoding)
+        - Dell Enterprise SONiC (config.sonic.yaml, port 8080, JSON_IETF encoding)
 
         ## Quick Start
 
@@ -122,19 +127,29 @@ jobs:
         tar -xzf gnmi-collector-${VERSION}-linux-amd64.tar.gz
 
         # Copy binary
+        mkdir -p /opt/gnmi-collector
         cp gnmi-collector /opt/gnmi-collector/gnmi-collector
 
-        # Edit configuration
-        cp config.example.yaml /opt/gnmi-collector/config.yaml
-        # Set credentials as environment variables (see config.example.yaml)
+        # Copy the config for your platform
+        cp config.cisco.yaml /opt/gnmi-collector/config.yaml   # Cisco NX-OS
+        # cp config.sonic.yaml /opt/gnmi-collector/config.yaml # SONiC
+
+        # Set credentials as environment variables
+        export GNMI_USER="admin"
+        export GNMI_PASS="your-password"
+        export WORKSPACE_ID="your-workspace-id"
+        export PRIMARY_KEY="your-primary-key"
 
         # Test with dry-run
         /opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
 
-        # Install init.d service
+        # Install service (Cisco NX-OS — init.d)
         cp gnmi-collectord /etc/init.d/gnmi-collectord
         chmod +x /etc/init.d/gnmi-collectord
         /etc/init.d/gnmi-collectord start
+
+        # Install service (SONiC — systemd)
+        # See Arcnet_Sonic_gNMI_Setup for systemd unit file
         ```
 
         ## CLI Flags
@@ -152,8 +167,9 @@ jobs:
         ## Files
 
         - `gnmi-collector` — Collector binary (linux-amd64)
-        - `config.example.yaml` — Reference configuration with all YANG paths
-        - `gnmi-collectord` — init.d service script for daemon management
+        - `config.cisco.yaml` — Cisco NX-OS configuration (20 YANG paths)
+        - `config.sonic.yaml` — Dell Enterprise SONiC configuration (14 YANG paths)
+        - `gnmi-collectord` — init.d service script for daemon management (Cisco)
         EOF
 
         # Fix the inline variable in README
@@ -212,44 +228,61 @@ jobs:
 
         ## 🎯 Overview
 
-        Collects telemetry from Cisco Nexus switches via gNMI/YANG and sends
+        Collects telemetry from network switches via gNMI/YANG and sends
         structured JSON to Azure Log Analytics. Replaces the cron-based CLI
         scraping pipeline with structured YANG data collection.
+
+        Supported platforms:
+        - **Cisco NX-OS** — 20 YANG paths, ~97% parity with CLI parser
+        - **Dell Enterprise SONiC** — 14 YANG paths, gNMI-native
 
         ## 📦 Package Contents
 
         - **File**: \`gnmi-collector-${VERSION}-linux-amd64.tar.gz\`
         - **Binary**: \`gnmi-collector\` (static linux-amd64, ~12 MB)
-        - **Config**: \`config.example.yaml\` with all YANG paths
-        - **Service**: \`gnmi-collectord\` init.d script
+        - **Cisco Config**: \`config.cisco.yaml\` — 20 YANG paths
+        - **SONiC Config**: \`config.sonic.yaml\` — 14 YANG paths
+        - **Service**: \`gnmi-collectord\` init.d script (Cisco)
 
         ## 🔧 Telemetry Paths
 
-        Collects 16 YANG paths covering:
-        - Interface counters, status, and errors
-        - BGP neighbor state
+        Collects YANG paths covering:
+        - Interface counters, status, Ethernet, and errors
+        - BGP neighbor state and summary
         - LLDP neighbors
-        - Transceiver DOM
-        - Environment (temperature, power)
+        - Transceiver DOM (optics data)
+        - Environment (temperature, power, fans)
         - System resources (CPU, memory, uptime)
-        - ARP and MAC tables
-        - Inventory
+        - ARP and MAC address tables
+        - IP routes and route summary
+        - Hardware inventory and version
 
         ## 🚀 Quick Start
 
         \`\`\`bash
         tar -xzf gnmi-collector-${VERSION}-linux-amd64.tar.gz
+        mkdir -p /opt/gnmi-collector
         cp gnmi-collector /opt/gnmi-collector/gnmi-collector
-        cp config.example.yaml /opt/gnmi-collector/config.yaml
-        # Edit config.yaml and set environment variables
+        # Use config.cisco.yaml for Cisco NX-OS, config.sonic.yaml for SONiC
+        cp config.cisco.yaml /opt/gnmi-collector/config.yaml
+        # Set GNMI_USER, GNMI_PASS, WORKSPACE_ID, PRIMARY_KEY env vars
         /opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
         \`\`\`
 
-        ## 📋 Requirements
+        ## 📋 Platform Requirements
 
+        **Cisco NX-OS**:
         - NX-OS 9.3(x)+ with \`feature grpc\` enabled
         - \`grpc use-vrf default\` for single-VRF deployment
+        - Port 50051, JSON encoding
+
+        **Dell Enterprise SONiC**:
+        - SONiC with sonic-gnmi container running
+        - Port 8080, JSON_IETF encoding
+
+        **Both**:
         - Azure Log Analytics workspace credentials
+        - x86_64 Linux (amd64)
         EOF
 
     - name: Create Release
