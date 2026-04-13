@@ -230,3 +230,117 @@ function Send-ScpFile {
         Remove-AskPassFile -Path $askpass
     }
 }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Cisco Go SSH tool — fallback for NX-OS keyboard-interactive auth
+# Standard SSH ASKPASS does not work reliably with NX-OS. This uses a Go-based
+# SSH client that handles both Password and KeyboardInteractive auth methods.
+# ─────────────────────────────────────────────────────────────────────────────
+
+function Find-CiscoSshTool {
+    <#
+    .SYNOPSIS
+        Finds or builds the cisco-ssh Go tool for NX-OS SSH access.
+    #>
+    $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..\")).Path
+    $toolDir  = Join-Path $repoRoot "tools\cisco-ssh"
+    $toolExe  = Join-Path $toolDir  "cisco-ssh.exe"
+
+    if (Test-Path $toolExe) { return $toolExe }
+
+    # Auto-build if Go is available and source exists
+    $mainGo = Join-Path $toolDir "main.go"
+    if ((Test-Path $mainGo) -and (Get-Command go -ErrorAction SilentlyContinue)) {
+        Write-Host "  Building cisco-ssh tool..." -ForegroundColor DarkGray
+        Push-Location $toolDir
+        try {
+            go build -ldflags="-s -w" -o cisco-ssh.exe . 2>&1 | Out-Null
+            if (Test-Path $toolExe) { return $toolExe }
+        }
+        finally { Pop-Location }
+    }
+
+    throw "cisco-ssh tool not found at $toolExe. Build it with: cd tools/cisco-ssh && go build -o cisco-ssh.exe ."
+}
+
+function Invoke-CiscoSshCommand {
+    <#
+    .SYNOPSIS
+        Executes a command on a Cisco NX-OS switch using the Go SSH tool.
+    .DESCRIPTION
+        Uses the cisco-ssh Go tool which handles keyboard-interactive auth
+        that standard SSH ASKPASS cannot handle on NX-OS.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$User,
+        [Parameter(Mandatory)][string]$HostName,
+        [Parameter(Mandatory)][string]$Password,
+        [Parameter(Mandatory)][string]$Command,
+        [int]$Timeout = 30,
+        [string[]]$ExtraFilterPatterns = @()
+    )
+
+    $toolExe = Find-CiscoSshTool
+
+    $prevHost = $env:SSH_HOST; $prevUser = $env:SSH_USER; $prevPass = $env:SSH_PASS
+    try {
+        $env:SSH_HOST = $HostName
+        $env:SSH_USER = $User
+        $env:SSH_PASS = $Password
+
+        $output = & $toolExe $Command 2>&1
+        $exitCode = $LASTEXITCODE
+
+        $filtered = $output | Remove-SshNoise -ExtraPatterns $ExtraFilterPatterns
+        $filtered
+
+        if ($exitCode -ne 0) {
+            Write-Error "Cisco SSH command failed with exit code $exitCode"
+            exit $exitCode
+        }
+    }
+    finally {
+        $env:SSH_HOST = $prevHost; $env:SSH_USER = $prevUser; $env:SSH_PASS = $prevPass
+    }
+}
+
+function Send-CiscoSshFile {
+    <#
+    .SYNOPSIS
+        Uploads a file to a Cisco NX-OS switch using the Go SSH tool.
+    .DESCRIPTION
+        Uses stdin pipe via "run bash cat > path" because NX-OS does not
+        support the SCP subsystem.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$User,
+        [Parameter(Mandatory)][string]$HostName,
+        [Parameter(Mandatory)][string]$Password,
+        [Parameter(Mandatory)][string]$LocalPath,
+        [Parameter(Mandatory)][string]$RemotePath
+    )
+
+    if (-not (Test-Path $LocalPath)) {
+        throw "Local file not found: $LocalPath"
+    }
+
+    $toolExe = Find-CiscoSshTool
+
+    $prevHost = $env:SSH_HOST; $prevUser = $env:SSH_USER; $prevPass = $env:SSH_PASS
+    try {
+        $env:SSH_HOST = $HostName
+        $env:SSH_USER = $User
+        $env:SSH_PASS = $Password
+
+        Write-Host "Uploading $LocalPath -> ${HostName}:${RemotePath}"
+        & $toolExe upload $LocalPath $RemotePath 2>&1
+
+        if ($LASTEXITCODE -ne 0) {
+            throw "Cisco SSH upload failed with exit code $LASTEXITCODE"
+        }
+        Write-Host "Transfer complete."
+    }
+    finally {
+        $env:SSH_HOST = $prevHost; $env:SSH_USER = $prevUser; $env:SSH_PASS = $prevPass
+    }
+}

@@ -1,0 +1,148 @@
+#!/bin/bash
+# /etc/init.d/gnmi-collectord
+#
+# init.d service script for the gNMI telemetry collector daemon.
+# Manages the gnmi-collector process running in poll mode (periodic gNMI Get).
+#
+# Usage: /etc/init.d/gnmi-collectord {start|stop|restart|status}
+#
+# Environment variables (set in /etc/environment or /opt/gnmi-collector/env):
+#   GNMI_USER       - NX-OS username for gNMI authentication
+#   GNMI_PASS       - NX-OS password for gNMI authentication
+#   WORKSPACE_ID    - Azure Log Analytics workspace ID
+#   PRIMARY_KEY     - Azure Log Analytics primary shared key
+#   SECONDARY_KEY   - Azure Log Analytics secondary shared key (optional)
+
+DAEMON_NAME="gnmi-collector"
+INSTALL_DIR="/opt/gnmi-collector"
+DAEMON_PATH="${INSTALL_DIR}/gnmi-collector"
+CONFIG_PATH="${INSTALL_DIR}/config.yaml"
+ENV_FILE="${INSTALL_DIR}/env"
+PIDFILE="/var/run/gnmi-collector.pid"
+LOGFILE="/var/log/gnmi-collector.log"
+MAX_LOG_SIZE=10485760  # 10 MB
+
+if [ ! -x "$DAEMON_PATH" ]; then
+    echo "ERROR: ${DAEMON_NAME} binary not found at ${DAEMON_PATH}"
+    exit 1
+fi
+
+if [ ! -f "$CONFIG_PATH" ]; then
+    echo "ERROR: config file not found at ${CONFIG_PATH}"
+    exit 1
+fi
+
+rotate_log() {
+    if [ -f "$LOGFILE" ]; then
+        local size
+        size=$(stat -f%z "$LOGFILE" 2>/dev/null || stat -c%s "$LOGFILE" 2>/dev/null)
+        if [ "$size" -gt "$MAX_LOG_SIZE" ] 2>/dev/null; then
+            mv "$LOGFILE" "${LOGFILE}.old"
+        fi
+    fi
+}
+
+start() {
+    if [ -f "$PIDFILE" ] && ps -p "$(cat "$PIDFILE")" > /dev/null 2>&1; then
+        echo "${DAEMON_NAME} is already running (PID $(cat "$PIDFILE"))"
+        return 0
+    fi
+
+    # Clean up stale PID file
+    rm -f "$PIDFILE"
+
+    # Kill any orphaned instances
+    pkill -f "${DAEMON_PATH}" 2>/dev/null
+    sleep 1
+
+    mkdir -p "$(dirname "$LOGFILE")"
+    rotate_log
+
+    # Load environment variables
+    [ -f /etc/environment ] && source /etc/environment
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+
+    # Validate required credentials
+    if [ -z "$GNMI_USER" ] || [ -z "$GNMI_PASS" ]; then
+        echo "ERROR: GNMI_USER and GNMI_PASS must be set in ${ENV_FILE} or /etc/environment"
+        return 1
+    fi
+    if [ -z "$WORKSPACE_ID" ] || [ -z "$PRIMARY_KEY" ]; then
+        echo "ERROR: WORKSPACE_ID and PRIMARY_KEY must be set in ${ENV_FILE} or /etc/environment"
+        return 1
+    fi
+
+    echo "Starting ${DAEMON_NAME}..." >> "$LOGFILE"
+
+    # Start the collector in poll mode (daemon with internal ticker).
+    # The binary handles SIGTERM for graceful shutdown.
+    nohup "$DAEMON_PATH" --config "$CONFIG_PATH" >> "$LOGFILE" 2>&1 &
+    PID=$!
+    echo $PID > "$PIDFILE"
+
+    # Wait briefly and verify it started
+    sleep 3
+    if ps -p $PID > /dev/null 2>&1; then
+        echo "${DAEMON_NAME} started (PID ${PID})"
+        return 0
+    else
+        echo "ERROR: ${DAEMON_NAME} failed to start. Check ${LOGFILE}"
+        rm -f "$PIDFILE"
+        return 1
+    fi
+}
+
+stop() {
+    if [ ! -f "$PIDFILE" ]; then
+        echo "${DAEMON_NAME} is not running (no PID file)"
+        return 0
+    fi
+
+    local PID
+    PID=$(cat "$PIDFILE")
+
+    if ! ps -p "$PID" > /dev/null 2>&1; then
+        echo "${DAEMON_NAME} is not running (stale PID file)"
+        rm -f "$PIDFILE"
+        return 0
+    fi
+
+    echo "Stopping ${DAEMON_NAME} (PID ${PID})..."
+
+    # Send SIGTERM for graceful shutdown (collector handles this)
+    kill "$PID" 2>/dev/null
+    
+    # Wait up to 15 seconds for graceful exit
+    for i in $(seq 1 15); do
+        if ! ps -p "$PID" > /dev/null 2>&1; then
+            echo "${DAEMON_NAME} stopped"
+            rm -f "$PIDFILE"
+            return 0
+        fi
+        sleep 1
+    done
+
+    # Force kill if still running
+    echo "WARNING: ${DAEMON_NAME} did not stop gracefully, forcing..."
+    kill -9 "$PID" 2>/dev/null
+    rm -f "$PIDFILE"
+    echo "${DAEMON_NAME} killed"
+}
+
+status() {
+    if [ -f "$PIDFILE" ] && ps -p "$(cat "$PIDFILE")" > /dev/null 2>&1; then
+        echo "${DAEMON_NAME} is running (PID $(cat "$PIDFILE"))"
+        return 0
+    else
+        echo "${DAEMON_NAME} is stopped"
+        return 3
+    fi
+}
+
+case "$1" in
+    start)   start ;;
+    stop)    stop ;;
+    restart) stop; sleep 2; start ;;
+    status)  status ;;
+    *)       echo "Usage: $0 {start|stop|restart|status}"; exit 1 ;;
+esac

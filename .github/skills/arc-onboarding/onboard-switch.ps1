@@ -73,6 +73,9 @@ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..")).Path
 function Resolve-SshPassword {
     if ($SshPassword) { return $SshPassword }
 
+    # For Cisco, try GNMI_PASS first (different credentials than Key Vault)
+    if ($Vendor -eq "cisco" -and $env:GNMI_PASS) { return $env:GNMI_PASS }
+
     $resolveScript = Join-Path $PSScriptRoot "..\resolve-password.ps1"
     if (Test-Path $resolveScript) {
         try {
@@ -92,17 +95,49 @@ function Resolve-SshPassword {
 $ciscoFilters = @('^hostname ', '^BuildVersion:')
 
 # Wrapper that joins output into a single string (for variable assignment)
+# Uses the Go SSH tool for Cisco (ASKPASS doesn't work with NX-OS keyboard-interactive auth)
 function Invoke-SwitchSsh {
     param([string]$Command, [int]$Timeout = 30)
-    $extra = if ($Vendor -eq "cisco") { $ciscoFilters } else { @() }
-    $result = Invoke-SshCommand `
-        -User $SshUser `
-        -HostName $SwitchIP `
-        -Password $script:password `
-        -Command $Command `
-        -Timeout $Timeout `
-        -ExtraFilterPatterns $extra
+    if ($Vendor -eq "cisco") {
+        $result = Invoke-CiscoSshCommand `
+            -User $SshUser `
+            -HostName $SwitchIP `
+            -Password $script:password `
+            -Command $Command `
+            -Timeout $Timeout `
+            -ExtraFilterPatterns $ciscoFilters
+    } else {
+        $extra = @()
+        $result = Invoke-SshCommand `
+            -User $SshUser `
+            -HostName $SwitchIP `
+            -Password $script:password `
+            -Command $Command `
+            -Timeout $Timeout `
+            -ExtraFilterPatterns $extra
+    }
     return ($result -join "`n")
+}
+
+# Wrapper for file upload — uses Go SSH tool for Cisco (SCP subsystem not available on NX-OS)
+function Send-SwitchFile {
+    param([string]$LocalPath, [string]$RemotePath)
+    if ($Vendor -eq "cisco") {
+        Send-CiscoSshFile `
+            -User $SshUser `
+            -HostName $SwitchIP `
+            -Password $script:password `
+            -LocalPath $LocalPath `
+            -RemotePath $RemotePath
+    } else {
+        Send-ScpFile `
+            -User $SshUser `
+            -HostName $SwitchIP `
+            -Password $script:password `
+            -LocalPath $LocalPath `
+            -RemotePath $RemotePath `
+            -Direction "upload"
+    }
 }
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -148,6 +183,19 @@ if (-not $Vendor) {
 }
 
 Write-Host "  Vendor: $Vendor" -ForegroundColor Green
+
+# After vendor detection, adjust credentials if defaults don't match the vendor.
+# Cisco NX-OS typically uses GNMI_USER/GNMI_PASS (not admin/KeyVault).
+if ($Vendor -eq "cisco") {
+    if ($SshUser -eq "admin" -and $env:GNMI_USER) {
+        $SshUser = $env:GNMI_USER
+        Write-Host "  Adjusted SSH user to '$SshUser' (from GNMI_USER)" -ForegroundColor DarkGray
+    }
+    if (-not $SshPassword -and $env:GNMI_PASS) {
+        $script:password = $env:GNMI_PASS
+        Write-Host "  Adjusted SSH password from GNMI_PASS" -ForegroundColor DarkGray
+    }
+}
 
 # ═════════════════════════════════════════════════════════════════════════════
 # STEP 3: Get switch hostname
@@ -262,9 +310,10 @@ if ($remaining.Count -gt 0) {
     Write-Warning "Unfilled placeholders remain: $($remaining -join ', ')"
 }
 
-# Write to temp file
+# Write to temp file with Unix line endings (LF only — no CR)
+$script = $script -replace "`r`n", "`n" -replace "`r", "`n"
 $tempScript = Join-Path $env:TEMP "arcnet-setup-$Vendor-$($SwitchIP -replace '\.', '-').sh"
-Set-Content -Path $tempScript -Value $script -NoNewline -Encoding utf8
+[System.IO.File]::WriteAllText($tempScript, $script, [System.Text.UTF8Encoding]::new($false))
 Write-Host "  Generated: $tempScript" -ForegroundColor Green
 Write-Host "  Vendor:    $Vendor ($((Get-Item $tempScript).Length / 1KB |ForEach-Object { '{0:N0} KB' -f $_ }))" -ForegroundColor Green
 
@@ -306,20 +355,15 @@ if ($Vendor -eq "cisco") {
 
 # Upload
 Write-Host "  Uploading to ${SwitchIP}:${remotePath}..."
-Send-ScpFile `
-    -User $SshUser `
-    -HostName $SwitchIP `
-    -Password $script:password `
-    -LocalPath $tempScript `
-    -RemotePath $remotePath `
-    -Direction "upload"
+Send-SwitchFile -LocalPath $tempScript -RemotePath $remotePath
 Write-Host "  Upload complete." -ForegroundColor Green
 
 # Execute
 Write-Host "  Executing setup script (this may take a few minutes)..."
 if ($Vendor -eq "cisco") {
-    # Cisco: need to copy from bootflash to /tmp, then run as root via bash
-    $execOutput = Invoke-SwitchSsh -Command "run bash sudo bash -c 'cp /bootflash$remotePath $remotePath 2>/dev/null; chmod +x $remotePath; bash $remotePath'" -Timeout 300
+    # Go SSH tool uploads directly to /tmp via stdin pipe — no bootflash copy needed.
+    # Run as root via sudo bash.
+    $execOutput = Invoke-SwitchSsh -Command "run bash sudo bash $remotePath" -Timeout 300
 } else {
     $execOutput = Invoke-SwitchSsh -Command "sudo bash $remotePath" -Timeout 300
 }
