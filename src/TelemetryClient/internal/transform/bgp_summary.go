@@ -1,6 +1,7 @@
 package transform
 
 import (
+	"strconv"
 	"strings"
 
 	"gnmi-collector/internal/gnmi"
@@ -176,6 +177,14 @@ func toInt64(v interface{}) (int64, bool) {
 		return int64(n), true
 	case int64:
 		return n, true
+	case string:
+		if n == "" {
+			return 0, false
+		}
+		if i, err := strconv.ParseInt(n, 10, 64); err == nil {
+			return i, true
+		}
+		return 0, false
 	default:
 		return 0, false
 	}

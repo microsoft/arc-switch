@@ -111,6 +111,8 @@ paths:
     enabled: true
     mode: sample
     sample_interval: 300s
+    # NOTE: vrf_local_as is not available at the Peer-list level in NX-OS YANG.
+    # It is provided in the GnmiTestBgpGlobal table (from bgp-global OC path).
     # NOTE: on_change not supported — see interface-status comment above.
 
   - name: nx-env-sensor
