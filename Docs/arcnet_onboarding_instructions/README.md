@@ -108,6 +108,14 @@ Each platform has a self-contained setup script. The workflow is the same for al
 
 **What it installs**: Azure Arc agent (via RPM) + gNMI telemetry collector + init.d services
 
+> **Note on Azure Arc agent RPM**: The setup script uses an Arc agent RPM
+> packaged at tag `v0.0.2-alpha-rpm`. Despite the tag name, this is the
+> validated and tested version (`azcmagent 1.54.03131`) for NX-OS switches.
+> The "alpha" label reflects the packaging process, not the agent stability —
+> the agent itself is the standard Microsoft Azure Arc release. NX-OS requires
+> a repackaged RPM because the standard installer (`install_linux_azcmagent.sh`)
+> depends on `systemd` and `apt`/`dnf`, which are not available on NX-OS.
+
 **Platform requirements**:
 - NX-OS 9.3(x) or later
 - `feature grpc` enabled on the switch

@@ -459,12 +459,12 @@ domain-level attributes like `asn`. Both approaches were attempted:
 1. **Peer-level `asn`** — field exists but is empty at this level
 2. **Dom-list level subscription** — NX-OS returns `[]interface{}` (children only), not a map with `asn`
 
-**Workaround**: The `local_as` is available per VRF in the `GnmiTestBgpGlobal` table
+**Workaround**: The `local_as` is available per VRF in the `CiscoBgpGlobal_CL` table
 (value: `64781`). A KQL join on `vrf_name` provides the same data:
 
 ```kql
-GnmiTestBgpSummary
-| join kind=leftouter (GnmiTestBgpGlobal | project vrf_name, vrf_local_as=local_as) on vrf_name
+CiscoBgpSummary_CL
+| join kind=leftouter (CiscoBgpGlobal_CL | project vrf_name, vrf_local_as=local_as) on vrf_name
 ```
 
 ---

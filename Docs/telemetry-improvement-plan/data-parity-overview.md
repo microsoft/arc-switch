@@ -55,7 +55,7 @@ exists, compares field-by-field coverage.
 | **QoS / Class Map** | OpenConfig QoS models exist but no vendor implements them via gNMI |
 | **Power aggregations** (total_grid_*, total_power_*) | CLI-only computed values, not raw device data |
 | **vmalloc** | Linux kernel metric, not exposed via any YANG model |
-| **Table naming** — `GnmiTest*` prefix | Rename to production names when deploying to production |
+| **Table naming** — `Cisco*_CL` prefix (Cisco), `Sonic*_CL` prefix (SONiC) | Production naming convention matching Azure Log Analytics `_CL` suffix |
 
 ---
 

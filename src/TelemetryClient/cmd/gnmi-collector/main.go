@@ -95,7 +95,11 @@ func main() {
 	case *output != "":
 		log.Printf("Mode: file output → %s (for external Azure sender)", *output)
 	default:
-		log.Printf("Mode: direct Azure POST (workspace %s...)", wsID[:8])
+		displayID := wsID
+		if len(wsID) > 8 {
+			displayID = wsID[:8]
+		}
+		log.Printf("Mode: direct Azure POST (workspace %s...)", displayID)
 	}
 
 	// Create collector

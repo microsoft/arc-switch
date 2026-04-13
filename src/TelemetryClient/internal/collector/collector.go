@@ -115,7 +115,10 @@ func (c *Collector) RunOnce() error {
 			for _, e := range te.entries {
 				raw, _ := json.Marshal(e)
 				var m map[string]interface{}
-				json.Unmarshal(raw, &m)
+				if err := json.Unmarshal(raw, &m); err != nil {
+					log.Printf("WARN: unmarshal entry for %s: %v", te.table, err)
+					continue
+				}
 				batch = append(batch, m)
 			}
 			if err := c.logger.Send(te.table, batch); err != nil {
@@ -332,7 +335,10 @@ func (c *Collector) writeTransformed(table string, entries []transform.CommonFie
 	for _, e := range entries {
 		raw, _ := json.Marshal(e)
 		var m map[string]interface{}
-		json.Unmarshal(raw, &m)
+		if err := json.Unmarshal(raw, &m); err != nil {
+			log.Printf("WARN: unmarshal entry for %s: %v", table, err)
+			continue
+		}
 		batch = append(batch, m)
 	}
 

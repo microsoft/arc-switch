@@ -180,7 +180,7 @@ verified on both switches with zero regressions.
 |---|---|---|
 | TLS cert lifecycle (Cisco) | ⚠️ Manual | 825-day cert in place; needs automated rotation |
 | Security approval for `grpc use-vrf default` | 🔲 Pending | Required before production deployment |
-| Production table rename | 🔲 Pending | `GnmiTest*` → production table names |
+| Production table rename | ✅ Done | `GnmiTest*` → `Cisco*_CL` production table names |
 | Credential management | 🔲 Pending | Move beyond env vars to vault/managed identity |
 | ~15 fields from Linux /proc | ❌ Not available | load_avg, vmalloc, processes — not in YANG |
 | Dell OS10 gNMI | ❌ Not supported | Requires SFD mode; no timeline |

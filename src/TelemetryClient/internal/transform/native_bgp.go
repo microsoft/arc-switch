@@ -11,7 +11,7 @@ import (
 // to the schema matching the existing bgp-all-summary parser.
 //
 // Note: vrf_local_as is not available at the Peer-list level in NX-OS YANG.
-// It is provided separately in the GnmiTestBgpGlobal table via the bgp-global
+// It is provided separately in the CiscoBgpGlobal_CL table via the bgp-global
 // OpenConfig path, which includes local_as per VRF.
 type NativeBgpTransformer struct{}
 
