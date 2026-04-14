@@ -32,21 +32,36 @@ type Collector struct {
 // Transformers self-register via init() in their source files, so adding
 // a new vendor's transformers only requires creating new files — no
 // changes to this function needed.
-func New(cfg *config.Config, client *gnmiclient.Client, logger *azure.Logger, dryRun bool, dumpDir, outputDir string, verbose ...bool) *Collector {
+// Returns an error if any enabled path references a transformer that is
+// not registered, so configuration mistakes are caught at startup.
+func New(cfg *config.Config, client *gnmiclient.Client, logger *azure.Logger, dryRun bool, dumpDir, outputDir string, verbose ...bool) (*Collector, error) {
 	v := false
 	if len(verbose) > 0 {
 		v = verbose[0]
 	}
+
+	transformers := transform.BuildMap()
+
+	// Validate that every enabled path has a registered transformer.
+	for _, p := range cfg.Paths {
+		if !p.Enabled {
+			continue
+		}
+		if _, ok := transformers[p.Name]; !ok {
+			return nil, fmt.Errorf("path %q has no registered transformer (check the name in config)", p.Name)
+		}
+	}
+
 	return &Collector{
 		cfg:          cfg,
 		client:       client,
 		logger:       logger,
-		transformers: transform.BuildMap(),
+		transformers: transformers,
 		dryRun:       dryRun,
 		dumpDir:      dumpDir,
 		outputDir:    outputDir,
 		verbose:      v,
-	}
+	}, nil
 }
 
 // RunOnce executes a single collection cycle for all enabled paths.

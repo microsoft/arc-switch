@@ -103,7 +103,10 @@ func main() {
 	}
 
 	// Create collector
-	c := collector.New(cfg, client, logger, *dryRun, *dump, *output, *verbose)
+	c, err := collector.New(cfg, client, logger, *dryRun, *dump, *output, *verbose)
+	if err != nil {
+		log.Fatalf("FATAL: create collector: %v", err)
+	}
 
 	if *once {
 		if err := c.RunOnce(); err != nil {
@@ -113,7 +116,10 @@ func main() {
 		os.Exit(0)
 	}
 
-	// Graceful shutdown context
+	// Graceful shutdown context with force-exit deadline.
+	// Context cancellation alone cannot interrupt a Recv blocked on a
+	// half-open TCP connection; the keepalive timeout may take tens of
+	// seconds to fire. A hard deadline guarantees the process exits promptly.
 	ctx, cancel := context.WithCancel(context.Background())
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
@@ -121,6 +127,12 @@ func main() {
 		sig := <-sigCh
 		log.Printf("Received %s, shutting down...", sig)
 		cancel()
+
+		// Force exit if graceful shutdown takes too long
+		time.AfterFunc(5*time.Second, func() {
+			log.Printf("Graceful shutdown timed out, forcing exit")
+			os.Exit(1)
+		})
 	}()
 
 	if strings.EqualFold(cfg.Collection.Mode, "subscribe") {

@@ -1,9 +1,12 @@
 package collector
 
 import (
+	"fmt"
 	"testing"
 
 	gnmiclient "gnmi-collector/internal/gnmi"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func TestDrillDownToSubscribedPath_SystemResources(t *testing.T) {
@@ -202,5 +205,53 @@ func TestDrillDown_SonicStylePathWithKeys(t *testing.T) {
 	}
 	if vals["in-octets"] != "12345" {
 		t.Errorf("in-octets = %v, want 12345", vals["in-octets"])
+	}
+}
+
+func TestIsPermanentSubscribeError(t *testing.T) {
+	tests := []struct {
+		name string
+		err  error
+		want bool
+	}{
+		{
+			name: "InvalidArgument is permanent",
+			err:  status.Error(codes.InvalidArgument, "on_change not supported for path"),
+			want: true,
+		},
+		{
+			name: "wrapped InvalidArgument is permanent",
+			err:  fmt.Errorf("subscribe recv: %w", status.Error(codes.InvalidArgument, "COUNTERS DB")),
+			want: true,
+		},
+		{
+			name: "Unavailable is transient",
+			err:  status.Error(codes.Unavailable, "connection refused"),
+			want: false,
+		},
+		{
+			name: "Unknown is transient",
+			err:  status.Error(codes.Unknown, "stream terminated"),
+			want: false,
+		},
+		{
+			name: "plain error is transient",
+			err:  fmt.Errorf("connection reset by peer"),
+			want: false,
+		},
+		{
+			name: "nil is transient",
+			err:  nil,
+			want: false,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := isPermanentSubscribeError(tc.err)
+			if got != tc.want {
+				t.Errorf("isPermanentSubscribeError(%v) = %v, want %v", tc.err, got, tc.want)
+			}
+		})
 	}
 }

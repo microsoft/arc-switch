@@ -14,6 +14,8 @@ import (
 	"gnmi-collector/internal/transform"
 
 	gpb "github.com/openconfig/gnmi/proto/gnmi"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -98,7 +100,11 @@ func (c *Collector) RunStream(ctx context.Context) error {
 		}
 	}
 
-	// Periodic flush goroutine
+	// Periodic flush goroutine — uses streamCtx so we can signal it on
+	// both graceful shutdown (ctx cancelled) and permanent errors.
+	streamCtx, streamCancel := context.WithCancel(ctx)
+	defer streamCancel()
+
 	flushDone := make(chan struct{})
 	go func() {
 		defer close(flushDone)
@@ -108,7 +114,7 @@ func (c *Collector) RunStream(ctx context.Context) error {
 			select {
 			case <-ticker.C:
 				c.flushAll(batches)
-			case <-ctx.Done():
+			case <-streamCtx.Done():
 				// Final flush on shutdown
 				c.flushAll(batches)
 				return
@@ -119,12 +125,31 @@ func (c *Collector) RunStream(ctx context.Context) error {
 	// Reconnect loop
 	delay := initialReconnectDelay
 	for {
-		err := c.subscribeOnce(ctx, subPaths, pathLookup, batches)
+		healthy, err := c.subscribeOnce(streamCtx, subPaths, pathLookup, batches)
 		if ctx.Err() != nil {
 			// Context cancelled — graceful shutdown
+			streamCancel()
 			<-flushDone
 			log.Printf("Subscribe stream stopped (context cancelled)")
 			return nil
+		}
+
+		// Detect permanent errors that will never succeed on retry.
+		// gRPC InvalidArgument means the switch rejected the subscription
+		// request itself (e.g., on_change not supported for a path, invalid
+		// sample interval). These are configuration errors that need human
+		// intervention — retrying is pointless.
+		if isPermanentSubscribeError(err) {
+			streamCancel()
+			<-flushDone
+			return fmt.Errorf("subscribe configuration error (will not retry): %w", err)
+		}
+
+		// If the session was healthy (received updates), reset backoff
+		// so a long-running stream that disconnects once doesn't wait
+		// at the backoff ceiling.
+		if healthy {
+			delay = initialReconnectDelay
 		}
 
 		log.Printf("Subscribe stream error: %v — reconnecting in %s", err, delay)
@@ -135,6 +160,7 @@ func (c *Collector) RunStream(ctx context.Context) error {
 				delay = maxReconnectDelay
 			}
 		case <-ctx.Done():
+			streamCancel()
 			<-flushDone
 			return nil
 		}
@@ -147,17 +173,26 @@ type pathMapping struct {
 	transformer transform.Transformer
 }
 
+// isPermanentSubscribeError returns true if the error indicates a
+// configuration problem that will never succeed on retry. The switch
+// rejects these subscriptions outright (e.g., on_change not supported
+// for a path, invalid sample interval).
+func isPermanentSubscribeError(err error) bool {
+	return status.Code(err) == codes.InvalidArgument
+}
+
 // subscribeOnce runs a single subscribe session. Returns when the stream
-// errors or the context is cancelled.
+// errors or the context is cancelled. The boolean indicates whether the
+// session was "healthy" — i.e., at least one update was received.
 func (c *Collector) subscribeOnce(
 	ctx context.Context,
 	subPaths []gnmiclient.SubscriptionPath,
 	pathLookup map[string]pathMapping,
 	batches map[string]*tableBatch,
-) error {
+) (healthy bool, err error) {
 	updateCount := 0
 
-	return c.client.Subscribe(ctx, subPaths, func(resp *gpb.SubscribeResponse) error {
+	err = c.client.Subscribe(ctx, subPaths, func(resp *gpb.SubscribeResponse) error {
 		// Decode WITH prefix preservation so entity keys (e.g.,
 		// [name=Ethernet0]) are included in the full update paths.
 		notifications, err := gnmiclient.DecodeSubscribeResponseWithPrefix(resp)
@@ -212,6 +247,7 @@ func (c *Collector) subscribeOnce(
 
 		return nil
 	})
+	return updateCount > 0, err
 }
 
 // filterNotificationsForPath returns notifications whose update paths

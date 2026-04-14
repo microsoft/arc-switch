@@ -23,6 +23,11 @@ target:
 
 collection:
   mode: poll                   # poll (Get every interval) or subscribe
+                               # Subscribe mode supports both sample and on_change.
+                               # NOTE: SONiC does not support on_change for all paths;
+                               # paths backed by COUNTERS DB or with on_change explicitly
+                               # disabled will be rejected by the switch. The collector
+                               # will exit with a clear error if this happens.
   interval: 300s               # 5 minutes — matches cron interval
   timeout: 30s                 # Per-path Get request timeout
   encoding: JSON_IETF
@@ -45,6 +50,7 @@ paths:
     enabled: true
     mode: sample
     sample_interval: 60s
+    # on_change not supported by SONiC for this path (COUNTERS DB backed)
 
   - name: interface-status
     yang_path: /openconfig-interfaces:interfaces/interface/state
@@ -52,6 +58,7 @@ paths:
     enabled: true
     mode: sample
     sample_interval: 60s
+    # on_change not supported by SONiC — child paths use COUNTERS DB
 
   - name: if-ethernet
     yang_path: /openconfig-if-ethernet:interfaces/interface/ethernet/state
@@ -69,6 +76,7 @@ paths:
     enabled: true
     mode: sample
     sample_interval: 300s
+    # on_change is supported for this path
 
   - name: system-cpus
     yang_path: /openconfig-system:system/cpus
@@ -119,6 +127,7 @@ paths:
   # ============================================================
   # LLDP — Subscribe ONCE fallback handles this automatically.
   # May return empty if no LLDP neighbors are present.
+  # on_change not supported by SONiC for this path.
   # ============================================================
   - name: lldp-neighbors
     yang_path: /openconfig-lldp:lldp/interfaces/interface/neighbors

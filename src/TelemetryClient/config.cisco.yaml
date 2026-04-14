@@ -13,10 +13,6 @@ target:
 
 collection:
   mode: poll                 # poll (Get every interval) or subscribe (persistent stream)
-                             # NOTE: subscribe mode is not production-ready — NX-OS sends
-                             # leaf-level/fragmented updates via Subscribe even in SAMPLE mode,
-                             # which our transformers cannot handle (they expect full containers
-                             # as returned by Get). Use poll mode until Subscribe is fixed.
   interval: 300s             # 5 minutes — matches current cron interval
   timeout: 30s               # Per-path Get request timeout
   encoding: JSON             # JSON or PROTO (NX-OS does not support JSON_IETF)
@@ -44,9 +40,7 @@ paths:
     enabled: true
     mode: sample
     sample_interval: 60s
-    # NOTE: on_change mode is NOT supported yet — it returns sub-tree level
-    # updates instead of complete JSON containers, which our transformers
-    # cannot handle without a state cache. See design doc for details.
+    # on_change is also supported for this path.
 
   - name: system-state
     yang_path: /openconfig-system:system/state
@@ -71,7 +65,7 @@ paths:
     enabled: true
     mode: sample
     sample_interval: 60s
-    # NOTE: on_change not supported — see interface-status comment above.
+    # on_change is also supported for this path.
 
   - name: bgp-global
     yang_path: /openconfig-network-instance:network-instances/network-instance/protocols/protocol/bgp/global/state
@@ -113,7 +107,6 @@ paths:
     sample_interval: 300s
     # NOTE: vrf_local_as is not available at the Peer-list level in NX-OS YANG.
     # It is provided in the CiscoBgpGlobal_CL table (from bgp-global OC path).
-    # NOTE: on_change not supported — see interface-status comment above.
 
   - name: nx-env-sensor
     yang_path: /System/ch-items/supslot-items/SupCSlot-list/sup-items/sensor-items
@@ -184,7 +177,6 @@ paths:
     enabled: true
     mode: sample
     sample_interval: 300s
-    # NOTE: on_change not supported — see interface-status comment above.
 
   # ============================================================
   # Disabled OpenConfig paths (replaced by native equivalents)
@@ -194,13 +186,11 @@ paths:
     yang_path: /openconfig-network-instance:network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state
     table: CiscoBgpSummary_CL
     enabled: false
-    # mode: on_change — not supported, use sample (see notes above)
 
   - name: lldp-neighbors
     yang_path: /openconfig-lldp:lldp/interfaces/interface/neighbors
     table: CiscoLldpNeighbor_CL
     enabled: false
-    # mode: on_change — not supported, use sample (see notes above)
 
   - name: temperature
     yang_path: /openconfig-platform:components/component/state/temperature
