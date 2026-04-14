@@ -476,3 +476,113 @@ risk**. Once we have a validated path inventory, we can proceed to Phase 1 (Set 
 
 The Arc Extension integration (Phase 2-3) should only happen after we're confident in
 the gNMI Set behavior on both Cisco and SONiC.
+
+---
+
+## 11. Live Discovery Results (April 2026)
+
+The `gnmi-config-diff` tool was built and tested on both live switches. Results below
+show which `/config` paths are readable via gNMI Get on each vendor.
+
+### 11.1 Cisco NX-OS (100.71.34.149)
+
+- **gNMI version**: 0.8.0, 32 models
+- **Encoding**: JSON
+- **Result**: **21 / 22 paths succeeded** (95.5%)
+
+| Category | Path Name | YANG Path | Status |
+|----------|-----------|-----------|--------|
+| interfaces | interface-config | `/openconfig-interfaces:interfaces/interface/config` | ✅ |
+| interfaces | interface-state | `/openconfig-interfaces:interfaces/interface/state` | ✅ |
+| interfaces | ethernet-config | `.../openconfig-if-ethernet:ethernet/config` | ✅ |
+| interfaces | subinterface-config | `.../subinterfaces/subinterface/config` | ✅ |
+| interfaces | native-interface-config | `/System/intf-items/phys-items/PhysIf-list` | ✅ |
+| interfaces | native-loopback-config | `/System/intf-items/lb-items/LbRtdIf-list` | ✅ |
+| interfaces | native-vlan-config | `/System/intf-items/svi-items/If-list` | ✅ |
+| bgp | bgp-global-config | `.../bgp/global/config` | ✅ |
+| bgp | bgp-global-state | `.../bgp/global/state` | ✅ |
+| bgp | bgp-neighbor-config | `.../bgp/neighbors/neighbor/config` | ❌ translation-unmapped |
+| bgp | native-bgp-global | `/System/bgp-items/inst-items` | ✅ |
+| bgp | native-bgp-peers | `.../dom-items/Dom-list/peer-items/Peer-list` | ✅ |
+| system | system-config | `/openconfig-system:system/config` | ✅ |
+| system | system-dns-config | `/openconfig-system:system/dns/config` | ✅ |
+| system | system-ntp-config | `/openconfig-system:system/ntp/config` | ✅ |
+| system | system-state | `/openconfig-system:system/state` | ✅ |
+| system | native-hostname | `/System/name` | ✅ |
+| lldp | lldp-config | `/openconfig-lldp:lldp/config` | ✅ |
+| network-instance | network-instance-config | `.../network-instance/config` | ✅ |
+| acl | native-ipv4-acl | `/System/acl-items/ipv4-items/name-items/ACL-list` | ✅ |
+| vlan | native-vlan-db | `/System/bd-items/bd-items/BD-list` | ✅ |
+| routing | native-static-routes | `/System/urib-items/table4-items/.../Route4-list` | ✅ |
+
+**Failed path detail**:
+- `bgp-neighbor-config`: `rpc error: code = Internal desc = translation-unmapped —
+  List object .../neighbor/neighbor is unmapped`. The OpenConfig BGP neighbor list
+  is not implemented for gNMI Get on this NX-OS version (10.4(6)). The native
+  `native-bgp-peers` path works as a workaround.
+
+### 11.2 Dell Enterprise SONiC (100.100.81.129)
+
+- **gNMI version**: 0.7.0, 85 models
+- **Encoding**: JSON_IETF
+- **Result**: **16 / 17 paths succeeded** (94.1%)
+
+| Category | Path Name | YANG Path | Status |
+|----------|-----------|-----------|--------|
+| interfaces | interface-config | `/openconfig-interfaces:interfaces/interface/config` | ✅ |
+| interfaces | interface-state | `/openconfig-interfaces:interfaces/interface/state` | ✅ |
+| interfaces | ethernet-config | `.../openconfig-if-ethernet:ethernet/config` | ✅ |
+| interfaces | sonic-interface-config | `/sonic-interface:sonic-interface/INTERFACE/INTERFACE_LIST` | ✅ |
+| interfaces | sonic-portchannel-config | `/sonic-portchannel:sonic-portchannel/PORTCHANNEL/PORTCHANNEL_LIST` | ✅ |
+| bgp | bgp-global-config | `.../bgp/global/config` | ✅ |
+| bgp | bgp-global-state | `.../bgp/global/state` | ✅ |
+| bgp | bgp-neighbor-config | `.../bgp/neighbors/neighbor/config` | ✅ |
+| system | system-config | `/openconfig-system:system/config` | ✅ |
+| system | system-state | `/openconfig-system:system/state` | ✅ |
+| system | sonic-device-metadata | `/sonic-device-metadata:.../DEVICE_METADATA_LIST` | ✅ |
+| system | sonic-ntp-config | `/sonic-ntp:sonic-ntp/NTP_SERVER/NTP_SERVER_LIST` | ❌ node not found |
+| lldp | lldp-config | `/openconfig-lldp:lldp/config` | ✅ |
+| acl | sonic-acl-config | `/sonic-acl:sonic-acl/ACL_TABLE/ACL_TABLE_LIST` | ✅ |
+| acl | sonic-acl-rule-config | `/sonic-acl:sonic-acl/ACL_RULE/ACL_RULE_LIST` | ✅ |
+| vlan | sonic-vlan-config | `/sonic-vlan:sonic-vlan/VLAN/VLAN_LIST` | ✅ |
+| vlan | sonic-vlan-member-config | `/sonic-vlan:sonic-vlan/VLAN_MEMBER/VLAN_MEMBER_LIST` | ✅ |
+
+**Failed path detail**:
+- `sonic-ntp-config`: `Node sonic-ntp not found in the given gnmi path`. The
+  `sonic-ntp` YANG module is not loaded on this SONiC image (Dell Enterprise SONiC 4.x).
+  NTP config may be accessible via the OpenConfig `/openconfig-system:system/ntp` path
+  instead.
+
+### 11.3 Cross-Vendor Comparison
+
+| Capability | Cisco NX-OS | SONiC |
+|------------|:-----------:|:-----:|
+| OC Interface config | ✅ | ✅ |
+| OC BGP global config | ✅ | ✅ |
+| OC BGP neighbor config | ❌ (use native) | ✅ |
+| OC System config | ✅ | ✅ |
+| OC LLDP config | ✅ | ✅ |
+| Native interface paths | ✅ (6 paths) | ✅ (2 paths) |
+| Native BGP paths | ✅ (2 paths) | N/A |
+| NTP config | ✅ (OC path) | ❌ (sonic-ntp missing) |
+| ACL config | ✅ (native) | ✅ (sonic-acl) |
+| VLAN config | ✅ (native) | ✅ (sonic-vlan) |
+| Static routes | ✅ (native, read-only) | N/A |
+| Device metadata | N/A | ✅ |
+| **Config paths readable** | **21/22 (95.5%)** | **16/17 (94.1%)** |
+
+### 11.4 Key Takeaways
+
+1. **High config-path readability**: Both vendors support >94% of the paths we defined,
+   confirming that gNMI Get on `/config` subtrees is viable for config management.
+
+2. **OpenConfig parity is strong**: Both vendors support OC interface, system, LLDP,
+   and BGP global config paths. The only OC gap is BGP neighbor on Cisco (works natively).
+
+3. **Native paths fill OC gaps**: Where OpenConfig fails (Cisco BGP neighbors),
+   vendor-native YANG paths provide full access. The multi-provider architecture
+   handles this seamlessly.
+
+4. **Next step: test gNMI Set**: Now that we know which paths are readable, we can
+   attempt safe, non-disruptive Set operations (e.g., changing an interface description)
+   to validate write capability on each vendor.
