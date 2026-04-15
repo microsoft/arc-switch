@@ -84,7 +84,7 @@ func (t *NativeLldpTransformer) Transform(notifications []gnmi.Notification) ([]
 						"enabled_capabilities":        GetString(adj, "enCap"),
 					}
 
-					results = append(results, NewCommonFields(dataTypeNativeLldp, msg))
+					results = append(results, NewCommonFields(dataTypeNativeLldp, msg, n.Timestamp))
 				}
 			}
 		}

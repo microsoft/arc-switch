@@ -20,8 +20,10 @@ func (t *InterfaceStatusTransformer) DataType() string {
 
 func (t *InterfaceStatusTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	var entries []InterfaceStatusEntry
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			vals, ok := u.Value.(map[string]interface{})
 			if !ok {
@@ -58,7 +60,7 @@ func (t *InterfaceStatusTransformer) Transform(notifications []gnmi.Notification
 	msg := map[string]interface{}{
 		"interfaces": entries,
 	}
-	result := NewCommonFields(dataTypeInterfaceStatus, msg)
+	result := NewCommonFields(dataTypeInterfaceStatus, msg, lastTS)
 	return []CommonFields{result}, nil
 }
 

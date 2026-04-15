@@ -18,8 +18,10 @@ func (t *NativeVersionTransformer) DataType() string { return dataTypeVersion }
 
 func (t *NativeVersionTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	msg := map[string]interface{}{}
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			vals, ok := u.Value.(map[string]interface{})
 			if !ok {
@@ -41,6 +43,6 @@ func (t *NativeVersionTransformer) Transform(notifications []gnmi.Notification) 
 		}
 	}
 
-	result := NewCommonFields(dataTypeVersion, msg)
+	result := NewCommonFields(dataTypeVersion, msg, lastTS)
 	return []CommonFields{result}, nil
 }

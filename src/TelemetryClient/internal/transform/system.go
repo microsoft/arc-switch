@@ -24,8 +24,10 @@ func (t *SystemResourcesTransformer) DataType() string { return dataTypeSystemRe
 
 func (t *SystemResourcesTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	msg := map[string]interface{}{}
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			vals, ok := u.Value.(map[string]interface{})
 			if !ok {
@@ -98,7 +100,7 @@ func (t *SystemResourcesTransformer) Transform(notifications []gnmi.Notification
 		}
 	}
 
-	result := NewCommonFields(dataTypeSystemResources, msg)
+	result := NewCommonFields(dataTypeSystemResources, msg, lastTS)
 	return []CommonFields{result}, nil
 }
 
@@ -163,8 +165,10 @@ func (t *SystemUptimeTransformer) DataType() string { return dataTypeSystemUptim
 
 func (t *SystemUptimeTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	msg := map[string]interface{}{}
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			vals, ok := u.Value.(map[string]interface{})
 			if !ok {
@@ -209,6 +213,6 @@ func (t *SystemUptimeTransformer) Transform(notifications []gnmi.Notification) (
 		}
 	}
 
-	result := NewCommonFields(dataTypeSystemUptime, msg)
+	result := NewCommonFields(dataTypeSystemUptime, msg, lastTS)
 	return []CommonFields{result}, nil
 }

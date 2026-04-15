@@ -103,6 +103,70 @@ paths:
 	}
 }
 
+func TestTLSValidation(t *testing.T) {
+	// ca_file without skip_verify should pass validation
+	caFileYaml := []byte(`
+target:
+  address: 127.0.0.1
+  port: 50051
+  tls:
+    enabled: true
+    ca_file: /etc/gnmi/server.pem
+azure:
+  device_type: cisco-nx-os
+paths:
+  - name: test
+    yang_path: /test
+    table: T
+    enabled: true
+`)
+	_, err := Parse(caFileYaml)
+	if err != nil {
+		t.Errorf("ca_file config should be valid, got: %v", err)
+	}
+
+	// skip_verify without ca_file should pass validation
+	skipYaml := []byte(`
+target:
+  address: 127.0.0.1
+  port: 50051
+  tls:
+    enabled: true
+    skip_verify: true
+azure:
+  device_type: cisco-nx-os
+paths:
+  - name: test
+    yang_path: /test
+    table: T
+    enabled: true
+`)
+	_, err = Parse(skipYaml)
+	if err != nil {
+		t.Errorf("skip_verify config should be valid, got: %v", err)
+	}
+
+	// TLS disabled should not require either
+	disabledYaml := []byte(`
+target:
+  address: 127.0.0.1
+  port: 50051
+  tls:
+    enabled: false
+azure:
+  device_type: cisco-nx-os
+paths:
+  - name: test
+    yang_path: /test
+    table: T
+    enabled: true
+`)
+	_, err = Parse(disabledYaml)
+	if err != nil {
+		t.Errorf("TLS disabled config should be valid, got: %v", err)
+	}
+}
+
 func TestParseMissingDeviceType(t *testing.T) {
 	yaml := []byte(`
 target:
@@ -181,6 +245,19 @@ paths:
   - name: test
     yang_path: /test
     table: ""
+    enabled: true`},
+		{"tls enabled without skip_verify or ca_file", `
+target:
+  address: 127.0.0.1
+  port: 50051
+  tls:
+    enabled: true
+azure:
+  device_type: cisco-nx-os
+paths:
+  - name: test
+    yang_path: /test
+    table: T
     enabled: true`},
 	}
 

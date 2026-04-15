@@ -43,7 +43,7 @@ func (t *BgpGlobalTransformer) Transform(notifications []gnmi.Notification) ([]C
 				"total_prefixes": GetString(stateVals, "total-prefixes"),
 			}
 
-			results = append(results, NewCommonFields(dataTypeBgpGlobal, msg))
+			results = append(results, NewCommonFields(dataTypeBgpGlobal, msg, n.Timestamp))
 		}
 	}
 

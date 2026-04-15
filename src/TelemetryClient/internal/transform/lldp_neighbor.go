@@ -88,7 +88,7 @@ func (t *LldpNeighborTransformer) Transform(notifications []gnmi.Notification) (
 					"enabled_capabilities": enabledCaps,
 				}
 
-				results = append(results, NewCommonFields(dataTypeLldpNeighbor, msg))
+				results = append(results, NewCommonFields(dataTypeLldpNeighbor, msg, n.Timestamp))
 			}
 		}
 	}

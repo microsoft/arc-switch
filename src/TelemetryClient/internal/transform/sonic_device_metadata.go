@@ -14,8 +14,10 @@ func (t *SonicDeviceMetadataTransformer) DataType() string { return dataTypeSoni
 
 func (t *SonicDeviceMetadataTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	msg := map[string]interface{}{}
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			vals, ok := u.Value.(map[string]interface{})
 			if !ok {
@@ -50,5 +52,5 @@ func (t *SonicDeviceMetadataTransformer) Transform(notifications []gnmi.Notifica
 		}
 	}
 
-	return []CommonFields{NewCommonFields(dataTypeSonicDeviceMetadata, msg)}, nil
+	return []CommonFields{NewCommonFields(dataTypeSonicDeviceMetadata, msg, lastTS)}, nil
 }

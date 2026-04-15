@@ -44,7 +44,7 @@ func (t *BgpSummaryTransformer) Transform(notifications []gnmi.Notification) ([]
 					if !ok {
 						continue
 					}
-					if entry := buildBgpNeighborEntry(nbr, u.Path, vrfName); entry != nil {
+					if entry := buildBgpNeighborEntry(nbr, u.Path, vrfName, n.Timestamp); entry != nil {
 						results = append(results, *entry)
 					}
 				}
@@ -54,7 +54,7 @@ func (t *BgpSummaryTransformer) Transform(notifications []gnmi.Notification) ([]
 				if vrfName == "" {
 					vrfName = "default"
 				}
-				if entry := buildBgpNeighborEntry(vals, u.Path, vrfName); entry != nil {
+				if entry := buildBgpNeighborEntry(vals, u.Path, vrfName, n.Timestamp); entry != nil {
 					results = append(results, *entry)
 				}
 			}
@@ -66,7 +66,7 @@ func (t *BgpSummaryTransformer) Transform(notifications []gnmi.Notification) ([]
 
 // buildBgpNeighborEntry extracts a single BGP neighbor entry from a
 // neighbor state map. Returns nil if the neighbor address cannot be found.
-func buildBgpNeighborEntry(vals map[string]interface{}, path, vrfName string) *CommonFields {
+func buildBgpNeighborEntry(vals map[string]interface{}, path, vrfName string, gnmiTimestampNs int64) *CommonFields {
 	neighborAddr := ExtractNeighborAddress(path)
 	if neighborAddr == "" {
 		neighborAddr = GetString(vals, "neighbor-address")
@@ -140,13 +140,13 @@ func buildBgpNeighborEntry(vals map[string]interface{}, path, vrfName string) *C
 	msg := map[string]interface{}{
 		"neighbor_id":      neighborAddr,
 		"neighbor_address": neighborAddr,
-		"vrf_name_out":     vrfName,
+		"vrf_name_out":     vrfName, // Deprecated: use vrf_name. Kept for backward compatibility with existing dashboards.
 		"vrf_name":         vrfName,
-		"neighbor_as":      GetFirstString(stateVals, "peer-as"),
+		"neighbor_as":      GetFirstString(stateVals, "peer-as"), // Deprecated: use peer_as. Kept for backward compatibility with existing dashboards.
 		"peer_as":          GetFirstString(stateVals, "peer-as"),
 		"peer_type":        GetFirstString(stateVals, "peer-type"),
 		"description":      GetFirstString(stateVals, "description"),
-		"state":            strings.ToLower(sessionState),
+		"state":            strings.ToLower(sessionState), // Deprecated: use session_state. Kept for backward compatibility with existing dashboards.
 		"session_state":    strings.ToLower(sessionState),
 		"enabled":          GetBool(stateVals, "enabled"),
 
@@ -165,7 +165,7 @@ func buildBgpNeighborEntry(vals map[string]interface{}, path, vrfName string) *C
 		"vrf_local_as":  GetFirstString(stateVals, "local-as"),
 	}
 
-	entry := NewCommonFields(dataTypeBgpSummary, msg)
+	entry := NewCommonFields(dataTypeBgpSummary, msg, gnmiTimestampNs)
 	return &entry
 }
 

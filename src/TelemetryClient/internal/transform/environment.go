@@ -48,7 +48,7 @@ func (t *EnvironmentTempTransformer) Transform(notifications []gnmi.Notification
 				"status":          deriveTempStatus(GetBool(vals, "alarm-status")),
 			}
 
-			results = append(results, NewCommonFields(dataTypeEnvTemp, msg))
+			results = append(results, NewCommonFields(dataTypeEnvTemp, msg, n.Timestamp))
 		}
 	}
 
@@ -91,8 +91,10 @@ func (t *EnvironmentPowerTransformer) DataType() string { return dataTypeEnvPowe
 
 func (t *EnvironmentPowerTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	var supplies []map[string]interface{}
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			vals, ok := u.Value.(map[string]interface{})
 			if !ok {
@@ -137,7 +139,7 @@ func (t *EnvironmentPowerTransformer) Transform(notifications []gnmi.Notificatio
 	msg := map[string]interface{}{
 		"power_supplies": supplies,
 	}
-	result := NewCommonFields(dataTypeEnvPower, msg)
+	result := NewCommonFields(dataTypeEnvPower, msg, lastTS)
 	return []CommonFields{result}, nil
 }
 

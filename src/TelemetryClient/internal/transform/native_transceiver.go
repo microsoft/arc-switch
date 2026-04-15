@@ -38,7 +38,7 @@ func (t *NativeTransceiverTransformer) Transform(notifications []gnmi.Notificati
 			fcot := GetMap(vals, "fcot-items")
 			if fcot == nil || !GetBool(fcot, "isFcotPresent") {
 				msg["transceiver_present"] = false
-				results = append(results, NewCommonFields(dataTypeTransceiver, msg))
+				results = append(results, NewCommonFields(dataTypeTransceiver, msg, n.Timestamp))
 				continue
 			}
 
@@ -93,7 +93,7 @@ func (t *NativeTransceiverTransformer) Transform(notifications []gnmi.Notificati
 				}
 			}
 
-			results = append(results, NewCommonFields(dataTypeTransceiver, msg))
+			results = append(results, NewCommonFields(dataTypeTransceiver, msg, n.Timestamp))
 		}
 	}
 

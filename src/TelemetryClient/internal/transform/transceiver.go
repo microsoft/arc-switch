@@ -80,7 +80,7 @@ func (t *TransceiverTransformer) Transform(notifications []gnmi.Notification) ([
 				msg["dom_data"] = domData
 			}
 
-			results = append(results, NewCommonFields(dataTypeTransceiver, msg))
+			results = append(results, NewCommonFields(dataTypeTransceiver, msg, n.Timestamp))
 		}
 	}
 

@@ -7,6 +7,8 @@ target:
   tls:
     enabled: true
     skip_verify: true        # Self-signed cert on the switch
+    # ca_file: /etc/gnmi/server.pem   # Pin server cert for TLS verification
+    # cert_auto_fetch: true           # TOFU: auto-fetch cert on first connect and on rotation
   credentials:
     username_env: GNMI_USER  # NX-OS SSH username
     password_env: GNMI_PASS  # NX-OS SSH password

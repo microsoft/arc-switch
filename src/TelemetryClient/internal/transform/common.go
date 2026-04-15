@@ -15,20 +15,29 @@ import (
 // CommonFields matches the existing parser output schema used by
 // the syslog writer and Azure logger.
 type CommonFields struct {
-	DataType  string      `json:"data_type"`
-	Timestamp string      `json:"timestamp"`
-	Date      string      `json:"date"`
-	Message   interface{} `json:"message"`
+	DataType    string      `json:"data_type"`
+	Timestamp   string      `json:"timestamp"`
+	TimestampNs int64       `json:"timestamp_ns"` // Nanosecond-precision device timestamp for Kusto ordering
+	Date        string      `json:"date"`
+	Message     interface{} `json:"message"`
 }
 
-// NewCommonFields creates a CommonFields entry with the current timestamp.
-func NewCommonFields(dataType string, message interface{}) CommonFields {
-	now := time.Now()
+// NewCommonFields creates a CommonFields entry using the gNMI notification
+// timestamp (nanoseconds since Unix epoch). If gnmiTimestampNs is zero
+// (e.g., no notification available), falls back to the current wall clock.
+func NewCommonFields(dataType string, message interface{}, gnmiTimestampNs int64) CommonFields {
+	var ts time.Time
+	if gnmiTimestampNs > 0 {
+		ts = time.Unix(0, gnmiTimestampNs)
+	} else {
+		ts = time.Now()
+	}
 	return CommonFields{
-		DataType:  dataType,
-		Timestamp: now.Format(time.RFC3339),
-		Date:      now.Format("2006-01-02"),
-		Message:   message,
+		DataType:    dataType,
+		TimestampNs: ts.UnixNano(),
+		Timestamp:   ts.Format(time.RFC3339Nano),
+		Date:        ts.Format("2006-01-02"),
+		Message:     message,
 	}
 }
 

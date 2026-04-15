@@ -52,6 +52,16 @@ func New(cfg *config.Config, client *gnmiclient.Client, logger *azure.Logger, dr
 	}
 }
 
+// ReplaceClient closes the existing gNMI client and replaces it with the
+// given one. This is used by the subscribe loop to reconnect with fresh
+// TLS credentials after a certificate rotation.
+func (c *Collector) ReplaceClient(newClient *gnmiclient.Client) {
+	if c.client != nil {
+		c.client.Close()
+	}
+	c.client = newClient
+}
+
 // RunOnce executes a single collection cycle for all enabled paths.
 // Entries targeting the same table with the same data_type are merged
 // into a single row (e.g., CPU + memory → one system_resources entry).

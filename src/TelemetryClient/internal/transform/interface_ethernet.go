@@ -57,7 +57,7 @@ func (t *InterfaceEthernetTransformer) Transform(notifications []gnmi.Notificati
 				msg["out_crc_errors"] = getInt64Multi(counters, "out-crc-errors", "openconfig-if-ethernet:out-crc-errors")
 			}
 
-			results = append(results, NewCommonFields(dataTypeInterfaceEthernet, msg))
+			results = append(results, NewCommonFields(dataTypeInterfaceEthernet, msg, n.Timestamp))
 		}
 	}
 

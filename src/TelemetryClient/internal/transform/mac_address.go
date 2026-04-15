@@ -61,7 +61,7 @@ func (t *MacAddressTransformer) Transform(notifications []gnmi.Notification) ([]
 					"ntfy":        GetString(state, "ntfy"),
 				}
 
-				results = append(results, NewCommonFields(dataTypeMacTable, msg))
+				results = append(results, NewCommonFields(dataTypeMacTable, msg, n.Timestamp))
 			}
 		}
 	}

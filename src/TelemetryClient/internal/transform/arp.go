@@ -29,7 +29,7 @@ func (t *ArpTransformer) Transform(notifications []gnmi.Notification) ([]CommonF
 				// Try the value directly as a neighbor entry
 				msg := extractArpEntry(vals, u.Path)
 				if msg != nil {
-					results = append(results, NewCommonFields(dataTypeArp, msg))
+					results = append(results, NewCommonFields(dataTypeArp, msg, n.Timestamp))
 				}
 				continue
 			}
@@ -41,7 +41,7 @@ func (t *ArpTransformer) Transform(notifications []gnmi.Notification) ([]CommonF
 				}
 				msg := extractArpEntry(nbr, u.Path)
 				if msg != nil {
-					results = append(results, NewCommonFields(dataTypeArp, msg))
+					results = append(results, NewCommonFields(dataTypeArp, msg, n.Timestamp))
 				}
 			}
 		}

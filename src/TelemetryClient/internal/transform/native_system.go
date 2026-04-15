@@ -18,8 +18,10 @@ func (t *NativeSystemCpuTransformer) DataType() string { return dataTypeSystemRe
 
 func (t *NativeSystemCpuTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	msg := map[string]interface{}{}
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			vals, ok := u.Value.(map[string]interface{})
 			if !ok {
@@ -71,7 +73,7 @@ func (t *NativeSystemCpuTransformer) Transform(notifications []gnmi.Notification
 		}
 	}
 
-	result := NewCommonFields(dataTypeSystemResources, msg)
+	result := NewCommonFields(dataTypeSystemResources, msg, lastTS)
 	return []CommonFields{result}, nil
 }
 
@@ -83,8 +85,10 @@ func (t *NativeSystemLoadTransformer) DataType() string { return dataTypeSystemR
 
 func (t *NativeSystemLoadTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	msg := map[string]interface{}{}
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			vals, ok := u.Value.(map[string]interface{})
 			if !ok {
@@ -100,7 +104,7 @@ func (t *NativeSystemLoadTransformer) Transform(notifications []gnmi.Notificatio
 		}
 	}
 
-	result := NewCommonFields(dataTypeSystemResources, msg)
+	result := NewCommonFields(dataTypeSystemResources, msg, lastTS)
 	return []CommonFields{result}, nil
 }
 
@@ -126,8 +130,10 @@ func (t *NativeSystemMemoryTransformer) DataType() string { return dataTypeSyste
 
 func (t *NativeSystemMemoryTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	msg := map[string]interface{}{}
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			vals, ok := u.Value.(map[string]interface{})
 			if !ok {
@@ -148,6 +154,6 @@ func (t *NativeSystemMemoryTransformer) Transform(notifications []gnmi.Notificat
 		}
 	}
 
-	result := NewCommonFields(dataTypeSystemResources, msg)
+	result := NewCommonFields(dataTypeSystemResources, msg, lastTS)
 	return []CommonFields{result}, nil
 }

@@ -33,12 +33,12 @@ func (t *NativeRouteSummaryTransformer) Transform(notifications []gnmi.Notificat
 				"mpath_total": GetInt64(vals, "mpathTotal"),
 			}
 
-			results = append(results, NewCommonFields(dataTypeRouteSummary, msg))
+			results = append(results, NewCommonFields(dataTypeRouteSummary, msg, n.Timestamp))
 		}
 	}
 
 	if len(results) == 0 {
-		return []CommonFields{NewCommonFields(dataTypeRouteSummary, map[string]interface{}{})}, nil
+		return []CommonFields{NewCommonFields(dataTypeRouteSummary, map[string]interface{}{}, 0)}, nil
 	}
 
 	return results, nil

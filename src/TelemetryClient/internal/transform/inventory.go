@@ -42,7 +42,7 @@ func (t *InventoryTransformer) Transform(notifications []gnmi.Notification) ([]C
 					"component_type": deriveComponentType(GetString(state, "type")),
 				}
 
-				results = append(results, NewCommonFields(dataTypeInventory, msg))
+				results = append(results, NewCommonFields(dataTypeInventory, msg, n.Timestamp))
 			}
 		}
 	}

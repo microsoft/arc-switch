@@ -54,7 +54,7 @@ func (t *NativeArpTransformer) Transform(notifications []gnmi.Notification) ([]C
 					msg["control_plane_l2rib"] = true
 				}
 
-				results = append(results, NewCommonFields(dataTypeArp, msg))
+				results = append(results, NewCommonFields(dataTypeArp, msg, n.Timestamp))
 			}
 		}
 	}

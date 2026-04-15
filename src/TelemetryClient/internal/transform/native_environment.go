@@ -32,7 +32,7 @@ func (t *NativeEnvTempTransformer) Transform(notifications []gnmi.Notification) 
 				// Value may be a single sensor entry rather than a list.
 				msg := nativeTempMsg(module, vals)
 				if msg != nil {
-					results = append(results, NewCommonFields(dataTypeEnvTemp, msg))
+					results = append(results, NewCommonFields(dataTypeEnvTemp, msg, n.Timestamp))
 				}
 				continue
 			}
@@ -44,7 +44,7 @@ func (t *NativeEnvTempTransformer) Transform(notifications []gnmi.Notification) 
 				}
 				msg := nativeTempMsg(module, sensor)
 				if msg != nil {
-					results = append(results, NewCommonFields(dataTypeEnvTemp, msg))
+					results = append(results, NewCommonFields(dataTypeEnvTemp, msg, n.Timestamp))
 				}
 			}
 		}
@@ -72,8 +72,10 @@ func (t *NativeEnvPowerTransformer) DataType() string { return dataTypeEnvPower 
 
 func (t *NativeEnvPowerTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
 	var supplies []map[string]interface{}
+	var lastTS int64
 
 	for _, n := range notifications {
+		lastTS = n.Timestamp
 		for _, u := range n.Updates {
 			// NX-OS returns arrays for YANG list nodes (PsuSlot-list)
 			entries := AsMapSlice(u.Value)
@@ -121,6 +123,6 @@ func (t *NativeEnvPowerTransformer) Transform(notifications []gnmi.Notification)
 	msg := map[string]interface{}{
 		"power_supplies": supplies,
 	}
-	result := NewCommonFields(dataTypeEnvPower, msg)
+	result := NewCommonFields(dataTypeEnvPower, msg, lastTS)
 	return []CommonFields{result}, nil
 }

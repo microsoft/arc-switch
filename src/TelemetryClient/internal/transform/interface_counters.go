@@ -58,7 +58,7 @@ func (t *InterfaceCountersTransformer) Transform(notifications []gnmi.Notificati
 				"has_egress_data":  GetString(vals, "out-octets") != "",
 			}
 
-			results = append(results, NewCommonFields(dataTypeInterfaceCounters, msg))
+			results = append(results, NewCommonFields(dataTypeInterfaceCounters, msg, n.Timestamp))
 		}
 	}
 

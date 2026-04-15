@@ -24,9 +24,10 @@ type TargetConfig struct {
 }
 
 type TLSConfig struct {
-	Enabled    bool   `yaml:"enabled"`
-	SkipVerify bool   `yaml:"skip_verify"`
-	CAFile     string `yaml:"ca_file,omitempty"`
+	Enabled       bool   `yaml:"enabled"`
+	SkipVerify    bool   `yaml:"skip_verify"`
+	CAFile        string `yaml:"ca_file,omitempty"`
+	CertAutoFetch bool   `yaml:"cert_auto_fetch,omitempty"` // TOFU: auto-fetch server cert on first connect and on cert rotation
 }
 
 type CredConfig struct {
@@ -98,6 +99,12 @@ func (c *Config) validate() error {
 	}
 	if c.Azure.DeviceType == "" {
 		return fmt.Errorf("azure.device_type is required (supported: cisco-nx-os, sonic)")
+	}
+
+	// TLS security: when TLS is enabled, require an explicit security
+	// posture — either skip_verify (with documented risk) or ca_file.
+	if c.Target.TLS.Enabled && !c.Target.TLS.SkipVerify && c.Target.TLS.CAFile == "" {
+		return fmt.Errorf("TLS is enabled but no verification configured: set either tls.skip_verify (insecure) or tls.ca_file (recommended)")
 	}
 
 	enabledCount := 0

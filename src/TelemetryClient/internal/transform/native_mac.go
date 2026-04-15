@@ -67,7 +67,7 @@ func (t *NativeMacTransformer) Transform(notifications []gnmi.Notification) ([]C
 					"routed_mac":    GetBool(entry, "routed"),
 				}
 
-				results = append(results, NewCommonFields(dataTypeNativeMac, msg))
+				results = append(results, NewCommonFields(dataTypeNativeMac, msg, n.Timestamp))
 			}
 		}
 	}

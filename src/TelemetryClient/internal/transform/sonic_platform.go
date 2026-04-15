@@ -39,7 +39,7 @@ func (t *SonicPlatformTransformer) Transform(notifications []gnmi.Notification) 
 						"warning_status":           GetString(sensor, "warning_status"),
 						"timestamp":                GetString(sensor, "timestamp"),
 					}
-					results = append(results, NewCommonFields(dataTypeSonicTemperature, msg))
+					results = append(results, NewCommonFields(dataTypeSonicTemperature, msg, n.Timestamp))
 				}
 			}
 
@@ -59,7 +59,7 @@ func (t *SonicPlatformTransformer) Transform(notifications []gnmi.Notification) 
 						"output_current": GetString(psu, "output_current"),
 						"output_power":   GetString(psu, "output_power"),
 					}
-					results = append(results, NewCommonFields(dataTypeSonicPsu, msg))
+					results = append(results, NewCommonFields(dataTypeSonicPsu, msg, n.Timestamp))
 				}
 			}
 
@@ -76,7 +76,7 @@ func (t *SonicPlatformTransformer) Transform(notifications []gnmi.Notification) 
 						"status":      GetString(fan, "status"),
 						"drawer_name": GetString(fan, "drawer_name"),
 					}
-					results = append(results, NewCommonFields(dataTypeSonicFan, msg))
+					results = append(results, NewCommonFields(dataTypeSonicFan, msg, n.Timestamp))
 				}
 			}
 		}

@@ -52,7 +52,7 @@ func (t *NativeInterfaceErrorsTransformer) Transform(notifications []gnmi.Notifi
 				"multicast_pkts":          GetInt64(vals, "multicastPkts"),
 			}
 
-			results = append(results, NewCommonFields(dataTypeInterfaceErrors, msg))
+			results = append(results, NewCommonFields(dataTypeInterfaceErrors, msg, n.Timestamp))
 		}
 	}
 

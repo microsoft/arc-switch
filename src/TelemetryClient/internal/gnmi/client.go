@@ -59,6 +59,22 @@ func NewClient(cfg *config.Config) (*Client, error) {
 		tlsCfg := &tls.Config{
 			InsecureSkipVerify: cfg.Target.TLS.SkipVerify,
 		}
+		if cfg.Target.TLS.SkipVerify {
+			log.Printf("WARN: TLS skip_verify is enabled — server certificate is NOT verified. " +
+				"An attacker with network access could intercept gNMI credentials and telemetry data. " +
+				"Set tls.ca_file with cert_auto_fetch for production use.")
+		}
+		// Load pinned CA cert if configured (TOFU bootstrap or manual pin).
+		if cfg.Target.TLS.CAFile != "" {
+			pool, err := BootstrapCert(cfg.TargetAddr(), cfg.Target.TLS.CAFile, cfg.Target.TLS.CertAutoFetch)
+			if err != nil {
+				return nil, fmt.Errorf("TLS cert setup: %w", err)
+			}
+			if pool != nil {
+				tlsCfg.RootCAs = pool
+				tlsCfg.InsecureSkipVerify = false // enforce verification when we have a pinned cert
+			}
+		}
 		opts = append(opts, grpc.WithTransportCredentials(credentials.NewTLS(tlsCfg)))
 	} else {
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))

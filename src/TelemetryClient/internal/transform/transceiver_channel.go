@@ -62,7 +62,7 @@ func (t *TransceiverChannelTransformer) Transform(notifications []gnmi.Notificat
 					"laser_bias_current": laserBias,
 				}
 
-				results = append(results, NewCommonFields(dataTypeTransceiverChannel, msg))
+				results = append(results, NewCommonFields(dataTypeTransceiverChannel, msg, n.Timestamp))
 			}
 		}
 	}

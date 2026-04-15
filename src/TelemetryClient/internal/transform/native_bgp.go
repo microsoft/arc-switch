@@ -62,7 +62,7 @@ func (t *NativeBgpTransformer) Transform(notifications []gnmi.Notification) ([]C
 						"vrf_name_out":     vrfName,
 						"vrf_name":         vrfName,
 					}
-					results = append(results, NewCommonFields(dataTypeBgpSummary, msg))
+					results = append(results, NewCommonFields(dataTypeBgpSummary, msg, n.Timestamp))
 					continue
 				}
 
@@ -118,7 +118,7 @@ func (t *NativeBgpTransformer) Transform(notifications []gnmi.Notification) ([]C
 					"shutdown_qualifier": GetString(peerEntry, "shutStQual"),
 				}
 
-				results = append(results, NewCommonFields(dataTypeBgpSummary, msg))
+				results = append(results, NewCommonFields(dataTypeBgpSummary, msg, n.Timestamp))
 			}
 		}
 	}
