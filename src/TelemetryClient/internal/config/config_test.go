@@ -277,3 +277,35 @@ func TestDeviceTypeToPrefix(t *testing.T) {
 		t.Errorf("got %q, want some_new_vendor", got)
 	}
 }
+
+func TestValidatePathNames(t *testing.T) {
+	cfg := &Config{
+		Paths: []PathConfig{
+			{Name: "interface-counters", YANGPath: "/ifc", Table: "T1", Enabled: true},
+			{Name: "bgp-neighbors", YANGPath: "/bgp", Table: "T2", Enabled: true},
+			{Name: "disabled-path", YANGPath: "/dis", Table: "T3", Enabled: false},
+		},
+	}
+	validNames := []string{"interface-counters", "bgp-neighbors", "system-resources"}
+
+	// All enabled paths are valid
+	if err := cfg.ValidatePathNames(validNames); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// Disabled paths with unknown names should not cause errors
+	cfg.Paths[2].Name = "totally-unknown"
+	if err := cfg.ValidatePathNames(validNames); err != nil {
+		t.Fatalf("disabled unknown path should not error: %v", err)
+	}
+
+	// Enabled path with unknown name should fail
+	cfg.Paths[0].Name = "typo-in-name"
+	err := cfg.ValidatePathNames(validNames)
+	if err == nil {
+		t.Fatal("expected error for unknown enabled path, got nil")
+	}
+	if !strings.Contains(err.Error(), "typo-in-name") {
+		t.Errorf("error should mention bad name, got: %v", err)
+	}
+}

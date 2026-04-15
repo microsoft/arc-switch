@@ -15,6 +15,7 @@ import (
 	"gnmi-collector/internal/collector"
 	"gnmi-collector/internal/config"
 	gnmiclient "gnmi-collector/internal/gnmi"
+	"gnmi-collector/internal/transform"
 )
 
 var version = "dev"
@@ -40,6 +41,11 @@ func main() {
 	cfg, err := config.Load(*configPath)
 	if err != nil {
 		log.Fatalf("FATAL: load config: %v", err)
+	}
+
+	// Validate path names against the transformer registry at startup.
+	if err := cfg.ValidatePathNames(transform.RegisteredNames()); err != nil {
+		log.Fatalf("FATAL: config validation: %v", err)
 	}
 
 	enabledPaths := 0
@@ -103,10 +109,7 @@ func main() {
 	}
 
 	// Create collector
-	c, err := collector.New(cfg, client, logger, *dryRun, *dump, *output, *verbose)
-	if err != nil {
-		log.Fatalf("FATAL: create collector: %v", err)
-	}
+	c := collector.New(cfg, client, logger, *dryRun, *dump, *output, *verbose)
 
 	if *once {
 		if err := c.RunOnce(); err != nil {

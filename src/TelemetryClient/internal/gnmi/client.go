@@ -181,6 +181,7 @@ func (c *Client) SubscribeOnce(ctx context.Context, yangPath string) ([]Notifica
 	}
 
 	// Collect raw subscribe responses, preserving the notification prefix
+	const maxNotifications = 1000
 	var allNotifs []Notification
 	for {
 		resp, err := stream.Recv()
@@ -192,6 +193,10 @@ func (c *Client) SubscribeOnce(ctx context.Context, yangPath string) ([]Notifica
 		if notif == nil {
 			// SyncResponse — ONCE stream is complete
 			break
+		}
+		if len(allNotifs) >= maxNotifications {
+			log.Printf("WARN: subscribe-once for %s reached %d notification cap — dropping further updates to prevent memory exhaustion", yangPath, maxNotifications)
+			continue
 		}
 		allNotifs = append(allNotifs, *notif)
 	}
@@ -211,11 +216,12 @@ func (c *Client) SubscribeOnceWithTimeout(yangPath string) ([]Notification, erro
 
 // SubscriptionPath defines a single path to subscribe to.
 type SubscriptionPath struct {
-	YANGPath       string
-	Mode           string // "sample" or "on_change"
-	SampleInterval time.Duration
-	Name           string // Path config name for routing updates
-	Table          string
+	YANGPath          string
+	Mode              string // "sample" or "on_change"
+	SampleInterval    time.Duration
+	HeartbeatInterval time.Duration
+	Name              string // Path config name for routing updates
+	Table             string
 }
 
 // Subscribe opens a gNMI Subscribe stream for the given paths and calls
@@ -237,9 +243,22 @@ func (c *Client) Subscribe(ctx context.Context, paths []SubscriptionPath, handle
 
 		if strings.EqualFold(p.Mode, "on_change") {
 			sub.Mode = gpb.SubscriptionMode_ON_CHANGE
+			// Default heartbeat for on_change: server-side liveness signal
+			// so a silent connection is detected without waiting for data changes.
+			if p.HeartbeatInterval > 0 {
+				sub.HeartbeatInterval = uint64(p.HeartbeatInterval.Nanoseconds())
+			} else {
+				sub.HeartbeatInterval = uint64((2 * time.Minute).Nanoseconds())
+			}
 		} else {
 			sub.Mode = gpb.SubscriptionMode_SAMPLE
 			sub.SampleInterval = uint64(p.SampleInterval.Nanoseconds())
+			// Always suppress unchanged values in sample mode to avoid
+			// shipping redundant data every interval.
+			sub.SuppressRedundant = true
+			if p.HeartbeatInterval > 0 {
+				sub.HeartbeatInterval = uint64(p.HeartbeatInterval.Nanoseconds())
+			}
 		}
 
 		subs = append(subs, sub)

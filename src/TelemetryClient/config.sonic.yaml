@@ -76,7 +76,7 @@ paths:
     enabled: true
     mode: sample
     sample_interval: 300s
-    # on_change is supported for this path
+    # on_change is supported for this path.
 
   - name: system-cpus
     yang_path: /openconfig-system:system/cpus

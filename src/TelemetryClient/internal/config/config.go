@@ -49,12 +49,13 @@ type AzureConfig struct {
 }
 
 type PathConfig struct {
-	Name           string        `yaml:"name"`
-	YANGPath       string        `yaml:"yang_path"`
-	Table          string        `yaml:"table"`
-	Enabled        bool          `yaml:"enabled"`
-	Mode           string        `yaml:"mode,omitempty"`            // "sample" or "on_change" (subscribe); ignored in poll mode
-	SampleInterval time.Duration `yaml:"sample_interval,omitempty"` // For sample mode subscriptions
+	Name              string        `yaml:"name"`
+	YANGPath          string        `yaml:"yang_path"`
+	Table             string        `yaml:"table"`
+	Enabled           bool          `yaml:"enabled"`
+	Mode              string        `yaml:"mode,omitempty"`               // "sample" or "on_change" (subscribe); ignored in poll mode
+	SampleInterval    time.Duration `yaml:"sample_interval,omitempty"`    // For sample mode subscriptions
+	HeartbeatInterval time.Duration `yaml:"heartbeat_interval,omitempty"` // Override server-side liveness interval (default: 2m for on_change)
 }
 
 func Load(path string) (*Config, error) {
@@ -119,6 +120,25 @@ func (c *Config) validate() error {
 	}
 	if enabledCount == 0 {
 		return fmt.Errorf("at least one path must be enabled")
+	}
+	return nil
+}
+
+// ValidatePathNames checks that every enabled path references a known
+// transformer name. Call this after loading config and building the
+// transformer registry so configuration errors are caught at startup.
+func (c *Config) ValidatePathNames(validNames []string) error {
+	valid := make(map[string]struct{}, len(validNames))
+	for _, n := range validNames {
+		valid[n] = struct{}{}
+	}
+	for _, p := range c.Paths {
+		if !p.Enabled {
+			continue
+		}
+		if _, ok := valid[p.Name]; !ok {
+			return fmt.Errorf("path %q has no registered transformer (check the name in config; valid names: %v)", p.Name, validNames)
+		}
 	}
 	return nil
 }

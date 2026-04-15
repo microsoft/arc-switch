@@ -67,11 +67,12 @@ func (c *Collector) RunStream(ctx context.Context) error {
 			continue
 		}
 		subPaths = append(subPaths, gnmiclient.SubscriptionPath{
-			YANGPath:       p.YANGPath,
-			Mode:           p.Mode,
-			SampleInterval: p.SampleInterval,
-			Name:           p.Name,
-			Table:          p.Table,
+			YANGPath:          p.YANGPath,
+			Mode:              p.Mode,
+			SampleInterval:    p.SampleInterval,
+			HeartbeatInterval: p.HeartbeatInterval,
+			Name:              p.Name,
+			Table:             p.Table,
 		})
 
 		t, ok := c.transformers[p.Name]
