@@ -107,20 +107,21 @@ paths:
     sample_interval: 300s
 
   # ============================================================
-  # BGP paths — SONiC requires specific network-instance and
-  # protocol keys. Without them, Get returns {} and Subscribe
-  # ONCE fails with "wildcard path not supported".
-  # Using keyed paths returns ALL neighbors/global in one response.
+  # BGP paths — use {network_instance} template for automatic
+  # discovery. At startup the collector queries the device for
+  # all network-instances and expands the template into one
+  # concrete path per VRF. Instances without BGP configured
+  # are automatically skipped.
   # ============================================================
   - name: bgp-neighbors
-    yang_path: /openconfig-network-instance:network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=bgp]/bgp/neighbors
+    yang_path: /openconfig-network-instance:network-instances/network-instance[name={network_instance}]/protocols/protocol[identifier=BGP][name=bgp]/bgp/neighbors
     table: SonicBgpSummary_CL
     enabled: true
     mode: sample
     sample_interval: 300s
 
   - name: bgp-global
-    yang_path: /openconfig-network-instance:network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=bgp]/bgp/global
+    yang_path: /openconfig-network-instance:network-instances/network-instance[name={network_instance}]/protocols/protocol[identifier=BGP][name=bgp]/bgp/global
     table: SonicBgpGlobal_CL
     enabled: true
     mode: sample
@@ -149,10 +150,10 @@ paths:
     sample_interval: 300s
 
   # ============================================================
-  # MAC table — needs network-instance key like BGP paths.
+  # MAC table — uses {network_instance} template like BGP paths.
   # ============================================================
   - name: mac-table
-    yang_path: /openconfig-network-instance:network-instances/network-instance[name=default]/fdb/mac-table
+    yang_path: /openconfig-network-instance:network-instances/network-instance[name={network_instance}]/fdb/mac-table
     table: SonicMacTable_CL
     enabled: true
     mode: sample

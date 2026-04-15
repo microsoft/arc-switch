@@ -57,6 +57,7 @@ type PathConfig struct {
 	Mode              string        `yaml:"mode,omitempty"`               // "sample" or "on_change" (subscribe); ignored in poll mode
 	SampleInterval    time.Duration `yaml:"sample_interval,omitempty"`    // For sample mode subscriptions
 	HeartbeatInterval time.Duration `yaml:"heartbeat_interval,omitempty"` // Override server-side liveness interval (default: 2m for on_change)
+	ResolvedLabel     string        `yaml:"-"`                            // Set by discovery; used for logging instead of Name when non-empty
 }
 
 func Load(path string) (*Config, error) {
@@ -153,6 +154,15 @@ func (c *Config) ValidatePathNames(validNames []string) error {
 // TargetAddr returns the target address in host:port format.
 func (c *Config) TargetAddr() string {
 	return fmt.Sprintf("%s:%d", c.Target.Address, c.Target.Port)
+}
+
+// LogLabel returns a display name for log messages: ResolvedLabel if set
+// by discovery, otherwise the configured Name.
+func (p *PathConfig) LogLabel() string {
+	if p.ResolvedLabel != "" {
+		return p.ResolvedLabel
+	}
+	return p.Name
 }
 
 // ResolveCredentials reads username and password from the environment variables

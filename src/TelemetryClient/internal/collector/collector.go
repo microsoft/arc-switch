@@ -84,7 +84,7 @@ func (c *Collector) RunOnce() error {
 
 		entries, err := c.fetchAndTransform(pathCfg)
 		if err != nil {
-			log.Printf("ERROR [%s]: %v", pathCfg.Name, err)
+			log.Printf("ERROR [%s]: %v", pathCfg.LogLabel(), err)
 			failureCount++
 			continue
 		}
@@ -243,7 +243,7 @@ func (c *Collector) fetchAndTransform(pathCfg config.PathConfig) ([]transform.Co
 	if err != nil {
 		// Some devices (e.g., SONiC) return errors for Get on list paths
 		// that lack specific entity keys. Fall back to Subscribe ONCE.
-		log.Printf("INFO [%s]: Get failed (%v), trying Subscribe ONCE fallback", pathCfg.Name, err)
+		log.Printf("INFO [%s]: Get failed (%v), trying Subscribe ONCE fallback", pathCfg.LogLabel(), err)
 		subNotifs, subErr := c.client.SubscribeOnceWithTimeout(pathCfg.YANGPath)
 		if subErr != nil {
 			// Both Get and Subscribe ONCE failed — return the original Get error
@@ -261,10 +261,10 @@ func (c *Collector) fetchAndTransform(pathCfg config.PathConfig) ([]transform.Co
 	// (e.g., SONiC returns {} for bulk list queries), try Subscribe ONCE
 	// which retrieves the full current state via the subscription mechanism.
 	if len(notifications) > 0 && !gnmiclient.HasNonEmptyValues(notifications) {
-		log.Printf("INFO [%s]: Get returned empty values, falling back to Subscribe ONCE", pathCfg.Name)
+		log.Printf("INFO [%s]: Get returned empty values, falling back to Subscribe ONCE", pathCfg.LogLabel())
 		subNotifs, subErr := c.client.SubscribeOnceWithTimeout(pathCfg.YANGPath)
 		if subErr != nil {
-			log.Printf("WARN [%s]: Subscribe ONCE fallback failed: %v", pathCfg.Name, subErr)
+			log.Printf("WARN [%s]: Subscribe ONCE fallback failed: %v", pathCfg.LogLabel(), subErr)
 			// Continue with the original (empty) Get notifications
 		} else if len(subNotifs) > 0 {
 			notifications = subNotifs
@@ -272,14 +272,14 @@ func (c *Collector) fetchAndTransform(pathCfg config.PathConfig) ([]transform.Co
 	}
 
 	if len(notifications) == 0 {
-		log.Printf("WARN [%s]: no notifications returned", pathCfg.Name)
+		log.Printf("WARN [%s]: no notifications returned", pathCfg.LogLabel())
 		return nil, nil
 	}
 
 	// Dump raw data if requested
 	if c.dumpDir != "" {
-		if err := c.dumpRaw(pathCfg.Name, notifications); err != nil {
-			log.Printf("WARN [%s]: dump failed: %v", pathCfg.Name, err)
+		if err := c.dumpRaw(pathCfg.LogLabel(), notifications); err != nil {
+			log.Printf("WARN [%s]: dump failed: %v", pathCfg.LogLabel(), err)
 		}
 	}
 
@@ -288,13 +288,13 @@ func (c *Collector) fetchAndTransform(pathCfg config.PathConfig) ([]transform.Co
 		for i, n := range notifications {
 			for j, u := range n.Updates {
 				log.Printf("DEBUG [%s] notif[%d].update[%d] path=%s value_type=%T",
-					pathCfg.Name, i, j, u.Path, u.Value)
+					pathCfg.LogLabel(), i, j, u.Path, u.Value)
 				if m, ok := u.Value.(map[string]interface{}); ok {
 					keys := make([]string, 0, len(m))
 					for k := range m {
 						keys = append(keys, k)
 					}
-					log.Printf("DEBUG [%s]   map keys (%d): %v", pathCfg.Name, len(keys), keys)
+					log.Printf("DEBUG [%s]   map keys (%d): %v", pathCfg.LogLabel(), len(keys), keys)
 				}
 			}
 		}
@@ -312,7 +312,7 @@ func (c *Collector) fetchAndTransform(pathCfg config.PathConfig) ([]transform.Co
 	}
 
 	if len(entries) == 0 {
-		log.Printf("WARN [%s]: transformer produced no entries", pathCfg.Name)
+		log.Printf("WARN [%s]: transformer produced no entries", pathCfg.LogLabel())
 		return nil, nil
 	}
 

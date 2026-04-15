@@ -74,6 +74,15 @@ func main() {
 	}
 	log.Printf("Connected — gNMI version %s, %d models", caps.GetGNMIVersion(), len(caps.GetSupportedModels()))
 
+	// Discover and expand template paths (e.g., {network_instance}).
+	// This queries the device to find all VRFs/network-instances and
+	// creates concrete paths for each one.
+	expandedPaths, err := collector.DiscoverAndExpand(client, cfg.Paths)
+	if err != nil {
+		log.Fatalf("FATAL: path discovery: %v", err)
+	}
+	cfg.Paths = expandedPaths
+
 	// Setup Azure logger (unless dry-run or output mode)
 	var logger *azure.Logger
 	var wsID string
