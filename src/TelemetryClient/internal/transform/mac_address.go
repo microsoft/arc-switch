@@ -29,7 +29,7 @@ func (t *MacAddressTransformer) Transform(notifications []gnmi.Notification) ([]
 				continue
 			}
 
-			entryList := getSlice(entriesObj, "entry")
+			entryList := GetSlice(entriesObj, "entry")
 			for _, raw := range entryList {
 				entry, ok := raw.(map[string]interface{})
 				if !ok {

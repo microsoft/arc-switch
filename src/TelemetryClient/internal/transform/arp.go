@@ -24,7 +24,7 @@ func (t *ArpTransformer) Transform(notifications []gnmi.Notification) ([]CommonF
 				continue
 			}
 
-			neighbors := getSlice(vals, "neighbor")
+			neighbors := GetSlice(vals, "neighbor")
 			if neighbors == nil {
 				// Try the value directly as a neighbor entry
 				msg := extractArpEntry(vals, u.Path)

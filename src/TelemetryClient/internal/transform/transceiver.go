@@ -41,7 +41,7 @@ func (t *TransceiverTransformer) Transform(notifications []gnmi.Notification) ([
 			domSupported := false
 			var domData map[string]interface{}
 			if channels := GetMap(vals, "physical-channels"); channels != nil {
-				if chList := getSlice(channels, "channel"); len(chList) > 0 {
+				if chList := GetSlice(channels, "channel"); len(chList) > 0 {
 					domSupported = true
 					ch, _ := chList[0].(map[string]interface{})
 					if ch != nil {

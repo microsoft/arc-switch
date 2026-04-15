@@ -155,6 +155,16 @@ func GetMap(m map[string]interface{}, key string) map[string]interface{} {
 	return nil
 }
 
+// GetSlice extracts a []interface{} from a map by key.
+func GetSlice(m map[string]interface{}, key string) []interface{} {
+	if v, ok := m[key]; ok {
+		if s, ok := v.([]interface{}); ok {
+			return s
+		}
+	}
+	return nil
+}
+
 // AsMapSlice converts a gNMI update value that may be either a
 // map[string]interface{} or []interface{} (array of maps) into a
 // uniform []map[string]interface{}.  NX-OS returns arrays for YANG

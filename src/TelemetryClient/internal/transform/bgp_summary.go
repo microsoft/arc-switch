@@ -34,7 +34,7 @@ func (t *BgpSummaryTransformer) Transform(notifications []gnmi.Notification) ([]
 			// When querying .../bgp/neighbors (keyed path), the response
 			// contains a "neighbor" array with all BGP peers. When querying
 			// .../neighbor/state (per-neighbor), vals IS the single neighbor.
-			if neighborList := getSlice(vals, "neighbor"); neighborList != nil {
+			if neighborList := GetSlice(vals, "neighbor"); neighborList != nil {
 				vrfName := extractKey(u.Path, "name")
 				if vrfName == "" {
 					vrfName = "default"
@@ -119,7 +119,7 @@ func buildBgpNeighborEntry(vals map[string]interface{}, path, vrfName string, gn
 		afiSafisMap = GetMap(stateVals, "afi-safis")
 	}
 	if afiSafisMap != nil {
-		if afiSafiList := getSlice(afiSafisMap, "afi-safi"); afiSafiList != nil {
+		if afiSafiList := GetSlice(afiSafisMap, "afi-safi"); afiSafiList != nil {
 			for _, raw := range afiSafiList {
 				if as, ok := raw.(map[string]interface{}); ok {
 					if asState := GetMap(as, "state"); asState != nil {

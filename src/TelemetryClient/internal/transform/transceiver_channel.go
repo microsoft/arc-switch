@@ -29,7 +29,7 @@ func (t *TransceiverChannelTransformer) Transform(notifications []gnmi.Notificat
 
 			ifName := extractKey(u.Path, "name")
 
-			channelList := getSlice(vals, "channel")
+			channelList := GetSlice(vals, "channel")
 			if channelList == nil {
 				continue
 			}

@@ -34,7 +34,7 @@ func (t *NativeSystemCpuTransformer) Transform(notifications []gnmi.Notification
 
 			// Per-CPU data from syscpu-items/SysCpu-list
 			if cpuItems := GetMap(vals, "syscpu-items"); cpuItems != nil {
-				if cpuList := getSlice(cpuItems, "SysCpu-list"); cpuList != nil {
+				if cpuList := GetSlice(cpuItems, "SysCpu-list"); cpuList != nil {
 					var cpuUsages []map[string]interface{}
 					for _, raw := range cpuList {
 						cpu, ok := raw.(map[string]interface{})
@@ -56,7 +56,7 @@ func (t *NativeSystemCpuTransformer) Transform(notifications []gnmi.Notification
 
 			// CPU usage history from syscpuhistory-items/SysCpuHistory-list
 			if histItems := GetMap(vals, "syscpuhistory-items"); histItems != nil {
-				if histList := getSlice(histItems, "SysCpuHistory-list"); histList != nil {
+				if histList := GetSlice(histItems, "SysCpuHistory-list"); histList != nil {
 					var history []map[string]interface{}
 					for _, raw := range histList {
 						entry, ok := raw.(map[string]interface{})

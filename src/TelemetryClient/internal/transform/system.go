@@ -35,7 +35,7 @@ func (t *SystemResourcesTransformer) Transform(notifications []gnmi.Notification
 			}
 
 			// CPU data (from /system/cpus)
-			if cpuList := getSlice(vals, "cpu"); cpuList != nil {
+			if cpuList := GetSlice(vals, "cpu"); cpuList != nil {
 				var cpuUsages []map[string]interface{}
 				for _, raw := range cpuList {
 					cpu, ok := raw.(map[string]interface{})

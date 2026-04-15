@@ -27,7 +27,7 @@ func (t *NativeEnvTempTransformer) Transform(notifications []gnmi.Notification) 
 
 			module := extractKey(u.Path, "id")
 
-			sensors := getSlice(vals, "Sensor-list")
+			sensors := GetSlice(vals, "Sensor-list")
 			if sensors == nil {
 				// Value may be a single sensor entry rather than a list.
 				msg := nativeTempMsg(module, vals)

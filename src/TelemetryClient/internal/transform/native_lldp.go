@@ -41,7 +41,7 @@ func (t *NativeLldpTransformer) Transform(notifications []gnmi.Notification) ([]
 				if adjItems == nil {
 					continue
 				}
-				adjList := getSlice(adjItems, "AdjEp-list")
+				adjList := GetSlice(adjItems, "AdjEp-list")
 				if adjList == nil {
 					continue
 				}

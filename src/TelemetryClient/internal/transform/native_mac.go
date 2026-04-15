@@ -36,7 +36,7 @@ func (t *NativeMacTransformer) Transform(notifications []gnmi.Notification) ([]C
 			if vlanItems == nil {
 				continue
 			}
-			macList := getSlice(vlanItems, "MacAddressEntry-list")
+			macList := GetSlice(vlanItems, "MacAddressEntry-list")
 			if macList == nil {
 				continue
 			}

@@ -34,7 +34,7 @@ func (t *LldpNeighborTransformer) Transform(notifications []gnmi.Notification) (
 			// 1) Bulk: vals = {"neighbor": [...]}, the full neighbors list
 			// 2) Per-neighbor (Subscribe ONCE): vals IS a single neighbor map
 			//    with "state", "capabilities", etc. directly
-			neighbors := getSlice(vals, "neighbor")
+			neighbors := GetSlice(vals, "neighbor")
 			if neighbors == nil {
 				// Single-neighbor: check if vals has a "state" sub-map
 				if GetMap(vals, "state") != nil || GetString(vals, "id") != "" {
@@ -55,7 +55,7 @@ func (t *LldpNeighborTransformer) Transform(notifications []gnmi.Notification) (
 				// Extract capabilities
 				var sysCaps, enabledCaps []string
 				if capsObj := GetMap(nbr, "capabilities"); capsObj != nil {
-					if capList := getSlice(capsObj, "capability"); capList != nil {
+					if capList := GetSlice(capsObj, "capability"); capList != nil {
 						for _, raw := range capList {
 							cap, ok := raw.(map[string]interface{})
 							if !ok {
@@ -96,11 +96,4 @@ func (t *LldpNeighborTransformer) Transform(notifications []gnmi.Notification) (
 	return results, nil
 }
 
-func getSlice(m map[string]interface{}, key string) []interface{} {
-	if v, ok := m[key]; ok {
-		if s, ok := v.([]interface{}); ok {
-			return s
-		}
-	}
-	return nil
-}
+

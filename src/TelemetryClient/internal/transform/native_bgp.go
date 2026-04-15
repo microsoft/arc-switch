@@ -50,7 +50,7 @@ func (t *NativeBgpTransformer) Transform(notifications []gnmi.Notification) ([]C
 				entItems := GetMap(vals, "ent-items")
 				var peerEntry map[string]interface{}
 				if entItems != nil {
-					if entryList := getSlice(entItems, "PeerEntry-list"); len(entryList) > 0 {
+					if entryList := GetSlice(entItems, "PeerEntry-list"); len(entryList) > 0 {
 						peerEntry, _ = entryList[0].(map[string]interface{})
 					}
 				}
@@ -79,7 +79,7 @@ func (t *NativeBgpTransformer) Transform(notifications []gnmi.Notification) ([]C
 				// Extract prefix info from af-items
 				prefixReceived := ""
 				if afItems := GetMap(peerEntry, "af-items"); afItems != nil {
-					if afList := getSlice(afItems, "PeerAfEntry-list"); len(afList) > 0 {
+					if afList := GetSlice(afItems, "PeerAfEntry-list"); len(afList) > 0 {
 						if af, ok := afList[0].(map[string]interface{}); ok {
 							prefixReceived = GetString(af, "acceptedPaths")
 						}
