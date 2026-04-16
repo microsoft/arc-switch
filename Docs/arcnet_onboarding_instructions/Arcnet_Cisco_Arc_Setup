@@ -19,6 +19,50 @@ TEMP_DIR="/tmp/cisco-parser-output"
 AZURE_TEMP_DIR="/tmp/azure-logger"
 AZCMAGENT_RPM_URL="https://github.com/microsoft/arc-switch/releases/download/v0.0.2-alpha-rpm/azcmagent-1.54.03131-2112.x86_64.rpm"
 
+# =============================================================================
+# PRE-FLIGHT CHECK: Detect conflicting collector
+# =============================================================================
+# The CLI parser and gNMI collector are mutually exclusive. Only one telemetry
+# collection method should be active on a switch at a time.
+
+CONFLICT_FOUND=0
+
+if [ -f /opt/gnmi-collector/gnmi-collector ]; then
+    CONFLICT_FOUND=1
+fi
+
+if [ -f /etc/init.d/gnmi-collectord ]; then
+    CONFLICT_FOUND=1
+fi
+
+if [ $CONFLICT_FOUND -eq 1 ]; then
+    echo "============================================================================"
+    echo "ERROR: gNMI collector is already installed on this switch."
+    echo "============================================================================"
+    echo ""
+    echo "The CLI parser and gNMI collector are mutually exclusive. You must"
+    echo "uninstall the gNMI collector before installing the CLI parser."
+    echo ""
+    echo "To uninstall the gNMI collector, run the following commands:"
+    echo ""
+    echo "  # Stop and remove the gNMI collector service"
+    echo "  /etc/init.d/gnmi-collectord stop 2>/dev/null"
+    echo "  rm -f /etc/init.d/gnmi-collectord"
+    echo ""
+    echo "  # Remove the gNMI collector installation"
+    echo "  rm -rf /opt/gnmi-collector"
+    echo ""
+    echo "  # Remove gNMI collector log and PID files"
+    echo "  rm -f /var/log/gnmi-collector.log /var/run/gnmi-collector.pid"
+    echo ""
+    echo "  # Remove gNMI collector from autostart (if present)"
+    echo "  sed -i '/gnmi-collectord/d' /bootflash/.rpmstore/config/etc/init.d/arcnet-autostart 2>/dev/null"
+    echo ""
+    echo "After uninstalling, re-run this script to proceed with CLI parser setup."
+    echo "============================================================================"
+    exit 1
+fi
+
 cd /opt
 curl -sSL "$AZCMAGENT_RPM_URL" -o azcmagent.rpm
 if [ $? -eq 0 ]; then

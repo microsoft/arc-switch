@@ -33,6 +33,20 @@ What platform is the switch running?
 > deprecated. All new onboardings should use the gNMI path. The CLI path will
 > be removed in a future release once all existing switches are migrated.
 
+### ⚠️ CLI Parser and gNMI Collector Are Mutually Exclusive (Cisco Only)
+
+Cisco NX-OS is the only platform with both a CLI parser and gNMI collector path.
+Each Cisco setup script includes a **pre-flight check** that detects if the other
+collector type is already installed. If a conflict is found, the script prints
+specific uninstall instructions and exits. You must remove the existing collector
+before installing the other.
+
+If you need to migrate from CLI parser to gNMI (recommended), see
+[Uninstalling a Collector](#uninstalling-a-collector) below.
+
+> Dell OS10 only supports CLI parser. SONiC only supports gNMI. No conflict
+> checks are needed for these platforms.
+
 ---
 
 ## Prerequisites
@@ -564,6 +578,50 @@ systemctl restart gnmi-collector
 
 # View logs
 journalctl -u gnmi-collector -f
+```
+
+---
+
+## Uninstalling a Collector
+
+If you need to switch between CLI parser and gNMI collector on a **Cisco NX-OS**
+switch (or remove a collector entirely), follow the instructions below.
+
+> **Note**: These steps only remove the telemetry collector. Azure Arc agent
+> services (himdsd, arcproxyd, extd, gcad) are shared and are **not** removed.
+
+### Cisco NX-OS — Uninstall gNMI Collector
+
+```bash
+# Stop and remove the gNMI collector service
+/etc/init.d/gnmi-collectord stop 2>/dev/null
+rm -f /etc/init.d/gnmi-collectord
+
+# Remove the gNMI collector installation
+rm -rf /opt/gnmi-collector
+
+# Remove log and PID files
+rm -f /var/log/gnmi-collector.log /var/run/gnmi-collector.pid
+
+# Remove from autostart (if present)
+sed -i '/gnmi-collectord/d' /bootflash/.rpmstore/config/etc/init.d/arcnet-autostart 2>/dev/null
+```
+
+### Cisco NX-OS — Uninstall CLI Parser
+
+```bash
+# Remove the cron job
+crontab -l 2>/dev/null | grep -v 'cisco-parser-collector' | crontab -
+
+# Remove parser and helper scripts
+rm -rf /opt/cisco-parser
+rm -f /opt/cisco-parser-collector.sh
+rm -f /opt/cisco-azure-logger-v2.sh
+rm -f /opt/azure-signature-generator.sh
+
+# Remove temporary files and logs
+rm -rf /tmp/cisco-parser-output /tmp/azure-logger
+rm -f /var/log/cisco-parser-collector.log
 ```
 
 ---
