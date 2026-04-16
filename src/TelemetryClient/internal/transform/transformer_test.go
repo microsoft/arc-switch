@@ -40,8 +40,8 @@ func TestInterfaceCountersTransformer(t *testing.T) {
 
 	// Check first result has required fields
 	entry := results[0]
-	if entry.DataType != "cisco_nexus_interface_counters" {
-		t.Errorf("data_type = %q, want cisco_nexus_interface_counters", entry.DataType)
+	if entry.DataType != "interface_counters" {
+		t.Errorf("data_type = %q, want interface_counters", entry.DataType)
 	}
 	if entry.Timestamp == "" {
 		t.Error("timestamp should not be empty")
@@ -80,7 +80,7 @@ func TestInterfaceStatusTransformer(t *testing.T) {
 	}
 
 	entry := results[0]
-	if entry.DataType != "cisco_nexus_interface_status" {
+	if entry.DataType != "interface_status" {
 		t.Errorf("data_type = %q", entry.DataType)
 	}
 

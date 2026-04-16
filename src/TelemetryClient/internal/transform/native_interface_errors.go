@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeInterfaceErrors = "cisco_nexus_interface_error_counters"
+const dataTypeInterfaceErrors = "interface_error_counters"
 
 // NativeInterfaceErrorsTransformer handles native Cisco NX-OS YANG data
 // from /System/intf-items/phys-items/PhysIf-list/dbgEtherStats-items.

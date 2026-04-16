@@ -32,14 +32,14 @@ paths:
   # ============================================================
   - name: interface-counters
     yang_path: /openconfig-interfaces:interfaces/interface/state/counters
-    table: CiscoInterfaceCounter_CL
+    table: InterfaceCounter_CL
     enabled: true
     mode: sample
     sample_interval: 60s
 
   - name: interface-status
     yang_path: /openconfig-interfaces:interfaces/interface/state
-    table: CiscoInterfaceStatus_CL
+    table: InterfaceStatus_CL
     enabled: true
     mode: sample
     sample_interval: 60s
@@ -47,14 +47,14 @@ paths:
 
   - name: system-state
     yang_path: /openconfig-system:system/state
-    table: CiscoSystemUptime_CL
+    table: SystemUptime_CL
     enabled: true
     mode: sample
     sample_interval: 300s
 
   - name: platform-inventory
     yang_path: /openconfig-platform:components/component
-    table: CiscoInventory_CL
+    table: Inventory_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -64,7 +64,7 @@ paths:
   # ============================================================
   - name: if-ethernet
     yang_path: /openconfig-if-ethernet:interfaces/interface/ethernet/state
-    table: CiscoInterfaceEthernet_CL
+    table: InterfaceEthernet_CL
     enabled: true
     mode: sample
     sample_interval: 60s
@@ -72,14 +72,14 @@ paths:
 
   - name: bgp-global
     yang_path: /openconfig-network-instance:network-instances/network-instance/protocols/protocol/bgp/global/state
-    table: CiscoBgpGlobal_CL
+    table: BgpGlobal_CL
     enabled: true
     mode: sample
     sample_interval: 300s
 
   - name: transceiver-channel
     yang_path: /openconfig-platform:components/component/transceiver/physical-channels
-    table: CiscoTransceiverDom_CL
+    table: TransceiverDom_CL
     enabled: true
     mode: sample
     sample_interval: 60s
@@ -90,30 +90,30 @@ paths:
   # ============================================================
   - name: nx-transceiver
     yang_path: /System/intf-items/phys-items/PhysIf-list/phys-items
-    table: CiscoTransceiver_CL
+    table: Transceiver_CL
     enabled: true
     mode: sample
     sample_interval: 60s
 
   - name: nx-arp
     yang_path: /System/arp-items/inst-items/dom-items/Dom-list/db-items/Db-list/adj-items/AdjEp-list
-    table: CiscoIpArp_CL
+    table: ArpEntry_CL
     enabled: true
     mode: sample
     sample_interval: 300s
 
   - name: nx-bgp-peers
     yang_path: /System/bgp-items/inst-items/dom-items/Dom-list/peer-items/Peer-list
-    table: CiscoBgpSummary_CL
+    table: BgpNeighbor_CL
     enabled: true
     mode: sample
     sample_interval: 300s
     # NOTE: vrf_local_as is not available at the Peer-list level in NX-OS YANG.
-    # It is provided in the CiscoBgpGlobal_CL table (from bgp-global OC path).
+    # It is provided in the BgpGlobal_CL table (from bgp-global OC path).
 
   - name: nx-env-sensor
     yang_path: /System/ch-items/supslot-items/SupCSlot-list/sup-items/sensor-items
-    table: CiscoEnvTemp_CL
+    table: EnvTemperature_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -127,21 +127,21 @@ paths:
 
   - name: nx-sys-cpu
     yang_path: /System/procsys-items/syscpusummary-items
-    table: CiscoSystemResources_CL
+    table: SystemResources_CL
     enabled: true
     mode: sample
     sample_interval: 300s
 
   - name: nx-sys-memory
     yang_path: /System/procsys-items/sysmem-items
-    table: CiscoSystemResources_CL
+    table: SystemResources_CL
     enabled: true
     mode: sample
     sample_interval: 300s
 
   - name: nx-sys-load
     yang_path: /System/procsys-items/sysload-items
-    table: CiscoSystemResources_CL
+    table: SystemResources_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -155,7 +155,7 @@ paths:
 
   - name: nx-mac-table
     yang_path: /System/mac-items
-    table: CiscoMacAddress_CL
+    table: MacTable_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -176,7 +176,7 @@ paths:
 
   - name: nx-lldp
     yang_path: /System/lldp-items/inst-items/if-items/If-list
-    table: CiscoLldpNeighbor_CL
+    table: LldpNeighbor_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -187,17 +187,17 @@ paths:
   # ============================================================
   - name: bgp-neighbors
     yang_path: /openconfig-network-instance:network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state
-    table: CiscoBgpSummary_CL
+    table: BgpNeighbor_CL
     enabled: false
 
   - name: lldp-neighbors
     yang_path: /openconfig-lldp:lldp/interfaces/interface/neighbors
-    table: CiscoLldpNeighbor_CL
+    table: LldpNeighbor_CL
     enabled: false
 
   - name: temperature
     yang_path: /openconfig-platform:components/component/state/temperature
-    table: CiscoEnvTemp_CL
+    table: EnvTemperature_CL
     enabled: false
 
   - name: power-supply
@@ -207,25 +207,25 @@ paths:
 
   - name: system-cpus
     yang_path: /openconfig-system:system/cpus
-    table: CiscoSystemResources_CL
+    table: SystemResources_CL
     enabled: false
 
   - name: system-memory
     yang_path: /openconfig-system:system/memory
-    table: CiscoSystemResources_CL
+    table: SystemResources_CL
     enabled: false
 
   - name: arp-table
     yang_path: /openconfig-if-ip:interfaces/interface/subinterfaces/subinterface/ipv4/neighbors
-    table: CiscoIpArp_CL
+    table: ArpEntry_CL
     enabled: false
 
   - name: mac-table
     yang_path: /openconfig-network-instance:network-instances/network-instance/fdb/mac-table
-    table: CiscoMacAddress_CL
+    table: MacTable_CL
     enabled: false
 
   - name: transceiver
     yang_path: /openconfig-platform:components/component/transceiver
-    table: CiscoTransceiver_CL
+    table: Transceiver_CL
     enabled: false

@@ -7,7 +7,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeEnvTemp = "cisco_nexus_environment_temperature"
+const dataTypeEnvTemp = "environment_temperature"
 
 func init() {
 	Register("temperature", func() Transformer { return &EnvironmentTempTransformer{} })
@@ -83,7 +83,7 @@ func deriveTempStatus(alarm bool) string {
 	return "Ok"
 }
 
-const dataTypeEnvPower = "cisco_nexus_environment_power"
+const dataTypeEnvPower = "environment_power"
 
 type EnvironmentPowerTransformer struct{}
 

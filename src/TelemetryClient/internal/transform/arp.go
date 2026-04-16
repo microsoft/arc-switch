@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeArp = "cisco_nexus_arp_entry"
+const dataTypeArp = "arp_entry"
 
 func init() {
 	Register("arp-table", func() Transformer { return &ArpTransformer{} })

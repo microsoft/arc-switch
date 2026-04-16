@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"gnmi-collector/internal/azure"
@@ -316,11 +315,6 @@ func (c *Collector) fetchAndTransform(pathCfg config.PathConfig) ([]transform.Co
 		return nil, nil
 	}
 
-	// Apply vendor-specific data_type prefix from config.
-	// Transformers always produce "cisco_nexus_*" data types internally;
-	// this replaces the prefix for other vendors (e.g., "sonic_*").
-	applyDataTypePrefix(entries, c.cfg.DataTypePrefix())
-
 	return entries, nil
 }
 
@@ -364,20 +358,3 @@ func (c *Collector) writeTransformed(table string, entries []transform.CommonFie
 	return os.WriteFile(path, data, 0644)
 }
 
-// applyDataTypePrefix replaces the default "cisco_nexus_" prefix in data_type
-// fields with the configured vendor prefix. This allows the same transformer
-// code to produce vendor-appropriate output (e.g., "sonic_interface_counters").
-// If the configured prefix is already "cisco_nexus", this is a no-op.
-func applyDataTypePrefix(entries []transform.CommonFields, prefix string) {
-	const defaultPrefix = "cisco_nexus"
-	if prefix == defaultPrefix {
-		return
-	}
-	for i := range entries {
-		dt := entries[i].DataType
-		if strings.HasPrefix(dt, defaultPrefix+"_") {
-			category := dt[len(defaultPrefix)+1:]
-			entries[i].DataType = prefix + "_" + category
-		}
-	}
-}

@@ -268,9 +268,6 @@ func (c *Collector) subscribeOnce(
 				continue
 			}
 
-			// Apply vendor-specific data_type prefix (same as poll mode).
-			applyDataTypePrefix(entries, c.cfg.DataTypePrefix())
-
 			batch := batches[sp.Table]
 			batch.add(entries)
 			updateCount++

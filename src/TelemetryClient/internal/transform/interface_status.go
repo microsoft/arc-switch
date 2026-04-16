@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeInterfaceStatus = "cisco_nexus_interface_status"
+const dataTypeInterfaceStatus = "interface_status"
 
 func init() {
 	Register("interface-status", func() Transformer { return &InterfaceStatusTransformer{} })

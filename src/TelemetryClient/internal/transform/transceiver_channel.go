@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeTransceiverChannel = "cisco_nexus_transceiver_dom"
+const dataTypeTransceiverChannel = "transceiver_dom"
 
 func init() {
 	Register("transceiver-channel", func() Transformer { return &TransceiverChannelTransformer{} })

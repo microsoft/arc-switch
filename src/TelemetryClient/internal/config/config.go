@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	"gopkg.in/yaml.v3"
@@ -188,21 +187,3 @@ func (c *Config) ResolveAzureKeys() (workspaceID, primaryKey, secondaryKey strin
 	return
 }
 
-// DataTypePrefix returns the vendor-specific prefix used for data_type fields
-// in telemetry output. Derived from the configured device_type.
-// Examples: "cisco-nx-os" → "cisco_nexus", "sonic" → "sonic".
-func (c *Config) DataTypePrefix() string {
-	return DeviceTypeToPrefix(c.Azure.DeviceType)
-}
-
-// DeviceTypeToPrefix converts a device_type string to its data_type prefix.
-func DeviceTypeToPrefix(deviceType string) string {
-	switch deviceType {
-	case "cisco-nx-os":
-		return "cisco_nexus"
-	case "sonic":
-		return "sonic"
-	default:
-		return strings.ReplaceAll(deviceType, "-", "_")
-	}
-}

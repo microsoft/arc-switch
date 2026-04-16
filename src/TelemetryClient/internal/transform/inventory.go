@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeInventory = "cisco_nexus_inventory"
+const dataTypeInventory = "inventory"
 
 func init() {
 	Register("platform-inventory", func() Transformer { return &InventoryTransformer{} })

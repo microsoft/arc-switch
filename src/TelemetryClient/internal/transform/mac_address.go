@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeMacTable = "cisco_nexus_mac_table"
+const dataTypeMacTable = "mac_table"
 
 func init() {
 	Register("mac-table", func() Transformer { return &MacAddressTransformer{} })
