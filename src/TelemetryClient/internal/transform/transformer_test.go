@@ -399,3 +399,31 @@ func TestArpTransformerEmpty(t *testing.T) {
 		t.Errorf("expected 0 results for empty ARP, got %d", len(results))
 	}
 }
+
+func TestParseCapabilityString(t *testing.T) {
+	tests := []struct {
+		input string
+		want  []string
+	}{
+		{"", nil},
+		{"  ", nil},
+		{"bridge", []string{"bridge"}},
+		{"bridge,router", []string{"bridge", "router"}},
+		{"bridge router", []string{"bridge", "router"}},
+		{"bridge, router", []string{"bridge", "router"}},
+		{"bridge, router, station-only", []string{"bridge", "router", "station-only"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			got := parseCapabilityString(tt.input)
+			if len(got) != len(tt.want) {
+				t.Fatalf("parseCapabilityString(%q) = %v, want %v", tt.input, got, tt.want)
+			}
+			for i := range got {
+				if got[i] != tt.want[i] {
+					t.Errorf("parseCapabilityString(%q)[%d] = %q, want %q", tt.input, i, got[i], tt.want[i])
+				}
+			}
+		})
+	}
+}
