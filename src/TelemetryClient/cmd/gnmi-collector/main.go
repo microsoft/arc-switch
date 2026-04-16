@@ -139,6 +139,9 @@ func main() {
 	// Context cancellation alone cannot interrupt a Recv blocked on a
 	// half-open TCP connection; the keepalive timeout may take tens of
 	// seconds to fire. A hard deadline guarantees the process exits promptly.
+	//
+	// NOTE: Config changes require a full service restart. There is no
+	// hot-reload (SIGHUP) support yet — only SIGINT/SIGTERM are handled.
 	ctx, cancel := context.WithCancel(context.Background())
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)

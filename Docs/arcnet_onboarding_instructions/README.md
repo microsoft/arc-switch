@@ -550,6 +550,12 @@ $env:PRIMARY_KEY   = "<your-primary-key>"
 
 ## Service Management
 
+> **⚠️ Config changes require a full service restart.** The gNMI collector does
+> not support hot-reload. After editing `config.yaml` (e.g., enabling new paths,
+> changing intervals), you must restart the collector service. This will cause a
+> brief telemetry gap while the service restarts and re-establishes gNMI
+> subscriptions. Plan config changes during low-traffic windows when possible.
+
 ### Cisco NX-OS (init.d)
 
 ```bash
