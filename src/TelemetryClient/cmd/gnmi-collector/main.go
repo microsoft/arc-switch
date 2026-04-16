@@ -60,8 +60,7 @@ func main() {
 	// Validate gNMI credentials before dialing
 	gnmiUser, gnmiPass := cfg.ResolveCredentials()
 	if gnmiUser == "" || gnmiPass == "" {
-		log.Fatalf("FATAL: gNMI credentials not set — ensure %s and %s environment variables are configured",
-			cfg.Target.Credentials.UsernameEnv, cfg.Target.Credentials.PasswordEnv)
+		log.Fatalf("FATAL: gNMI credentials not set — ensure required environment variables are configured")
 	}
 
 	// Connect gNMI
