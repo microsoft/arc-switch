@@ -56,25 +56,28 @@ func NewClient(cfg *config.Config) (*Client, error) {
 	}
 
 	if cfg.Target.TLS.Enabled {
-		tlsCfg := &tls.Config{
-			InsecureSkipVerify: cfg.Target.TLS.SkipVerify,
-		}
-		if cfg.Target.TLS.SkipVerify {
-			log.Printf("WARN: TLS skip_verify is enabled — server certificate is NOT verified. " +
-				"An attacker with network access could intercept gNMI credentials and telemetry data. " +
-				"Set tls.ca_file with cert_auto_fetch for production use.")
-		}
-		// Load pinned CA cert if configured (TOFU bootstrap or manual pin).
+		tlsCfg := &tls.Config{}
+
 		if cfg.Target.TLS.CAFile != "" {
-			pool, err := BootstrapCert(cfg.TargetAddr(), cfg.Target.TLS.CAFile, cfg.Target.TLS.CertAutoFetch)
+			// Explicit CA file: load or TOFU-fetch+persist the pinned cert.
+			pool, err := BootstrapCert(cfg.TargetAddr(), cfg.Target.TLS.CAFile)
 			if err != nil {
 				return nil, fmt.Errorf("TLS cert setup: %w", err)
 			}
 			if pool != nil {
 				tlsCfg.RootCAs = pool
-				tlsCfg.InsecureSkipVerify = false // enforce verification when we have a pinned cert
 			}
+			log.Printf("TLS: using pinned CA from %s", cfg.Target.TLS.CAFile)
+		} else {
+			// Default: in-memory TOFU — fetch server cert, trust it for this session.
+			pool, serverName, err := TOFUCertPool(cfg.TargetAddr())
+			if err != nil {
+				return nil, fmt.Errorf("TLS TOFU bootstrap: %w", err)
+			}
+			tlsCfg.RootCAs = pool
+			tlsCfg.ServerName = serverName
 		}
+
 		opts = append(opts, grpc.WithTransportCredentials(credentials.NewTLS(tlsCfg)))
 	} else {
 		opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))

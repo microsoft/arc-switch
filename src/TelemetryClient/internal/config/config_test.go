@@ -14,7 +14,6 @@ target:
   port: 50051
   tls:
     enabled: true
-    skip_verify: true
   credentials:
     username_env: GNMI_USER
     password_env: GNMI_PASS
@@ -51,9 +50,6 @@ paths:
 	}
 	if !cfg.Target.TLS.Enabled {
 		t.Error("tls.enabled should be true")
-	}
-	if !cfg.Target.TLS.SkipVerify {
-		t.Error("tls.skip_verify should be true")
 	}
 	if cfg.Collection.Interval != 300*time.Second {
 		t.Errorf("interval = %v, want 5m0s", cfg.Collection.Interval)
@@ -104,7 +100,7 @@ paths:
 }
 
 func TestTLSValidation(t *testing.T) {
-	// ca_file without skip_verify should pass validation
+	// ca_file should pass validation
 	caFileYaml := []byte(`
 target:
   address: 127.0.0.1
@@ -125,14 +121,13 @@ paths:
 		t.Errorf("ca_file config should be valid, got: %v", err)
 	}
 
-	// skip_verify without ca_file should pass validation
-	skipYaml := []byte(`
+	// TLS enabled without ca_file should pass (TOFU default)
+	tofuYaml := []byte(`
 target:
   address: 127.0.0.1
   port: 50051
   tls:
     enabled: true
-    skip_verify: true
 azure:
   device_type: cisco-nx-os
 paths:
@@ -141,12 +136,12 @@ paths:
     table: T
     enabled: true
 `)
-	_, err = Parse(skipYaml)
+	_, err = Parse(tofuYaml)
 	if err != nil {
-		t.Errorf("skip_verify config should be valid, got: %v", err)
+		t.Errorf("TLS with TOFU (no ca_file) should be valid, got: %v", err)
 	}
 
-	// TLS disabled should not require either
+	// TLS disabled should not require anything
 	disabledYaml := []byte(`
 target:
   address: 127.0.0.1
@@ -245,19 +240,6 @@ paths:
   - name: test
     yang_path: /test
     table: ""
-    enabled: true`},
-		{"tls enabled without skip_verify or ca_file", `
-target:
-  address: 127.0.0.1
-  port: 50051
-  tls:
-    enabled: true
-azure:
-  device_type: cisco-nx-os
-paths:
-  - name: test
-    yang_path: /test
-    table: T
     enabled: true`},
 	}
 

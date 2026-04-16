@@ -8,6 +8,7 @@ import (
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"math/big"
+	"net"
 	"os"
 	"path/filepath"
 	"strings"
@@ -192,8 +193,8 @@ func TestRefetchAndSave_SameCert(t *testing.T) {
 }
 
 func TestBootstrapCert_NoCAFile(t *testing.T) {
-	// When ca_file is empty, BootstrapCert returns nil (skip_verify mode)
-	pool, err := BootstrapCert("localhost:50051", "", false)
+	// When ca_file is empty, BootstrapCert returns nil (caller should use TOFU)
+	pool, err := BootstrapCert("localhost:50051", "")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -211,7 +212,7 @@ func TestBootstrapCert_ExistingFile(t *testing.T) {
 		t.Fatalf("save: %v", err)
 	}
 
-	pool, err := BootstrapCert("localhost:50051", path, false)
+	pool, err := BootstrapCert("localhost:50051", path)
 	if err != nil {
 		t.Fatalf("BootstrapCert: %v", err)
 	}
@@ -220,15 +221,46 @@ func TestBootstrapCert_ExistingFile(t *testing.T) {
 	}
 }
 
-func TestBootstrapCert_MissingFileNoAutoFetch(t *testing.T) {
-	dir := t.TempDir()
-	path := filepath.Join(dir, "missing.pem")
+func TestCertServerName(t *testing.T) {
+	tests := []struct {
+		name     string
+		cn       string
+		dns      []string
+		ips      []string
+		wantName string
+	}{
+		{"DNS SAN preferred", "switch.local", []string{"switch.example.com"}, nil, "switch.example.com"},
+		{"IP SAN fallback", "switch.local", nil, []string{"10.0.0.1"}, "10.0.0.1"},
+		{"CN fallback", "switch.local", nil, nil, "switch.local"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			key, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+			template := &x509.Certificate{
+				SerialNumber: big.NewInt(1),
+				Subject:      pkix.Name{CommonName: tt.cn},
+				NotBefore:    time.Now().Add(-1 * time.Hour),
+				NotAfter:     time.Now().Add(24 * time.Hour),
+				DNSNames:     tt.dns,
+			}
+			for _, ip := range tt.ips {
+				template.IPAddresses = append(template.IPAddresses, parseIP(ip))
+			}
+			der, _ := x509.CreateCertificate(rand.Reader, template, template, &key.PublicKey, key)
+			cert, _ := x509.ParseCertificate(der)
 
-	_, err := BootstrapCert("localhost:50051", path, false)
-	if err == nil {
-		t.Error("expected error when ca_file missing and auto_fetch disabled")
+			got := CertServerName(cert)
+			if got != tt.wantName {
+				t.Errorf("CertServerName() = %q, want %q", got, tt.wantName)
+			}
+		})
 	}
-	if !strings.Contains(err.Error(), "not found") {
-		t.Errorf("error should mention 'not found', got: %v", err)
+}
+
+func parseIP(s string) net.IP {
+	ip := net.ParseIP(s)
+	if ip == nil {
+		panic("invalid IP: " + s)
 	}
+	return ip
 }

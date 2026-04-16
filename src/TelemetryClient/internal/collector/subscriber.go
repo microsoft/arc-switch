@@ -147,23 +147,36 @@ func (c *Collector) RunStream(ctx context.Context) error {
 		}
 
 		// Self-heal on TLS certificate verification failures.
-		// When ca_file is configured with cert_auto_fetch, a cert rotation
-		// on the switch causes verification to fail. We re-fetch the new
-		// cert, save it, and create a fresh client.
-		if gnmiclient.IsCertVerificationError(err) && c.cfg.Target.TLS.CertAutoFetch && c.cfg.Target.TLS.CAFile != "" {
+		// When TLS is enabled, a cert rotation on the switch causes
+		// verification to fail. We re-fetch the cert and create a fresh client.
+		if gnmiclient.IsCertVerificationError(err) && c.cfg.Target.TLS.Enabled {
 			log.Printf("WARN: TLS certificate verification failed — attempting cert re-fetch from %s", c.cfg.TargetAddr())
-			pool, refetchErr := gnmiclient.RefetchAndSave(c.cfg.TargetAddr(), c.cfg.Target.TLS.CAFile)
-			if refetchErr != nil {
-				log.Printf("WARN: cert re-fetch failed: %v — will retry with normal backoff", refetchErr)
-			} else if pool != nil {
+			if c.cfg.Target.TLS.CAFile != "" {
+				// Persistent mode: re-fetch and save to ca_file
+				pool, refetchErr := gnmiclient.RefetchAndSave(c.cfg.TargetAddr(), c.cfg.Target.TLS.CAFile)
+				if refetchErr != nil {
+					log.Printf("WARN: cert re-fetch failed: %v — will retry with normal backoff", refetchErr)
+				} else if pool != nil {
+					newClient, dialErr := gnmiclient.NewClient(c.cfg)
+					if dialErr != nil {
+						log.Printf("ERROR: reconnect with new cert failed: %v", dialErr)
+					} else {
+						c.ReplaceClient(newClient)
+						log.Printf("Reconnected with updated server certificate")
+						delay = initialReconnectDelay
+						continue // skip backoff — we already have a fresh connection
+					}
+				}
+			} else {
+				// In-memory TOFU mode: just re-create the client (TOFU will re-probe)
 				newClient, dialErr := gnmiclient.NewClient(c.cfg)
 				if dialErr != nil {
-					log.Printf("ERROR: reconnect with new cert failed: %v", dialErr)
+					log.Printf("ERROR: reconnect with TOFU re-probe failed: %v", dialErr)
 				} else {
 					c.ReplaceClient(newClient)
-					log.Printf("Reconnected with updated server certificate")
+					log.Printf("Reconnected with fresh TOFU certificate")
 					delay = initialReconnectDelay
-					continue // skip backoff — we already have a fresh connection
+					continue
 				}
 			}
 		}

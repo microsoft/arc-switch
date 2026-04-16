@@ -6,7 +6,6 @@ target:
   port: 50051
   tls:
     enabled: true
-    skip_verify: true
   credentials:
     username_env: GNMI_USER
     password_env: GNMI_PASS

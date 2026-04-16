@@ -7,16 +7,27 @@ import (
 	"encoding/pem"
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
+
+const tofuProbeTimeout = 10 * time.Second
 
 // FetchServerCert connects to the given address with TLS (skipping
 // verification) and returns the server's leaf certificate in DER form.
 // This is used for trust-on-first-use (TOFU) cert bootstrapping.
+// The probe has a 10-second timeout to avoid hanging on unreachable targets.
 func FetchServerCert(addr string) (*x509.Certificate, error) {
-	conn, err := tls.Dial("tcp", addr, &tls.Config{
+	dialer := &net.Dialer{Timeout: tofuProbeTimeout}
+	// WORKAROUND: InsecureSkipVerify is required here because the TOFU probe
+	// must connect before we have any trusted cert to verify against.
+	// This is intended only for the current self-signed cert environment.
+	// TODO: once a proper CA-signed certificate is installed on the switch
+	// for gRPC, replace TOFU with standard certificate validation.
+	conn, err := tls.DialWithDialer(dialer, "tcp", addr, &tls.Config{
 		InsecureSkipVerify: true,
 	})
 	if err != nil {
@@ -40,6 +51,61 @@ func CertFingerprint(cert *x509.Certificate) string {
 		parts[i] = fmt.Sprintf("%02x", b)
 	}
 	return strings.Join(parts, ":")
+}
+
+// CertServerName extracts a usable ServerName from the certificate.
+// Prefers the first DNS SAN; falls back to the first IP SAN as string;
+// then falls back to the Subject CommonName.
+func CertServerName(cert *x509.Certificate) string {
+	if len(cert.DNSNames) > 0 {
+		return cert.DNSNames[0]
+	}
+	if len(cert.IPAddresses) > 0 {
+		return cert.IPAddresses[0].String()
+	}
+	return cert.Subject.CommonName
+}
+
+// TOFUCertPool performs trust-on-first-use: it probes the server,
+// fetches its leaf certificate, and returns an in-memory CertPool
+// along with the ServerName to use for hostname verification.
+// The pool and server name are NOT persisted to disk.
+func TOFUCertPool(addr string) (*x509.CertPool, string, error) {
+	cert, err := FetchServerCert(addr)
+	if err != nil {
+		return nil, "", err
+	}
+
+	fp := CertFingerprint(cert)
+	serverName := CertServerName(cert)
+	log.Printf("TOFU: trusted server certificate from %s (ServerName=%s, SHA-256=%s)", addr, serverName, fp)
+
+	pool := x509.NewCertPool()
+	pool.AddCert(cert)
+	return pool, serverName, nil
+}
+
+// TOFURefetch re-probes the server and returns an updated CertPool
+// if the certificate has changed since the given fingerprint.
+// Returns the new pool, new fingerprint, and server name.
+// Returns nil pool if the cert is unchanged.
+func TOFURefetch(addr, oldFingerprint string) (*x509.CertPool, string, string, error) {
+	cert, err := FetchServerCert(addr)
+	if err != nil {
+		return nil, "", "", fmt.Errorf("cert re-fetch probe failed: %w", err)
+	}
+
+	newFP := CertFingerprint(cert)
+	if newFP == oldFingerprint {
+		return nil, "", "", fmt.Errorf("server certificate unchanged (SHA-256: %s) — TLS error is not caused by cert rotation", newFP)
+	}
+
+	serverName := CertServerName(cert)
+	log.Printf("WARN: server certificate changed — old fingerprint: %s, new fingerprint: %s", oldFingerprint, newFP)
+
+	pool := x509.NewCertPool()
+	pool.AddCert(cert)
+	return pool, newFP, serverName, nil
 }
 
 // SaveCertPEM writes a certificate to a PEM file atomically. It writes to
@@ -83,11 +149,11 @@ func LoadCACertPool(path string) (*x509.CertPool, error) {
 	return pool, nil
 }
 
-// BootstrapCert handles TOFU cert bootstrapping. If the ca_file doesn't
-// exist and auto-fetch is enabled, it probes the server, saves the cert,
-// and returns the loaded cert pool. If the file exists, it loads it.
-// Returns nil (use skip_verify) if ca_file is not configured.
-func BootstrapCert(addr, caFile string, autoFetch bool) (*x509.CertPool, error) {
+// BootstrapCert loads a pinned CA cert from ca_file. If the file doesn't
+// exist, it probes the server via TOFU, saves the cert, and returns
+// the loaded cert pool. Returns nil if ca_file is not configured
+// (caller should use in-memory TOFU instead).
+func BootstrapCert(addr, caFile string) (*x509.CertPool, error) {
 	if caFile == "" {
 		return nil, nil
 	}
@@ -102,11 +168,7 @@ func BootstrapCert(addr, caFile string, autoFetch bool) (*x509.CertPool, error) 
 		return pool, nil
 	}
 
-	// File doesn't exist — auto-fetch if enabled
-	if !autoFetch {
-		return nil, fmt.Errorf("ca_file %s not found and cert_auto_fetch is disabled", caFile)
-	}
-
+	// File doesn't exist — auto-fetch via TOFU
 	log.Printf("ca_file %s not found — fetching server certificate from %s (TOFU)", caFile, addr)
 	cert, err := FetchServerCert(addr)
 	if err != nil {
