@@ -532,10 +532,7 @@ func (c *Collector) flushBatch(batch *tableBatch) {
 
 	maps := make([]map[string]interface{}, 0, len(entries))
 	for _, e := range entries {
-		raw, _ := json.Marshal(e)
-		var m map[string]interface{}
-		json.Unmarshal(raw, &m)
-		maps = append(maps, m)
+		maps = append(maps, flattenEntry(e))
 	}
 
 	if err := c.logger.Send(batch.table, maps); err != nil {
