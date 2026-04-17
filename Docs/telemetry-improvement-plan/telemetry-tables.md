@@ -64,12 +64,6 @@ summary, environment sensors) that have no OpenConfig equivalent on SONiC.
 The following screenshots were taken from Azure Log Analytics and show
 real telemetry collected from both Cisco NX-OS and SONiC switches.
 
-### Interface Counters — Traffic Chart
-
-Per-interface traffic counters (bytes, packets, unicast, multicast) plotted
-over time. Useful for spotting traffic spikes and link utilization patterns.
-
-![Interface counters timechart](../../media/images/interface-counter.png)
 
 ### Interface Counters — Top Interfaces by Traffic
 

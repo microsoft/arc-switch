@@ -466,6 +466,8 @@ The following custom tables are created in your Log Analytics workspace (Azure a
 
 ---
 
+See [telemetry tables](./../telemetry-improvement-plan/telemetry-tables.md) for a more detailed view of the table inventory.
+
 ## Architecture
 
 ### Data Flow — gNMI (Cisco + SONiC)
