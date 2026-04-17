@@ -675,6 +675,9 @@ cat /opt/gnmi-collector/gnmi-collector.env
 
 ---
 
+## Demo
+See a [demo](./../../media/videos/gnmi-demo.mp4) explaining the high level overview of the project, the configuration file of the collector and the resulting data a of bgp flap event.
+
 ## Grafana Dashboard Setup
 
 To visualize telemetry data, use Grafana with the Azure Monitor data source.
