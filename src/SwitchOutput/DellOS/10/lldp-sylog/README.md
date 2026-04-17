@@ -15,7 +15,7 @@ flowchart TD
 
 [show lldp neighbor details](./show-lldp-neighbors-detail.txt)
 
-![LLDP Table](../../../../images/lldp-table.png)
+![LLDP Table](../../../../media/images/lldp-table.png)
 
 ## KQL
 

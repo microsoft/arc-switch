@@ -251,7 +251,7 @@ three TLS modes, configured in the YAML:
 │  │ tls:         │               │ if ca_file set:            │   │
 │  │   enabled: T │──────────────►│   load CA → verify server  │   │
 │  │   ca_file: ""│               │ elif skip_verify:          │   │
-│  │   skip_verify│               │   InsecureSkipVerify: true │   │
+│  │   skip_verify│               │   tls: skip verification   │   │
 │  │     : false  │               │ else (default — TOFU):     │   │
 │  └──────────────┘               │   fetch cert on connect,   │   │
 │                                 │   pin for session lifetime  │   │

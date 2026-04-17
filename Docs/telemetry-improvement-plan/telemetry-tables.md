@@ -69,14 +69,14 @@ real telemetry collected from both Cisco NX-OS and SONiC switches.
 Per-interface traffic counters (bytes, packets, unicast, multicast) plotted
 over time. Useful for spotting traffic spikes and link utilization patterns.
 
-![Interface counters timechart](../../images/interface-counter.png)
+![Interface counters timechart](../../media/images/interface-counter.png)
 
 ### Interface Counters — Top Interfaces by Traffic
 
 Bar chart showing the top 10 busiest interfaces ranked by total bytes
 (in + out). Quickly identifies which links carry the most traffic.
 
-![Top interfaces by traffic](../../images/interfaces_traffic.png)
+![Top interfaces by traffic](../../media/images/interfaces_traffic.png)
 
 ### BGP Peers
 
@@ -84,7 +84,7 @@ BGP neighbor table showing session state, message counts, and prefix
 counts for all peers. Both Cisco and SONiC peers appear in the same table
 with the `device_type` column distinguishing them.
 
-![BGP peers table](../../images/bgp_peers.png)
+![BGP peers table](../../media/images/bgp_peers.png)
 
 ### LLDP Neighbors
 
@@ -92,7 +92,7 @@ LLDP neighbor discovery table showing local port, remote device name,
 remote port, chassis ID, and device capabilities. Provides a live view
 of the physical network topology.
 
-![LLDP neighbors table](../../images/lldp_neighbour.png)
+![LLDP neighbors table](../../media/images/lldp_neighbour.png)
 
 ### ARP Table
 
@@ -100,7 +100,7 @@ ARP entries across all VLANs and interfaces, showing IP-to-MAC mappings.
 Both Cisco (VLAN interfaces) and SONiC (Ethernet interfaces) entries are
 visible.
 
-![ARP entry table](../../images/arpEntry.png)
+![ARP entry table](../../media/images/arpEntry.png)
 
 ### System Uptime
 
@@ -108,7 +108,7 @@ System uptime records for all monitored switches. Alternating entries from
 Cisco NX-OS and SONiC show both platforms reporting on the same polling
 cadence.
 
-![System uptime table](../../images/uptime.png)
+![System uptime table](../../media/images/uptime.png)
 
 ### Platform Inventory
 
@@ -116,7 +116,7 @@ Hardware inventory showing chassis components — line cards, CPUs, fans,
 PSUs, and transceivers. Component type and description are included for
 each entry.
 
-![Inventory table](../../images/inventory.png)
+![Inventory table](../../media/images/inventory.png)
 
 ---
 

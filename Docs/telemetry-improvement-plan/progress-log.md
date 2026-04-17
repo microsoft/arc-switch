@@ -125,10 +125,13 @@ endpoints are reachable only from the default VRF. Fixed with
 Needs security team approval for production deployment.
 
 **bootflash is noexec**: SCP uploads land on `/bootflash/`, which is
-mounted noexec. Binaries must be copied to `/tmp/` to execute:
+mounted noexec. Binaries must be copied to an executable path:
 ```
 cp /bootflash/gnmi-collector /tmp/ && chmod +x /tmp/gnmi-collector
 ```
+> **Note**: This was a development workaround. Production deployment uses
+> `/opt/gnmi-collector/` (installed via setup scripts), which handles
+> permissions correctly.
 
 **SCP requires legacy protocol**: NX-OS lacks sftp support. Must use
 `scp -O` (legacy SCP protocol) for file transfers.
