@@ -65,7 +65,7 @@ The new pipeline uses industry-standard gNMI/YANG for structured telemetry:
 │  │  gNMI Client (internal/gnmi/client.go)       │                        │  │
 │  │                                              ▼                        │  │
 │  │  grpc.DialContext(target:port)                                        │  │
-│  │  ├─ TLS: tls.Config{InsecureSkipVerify: true}                         │  │
+│  │  ├─ TLS: TOFU (trust-on-first-use) or skip_verify                     │  │
 │  │  ├─ Auth: gRPC metadata{username, password}                           │  │
 │  │  ├─ Max msg: 64 MB                                                    │  │
 │  │  │                                                                    │  │
@@ -200,7 +200,7 @@ src/TelemetryClient/
 
 - **mergeByDataType**: CPU and memory entries are merged into a single system-resources row in both poll and subscribe modes, matching the old pipeline's output format.
 
-- **TLS**: NX-OS auto-generates a 1-day self-signed certificate. Currently using `skip_verify: true`. Needs automated certificate rotation for production deployment.
+- **TLS**: Default mode is TOFU (trust-on-first-use) — the server cert is fetched on startup and used for verification during the session. `skip_verify: true` and `ca_file` are also supported. NX-OS auto-generates a self-signed certificate; longer-lived certs can be imported manually.
 
 ---
 
@@ -239,29 +239,30 @@ ctx = metadata.NewOutgoingContext(ctx, md)
 
 ### TLS Certificate Lifecycle
 
-Both platforms use **self-signed certificates** today. The collector
-accepts them via `InsecureSkipVerify: true`.
+Both platforms use **self-signed certificates**. The collector supports
+three TLS modes, configured in the YAML:
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  TLS Decision Flow                                               │
+│  TLS Decision Flow (gnmi/tls.go)                                 │
 │                                                                  │
-│  config.yaml                    gnmi/client.go                   │
+│  config.yaml                    tls.go                           │
 │  ┌──────────────┐               ┌────────────────────────────┐   │
-│  │ tls:         │               │ if TLS.Enabled:            │   │
-│  │   enabled: T │──────────────►│   tls.Config{              │   │
-│  │   skip_verify│               │     InsecureSkipVerify: T  │   │
-│  │     : true   │               │   }                        │   │
-│  │   ca_file: ""│               │   (ca_file defined in      │   │
-│  └──────────────┘               │    struct but NOT loaded)   │   │
+│  │ tls:         │               │ if ca_file set:            │   │
+│  │   enabled: T │──────────────►│   load CA → verify server  │   │
+│  │   ca_file: ""│               │ elif skip_verify:          │   │
+│  │   skip_verify│               │   InsecureSkipVerify: true │   │
+│  │     : false  │               │ else (default — TOFU):     │   │
+│  └──────────────┘               │   fetch cert on connect,   │   │
+│                                 │   pin for session lifetime  │   │
 │                                 └────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
 **Cisco NX-OS specifics**:
 - `feature grpc` auto-generates a self-signed cert valid for **24 hours**
-- After expiry, the gRPC server continues running but TLS handshakes
-  fail for strict clients. Our `skip_verify: true` bypasses this.
+- TOFU (default) handles this automatically — the cert is fetched fresh
+  on each collector startup and trusted for the session
 - For longer validity, we manually generated an 825-day cert via:
   `openssl req → openssl x509 → openssl pkcs12 → NX-OS crypto import`
 - **Production concern**: needs automated certificate rotation or a
@@ -270,10 +271,9 @@ accepts them via `InsecureSkipVerify: true`.
 **SONiC specifics**:
 - The `sonic-gnmi` container generates a self-signed cert at startup
 - Cert persists across container restarts (stored in `/etc/sonic/`)
-- Same `skip_verify: true` bypass
+- TOFU handles this automatically
 
 **Future improvements**:
-- Load `ca_file` from config (field exists but is unused in client code)
 - Support mTLS for environments requiring mutual authentication
 - Integrate with fleet cert management for automated rotation
 

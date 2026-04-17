@@ -15,7 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Dell Enterprise SONiC support: 14 YANG paths (OpenConfig), ~76% coverage vs
     Cisco baseline.
   - Poll mode (periodic gNMI Get) — production-ready.
-  - Subscribe mode — experimental, not yet recommended for production.
+  - Subscribe mode (persistent gNMI stream) — supports both `sample` and
+    `on_change` per-path modes. Validated on Cisco NX-OS and SONiC.
   - CLI flags: `--once`, `--dry-run`, `--output`, `--dump`, `--verbose`, `--version`.
 - **Per-vendor configuration files**: `config.cisco.yaml` (20 paths) and
   `config.sonic.yaml` (14 paths) ship in the release tarball.
@@ -49,8 +50,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   Will be removed in a future release.
 
 ### Known Limitations
-- **Subscribe mode**: NX-OS sends fragmented leaf-level updates that transformers
-  cannot handle. Use poll mode until Subscribe support is completed.
+- **Subscribe mode on SONiC**: Not all paths support `on_change` — paths backed
+  by COUNTERS DB (e.g., interface-counters) are rejected. Use `sample` mode for
+  those paths. See per-path comments in `config.sonic.yaml`.
 - **SONiC gaps**: Interface errors, transceiver DOM, and route summary not yet
   available (~24% less coverage than Cisco). See `sonic-gnmi-parity.md`.
 - **Azure Arc on NX-OS**: Requires repackaged RPM (`v0.0.2-alpha-rpm`) because
