@@ -1,0 +1,716 @@
+[
+  {
+    "timestamp": 1773862275586702908,
+    "updates": [
+      {
+        "path": "/system/cpus",
+        "value": {
+          "cpu": [
+            {
+              "index": "cpu7",
+              "state": {
+                "hardware-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 1,
+                  "min": 0,
+                  "max-time": "1773862241",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "idle": {
+                  "avg": 76,
+                  "instant": 96,
+                  "max": 96,
+                  "min": 45,
+                  "max-time": "1773862255",
+                  "min-time": "1773862248",
+                  "interval": "30"
+                },
+                "index": "cpu7",
+                "kernel": {
+                  "avg": 6,
+                  "instant": 3,
+                  "max": 20,
+                  "min": 2,
+                  "max-time": "1773862248",
+                  "min-time": "1773862234",
+                  "interval": "30"
+                },
+                "nice": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "software-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "total": {
+                  "avg": 22,
+                  "instant": 3,
+                  "max": 54,
+                  "min": 3,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "user": {
+                  "avg": 14,
+                  "instant": 0,
+                  "max": 34,
+                  "min": 0,
+                  "max-time": "1773862241",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "wait": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                }
+              }
+            },
+            {
+              "index": "cpu5",
+              "state": {
+                "hardware-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "idle": {
+                  "avg": 74,
+                  "instant": 97,
+                  "max": 97,
+                  "min": 50,
+                  "max-time": "1773862255",
+                  "min-time": "1773862248",
+                  "interval": "30"
+                },
+                "index": "cpu5",
+                "kernel": {
+                  "avg": 6,
+                  "instant": 0,
+                  "max": 20,
+                  "min": 0,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "nice": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "software-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 1,
+                  "min": 0,
+                  "max-time": "1773862227",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "total": {
+                  "avg": 24,
+                  "instant": 2,
+                  "max": 49,
+                  "min": 2,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "user": {
+                  "avg": 17,
+                  "instant": 2,
+                  "max": 30,
+                  "min": 2,
+                  "max-time": "1773862234",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "wait": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                }
+              }
+            },
+            {
+              "index": "cpu4",
+              "state": {
+                "hardware-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "idle": {
+                  "avg": 71,
+                  "instant": 96,
+                  "max": 96,
+                  "min": 57,
+                  "max-time": "1773862255",
+                  "min-time": "1773862241",
+                  "interval": "30"
+                },
+                "index": "cpu4",
+                "kernel": {
+                  "avg": 5,
+                  "instant": 1,
+                  "max": 10,
+                  "min": 1,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "nice": {
+                  "avg": 4,
+                  "instant": 2,
+                  "max": 24,
+                  "min": 0,
+                  "max-time": "1773862248",
+                  "min-time": "1773862220",
+                  "interval": "30"
+                },
+                "software-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "total": {
+                  "avg": 27,
+                  "instant": 3,
+                  "max": 42,
+                  "min": 3,
+                  "max-time": "1773862241",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "user": {
+                  "avg": 17,
+                  "instant": 0,
+                  "max": 37,
+                  "min": 0,
+                  "max-time": "1773862241",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "wait": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                }
+              }
+            },
+            {
+              "index": "cpu6",
+              "state": {
+                "hardware-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "idle": {
+                  "avg": 69,
+                  "instant": 85,
+                  "max": 96,
+                  "min": 47,
+                  "max-time": "1773862234",
+                  "min-time": "1773862241",
+                  "interval": "30"
+                },
+                "index": "cpu6",
+                "kernel": {
+                  "avg": 11,
+                  "instant": 2,
+                  "max": 23,
+                  "min": 1,
+                  "max-time": "1773862241",
+                  "min-time": "1773862234",
+                  "interval": "30"
+                },
+                "nice": {
+                  "avg": 4,
+                  "instant": 0,
+                  "max": 27,
+                  "min": 0,
+                  "max-time": "1773862241",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "software-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 1,
+                  "min": 0,
+                  "max-time": "1773862220",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "total": {
+                  "avg": 30,
+                  "instant": 14,
+                  "max": 53,
+                  "min": 3,
+                  "max-time": "1773862241",
+                  "min-time": "1773862234",
+                  "interval": "30"
+                },
+                "user": {
+                  "avg": 12,
+                  "instant": 10,
+                  "max": 26,
+                  "min": 2,
+                  "max-time": "1773862227",
+                  "min-time": "1773862234",
+                  "interval": "30"
+                },
+                "wait": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                }
+              }
+            },
+            {
+              "index": "cpu3",
+              "state": {
+                "hardware-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "idle": {
+                  "avg": 73,
+                  "instant": 78,
+                  "max": 95,
+                  "min": 48,
+                  "max-time": "1773862234",
+                  "min-time": "1773862227",
+                  "interval": "30"
+                },
+                "index": "cpu3",
+                "kernel": {
+                  "avg": 6,
+                  "instant": 0,
+                  "max": 14,
+                  "min": 0,
+                  "max-time": "1773862227",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "nice": {
+                  "avg": 5,
+                  "instant": 19,
+                  "max": 19,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862220",
+                  "interval": "30"
+                },
+                "software-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 1,
+                  "min": 0,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "total": {
+                  "avg": 25,
+                  "instant": 21,
+                  "max": 51,
+                  "min": 4,
+                  "max-time": "1773862227",
+                  "min-time": "1773862234",
+                  "interval": "30"
+                },
+                "user": {
+                  "avg": 13,
+                  "instant": 0,
+                  "max": 36,
+                  "min": 0,
+                  "max-time": "1773862227",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "wait": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                }
+              }
+            },
+            {
+              "index": "ALL",
+              "state": {
+                "hardware-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "idle": {
+                  "avg": 67,
+                  "instant": 87,
+                  "max": 87,
+                  "min": 46,
+                  "max-time": "1773862255",
+                  "min-time": "1773862248",
+                  "interval": "30"
+                },
+                "index": "ALL",
+                "kernel": {
+                  "avg": 9,
+                  "instant": 3,
+                  "max": 15,
+                  "min": 3,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "nice": {
+                  "avg": 1,
+                  "instant": 3,
+                  "max": 4,
+                  "min": 0,
+                  "max-time": "1773862241",
+                  "min-time": "1773862220",
+                  "interval": "30"
+                },
+                "software-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "total": {
+                  "avg": 31,
+                  "instant": 12,
+                  "max": 53,
+                  "min": 12,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "user": {
+                  "avg": 19,
+                  "instant": 5,
+                  "max": 32,
+                  "min": 5,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "wait": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                }
+              }
+            },
+            {
+              "index": "cpu1",
+              "state": {
+                "hardware-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "idle": {
+                  "avg": 47,
+                  "instant": 53,
+                  "max": 94,
+                  "min": 10,
+                  "max-time": "1773862234",
+                  "min-time": "1773862248",
+                  "interval": "30"
+                },
+                "index": "cpu1",
+                "kernel": {
+                  "avg": 12,
+                  "instant": 20,
+                  "max": 33,
+                  "min": 3,
+                  "max-time": "1773862241",
+                  "min-time": "1773862234",
+                  "interval": "30"
+                },
+                "nice": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "software-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 1,
+                  "min": 0,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "total": {
+                  "avg": 52,
+                  "instant": 46,
+                  "max": 89,
+                  "min": 6,
+                  "max-time": "1773862248",
+                  "min-time": "1773862234",
+                  "interval": "30"
+                },
+                "user": {
+                  "avg": 38,
+                  "instant": 25,
+                  "max": 82,
+                  "min": 3,
+                  "max-time": "1773862248",
+                  "min-time": "1773862234",
+                  "interval": "30"
+                },
+                "wait": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                }
+              }
+            },
+            {
+              "index": "cpu2",
+              "state": {
+                "hardware-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 1,
+                  "min": 0,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "idle": {
+                  "avg": 56,
+                  "instant": 95,
+                  "max": 95,
+                  "min": 19,
+                  "max-time": "1773862255",
+                  "min-time": "1773862234",
+                  "interval": "30"
+                },
+                "index": "cpu2",
+                "kernel": {
+                  "avg": 14,
+                  "instant": 1,
+                  "max": 38,
+                  "min": 1,
+                  "max-time": "1773862234",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "nice": {
+                  "avg": 2,
+                  "instant": 3,
+                  "max": 8,
+                  "min": 0,
+                  "max-time": "1773862241",
+                  "min-time": "1773862227",
+                  "interval": "30"
+                },
+                "software-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 1,
+                  "min": 0,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "total": {
+                  "avg": 43,
+                  "instant": 4,
+                  "max": 80,
+                  "min": 4,
+                  "max-time": "1773862234",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "user": {
+                  "avg": 24,
+                  "instant": 0,
+                  "max": 51,
+                  "min": 0,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "wait": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                }
+              }
+            },
+            {
+              "index": "cpu0",
+              "state": {
+                "hardware-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "idle": {
+                  "avg": 71,
+                  "instant": 97,
+                  "max": 97,
+                  "min": 29,
+                  "max-time": "1773862255",
+                  "min-time": "1773862220",
+                  "interval": "30"
+                },
+                "index": "cpu0",
+                "kernel": {
+                  "avg": 9,
+                  "instant": 0,
+                  "max": 30,
+                  "min": 0,
+                  "max-time": "1773862220",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "nice": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 1,
+                  "min": 0,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "software-interrupt": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "total": {
+                  "avg": 27,
+                  "instant": 2,
+                  "max": 71,
+                  "min": 2,
+                  "max-time": "1773862220",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "user": {
+                  "avg": 17,
+                  "instant": 1,
+                  "max": 41,
+                  "min": 1,
+                  "max-time": "1773862220",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                },
+                "wait": {
+                  "avg": 0,
+                  "instant": 0,
+                  "max": 0,
+                  "min": 0,
+                  "max-time": "1773862255",
+                  "min-time": "1773862255",
+                  "interval": "30"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

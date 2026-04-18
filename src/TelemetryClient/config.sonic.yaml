@@ -1,0 +1,233 @@
+# gnmi-collector configuration — SONiC (Dell Enterprise SONiC)
+# All credentials are read from environment variables for security.
+#
+# SONiC supports OpenConfig YANG models natively via the sonic-gnmi container.
+# The gNMI server runs on port 8080 with TLS and password+JWT auth.
+#
+# Key differences from Cisco NX-OS:
+# - Encoding: JSON_IETF only (not JSON) — stripModulePrefixes() handles this
+# - Bulk Get on list paths returns empty {} — Subscribe ONCE fallback handles this
+# - Some paths need specific entity keys (BGP, MAC need VRF/NI keys)
+# - Component paths (temperature, PSU, transceiver) need component name keys;
+#   use platform-inventory instead which returns all components in one query
+
+target:
+  address: 127.0.0.1
+  port: 8080                   # SONiC gNMI port (Dell Enterprise SONiC default)
+  tls:
+    enabled: true
+    # TOFU (trust-on-first-use) is the default: the server cert is fetched
+    # on startup and used for verification during the session.
+    # To pin a specific cert, uncomment ca_file:
+    # ca_file: /etc/gnmi/server.pem
+  credentials:
+    username_env: GNMI_USER    # SONiC admin username
+    password_env: GNMI_PASS    # SONiC admin password
+
+collection:
+  mode: poll                   # poll (Get every interval) or subscribe
+                               # Subscribe mode supports both sample and on_change.
+                               # NOTE: SONiC does not support on_change for all paths;
+                               # paths backed by COUNTERS DB or with on_change explicitly
+                               # disabled will be rejected by the switch. The collector
+                               # will exit with a clear error if this happens.
+  interval: 300s               # 5 minutes — matches cron interval
+  timeout: 30s                 # Per-path Get request timeout
+  encoding: JSON_IETF
+
+azure:
+  workspace_id_env: WORKSPACE_ID
+  primary_key_env: PRIMARY_KEY
+  secondary_key_env: SECONDARY_KEY
+  device_type: sonic
+
+paths:
+  # ============================================================
+  # Interface paths — SONiC returns empty for bulk Get, but the
+  # Subscribe ONCE fallback in fetchAndTransform handles this
+  # automatically. Each interface is streamed individually.
+  # ============================================================
+  - name: interface-counters
+    yang_path: /openconfig-interfaces:interfaces/interface/state/counters
+    table: SonicInterfaceCounter_CL
+    enabled: true
+    mode: sample
+    sample_interval: 60s
+    # on_change not supported by SONiC for this path (COUNTERS DB backed)
+
+  - name: interface-status
+    yang_path: /openconfig-interfaces:interfaces/interface/state
+    table: SonicInterfaceStatus_CL
+    enabled: true
+    mode: sample
+    sample_interval: 60s
+    # on_change not supported by SONiC — child paths use COUNTERS DB
+
+  - name: if-ethernet
+    yang_path: /openconfig-if-ethernet:interfaces/interface/ethernet/state
+    table: SonicInterfaceEthernet_CL
+    enabled: true
+    mode: sample
+    sample_interval: 60s
+
+  # ============================================================
+  # System paths — these work with bulk Get (no entity keys needed)
+  # ============================================================
+  - name: system-state
+    yang_path: /openconfig-system:system/state
+    table: SonicSystemUptime_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+    # on_change is supported for this path.
+
+  - name: system-cpus
+    yang_path: /openconfig-system:system/cpus
+    table: SonicSystemResources_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: system-memory
+    yang_path: /openconfig-system:system/memory
+    table: SonicSystemResources_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # Platform inventory — returns ALL components (PSUs, fans, temp
+  # sensors, transceivers) in a single query. No keys needed.
+  # This replaces individual temperature/PSU/transceiver queries.
+  # ============================================================
+  - name: platform-inventory
+    yang_path: /openconfig-platform:components/component
+    table: SonicInventory_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # BGP paths — use {network_instance} template for automatic
+  # discovery. At startup the collector queries the device for
+  # all network-instances and expands the template into one
+  # concrete path per VRF. Instances without BGP configured
+  # are automatically skipped.
+  # ============================================================
+  - name: bgp-neighbors
+    yang_path: /openconfig-network-instance:network-instances/network-instance[name={network_instance}]/protocols/protocol[identifier=BGP][name=bgp]/bgp/neighbors
+    table: SonicBgpSummary_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: bgp-global
+    yang_path: /openconfig-network-instance:network-instances/network-instance[name={network_instance}]/protocols/protocol[identifier=BGP][name=bgp]/bgp/global
+    table: SonicBgpGlobal_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # LLDP — Subscribe ONCE fallback handles this automatically.
+  # May return empty if no LLDP neighbors are present.
+  # on_change not supported by SONiC for this path.
+  # ============================================================
+  - name: lldp-neighbors
+    yang_path: /openconfig-lldp:lldp/interfaces/interface/neighbors
+    table: SonicLldpNeighbor_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # ARP — Subscribe ONCE fallback handles this automatically.
+  # ============================================================
+  - name: arp-table
+    yang_path: /openconfig-if-ip:interfaces/interface/subinterfaces/subinterface/ipv4/neighbors
+    table: SonicArpEntry_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # MAC table — uses {network_instance} template like BGP paths.
+  # ============================================================
+  - name: mac-table
+    yang_path: /openconfig-network-instance:network-instances/network-instance[name={network_instance}]/fdb/mac-table
+    table: SonicMacTable_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # SONiC native YANG — sonic-platform returns ALL temperature,
+  # PSU, and fan data in a single query. No component keys needed.
+  # ============================================================
+  - name: sonic-platform
+    yang_path: /sonic-platform:sonic-platform
+    table: SonicPlatform_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # SONiC native YANG — device metadata (hostname, hwsku, etc.)
+  # ============================================================
+  - name: sonic-device-metadata
+    yang_path: /sonic-device-metadata:sonic-device-metadata
+    table: SonicDeviceMetadata_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # Temperature — requires specific component keys (TEMP 1..8).
+  # Disabled: temperature data is already available in the
+  # platform-inventory response (components include temp sensors).
+  # Enable if per-sensor trending in a separate table is needed.
+  # ============================================================
+  - name: temperature
+    yang_path: /openconfig-platform:components/component[name=TEMP 1]/state/temperature
+    table: SonicEnvironmentTemperature_CL
+    enabled: false
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # Power supply — individual PSU queries with component keys.
+  # Disabled: PSU data is available in platform-inventory.
+  # Enable if per-PSU power metrics in a separate table are needed.
+  # ============================================================
+  - name: power-supply
+    yang_path: /openconfig-platform:components/component[name=PSU 1]/power-supply
+    table: SonicEnvironmentPower_CL
+    enabled: false
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # Transceiver — requires specific component keys (Ethernet name).
+  # Disabled: transceiver presence is in platform-inventory.
+  # Enable if detailed DOM (optical power, temp) monitoring is needed.
+  # ============================================================
+  - name: transceiver
+    yang_path: /openconfig-platform:components/component/transceiver
+    table: SonicTransceiver_CL
+    enabled: false
+    mode: sample
+    sample_interval: 60s
+
+  - name: transceiver-channel
+    yang_path: /openconfig-platform:components/component/transceiver/physical-channels
+    table: SonicTransceiverDom_CL
+    enabled: false
+    mode: sample
+    sample_interval: 60s
+
+  # ============================================================
+  # NOTE: SONiC does not use Cisco-native /System/... YANG paths.
+  # All telemetry is collected via OpenConfig models above.
+  # The nx-* paths from config.cisco.yaml should NOT be enabled
+  # for SONiC switches.
+  # ============================================================

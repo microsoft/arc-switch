@@ -1,0 +1,994 @@
+#!/bin/bash
+
+# Configuration Variables - EDIT THESE
+REGION="<YOUR_AZURE_REGION>"
+RESOURCE_GROUP="<YOUR_RESOURCE_GROUP>"
+SUBSCRIPTION_ID="<YOUR_SUBSCRIPTION_ID>"
+MACHINE_NAME="<YOUR_SWITCH_HOSTNAME>"
+TENANT_ID="<YOUR_TENANT_ID>"
+# DNS_SERVER_1="<DNS_SERVER_1>" (Uncomment and set ONLY if custom DNS servers are needed ex: 10.10.240.23)
+# DNS_SERVER_2="<DNS_SERVER_2>" (Uncomment and set ONLY if custom DNS servers are needed ex: 10.10.240.24)
+
+# Configuration Variables - EDIT THESE
+WORKSPACE_ID="<LOG_ANALYTICS_WORKSPACE_ID>"
+PRIMARY_KEY="<LOG_ANALYTICS_PRIMARY_KEY>"
+SECONDARY_KEY="<LOG_ANALYTICS_SECONDARY_KEY>"
+GNMI_USER="<NX-OS_USERNAME>"
+GNMI_PASS="<NX-OS_PASSWORD>"
+COLLECTOR_URL="https://github.com/microsoft/arc-switch/releases/download/gnmi-1.2603.1/gnmi-collector-1.2603.1-linux-amd64.tar.gz"
+GNMI_INSTALL_DIR="/opt/gnmi-collector"
+AZCMAGENT_RPM_URL="https://github.com/microsoft/arc-switch/releases/download/v0.0.2-alpha-rpm/azcmagent-1.54.03131-2112.x86_64.rpm"
+
+# =============================================================================
+# PRE-FLIGHT CHECK: Detect conflicting collector
+# =============================================================================
+# The CLI parser and gNMI collector are mutually exclusive. Only one telemetry
+# collection method should be active on a switch at a time.
+
+CONFLICT_FOUND=0
+
+if [ -f /opt/cisco-parser ] || [ -d /opt/cisco-parser ]; then
+    CONFLICT_FOUND=1
+fi
+
+if [ -f /opt/cisco-parser-collector.sh ]; then
+    CONFLICT_FOUND=1
+fi
+
+if crontab -l 2>/dev/null | grep -q "cisco-parser-collector"; then
+    CONFLICT_FOUND=1
+fi
+
+if [ $CONFLICT_FOUND -eq 1 ]; then
+    echo "============================================================================"
+    echo "ERROR: CLI parser collector is already installed on this switch."
+    echo "============================================================================"
+    echo ""
+    echo "The CLI parser and gNMI collector are mutually exclusive. You must"
+    echo "uninstall the CLI parser before installing the gNMI collector."
+    echo ""
+    echo "To uninstall the CLI parser, run the following commands:"
+    echo ""
+    echo "  # Remove the CLI parser cron job"
+    echo "  crontab -l 2>/dev/null | grep -v 'cisco-parser-collector' | crontab -"
+    echo ""
+    echo "  # Remove the CLI parser and helper scripts"
+    echo "  rm -rf /opt/cisco-parser"
+    echo "  rm -f /opt/cisco-parser-collector.sh"
+    echo "  rm -f /opt/cisco-azure-logger-v2.sh"
+    echo "  rm -f /opt/azure-signature-generator.sh"
+    echo ""
+    echo "  # Remove temporary files and logs"
+    echo "  rm -rf /tmp/cisco-parser-output /tmp/azure-logger"
+    echo "  rm -f /var/log/cisco-parser-collector.log"
+    echo ""
+    echo "After uninstalling, re-run this script to proceed with gNMI setup."
+    echo "============================================================================"
+    exit 1
+fi
+
+cd /opt
+curl -sSL "$AZCMAGENT_RPM_URL" -o azcmagent.rpm
+if [ $? -eq 0 ]; then
+    rpm -Uvh --nopost azcmagent.rpm 2>/dev/null
+    # NX-OS installs RPM contents to /bootflash/rpm_test/ instead of /.
+    # Relocate to the expected paths if needed.
+    if [ -d /bootflash/rpm_test/opt/azcmagent ] && [ ! -f /opt/azcmagent/bin/azcmagent ]; then
+        echo "Relocating RPM contents from /bootflash/rpm_test/ ..."
+        cp -r /bootflash/rpm_test/opt/azcmagent /opt/azcmagent
+        cp -r /bootflash/rpm_test/opt/GC_Ext /opt/GC_Ext 2>/dev/null
+        cp -r /bootflash/rpm_test/opt/GC_Service /opt/GC_Service 2>/dev/null
+        cp -r /bootflash/rpm_test/var/opt/azcmagent /var/opt/azcmagent 2>/dev/null
+    fi
+    # Ensure all required azcmagent subdirectories exist (RPM relocation may miss empty dirs)
+    mkdir -p /var/opt/azcmagent/{certs,log,tokens,socks,arcproxy}
+    chmod 700 /var/opt/azcmagent/certs /var/opt/azcmagent/tokens
+    ln -sf /opt/azcmagent/bin/azcmagent /usr/bin/azcmagent
+    rm -f azcmagent.rpm
+fi
+
+# PART 1: DNS AND GC CONFIG SETUP
+cat > /opt/GC_Service/GC/gc.config <<'EOF'
+{
+    "ServiceType": "GCArc"
+}
+EOF
+
+cat > /opt/GC_Ext/GC/gc.config <<'EOF'
+{
+    "ServiceType": "Extension"
+}
+EOF
+
+# cat > /etc/resolv.conf <<DNSEOF
+# nameserver ${DNS_SERVER_1}
+# nameserver ${DNS_SERVER_2}
+# DNSEOF
+
+# cat > /isan/etc/template/etc/resolv.conf <<DNSEOF
+# nameserver ${DNS_SERVER_1}
+# nameserver ${DNS_SERVER_2}
+# DNSEOF
+
+# PART 2: MAKE ARC BINARIES EXECUTABLE
+
+for binary in $(find /opt /var -type f -name "himds" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+for binary in $(find /opt /var -type f -name "arcproxy" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+for binary in $(find /opt /var -type f -name "azcmagent" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+for binary in $(find /opt /var -type f -name "gc_linux_service" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+for binary in $(find /opt /var -type f -name "gc_worker" 2>/dev/null | grep -v ".bak\|.old\|.backup"); do
+    chmod +x "$binary" 2>/dev/null
+    chmod 755 "$binary" 2>/dev/null
+    chown root:root "$binary" 2>/dev/null
+    chmod u+s "$binary" 2>/dev/null
+    setcap 'cap_dac_override,cap_dac_read_search,cap_fowner,cap_setgid,cap_setuid,cap_net_bind_service,cap_sys_admin,cap_sys_ptrace=eip' "$binary" 2>/dev/null
+done
+
+
+# PART 3: CREATE SYSTEMD SHIMS
+
+SHIM_DIR=""
+for dir in /var/bin /tmp/bin /usr/local/bin /volatile/bin; do
+    mkdir -p "$dir" 2>/dev/null
+    if touch "$dir/.test" 2>/dev/null; then
+        rm -f "$dir/.test"
+        cat > "$dir/.test_exec.sh" <<'TEST_EOF'
+#!/bin/bash
+exit 0
+TEST_EOF
+        chmod +x "$dir/.test_exec.sh" 2>/dev/null
+        if "$dir/.test_exec.sh" 2>/dev/null; then
+            rm -f "$dir/.test_exec.sh"
+            [ -z "$SHIM_DIR" ] && SHIM_DIR="$dir"
+            break
+        else
+            rm -f "$dir/.test_exec.sh"
+        fi
+    fi
+done
+
+if [ -z "$SHIM_DIR" ]; then
+    echo "ERROR: No writable+executable directory found"
+    exit 1
+fi
+
+cat > "$SHIM_DIR/systemctl" <<'SYSTEMCTL_EOF'
+#!/bin/bash
+mkdir -p /var/log/arc 2>/dev/null
+exec 2>> /var/log/arc/systemctl-shim.log
+echo "[$(date)] systemctl called with: $*" >&2
+
+SERVICE_NAME=""; COMMAND=""
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        status|is-active|is-enabled|is-failed|start|stop|restart|reload|enable|disable|mask|unmask)
+            COMMAND="$1"; shift; SERVICE_NAME="$1"; shift ;;
+        list-units|list-unit-files|daemon-reload|reset-failed)
+            COMMAND="$1"; shift ;;
+        --all|-a|--no-pager|--no-legend|--plain|--full|--state=*|--type=*)
+            shift ;;
+        --version)
+            echo "systemctl 245 (245.4-4ubuntu3) - SHIM for Arc agent"
+            exit 0 ;;
+        --help|-h)
+            echo "systemctl [OPTIONS...] COMMAND [NAME...]"
+            exit 0 ;;
+        *) shift ;;
+    esac
+done
+
+SERVICE_NAME="${SERVICE_NAME%.service}"
+
+map_service() {
+    case "$1" in
+        extd|extension*|Extension*|"Extension Service") echo "/etc/init.d/extd" ;;
+        gcad|guestconfig*|GuestConfig*|"GC Service") echo "/etc/init.d/gcad" ;;
+        arcproxyd|arcproxy|ArcProxy*|"Azure Arc Proxy") echo "/etc/init.d/arcproxyd" ;;
+        himdsd|himds) echo "/etc/init.d/himdsd" ;;
+        azcmagent|"Agent Service") echo "/etc/init.d/himdsd" ;;
+        sshd|ssh) echo "/etc/init.d/sshd" ;;
+        *) echo "" ;;
+    esac
+}
+
+case "$COMMAND" in
+    status)
+        INIT_SCRIPT=$(map_service "$SERVICE_NAME")
+        if [ -n "$INIT_SCRIPT" ] && [ -f "$INIT_SCRIPT" ]; then
+            echo "● ${SERVICE_NAME}.service"
+            echo "   Loaded: loaded (/etc/init.d/${SERVICE_NAME}; enabled)"
+            status_output=$($INIT_SCRIPT status 2>&1)
+            if echo "$status_output" | grep -iq "running\|OK.*PID\|active"; then
+                echo "   Active: active (running)"
+                exit 0
+            else
+                echo "   Active: inactive (dead)"
+                exit 3
+            fi
+        else
+            exit 4
+        fi ;;
+    is-active)
+        INIT_SCRIPT=$(map_service "$SERVICE_NAME")
+        if [ -n "$INIT_SCRIPT" ] && [ -f "$INIT_SCRIPT" ]; then
+            $INIT_SCRIPT status 2>&1 | grep -iq "running\|OK.*PID\|active" && echo "active" && exit 0
+            echo "inactive"; exit 3
+        else
+            echo "unknown"; exit 3
+        fi ;;
+    is-enabled)
+        INIT_SCRIPT=$(map_service "$SERVICE_NAME")
+        [ -n "$INIT_SCRIPT" ] && [ -f "$INIT_SCRIPT" ] && echo "enabled" && exit 0
+        echo "disabled"; exit 1 ;;
+    start|stop|restart|reload)
+        INIT_SCRIPT=$(map_service "$SERVICE_NAME")
+        if [ -n "$INIT_SCRIPT" ] && [ -f "$INIT_SCRIPT" ]; then
+            [ "$COMMAND" = "reload" ] && COMMAND="restart"
+            $INIT_SCRIPT $COMMAND; exit $?
+        else
+            exit 5
+        fi ;;
+    enable|disable|mask|unmask|daemon-reload|reset-failed)
+        exit 0 ;;
+    list-units|list-unit-files)
+        echo "UNIT                          LOAD   ACTIVE SUB"
+        for script in /etc/init.d/{extd,gcad,arcproxyd,himdsd}; do
+            if [ -f "$script" ]; then
+                svc=$(basename "$script")
+                $script status 2>&1 | grep -iq "running" && \
+                printf "%-30s loaded active running\n" "${svc}.service" || \
+                printf "%-30s loaded inactive dead\n" "${svc}.service"
+            fi
+        done
+        exit 0 ;;
+    *) exit 0 ;;
+esac
+SYSTEMCTL_EOF
+
+chmod +x "$SHIM_DIR/systemctl"
+mkdir -p /var/log/arc
+
+for util in systemd systemd-notify journalctl service; do
+    cat > "$SHIM_DIR/$util" <<'EOF'
+#!/bin/bash
+exit 0
+EOF
+    chmod +x "$SHIM_DIR/$util"
+done
+
+# PART 4: EXTRACT ARC MACHINE IDENTITY
+
+RESOURCE_ID=""
+if [ -f /var/opt/azcmagent/agentconfig.json ]; then
+    RESOURCE_ID=$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+fi
+
+if [ -z "$RESOURCE_ID" ] || [ "$RESOURCE_ID" = "null" ]; then
+    RESOURCE_ID="/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.HybridCompute/machines/${MACHINE_NAME}"
+fi
+
+# PART 5: CONFIGURE SYSTEM ENVIRONMENT
+
+cat > /etc/environment <<ENVEOF
+IMDS_ENDPOINT=http://localhost:40342
+IDENTITY_ENDPOINT=http://localhost:40342/metadata/identity/oauth2/token
+AZGUESTCONFIG_ENDPOINT=http://localhost:40343
+EXTENSION_SERVICE_URL=http://localhost:40343
+PATH=${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin
+AZURE_RESOURCE_GROUP=${RESOURCE_GROUP}
+AZURE_LOCATION=${REGION}
+ARM_RESOURCE_ID=${RESOURCE_ID}
+SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
+TENANT_ID=${TENANT_ID}
+SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+NODE_TLS_REJECT_UNAUTHORIZED=0
+AZURE_CLI_DISABLE_CONNECTION_VERIFICATION=1
+ENVEOF
+
+mkdir -p /etc/profile.d 2>/dev/null
+cat > /etc/profile.d/arc-environment.sh <<PROFEOF
+#!/bin/bash
+export PATH="${SHIM_DIR}:\$PATH"
+export IMDS_ENDPOINT="http://localhost:40342"
+export IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token"
+export AZGUESTCONFIG_ENDPOINT="http://localhost:40343"
+export EXTENSION_SERVICE_URL="http://localhost:40343"
+export ARM_RESOURCE_ID="${RESOURCE_ID}"
+export AZURE_RESOURCE_GROUP="${RESOURCE_GROUP}"
+export AZURE_LOCATION="${REGION}"
+export SUBSCRIPTION_ID="${SUBSCRIPTION_ID}"
+export TENANT_ID="${TENANT_ID}"
+export SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt"
+export CURL_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+export NODE_TLS_REJECT_UNAUTHORIZED=0
+PROFEOF
+
+chmod +x /etc/profile.d/arc-environment.sh
+source /etc/profile.d/arc-environment.sh
+
+mkdir -p /var/opt/azcmagent/{log,tokens,arcproxy}
+mkdir -p /var/lib/{waagent,GuestConfig/Configuration,GuestConfig/Extension/{status,config}}
+mkdir -p /var/log/arc
+chmod 700 /var/opt/azcmagent/tokens
+chmod 755 /var/lib/GuestConfig/{Extension,Configuration}
+
+# PART 6: CREATE INIT SCRIPTS
+
+cat > /etc/init.d/himdsd <<HIMDS_EOF
+#!/bin/bash
+DAEMON="himds"
+PIDFILE="/var/run/himds.pid"
+LOGFILE="/var/log/arc/himds.log"
+
+DAEMON_PATH=\$(find /opt /var 2>/dev/null | grep -E "/himds\$" | grep -v ".bak\|.old\|.backup" | head -1)
+
+if [ -z "\$DAEMON_PATH" ]; then
+    echo "ERROR: himds binary not found"
+    exit 1
+fi
+
+start() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        return 0
+    fi
+    
+    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f /var/opt/azcmagent/socks/himds.sock 2>/dev/null
+    sleep 2
+    
+    mkdir -p /var/opt/azcmagent/socks \$(dirname \$LOGFILE)
+    
+    export PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin"
+    export IMDS_ENDPOINT="http://localhost:40342"
+    export IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token"
+    
+    cd \$(dirname \$DAEMON_PATH)
+    nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
+    PID=\$!
+    echo \$PID > \$PIDFILE
+    
+    for i in {1..20}; do
+        if [ -e /var/opt/azcmagent/socks/himds.sock ] && ps -p \$PID > /dev/null 2>&1; then
+            return 0
+        fi
+        sleep 1
+    done
+    
+    return 1
+}
+
+stop() {
+    [ -f \$PIDFILE ] && kill \$(cat \$PIDFILE) 2>/dev/null
+    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+}
+
+status() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        echo "HIMDS is running (PID \$(cat \$PIDFILE))"
+        return 0
+    else
+        echo "HIMDS is stopped"
+        return 3
+    fi
+}
+
+case "\$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) stop; sleep 2; start ;;
+    status) status ;;
+    *) echo "Usage: \$0 {start|stop|restart|status}" ;;
+esac
+HIMDS_EOF
+
+chmod +x /etc/init.d/himdsd
+
+cat > /etc/init.d/arcproxyd <<'ARCPROXY_EOF'
+#!/bin/bash
+DAEMON="arcproxy"
+PIDFILE="/var/run/arcproxy.pid"
+LOGFILE="/var/log/arc/arcproxy.log"
+
+DAEMON_PATH=$(find /opt /var 2>/dev/null | grep -E "/arcproxy$" | grep -v ".bak\|.old" | head -1)
+
+if [ -z "$DAEMON_PATH" ]; then
+    echo "ERROR: arcproxy binary not found"
+    exit 1
+fi
+
+start() {
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
+        return 0
+    fi
+    
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
+    fuser -k -9 40343/tcp 2>/dev/null
+    fuser -k -9 40344/tcp 2>/dev/null
+    rm -f $PIDFILE
+    sleep 3
+    
+    mkdir -p $(dirname $LOGFILE)
+    [ -f /etc/profile.d/arc-environment.sh ] && source /etc/profile.d/arc-environment.sh
+    
+    nohup $DAEMON_PATH >> $LOGFILE 2>&1 &
+    PID=$!
+    echo $PID > $PIDFILE
+    sleep 5
+    
+    if ps -p $PID > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+stop() {
+    if [ -f $PIDFILE ]; then
+        kill -9 $(cat $PIDFILE) 2>/dev/null
+        rm -f $PIDFILE
+    fi
+    pkill -9 -f "$DAEMON_PATH" 2>/dev/null
+    fuser -k -9 40343/tcp 2>/dev/null
+    fuser -k -9 40344/tcp 2>/dev/null
+    sleep 3
+}
+
+restart() {
+    stop
+    sleep 5
+    start
+}
+
+status() {
+    if [ -f $PIDFILE ] && ps -p $(cat $PIDFILE) > /dev/null 2>&1; then
+        echo "ArcProxy is running (PID $(cat $PIDFILE))"
+        return 0
+    else
+        echo "ArcProxy is stopped"
+        return 3
+    fi
+}
+
+case "$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) restart ;;
+    status) status ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" ;;
+esac
+ARCPROXY_EOF
+
+chmod +x /etc/init.d/arcproxyd
+
+cat > /etc/init.d/extd <<EXTD_EOF
+#!/bin/bash
+DAEMON="gc_linux_service"
+PIDFILE="/var/run/extd.pid"
+LOGFILE="/var/log/arc/extd.log"
+
+DAEMON_PATH=\$(find /opt /var 2>/dev/null | grep -E "/GC_Ext.*gc_linux_service\$" | grep -v ".bak\|.old" | head -1)
+GC_PATH=\$(dirname "\$DAEMON_PATH" 2>/dev/null)
+
+if [ -z "\$DAEMON_PATH" ] || [ ! -f "\$DAEMON_PATH" ]; then
+    echo "ERROR: EXTD binary not found"
+    exit 1
+fi
+
+start() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        return 0
+    fi
+    
+    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+    sleep 2
+    
+    mkdir -p \$(dirname \$LOGFILE) /var/lib/GuestConfig/Extension/{status,config} /var/lib/waagent
+    cd \$GC_PATH
+    
+    ARM_RES_ID=""
+    if [ -f /var/opt/azcmagent/agentconfig.json ]; then
+        ARM_RES_ID=\$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+    fi
+    
+    if [ -z "\$ARM_RES_ID" ]; then
+        ARM_RES_ID="${RESOURCE_ID}"
+    fi
+    
+    env - PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin" \
+        IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token" \
+        IMDS_ENDPOINT="http://localhost:40342" \
+        AZGUESTCONFIG_ENDPOINT="http://localhost:40343" \
+        EXTENSION_SERVICE_URL="http://localhost:40343" \
+        ARM_RESOURCE_ID="\$ARM_RES_ID" \
+        LD_LIBRARY_PATH="\$GC_PATH" \
+        AZURE_GUEST_AGENT_EXTENSION_PATH="/var/lib/waagent" \
+        AZURE_GUEST_AGENT_EXTENSION_SUPPORTED_FEATURES="ExtensionTelemetryPipeline,PersistentExtensions" \
+        AZURE_HTTP_USER_AGENT="GuestConfiguration/Extension" \
+        nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
+    
+    PID=\$!
+    echo \$PID > \$PIDFILE
+    sleep 8
+    
+    if ps -p \$PID > /dev/null 2>&1; then
+        return 0
+    else
+        rm -f \$PIDFILE
+        return 1
+    fi
+}
+
+stop() {
+    [ -f \$PIDFILE ] && kill \$(cat \$PIDFILE) 2>/dev/null
+    pkill -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+}
+
+status() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        echo "EXTD is running (PID \$(cat \$PIDFILE))"
+        return 0
+    else
+        echo "EXTD is stopped"
+        return 3
+    fi
+}
+
+case "\$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) stop; sleep 2; start ;;
+    status) status ;;
+    *) echo "Usage: \$0 {start|stop|restart|status}" ;;
+esac
+EXTD_EOF
+
+chmod +x /etc/init.d/extd
+
+cat > /etc/init.d/gcad <<GCAD_EOF
+#!/bin/bash
+DAEMON="gc_linux_service"
+PIDFILE="/var/run/gcad.pid"
+LOGFILE="/var/log/arc/gcad.log"
+
+DAEMON_PATH=\$(find /opt /var 2>/dev/null | grep -E "/GC_Service.*gc_linux_service\$" | grep -v ".bak\|.old" | head -1)
+GC_PATH=\$(dirname "\$DAEMON_PATH" 2>/dev/null)
+
+if [ -z "\$DAEMON_PATH" ] || [ ! -f "\$DAEMON_PATH" ]; then
+    echo "ERROR: GCAD binary not found"
+    exit 1
+fi
+
+start() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        return 0
+    fi
+    
+    pkill -9 -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+    sleep 2
+    
+    mkdir -p \$(dirname \$LOGFILE) /var/lib/GuestConfig/Configuration
+    cd \$GC_PATH
+    
+    ARM_RES_ID=""
+    if [ -f /var/opt/azcmagent/agentconfig.json ]; then
+        ARM_RES_ID=\$(grep '"resourceId"' /var/opt/azcmagent/agentconfig.json 2>/dev/null | sed 's/.*"resourceId"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | head -1)
+    fi
+    
+    if [ -z "\$ARM_RES_ID" ]; then
+        ARM_RES_ID="${RESOURCE_ID}"
+    fi
+    
+    env - PATH="${SHIM_DIR}:/usr/bin:/usr/sbin:/bin:/sbin" \
+        IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token" \
+        IMDS_ENDPOINT="http://localhost:40342" \
+        AZGUESTCONFIG_ENDPOINT="http://localhost:40343" \
+        ARM_RESOURCE_ID="\$ARM_RES_ID" \
+        LD_LIBRARY_PATH="\$GC_PATH" \
+        AZURE_GUEST_CONFIGURATION_PATH="/var/lib/GuestConfig/Configuration" \
+        AZURE_HTTP_USER_AGENT="GuestConfiguration/Agent" \
+        nohup \$DAEMON_PATH >> \$LOGFILE 2>&1 &
+    
+    PID=\$!
+    echo \$PID > \$PIDFILE
+    sleep 8
+    
+    if ps -p \$PID > /dev/null 2>&1; then
+        return 0
+    else
+        rm -f \$PIDFILE
+        return 1
+    fi
+}
+
+stop() {
+    [ -f \$PIDFILE ] && kill \$(cat \$PIDFILE) 2>/dev/null
+    pkill -f "\$DAEMON_PATH" 2>/dev/null
+    rm -f \$PIDFILE
+}
+
+status() {
+    if [ -f \$PIDFILE ] && ps -p \$(cat \$PIDFILE) > /dev/null 2>&1; then
+        echo "GCAD is running (PID \$(cat \$PIDFILE))"
+        return 0
+    else
+        echo "GCAD is stopped"
+        return 3
+    fi
+}
+
+case "\$1" in
+    start) start ;;
+    stop) stop ;;
+    restart) stop; sleep 2; start ;;
+    status) status ;;
+    *) echo "Usage: \$0 {start|stop|restart|status}" ;;
+esac
+GCAD_EOF
+
+chmod +x /etc/init.d/gcad
+
+# PART 7: RESTART ALL ARC SERVICES
+
+echo "Stopping services..."
+for service in gcad extd arcproxyd himdsd; do
+    /etc/init.d/$service stop 2>/dev/null
+done
+
+sleep 5
+pkill -9 -f "gc_linux_service" 2>/dev/null
+pkill -9 -f "arcproxy" 2>/dev/null
+pkill -9 -f "himds" 2>/dev/null
+for port in 40342 40343 40344; do
+    fuser -k -9 $port/tcp 2>/dev/null
+done
+rm -f /var/run/*.pid 2>/dev/null
+rm -f /var/opt/azcmagent/socks/himds.sock 2>/dev/null
+sleep 3
+
+echo "Starting services..."
+/etc/init.d/himdsd start
+sleep 5
+
+/etc/init.d/arcproxyd start
+sleep 5
+
+/etc/init.d/extd start
+sleep 8
+
+/etc/init.d/gcad start
+sleep 8
+
+echo "Arc service status:"
+for service in himdsd arcproxyd extd gcad; do
+    /etc/init.d/$service status
+done
+
+# PART 8: DOWNLOAD AND INSTALL gNMI COLLECTOR
+# (Replaces the cron-based CLI parser pipeline with gNMI/YANG telemetry collection)
+
+echo ""
+echo "--- Installing gNMI Telemetry Collector ---"
+
+mkdir -p "$GNMI_INSTALL_DIR"
+
+# If collector binary already exists, skip download
+if [ -x "$GNMI_INSTALL_DIR/gnmi-collector" ]; then
+    echo "gNMI collector already installed at ${GNMI_INSTALL_DIR}/gnmi-collector — skipping download"
+    "$GNMI_INSTALL_DIR/gnmi-collector" --version 2>/dev/null
+else
+    GNMI_TEMP_DIR="/tmp/gnmi-collector-install"
+    mkdir -p "$GNMI_TEMP_DIR"
+    cd "$GNMI_TEMP_DIR" || exit 1
+
+    echo "Downloading gNMI collector from ${COLLECTOR_URL} ..."
+    curl -sSL -f "$COLLECTOR_URL" -o gnmi-collector.tar.gz
+    if [ $? -ne 0 ]; then
+        echo "WARNING: Failed to download gNMI collector from ${COLLECTOR_URL}"
+        echo "         You can manually upload the binary to ${GNMI_INSTALL_DIR}/gnmi-collector later."
+    else
+        tar -xzf gnmi-collector.tar.gz
+        if [ $? -ne 0 ]; then
+            echo "WARNING: Failed to extract gNMI collector archive"
+        else
+            cp gnmi-collector "$GNMI_INSTALL_DIR/gnmi-collector"
+            chmod +x "$GNMI_INSTALL_DIR/gnmi-collector"
+            if [ ! -f "$GNMI_INSTALL_DIR/config.yaml" ]; then
+                cp config.cisco.yaml "$GNMI_INSTALL_DIR/config.yaml" 2>/dev/null
+                echo "Installed default config.yaml"
+            else
+                echo "Existing config.yaml preserved (not overwritten)"
+            fi
+            echo "gNMI collector installed to ${GNMI_INSTALL_DIR}"
+            "$GNMI_INSTALL_DIR/gnmi-collector" --version 2>/dev/null
+        fi
+    fi
+    rm -rf "$GNMI_TEMP_DIR"
+fi
+
+find /opt/azcmagent -name "*.sh" -type f -exec chmod +x {} \; 2>/dev/null
+find /var/tmp -name "rpm-tmp.*" -type f -exec chmod +x {} \; 2>/dev/null
+
+# PART 9: CREATE gNMI COLLECTOR CREDENTIALS FILE
+
+cat > "${GNMI_INSTALL_DIR}/env" << GNMIENV_EOF
+# gNMI Collector credentials
+# This file is sourced by the init.d service script.
+export GNMI_USER="${GNMI_USER}"
+export GNMI_PASS="${GNMI_PASS}"
+export WORKSPACE_ID="${WORKSPACE_ID}"
+export PRIMARY_KEY="${PRIMARY_KEY}"
+export SECONDARY_KEY="${SECONDARY_KEY}"
+GNMIENV_EOF
+
+chmod 600 "${GNMI_INSTALL_DIR}/env"
+echo "Credentials file created at ${GNMI_INSTALL_DIR}/env (permissions: 600)"
+
+# PART 10: CREATE gNMI COLLECTOR INIT.D SERVICE
+
+cat > /etc/init.d/gnmi-collectord << 'GNMI_INITD_EOF'
+#!/bin/bash
+# /etc/init.d/gnmi-collectord
+#
+# init.d service script for the gNMI telemetry collector daemon.
+# Manages the gnmi-collector process running in poll mode (periodic gNMI Get).
+#
+# Usage: /etc/init.d/gnmi-collectord {start|stop|restart|status}
+
+DAEMON_NAME="gnmi-collector"
+INSTALL_DIR="/opt/gnmi-collector"
+DAEMON_PATH="${INSTALL_DIR}/gnmi-collector"
+CONFIG_PATH="${INSTALL_DIR}/config.yaml"
+ENV_FILE="${INSTALL_DIR}/env"
+PIDFILE="/var/run/gnmi-collector.pid"
+LOGFILE="/var/log/gnmi-collector.log"
+MAX_LOG_SIZE=10485760  # 10 MB
+
+if [ ! -x "$DAEMON_PATH" ]; then
+    echo "ERROR: ${DAEMON_NAME} binary not found at ${DAEMON_PATH}"
+    exit 1
+fi
+
+if [ ! -f "$CONFIG_PATH" ]; then
+    echo "ERROR: config file not found at ${CONFIG_PATH}"
+    exit 1
+fi
+
+rotate_log() {
+    if [ -f "$LOGFILE" ]; then
+        local size
+        size=$(stat -f%z "$LOGFILE" 2>/dev/null || stat -c%s "$LOGFILE" 2>/dev/null)
+        if [ "$size" -gt "$MAX_LOG_SIZE" ] 2>/dev/null; then
+            mv "$LOGFILE" "${LOGFILE}.old"
+        fi
+    fi
+}
+
+start() {
+    if [ -f "$PIDFILE" ] && ps -p "$(cat "$PIDFILE")" > /dev/null 2>&1; then
+        echo "${DAEMON_NAME} is already running (PID $(cat "$PIDFILE"))"
+        return 0
+    fi
+
+    rm -f "$PIDFILE"
+    pkill -f "${DAEMON_PATH}" 2>/dev/null
+    sleep 1
+
+    mkdir -p "$(dirname "$LOGFILE")"
+    rotate_log
+
+    [ -f /etc/environment ] && source /etc/environment
+    [ -f "$ENV_FILE" ] && source "$ENV_FILE"
+
+    if [ -z "$GNMI_USER" ] || [ -z "$GNMI_PASS" ]; then
+        echo "ERROR: GNMI_USER and GNMI_PASS must be set in ${ENV_FILE} or /etc/environment"
+        return 1
+    fi
+    if [ -z "$WORKSPACE_ID" ] || [ -z "$PRIMARY_KEY" ]; then
+        echo "ERROR: WORKSPACE_ID and PRIMARY_KEY must be set in ${ENV_FILE} or /etc/environment"
+        return 1
+    fi
+
+    echo "Starting ${DAEMON_NAME}..." >> "$LOGFILE"
+
+    nohup "$DAEMON_PATH" --config "$CONFIG_PATH" >> "$LOGFILE" 2>&1 &
+    PID=$!
+    echo $PID > "$PIDFILE"
+
+    sleep 3
+    if ps -p $PID > /dev/null 2>&1; then
+        echo "${DAEMON_NAME} started (PID ${PID})"
+        return 0
+    else
+        echo "ERROR: ${DAEMON_NAME} failed to start. Check ${LOGFILE}"
+        rm -f "$PIDFILE"
+        return 1
+    fi
+}
+
+stop() {
+    if [ ! -f "$PIDFILE" ]; then
+        echo "${DAEMON_NAME} is not running (no PID file)"
+        return 0
+    fi
+
+    local PID
+    PID=$(cat "$PIDFILE")
+
+    if ! ps -p "$PID" > /dev/null 2>&1; then
+        echo "${DAEMON_NAME} is not running (stale PID file)"
+        rm -f "$PIDFILE"
+        return 0
+    fi
+
+    echo "Stopping ${DAEMON_NAME} (PID ${PID})..."
+    kill "$PID" 2>/dev/null
+
+    for i in $(seq 1 15); do
+        if ! ps -p "$PID" > /dev/null 2>&1; then
+            echo "${DAEMON_NAME} stopped"
+            rm -f "$PIDFILE"
+            return 0
+        fi
+        sleep 1
+    done
+
+    echo "WARNING: ${DAEMON_NAME} did not stop gracefully, forcing..."
+    kill -9 "$PID" 2>/dev/null
+    rm -f "$PIDFILE"
+    echo "${DAEMON_NAME} killed"
+}
+
+status() {
+    if [ -f "$PIDFILE" ] && ps -p "$(cat "$PIDFILE")" > /dev/null 2>&1; then
+        echo "${DAEMON_NAME} is running (PID $(cat "$PIDFILE"))"
+        return 0
+    else
+        echo "${DAEMON_NAME} is stopped"
+        return 3
+    fi
+}
+
+case "$1" in
+    start)   start ;;
+    stop)    stop ;;
+    restart) stop; sleep 2; start ;;
+    status)  status ;;
+    *)       echo "Usage: $0 {start|stop|restart|status}"; exit 1 ;;
+esac
+GNMI_INITD_EOF
+
+chmod +x /etc/init.d/gnmi-collectord
+echo "init.d service installed at /etc/init.d/gnmi-collectord"
+
+# PART 11: VALIDATE gNMI CONNECTIVITY AND START COLLECTOR
+
+echo ""
+echo "--- Validating gNMI connectivity ---"
+
+source "${GNMI_INSTALL_DIR}/env"
+
+echo "Running dry-run connectivity test..."
+"$GNMI_INSTALL_DIR/gnmi-collector" --config "$GNMI_INSTALL_DIR/config.yaml" --once --dry-run > /tmp/gnmi-test-output.txt 2>&1
+TEST_RESULT=$?
+
+if [ $TEST_RESULT -eq 0 ]; then
+    echo "gNMI connectivity test PASSED"
+    LINES=$(wc -l < /tmp/gnmi-test-output.txt)
+    echo "  Collected ${LINES} lines of output"
+else
+    echo "WARNING: gNMI connectivity test failed (exit code ${TEST_RESULT})"
+    echo "  Check /tmp/gnmi-test-output.txt for details"
+    echo "  Common causes:"
+    echo "    - gRPC feature not enabled: run 'feature grpc' in NX-OS config"
+    echo "    - VRF not configured: run 'grpc use-vrf default' in NX-OS config"
+    echo "    - Invalid GNMI_USER / GNMI_PASS credentials"
+    echo "    - gNMI server not listening on localhost:50051"
+fi
+
+rm -f /tmp/gnmi-test-output.txt
+
+echo ""
+echo "Starting gNMI collector service..."
+/etc/init.d/gnmi-collectord start
+sleep 2
+/etc/init.d/gnmi-collectord status
+
+# PART 12: CREATE PERSISTENT AUTOSTART SCRIPT IN RPMSTORE
+
+echo "Configuring Persistent Boot Auto-Start..."
+
+mkdir -p /bootflash/.rpmstore/config/etc/rc3.d
+
+cat > /bootflash/.rpmstore/config/etc/init.d/arcnet-autostart << 'AUTOSTART_EOF'
+#!/bin/bash
+
+case "$1" in
+    start)
+        (
+            sleep 120
+            if [ ! -f /tmp/arcnet-boot-complete ]; then
+                touch /tmp/arcnet-boot-complete
+                echo "=== arcnet-autostart triggered at $(date) ===" >> /bootflash/arcnet-debug.log
+                /bin/bash /bootflash/arcnet-setup.sh >> /bootflash/arcnet-debug.log 2>&1
+                echo "=== arcnet-setup finished with code $? at $(date) ===" >> /bootflash/arcnet-debug.log
+            fi
+        ) &
+        ;;
+    stop)
+        ;;
+    *)
+        echo "Usage: $0 {start|stop}"
+        exit 1
+        ;;
+esac
+exit 0
+AUTOSTART_EOF
+
+chmod +x /bootflash/.rpmstore/config/etc/init.d/arcnet-autostart
+
+# Create symlink in persistent rc3.d
+ln -sf ../init.d/arcnet-autostart /bootflash/.rpmstore/config/etc/rc3.d/S99arcnet-autostart
+rm -f /bootflash/arcnet-debug.log 2>/dev/null
+
+echo "Persistent boot auto-start configured."
+
+echo ""
+echo "============================================================================"
+echo "Azure Arc + gNMI Telemetry Setup Complete!"
+echo "============================================================================"
+echo ""
+echo "NEXT STEPS:"
+echo "1. Connect the Arc agent to Azure (see README.md for instructions)"
+echo "2. Verify Arc agent connection with: azcmagent show"
+echo "3. Check Arc service status with: /etc/init.d/himdsd status"
+echo "4. View Arc logs in /var/log/arc/"
+echo ""
+echo "gNMI TELEMETRY COLLECTOR:"
+echo "  Binary:      ${GNMI_INSTALL_DIR}/gnmi-collector"
+echo "  Config:      ${GNMI_INSTALL_DIR}/config.yaml"
+echo "  Credentials: ${GNMI_INSTALL_DIR}/env"
+echo "  Service:     /etc/init.d/gnmi-collectord"
+echo "  Logs:        /var/log/gnmi-collector.log"
+echo ""
+echo "Service management:"
+echo "  /etc/init.d/gnmi-collectord status    Check if running"
+echo "  /etc/init.d/gnmi-collectord restart   Restart the collector"
+echo "  /etc/init.d/gnmi-collectord stop      Stop the collector"
+echo ""
+echo "Manual testing:"
+echo "  ${GNMI_INSTALL_DIR}/gnmi-collector --config ${GNMI_INSTALL_DIR}/config.yaml --once --dry-run"
+echo ""
+echo "============================================================================"

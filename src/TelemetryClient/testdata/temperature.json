@@ -1,0 +1,14 @@
+[
+  {
+    "timestamp": 1773862274413535324,
+    "updates": [
+      {
+        "path": "/components/component[name=27]/state/temperature",
+        "value": {
+          "instant": "36.0",
+          "alarm-status": false
+        }
+      }
+    ]
+  }
+]

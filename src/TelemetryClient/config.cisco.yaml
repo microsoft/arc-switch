@@ -1,0 +1,231 @@
+# gnmi-collector configuration
+# All credentials are read from environment variables for security.
+
+target:
+  address: 127.0.0.1
+  port: 50051
+  tls:
+    enabled: true
+    # TOFU (trust-on-first-use) is the default: the server cert is fetched
+    # on startup and used for verification during the session.
+    # To pin a specific cert, uncomment ca_file:
+    # ca_file: /etc/gnmi/server.pem
+  credentials:
+    username_env: GNMI_USER  # NX-OS SSH username
+    password_env: GNMI_PASS  # NX-OS SSH password
+
+collection:
+  mode: poll                 # poll (Get every interval) or subscribe (persistent stream)
+  interval: 300s             # 5 minutes — matches current cron interval
+  timeout: 30s               # Per-path Get request timeout
+  encoding: JSON             # JSON or PROTO (NX-OS does not support JSON_IETF)
+
+azure:
+  workspace_id_env: WORKSPACE_ID
+  primary_key_env: PRIMARY_KEY
+  secondary_key_env: SECONDARY_KEY
+  device_type: cisco-nx-os
+
+paths:
+  # ============================================================
+  # OpenConfig paths (working well, keep enabled)
+  # ============================================================
+  - name: interface-counters
+    yang_path: /openconfig-interfaces:interfaces/interface/state/counters
+    table: CiscoInterfaceCounter_CL
+    enabled: true
+    mode: sample
+    sample_interval: 60s
+
+  - name: interface-status
+    yang_path: /openconfig-interfaces:interfaces/interface/state
+    table: CiscoInterfaceStatus_CL
+    enabled: true
+    mode: sample
+    sample_interval: 60s
+    # on_change is also supported for this path.
+
+  - name: system-state
+    yang_path: /openconfig-system:system/state
+    table: CiscoSystemUptime_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: platform-inventory
+    yang_path: /openconfig-platform:components/component
+    table: CiscoInventory_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # Supplementary OpenConfig paths (fill specific gaps)
+  # ============================================================
+  - name: if-ethernet
+    yang_path: /openconfig-if-ethernet:interfaces/interface/ethernet/state
+    table: CiscoInterfaceEthernet_CL
+    enabled: true
+    mode: sample
+    sample_interval: 60s
+    # on_change is also supported for this path.
+
+  - name: bgp-global
+    yang_path: /openconfig-network-instance:network-instances/network-instance/protocols/protocol/bgp/global/state
+    table: CiscoBgpGlobal_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: transceiver-channel
+    yang_path: /openconfig-platform:components/component/transceiver/physical-channels
+    table: CiscoTransceiverDom_CL
+    enabled: true
+    mode: sample
+    sample_interval: 60s
+
+  # ============================================================
+  # Native Cisco YANG paths (Cisco-NX-OS-device model)
+  # These provide much richer data than their OpenConfig equivalents.
+  # ============================================================
+  - name: nx-transceiver
+    yang_path: /System/intf-items/phys-items/PhysIf-list/phys-items
+    table: CiscoTransceiver_CL
+    enabled: true
+    mode: sample
+    sample_interval: 60s
+
+  - name: nx-arp
+    yang_path: /System/arp-items/inst-items/dom-items/Dom-list/db-items/Db-list/adj-items/AdjEp-list
+    table: CiscoIpArp_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-bgp-peers
+    yang_path: /System/bgp-items/inst-items/dom-items/Dom-list/peer-items/Peer-list
+    table: CiscoBgpSummary_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+    # NOTE: vrf_local_as is not available at the Peer-list level in NX-OS YANG.
+    # It is provided in the CiscoBgpGlobal_CL table (from bgp-global OC path).
+
+  - name: nx-env-sensor
+    yang_path: /System/ch-items/supslot-items/SupCSlot-list/sup-items/sensor-items
+    table: CiscoEnvTemp_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-env-psu
+    yang_path: /System/ch-items/psuslot-items/PsuSlot-list
+    table: CiscoEnvPower_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-sys-cpu
+    yang_path: /System/procsys-items/syscpusummary-items
+    table: CiscoSystemResources_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-sys-memory
+    yang_path: /System/procsys-items/sysmem-items
+    table: CiscoSystemResources_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-sys-load
+    yang_path: /System/procsys-items/sysload-items
+    table: CiscoSystemResources_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-route-summary
+    yang_path: /System/urib-items/table4-items/Table4-list/sum-items
+    table: CiscoRouteSummary_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-mac-table
+    yang_path: /System/mac-items
+    table: CiscoMacAddress_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-version
+    yang_path: /System/showversion-items
+    table: CiscoVersion_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-intf-errors
+    yang_path: /System/intf-items/phys-items/PhysIf-list/dbgEtherStats-items
+    table: CiscoInterfaceErrors_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: nx-lldp
+    yang_path: /System/lldp-items/inst-items/if-items/If-list
+    table: CiscoLldpNeighbor_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  # ============================================================
+  # Disabled OpenConfig paths (replaced by native equivalents)
+  # Enable these if native paths have issues on a specific switch.
+  # ============================================================
+  - name: bgp-neighbors
+    yang_path: /openconfig-network-instance:network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state
+    table: CiscoBgpSummary_CL
+    enabled: false
+
+  - name: lldp-neighbors
+    yang_path: /openconfig-lldp:lldp/interfaces/interface/neighbors
+    table: CiscoLldpNeighbor_CL
+    enabled: false
+
+  - name: temperature
+    yang_path: /openconfig-platform:components/component/state/temperature
+    table: CiscoEnvTemp_CL
+    enabled: false
+
+  - name: power-supply
+    yang_path: /openconfig-platform:components/component/power-supply
+    table: CiscoEnvPower_CL
+    enabled: false
+
+  - name: system-cpus
+    yang_path: /openconfig-system:system/cpus
+    table: CiscoSystemResources_CL
+    enabled: false
+
+  - name: system-memory
+    yang_path: /openconfig-system:system/memory
+    table: CiscoSystemResources_CL
+    enabled: false
+
+  - name: arp-table
+    yang_path: /openconfig-if-ip:interfaces/interface/subinterfaces/subinterface/ipv4/neighbors
+    table: CiscoIpArp_CL
+    enabled: false
+
+  - name: mac-table
+    yang_path: /openconfig-network-instance:network-instances/network-instance/fdb/mac-table
+    table: CiscoMacAddress_CL
+    enabled: false
+
+  - name: transceiver
+    yang_path: /openconfig-platform:components/component/transceiver
+    table: CiscoTransceiver_CL
+    enabled: false

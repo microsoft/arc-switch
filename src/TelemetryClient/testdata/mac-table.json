@@ -1,0 +1,3715 @@
+[
+  {
+    "timestamp": 1773862278898397291,
+    "updates": [
+      {
+        "path": "/network-instances/network-instance[name=default]/fdb/mac-table",
+        "value": {
+          "entries": {
+            "entry": [
+              {
+                "mac-address": "B8:E9:24:E5:A3:00",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A3:00",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:DC",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:DC",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:DC",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:DC",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:67:58",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:67:58",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:9C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:9C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:64",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:64",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5D:58",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5D:58",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:07",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:07",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:16",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:16",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:2C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:2C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:62:1C",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:62:1C",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:14",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:14",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:70:3B",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:70:3B",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:A2:F8",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A2:F8",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:44",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:44",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:67:1C",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:67:1C",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9B:80",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9B:80",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6F:A4",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6F:A4",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5E:ED",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5E:ED",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6C:F4",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6C:F4",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:54",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:54",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:90:50",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:90:50",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "02:EC:F2:04:00:00",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po101"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "02:EC:F2:04:00:00",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "9C:63:C0:C9:3D:CC",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "9C:63:C0:C9:3D:CC",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9E:C0",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9E:C0",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6E:65",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6E:65",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:84",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:84",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "00:15:5D:22:FE:13",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "00:15:5D:22:FE:13",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:04",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:04",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:54",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:54",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:4C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:4C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:5C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:5C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:24",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:24",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9F:D0",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9F:D0",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:1C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:1C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:62:85",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:62:85",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:66:27",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:66:27",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "9C:63:C0:C9:3D:CD",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "9C:63:C0:C9:3D:CD",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:B6",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:B6",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "C4:5A:B1:CA:CB:1F",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "C4:5A:B1:CA:CB:1F",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:72:57",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:72:57",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:60:46",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:60:46",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:A4",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:A4",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5D:26",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5D:26",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "A4:10:B6:BC:04:47",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "A4:10:B6:BC:04:47",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:3C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:3C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:EC",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:EC",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:8C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:8C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:4C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:4C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:BC",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:BC",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:E4",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:E4",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:73:2E",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:73:2E",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:A3:10",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A3:10",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9F:E8",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9F:E8",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "path": "/network-instances/network-instance[name=VLAN-4294967295]/fdb/mac-table",
+        "value": {
+          "entries": {
+            "entry": [
+              {
+                "mac-address": "B8:E9:24:E5:A3:00",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A3:00",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:DC",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:DC",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:DC",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:DC",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:67:58",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:67:58",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:9C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:9C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:64",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:64",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5D:58",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5D:58",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:07",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:07",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:16",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:16",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:2C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:2C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:62:1C",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:62:1C",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:14",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:14",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:70:3B",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:70:3B",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:A2:F8",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A2:F8",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:44",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:44",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:67:1C",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:67:1C",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9B:80",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9B:80",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6F:A4",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6F:A4",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5E:ED",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5E:ED",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6C:F4",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6C:F4",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:54",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:54",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:90:50",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:90:50",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "02:EC:F2:04:00:00",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po101"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "02:EC:F2:04:00:00",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "9C:63:C0:C9:3D:CC",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "9C:63:C0:C9:3D:CC",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9E:C0",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9E:C0",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6E:65",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6E:65",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:84",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:84",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "00:15:5D:22:FE:13",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "00:15:5D:22:FE:13",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:04",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:04",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:54",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:54",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:4C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:4C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:5C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:5C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:24",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:24",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9F:D0",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9F:D0",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:1C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:1C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:62:85",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:62:85",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:66:27",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:66:27",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "9C:63:C0:C9:3D:CD",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "9C:63:C0:C9:3D:CD",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:B6",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:B6",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "C4:5A:B1:CA:CB:1F",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "C4:5A:B1:CA:CB:1F",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:72:57",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:72:57",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:60:46",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:60:46",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:A4",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:A4",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5D:26",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5D:26",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "A4:10:B6:BC:04:47",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "A4:10:B6:BC:04:47",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:3C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:3C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:EC",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:EC",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:8C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:8C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:4C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:4C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:BC",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:BC",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:E4",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:E4",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:73:2E",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:73:2E",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:A3:10",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A3:10",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9F:E8",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9F:E8",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "path": "/network-instances/network-instance[name=VLAN-4294967294]/fdb/mac-table",
+        "value": {
+          "entries": {
+            "entry": [
+              {
+                "mac-address": "B8:E9:24:E5:A3:00",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A3:00",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:DC",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:DC",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:DC",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:DC",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:67:58",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:67:58",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:9C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:9C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:64",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:64",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5D:58",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5D:58",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:07",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:07",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:16",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:16",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:2C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:2C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:62:1C",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:62:1C",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:14",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:14",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:70:3B",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:70:3B",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:A2:F8",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A2:F8",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:44",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:44",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:67:1C",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:67:1C",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9B:80",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9B:80",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6F:A4",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6F:A4",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5E:ED",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5E:ED",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6C:F4",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6C:F4",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:54",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:54",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:90:50",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:90:50",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "02:EC:F2:04:00:00",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po101"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "02:EC:F2:04:00:00",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "9C:63:C0:C9:3D:CC",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "9C:63:C0:C9:3D:CC",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9E:C0",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9E:C0",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6E:65",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6E:65",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:84",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:84",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "00:15:5D:22:FE:13",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "00:15:5D:22:FE:13",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:04",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:04",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:54",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:54",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:4C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:4C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:5C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:5C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:24",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:24",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9F:D0",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9F:D0",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:1C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:1C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:62:85",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:62:85",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:66:27",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:66:27",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "9C:63:C0:C9:3D:CD",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "9C:63:C0:C9:3D:CD",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:B6",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:B6",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "C4:5A:B1:CA:CB:1F",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "C4:5A:B1:CA:CB:1F",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:72:57",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:72:57",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:60:46",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:60:46",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:A4",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:A4",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5D:26",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5D:26",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "A4:10:B6:BC:04:47",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "A4:10:B6:BC:04:47",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:3C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:3C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:EC",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:EC",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:8C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:8C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:4C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:4C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:BC",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:BC",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:E4",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:E4",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:73:2E",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:73:2E",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:A3:10",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A3:10",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9F:E8",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9F:E8",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "path": "/network-instances/network-instance[name=VLAN-4294967291]/fdb/mac-table",
+        "value": {
+          "entries": {
+            "entry": [
+              {
+                "mac-address": "B8:E9:24:E5:A3:00",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A3:00",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:DC",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:DC",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:DC",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:DC",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:67:58",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:67:58",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:9C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:9C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:64",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:64",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5D:58",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5D:58",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:07",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:07",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:16",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:16",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:2C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:2C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:62:1C",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:62:1C",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:14",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:14",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:70:3B",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:70:3B",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:A2:F8",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A2:F8",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:44",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:44",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:67:1C",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:67:1C",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9B:80",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9B:80",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6F:A4",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6F:A4",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5E:ED",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5E:ED",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6C:F4",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6C:F4",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:54",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:54",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:90:50",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/2/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:90:50",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "02:EC:F2:04:00:00",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po101"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "02:EC:F2:04:00:00",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "9C:63:C0:C9:3D:CC",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "9C:63:C0:C9:3D:CC",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9E:C0",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9E:C0",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6E:65",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6E:65",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:84",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:84",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "00:15:5D:22:FE:13",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "00:15:5D:22:FE:13",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:04",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:04",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:54",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:54",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:4C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:4C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6D:5C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6D:5C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:24",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/4/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:24",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9F:D0",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9F:D0",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:1C",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:1C",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:62:85",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:62:85",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:66:27",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:66:27",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "9C:63:C0:C9:3D:CD",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "9C:63:C0:C9:3D:CD",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:6D:B6",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:6D:B6",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "C4:5A:B1:CA:CB:1F",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "C4:5A:B1:CA:CB:1F",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:72:57",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:72:57",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:60:46",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:60:46",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:A4",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/3/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:A4",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:5D:26",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:5D:26",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "A4:10:B6:BC:04:47",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "A4:10:B6:BC:04:47",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:3C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:3C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:EC",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/18/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:EC",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:8C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:8C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:70:4C",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:70:4C",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:BC",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/19/2"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:BC",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "54:9B:24:61:6E:E4",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/17/1"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "54:9B:24:61:6E:E4",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "74:5D:22:DC:73:2E",
+                "vlan": 125,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "po102"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "74:5D:22:DC:73:2E",
+                  "vlan": 125,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:A3:10",
+                "vlan": 7,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/1/4"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:A3:10",
+                  "vlan": 7,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              },
+              {
+                "mac-address": "B8:E9:24:E5:9F:E8",
+                "vlan": 711,
+                "interface": {
+                  "interface-ref": {
+                    "state": {
+                      "interface": "eth1/20/3"
+                    }
+                  }
+                },
+                "state": {
+                  "mac-address": "B8:E9:24:E5:9F:E8",
+                  "vlan": 711,
+                  "age": "0",
+                  "entry-type": "DYNAMIC"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]

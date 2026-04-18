@@ -1,0 +1,2209 @@
+[
+  {
+    "timestamp": 1773862276516476301,
+    "updates": [
+      {
+        "path": "/components/component[name=1]",
+        "value": [
+          {
+            "name": "1",
+            "state": {
+              "name": "N9K-C9336C-FX2",
+              "description": "36x40/100G QSFP28 Ethernet Module",
+              "empty": false,
+              "hardware-version": "2.0",
+              "id": "1",
+              "location": "front",
+              "mfg-date": "2023-05-22",
+              "mfg-name": "Cisco Systems, Inc.",
+              "oper-status": "ACTIVE",
+              "part-no": "73-18766-04",
+              "removable": true,
+              "serial-no": "FLM27210AP2",
+              "software-version": "10.4(6)",
+              "type": "LINECARD"
+            },
+            "linecard": {
+              "state": {
+                "power-admin-state": "POWER_ENABLED",
+                "slot-id": "1"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=28]",
+        "value": [
+          {
+            "name": "28",
+            "state": {
+              "empty": true,
+              "id": "28",
+              "location": "front",
+              "type": "CPU"
+            },
+            "linecard": {
+              "state": {
+                "slot-id": "28"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=27]",
+        "value": [
+          {
+            "name": "27",
+            "state": {
+              "name": "N9K-C9336C-FX2",
+              "memory": {
+                "available": "25134366720",
+                "utilized": "12831424512"
+              },
+              "description": "Virtual Supervisor Module",
+              "empty": false,
+              "hardware-version": "2.0",
+              "id": "27",
+              "location": "front",
+              "mfg-date": "2023-05-22",
+              "mfg-name": "Cisco Systems, Inc.",
+              "oper-status": "ACTIVE",
+              "part-no": "73-18766-04",
+              "removable": true,
+              "serial-no": "FLM27210AP2",
+              "software-version": "10.4(6)",
+              "type": "CPU",
+              "temperature": {
+                "instant": "36.0",
+                "alarm-status": false
+              }
+            },
+            "linecard": {
+              "state": {
+                "power-admin-state": "POWER_ENABLED",
+                "slot-id": "27"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/20]",
+        "value": [
+          {
+            "name": "eth1/20",
+            "port": {
+              "breakout-mode": {
+                "groups": {
+                  "group": [
+                    {
+                      "index": 0,
+                      "state": {
+                        "breakout-speed": "SPEED_25GB",
+                        "index": 0,
+                        "num-breakouts": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/19]",
+        "value": [
+          {
+            "name": "eth1/19",
+            "port": {
+              "breakout-mode": {
+                "groups": {
+                  "group": [
+                    {
+                      "index": 0,
+                      "state": {
+                        "breakout-speed": "SPEED_25GB",
+                        "index": 0,
+                        "num-breakouts": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/18]",
+        "value": [
+          {
+            "name": "eth1/18",
+            "port": {
+              "breakout-mode": {
+                "groups": {
+                  "group": [
+                    {
+                      "index": 0,
+                      "state": {
+                        "breakout-speed": "SPEED_25GB",
+                        "index": 0,
+                        "num-breakouts": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/17]",
+        "value": [
+          {
+            "name": "eth1/17",
+            "port": {
+              "breakout-mode": {
+                "groups": {
+                  "group": [
+                    {
+                      "index": 0,
+                      "state": {
+                        "breakout-speed": "SPEED_25GB",
+                        "index": 0,
+                        "num-breakouts": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/4]",
+        "value": [
+          {
+            "name": "eth1/4",
+            "port": {
+              "breakout-mode": {
+                "groups": {
+                  "group": [
+                    {
+                      "index": 0,
+                      "state": {
+                        "breakout-speed": "SPEED_25GB",
+                        "index": 0,
+                        "num-breakouts": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/36]",
+        "value": [
+          {
+            "name": "eth1/36",
+            "port": {
+              "breakout-mode": {
+                "groups": {
+                  "group": [
+                    {
+                      "index": 0,
+                      "state": {
+                        "breakout-speed": "SPEED_10GB",
+                        "index": 0,
+                        "num-breakouts": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/1]",
+        "value": [
+          {
+            "name": "eth1/1",
+            "port": {
+              "breakout-mode": {
+                "groups": {
+                  "group": [
+                    {
+                      "index": 0,
+                      "state": {
+                        "breakout-speed": "SPEED_25GB",
+                        "index": 0,
+                        "num-breakouts": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/2]",
+        "value": [
+          {
+            "name": "eth1/2",
+            "port": {
+              "breakout-mode": {
+                "groups": {
+                  "group": [
+                    {
+                      "index": 0,
+                      "state": {
+                        "breakout-speed": "SPEED_25GB",
+                        "index": 0,
+                        "num-breakouts": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/3]",
+        "value": [
+          {
+            "name": "eth1/3",
+            "port": {
+              "breakout-mode": {
+                "groups": {
+                  "group": [
+                    {
+                      "index": 0,
+                      "state": {
+                        "breakout-speed": "SPEED_25GB",
+                        "index": 0,
+                        "num-breakouts": 4
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=psu2]",
+        "value": [
+          {
+            "name": "psu2",
+            "power-supply": {
+              "state": {
+                "enabled": true,
+                "capacity": "RIl9cQ==",
+                "input-current": "P1AAAA==",
+                "input-voltage": "Q08AAA==",
+                "output-current": "QTwAAA==",
+                "output-power": "Qw4AAA==",
+                "output-voltage": "QT/wAA=="
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=psu1]",
+        "value": [
+          {
+            "name": "psu1",
+            "power-supply": {
+              "state": {
+                "enabled": true,
+                "capacity": "RIl9cQ==",
+                "input-current": "PzgAAA==",
+                "input-voltage": "Q08AAA==",
+                "output-current": "QSgAAA==",
+                "output-power": "QvwAAA==",
+                "output-voltage": "QUAAAA=="
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan3/3]",
+        "value": [
+          {
+            "name": "fan3/3",
+            "fan": {
+              "state": {
+                "speed": 17142
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan3/4]",
+        "value": [
+          {
+            "name": "fan3/4",
+            "fan": {
+              "state": {
+                "speed": 14794
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan3/2]",
+        "value": [
+          {
+            "name": "fan3/2",
+            "fan": {
+              "state": {
+                "speed": 14835
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan3/1]",
+        "value": [
+          {
+            "name": "fan3/1",
+            "fan": {
+              "state": {
+                "speed": 17142
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan2/3]",
+        "value": [
+          {
+            "name": "fan2/3",
+            "fan": {
+              "state": {
+                "speed": 16666
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan2/4]",
+        "value": [
+          {
+            "name": "fan2/4",
+            "fan": {
+              "state": {
+                "speed": 14477
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan2/2]",
+        "value": [
+          {
+            "name": "fan2/2",
+            "fan": {
+              "state": {
+                "speed": 14361
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan2/1]",
+        "value": [
+          {
+            "name": "fan2/1",
+            "fan": {
+              "state": {
+                "speed": 16463
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan1/3]",
+        "value": [
+          {
+            "name": "fan1/3",
+            "fan": {
+              "state": {
+                "speed": 16666
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan1/4]",
+        "value": [
+          {
+            "name": "fan1/4",
+            "fan": {
+              "state": {
+                "speed": 14555
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan1/2]",
+        "value": [
+          {
+            "name": "fan1/2",
+            "fan": {
+              "state": {
+                "speed": 14555
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=fan1/1]",
+        "value": [
+          {
+            "name": "fan1/1",
+            "fan": {
+              "state": {
+                "speed": 16513
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=cpu0]",
+        "value": [
+          {
+            "name": "cpu0",
+            "cpu": {
+              "utilization": {
+                "state": {
+                  "avg": 27,
+                  "instant": 2,
+                  "max": 71,
+                  "min": 2,
+                  "max-time": "1773862220",
+                  "min-time": "1773862255"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=cpu2]",
+        "value": [
+          {
+            "name": "cpu2",
+            "cpu": {
+              "utilization": {
+                "state": {
+                  "avg": 43,
+                  "instant": 4,
+                  "max": 80,
+                  "min": 4,
+                  "max-time": "1773862234",
+                  "min-time": "1773862255"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=cpu1]",
+        "value": [
+          {
+            "name": "cpu1",
+            "cpu": {
+              "utilization": {
+                "state": {
+                  "avg": 52,
+                  "instant": 46,
+                  "max": 89,
+                  "min": 6,
+                  "max-time": "1773862248",
+                  "min-time": "1773862234"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=ALL]",
+        "value": [
+          {
+            "name": "ALL",
+            "cpu": {
+              "utilization": {
+                "state": {
+                  "avg": 31,
+                  "instant": 12,
+                  "max": 53,
+                  "min": 12,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=cpu7]",
+        "value": [
+          {
+            "name": "cpu7",
+            "cpu": {
+              "utilization": {
+                "state": {
+                  "avg": 22,
+                  "instant": 3,
+                  "max": 54,
+                  "min": 3,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=cpu5]",
+        "value": [
+          {
+            "name": "cpu5",
+            "cpu": {
+              "utilization": {
+                "state": {
+                  "avg": 24,
+                  "instant": 2,
+                  "max": 49,
+                  "min": 2,
+                  "max-time": "1773862248",
+                  "min-time": "1773862255"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=cpu4]",
+        "value": [
+          {
+            "name": "cpu4",
+            "cpu": {
+              "utilization": {
+                "state": {
+                  "avg": 27,
+                  "instant": 3,
+                  "max": 42,
+                  "min": 3,
+                  "max-time": "1773862241",
+                  "min-time": "1773862255"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=cpu3]",
+        "value": [
+          {
+            "name": "cpu3",
+            "cpu": {
+              "utilization": {
+                "state": {
+                  "avg": 25,
+                  "instant": 21,
+                  "max": 51,
+                  "min": 4,
+                  "max-time": "1773862227",
+                  "min-time": "1773862234"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=cpu6]",
+        "value": [
+          {
+            "name": "cpu6",
+            "cpu": {
+              "utilization": {
+                "state": {
+                  "avg": 30,
+                  "instant": 14,
+                  "max": 53,
+                  "min": 3,
+                  "max-time": "1773862241",
+                  "min-time": "1773862234"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/16]",
+        "value": [
+          {
+            "name": "eth1/16",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/20/3]",
+        "value": [
+          {
+            "name": "eth1/20/3",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458042",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/15]",
+        "value": [
+          {
+            "name": "eth1/15",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/4/2]",
+        "value": [
+          {
+            "name": "eth1/4/2",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458040",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/14]",
+        "value": [
+          {
+            "name": "eth1/14",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/13]",
+        "value": [
+          {
+            "name": "eth1/13",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/18/1]",
+        "value": [
+          {
+            "name": "eth1/18/1",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458036",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/12]",
+        "value": [
+          {
+            "name": "eth1/12",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/18/2]",
+        "value": [
+          {
+            "name": "eth1/18/2",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458036",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/21]",
+        "value": [
+          {
+            "name": "eth1/21",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/11]",
+        "value": [
+          {
+            "name": "eth1/11",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/1/4]",
+        "value": [
+          {
+            "name": "eth1/1/4",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458041",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/9]",
+        "value": [
+          {
+            "name": "eth1/9",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/8]",
+        "value": [
+          {
+            "name": "eth1/8",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/7]",
+        "value": [
+          {
+            "name": "eth1/7",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/5]",
+        "value": [
+          {
+            "name": "eth1/5",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/20/1]",
+        "value": [
+          {
+            "name": "eth1/20/1",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458042",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/19/2]",
+        "value": [
+          {
+            "name": "eth1/19/2",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458024",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/2/1]",
+        "value": [
+          {
+            "name": "eth1/2/1",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458027",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/29]",
+        "value": [
+          {
+            "name": "eth1/29",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/35]",
+        "value": [
+          {
+            "name": "eth1/35",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-05-08T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "G2410219029-1",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-PC01",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/18/4]",
+        "value": [
+          {
+            "name": "eth1/18/4",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458036",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/1/3]",
+        "value": [
+          {
+            "name": "eth1/1/3",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458041",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/2/4]",
+        "value": [
+          {
+            "name": "eth1/2/4",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458027",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/36/2]",
+        "value": [
+          {
+            "name": "eth1/36/2",
+            "transceiver": {
+              "physical-channels": {
+                "channel": [
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.95"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.59"
+                      },
+                      "output-power": {
+                        "instant": "-1.6"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.95"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.59"
+                      },
+                      "output-power": {
+                        "instant": "-1.6"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.95"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.59"
+                      },
+                      "output-power": {
+                        "instant": "-1.6"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.95"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.59"
+                      },
+                      "output-power": {
+                        "instant": "-1.6"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.95"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.59"
+                      },
+                      "output-power": {
+                        "instant": "-1.6"
+                      }
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "date-code": "2024-07-17T00:00:00Z+00:00",
+                "form-factor": "QSFP",
+                "present": "PRESENT",
+                "serial-no": "C2407418236",
+                "supply-voltage": {
+                  "instant": "3.29"
+                },
+                "vendor": "FS",
+                "vendor-part": "QSFP-CSR4-40G",
+                "vendor-rev": "C"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/4/4]",
+        "value": [
+          {
+            "name": "eth1/4/4",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458040",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/36/3]",
+        "value": [
+          {
+            "name": "eth1/36/3",
+            "transceiver": {
+              "physical-channels": {
+                "channel": [
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "-30.0"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.62"
+                      },
+                      "output-power": {
+                        "instant": "-2.01"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "-30.0"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.62"
+                      },
+                      "output-power": {
+                        "instant": "-2.01"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "-30.0"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.62"
+                      },
+                      "output-power": {
+                        "instant": "-2.01"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "-30.0"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.62"
+                      },
+                      "output-power": {
+                        "instant": "-2.01"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "-30.0"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.62"
+                      },
+                      "output-power": {
+                        "instant": "-2.01"
+                      }
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "date-code": "2024-07-17T00:00:00Z+00:00",
+                "form-factor": "QSFP",
+                "present": "PRESENT",
+                "serial-no": "C2407418236",
+                "supply-voltage": {
+                  "instant": "3.29"
+                },
+                "vendor": "FS",
+                "vendor-part": "QSFP-CSR4-40G",
+                "vendor-rev": "C"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/20/4]",
+        "value": [
+          {
+            "name": "eth1/20/4",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458042",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/36/1]",
+        "value": [
+          {
+            "name": "eth1/36/1",
+            "transceiver": {
+              "physical-channels": {
+                "channel": [
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.68"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.6"
+                      },
+                      "output-power": {
+                        "instant": "-1.78"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.68"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.6"
+                      },
+                      "output-power": {
+                        "instant": "-1.78"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.68"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.6"
+                      },
+                      "output-power": {
+                        "instant": "-1.78"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.68"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.6"
+                      },
+                      "output-power": {
+                        "instant": "-1.78"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "8.68"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.6"
+                      },
+                      "output-power": {
+                        "instant": "-1.78"
+                      }
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "date-code": "2024-07-17T00:00:00Z+00:00",
+                "form-factor": "QSFP",
+                "present": "PRESENT",
+                "serial-no": "C2407418236",
+                "supply-voltage": {
+                  "instant": "3.29"
+                },
+                "vendor": "FS",
+                "vendor-part": "QSFP-CSR4-40G",
+                "vendor-rev": "C"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/17/1]",
+        "value": [
+          {
+            "name": "eth1/17/1",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458035",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/36/4]",
+        "value": [
+          {
+            "name": "eth1/36/4",
+            "transceiver": {
+              "physical-channels": {
+                "channel": [
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "7.92"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.61"
+                      },
+                      "output-power": {
+                        "instant": "-2.33"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "7.92"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.61"
+                      },
+                      "output-power": {
+                        "instant": "-2.33"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "7.92"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.61"
+                      },
+                      "output-power": {
+                        "instant": "-2.33"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "7.92"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.61"
+                      },
+                      "output-power": {
+                        "instant": "-2.33"
+                      }
+                    }
+                  },
+                  {
+                    "index": 1,
+                    "state": {
+                      "index": 1,
+                      "input-power": {
+                        "instant": "7.92"
+                      },
+                      "laser-bias-current": {
+                        "instant": "6.61"
+                      },
+                      "output-power": {
+                        "instant": "-2.33"
+                      }
+                    }
+                  }
+                ]
+              },
+              "state": {
+                "date-code": "2024-07-17T00:00:00Z+00:00",
+                "form-factor": "QSFP",
+                "present": "PRESENT",
+                "serial-no": "C2407418236",
+                "supply-voltage": {
+                  "instant": "3.29"
+                },
+                "vendor": "FS",
+                "vendor-part": "QSFP-CSR4-40G",
+                "vendor-rev": "C"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/1/2]",
+        "value": [
+          {
+            "name": "eth1/1/2",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458041",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/17/3]",
+        "value": [
+          {
+            "name": "eth1/17/3",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458035",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/27]",
+        "value": [
+          {
+            "name": "eth1/27",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/31]",
+        "value": [
+          {
+            "name": "eth1/31",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/28]",
+        "value": [
+          {
+            "name": "eth1/28",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/10]",
+        "value": [
+          {
+            "name": "eth1/10",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/26]",
+        "value": [
+          {
+            "name": "eth1/26",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/1/1]",
+        "value": [
+          {
+            "name": "eth1/1/1",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458041",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/4/1]",
+        "value": [
+          {
+            "name": "eth1/4/1",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458040",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/32]",
+        "value": [
+          {
+            "name": "eth1/32",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/24]",
+        "value": [
+          {
+            "name": "eth1/24",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/30]",
+        "value": [
+          {
+            "name": "eth1/30",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/18/3]",
+        "value": [
+          {
+            "name": "eth1/18/3",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458036",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/17/4]",
+        "value": [
+          {
+            "name": "eth1/17/4",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458035",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/22]",
+        "value": [
+          {
+            "name": "eth1/22",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/20/2]",
+        "value": [
+          {
+            "name": "eth1/20/2",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458042",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/3/4]",
+        "value": [
+          {
+            "name": "eth1/3/4",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458039",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/19/3]",
+        "value": [
+          {
+            "name": "eth1/19/3",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458024",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/6]",
+        "value": [
+          {
+            "name": "eth1/6",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/2/2]",
+        "value": [
+          {
+            "name": "eth1/2/2",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458027",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/3/2]",
+        "value": [
+          {
+            "name": "eth1/3/2",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458039",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/3/1]",
+        "value": [
+          {
+            "name": "eth1/3/1",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458039",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/4/3]",
+        "value": [
+          {
+            "name": "eth1/4/3",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458040",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/17/2]",
+        "value": [
+          {
+            "name": "eth1/17/2",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458035",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/25]",
+        "value": [
+          {
+            "name": "eth1/25",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/2/3]",
+        "value": [
+          {
+            "name": "eth1/2/3",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458027",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/34]",
+        "value": [
+          {
+            "name": "eth1/34",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-05-08T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "G2410219025-2",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-PC01",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/19/1]",
+        "value": [
+          {
+            "name": "eth1/19/1",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458024",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/3/3]",
+        "value": [
+          {
+            "name": "eth1/3/3",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458039",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/19/4]",
+        "value": [
+          {
+            "name": "eth1/19/4",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-04-12T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "S2416458024",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-4SPC03",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/33]",
+        "value": [
+          {
+            "name": "eth1/33",
+            "transceiver": {
+              "state": {
+                "date-code": "2024-05-08T00:00:00Z+00:00",
+                "form-factor": "QSFP28",
+                "present": "PRESENT",
+                "serial-no": "G2410219016-1",
+                "vendor": "FS",
+                "vendor-part": "QSFP-100G-PC01",
+                "vendor-rev": "A"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "path": "/components/component[name=eth1/23]",
+        "value": [
+          {
+            "name": "eth1/23",
+            "transceiver": {
+              "state": {
+                "date-code": "0000-00-00T00:00:00Z+00:00",
+                "form-factor": "OTHER",
+                "present": "NOT_PRESENT",
+                "serial-no": "",
+                "vendor": "",
+                "vendor-part": "",
+                "vendor-rev": ""
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

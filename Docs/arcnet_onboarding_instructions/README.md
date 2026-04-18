@@ -1,585 +1,716 @@
-# Azure Arc for Cisco Nexus Switches
+# Azure Arc for Network Switches
 
 ## Overview
 
-This project enables Azure Arc management and monitoring for Cisco Nexus switches running NX-OS. By onboarding Cisco switches to Azure Arc, you can:
+This project enables Azure Arc management and monitoring for network switches. By onboarding switches to Azure Arc, you can:
 
-- Centralized Management: Manage network devices alongside other Azure resources
-- Monitoring & Telemetry: Collect and analyze switch telemetry in Azure Log Analytics
-- Dashboards & Alerts: Create custom dashboards and alerts in Azure or Grafana
-- Compliance & Governance: Apply Azure policies and track configuration changes
-- Hybrid Infrastructure: Unified view of cloud and on-premises network devices
+- **Centralized Management**: Manage network devices alongside other Azure resources
+- **Monitoring & Telemetry**: Collect and analyze switch telemetry in Azure Log Analytics
+- **Dashboards & Alerts**: Create custom dashboards and alerts in Azure or Grafana
+- **Compliance & Governance**: Apply Azure policies and track configuration changes
+- **Hybrid Infrastructure**: Unified view of cloud and on-premises network devices
 
-## Architecture
+## Supported Platforms
 
-The solution consists of several components:
+| Platform | Telemetry Method | Setup Script | Status |
+|----------|-----------------|-------------|--------|
+| **Cisco NX-OS** | gNMI *(recommended)* | [`Arcnet_Cisco_gNMI_Setup`](Arcnet_Cisco_gNMI_Setup) | ✅ Production |
+| **Cisco NX-OS** | CLI parser *(legacy)* | [`Arcnet_Cisco_Arc_Setup`](Arcnet_Cisco_Arc_Setup) | ⚠️ Deprecated |
+| **Dell Enterprise SONiC** | gNMI | [`Arcnet_Sonic_gNMI_Setup`](Arcnet_Sonic_gNMI_Setup) | ✅ Production |
+| **Dell OS10** | CLI parser | [`Arcnet_Dell_Setup`](Arcnet_Dell_Setup) | ✅ Production |
 
-1. Azure Arc Agent - Connects the switch to Azure and provides identity
-2. Azure Arc Services - Himdsd, Arcproxyd, Extd, GCAD and GAS manages security, policies and extensions
-3. Parsers - Extracts structured data from Cisco show commands
-4. Azure Logger - Sends parsed telemetry to Log Analytics workspace
-5. Cron-based Collector - Runs every minute to gather and send metrics
-
-### Data Flow
+### Which path should I choose?
 
 ```
-Cisco Switch (NX-OS)
-    ├─> vsh commands (show interface, show inventory, etc.)
-    ├─> Cisco Parser (converts text to JSON)
-    ├─> Azure Logger (adds metadata, signs requests)
-    └─> Azure Log Analytics Workspace
+What platform is the switch running?
+├── Cisco NX-OS ──────────> Use Arcnet_Cisco_gNMI_Setup (recommended)
+│                           Or Arcnet_Cisco_Arc_Setup (legacy CLI, being phased out)
+├── Dell Enterprise SONiC ─> Use Arcnet_Sonic_gNMI_Setup
+└── Dell OS10 ─────────────> Use Arcnet_Dell_Setup
 ```
+
+> **Note**: The legacy CLI parser path for Cisco (`Arcnet_Cisco_Arc_Setup`) is
+> deprecated. All new onboardings should use the gNMI path. The CLI path will
+> be removed in a future release once all existing switches are migrated.
+
+### ⚠️ CLI Parser and gNMI Collector Are Mutually Exclusive (Cisco Only)
+
+Cisco NX-OS is the only platform with both a CLI parser and gNMI collector path.
+Each Cisco setup script includes a **pre-flight check** that detects if the other
+collector type is already installed. If a conflict is found, the script prints
+specific uninstall instructions and exits. You must remove the existing collector
+before installing the other.
+
+If you need to migrate from CLI parser to gNMI (recommended), see
+[Uninstalling a Collector](#uninstalling-a-collector) below.
+
+> Dell OS10 only supports CLI parser. SONiC only supports gNMI. No conflict
+> checks are needed for these platforms.
+
+---
 
 ## Prerequisites
 
 ### Azure Requirements
 
-- Azure Subscription with appropriate permissions
-- Resource Group for Arc-enabled devices
-- Log Analytics Workspace for telemetry storage
-- Network connectivity from switch to Azure endpoints
+Before installing on any platform, you need:
 
-### Switch Requirements
+1. **Azure Subscription** with permissions to create resources
+2. **Resource Group** for Arc-enabled devices (e.g., `ARCNET`)
+3. **Log Analytics Workspace** for telemetry storage
 
-- Cisco Nexus Switch running NX-OS
-- Bash access to the switch operating system
-- Internet connectivity to download binaries and connect to Azure
-- Root/sudo access for installation
-- Minimum RAM and Storage as per Azure Local documentation
-
-### Network Requirements
-
-The switch must have outbound connectivity to:
-- Azure Arc services (`*.his.arc.azure.com`)
-- Azure Log Analytics (`*.ods.opinsights.azure.com`)
-- GitHub releases (for parser download)
-
-## Installation Guide
-
-### Step 1: Prepare Azure Resources
-
-#### 1.1 Create Log Analytics Workspace
-
-Navigate to Azure Portal and create a new Log Analytics workspace:
+#### Create a Log Analytics Workspace
 
 ```bash
 # Using Azure CLI
 az monitor log-analytics workspace create \
   --resource-group "ARCNET" \
-  --workspace-name "CiscoSwitchLogs" \
+  --workspace-name "SwitchTelemetry" \
   --location "eastus"
 ```
 
-Via Azure Portal:
-1. Go to Azure Portal → Create a resource
-2. Search for "Log Analytics Workspace"
-3. Fill in the details:
-   - Subscription: Your subscription
-   - Resource Group: Create new or use existing (e.g., "ARCNET")
-   - Name: CiscoSwitchLogs
-   - Region: Select your region (e.g., East US)
-4. Click "Review + Create"
+Or via the Azure Portal: Create a resource → Search "Log Analytics Workspace" → fill in details.
 
-#### 1.2 Get Log Analytics Credentials
+#### Get Workspace Credentials
 
-You'll need three values from your workspace:
+You'll need three values:
 
-Get Workspace ID:
 ```bash
+# Workspace ID
 az monitor log-analytics workspace show \
   --resource-group "ARCNET" \
-  --workspace-name "CiscoSwitchLogs" \
+  --workspace-name "SwitchTelemetry" \
   --query "customerId" -o tsv
-```
 
-Get Primary and Secondary Keys:
-```bash
+# Primary and Secondary Keys
 az monitor log-analytics workspace get-shared-keys \
   --resource-group "ARCNET" \
-  --workspace-name "CiscoSwitchLogs"
+  --workspace-name "SwitchTelemetry"
 ```
 
-### Step 2: Configure the Installation Script
+### Network Requirements
 
-1. Download the `ArcNet_Cisco_Arc_Setup.sh` script which is a part of this folder
-2. Edit the configuration section at the top:
+The switch must have outbound HTTPS connectivity to:
+- Azure Arc services: `*.his.arc.azure.com`
+- Azure Log Analytics: `*.ods.opinsights.azure.com`
+- GitHub Releases: `github.com` (for binary downloads during setup)
+
+---
+
+## Installation
+
+Each platform has a self-contained setup script. The workflow is the same for all:
+
+1. **Edit** the configuration variables at the top of the script
+2. **SSH** into the switch and become root
+3. **Paste** the script into the bash shell
+4. **Connect** to Azure Arc (Device Code Flow authentication)
+5. **Verify** telemetry is flowing to Log Analytics
+
+### Platform-Specific Instructions
+
+- [**Cisco NX-OS (gNMI)**](#cisco-nx-os-gnmi-recommended) — Recommended for all new Cisco deployments
+- [**Cisco NX-OS (CLI)**](#cisco-nx-os-cli-legacy) — Legacy, for existing deployments only
+- [**Dell Enterprise SONiC (gNMI)**](#dell-enterprise-sonic-gnmi) — Only option for SONiC
+- [**Dell OS10 (CLI)**](#dell-os10-cli) — Only option for Dell OS10
+
+---
+
+### Cisco NX-OS — gNMI (Recommended)
+
+**Script**: [`Arcnet_Cisco_gNMI_Setup`](Arcnet_Cisco_gNMI_Setup)
+
+**What it installs**: Azure Arc agent (via RPM) + gNMI telemetry collector + init.d services
+
+> **Note on Azure Arc agent RPM**: The setup script uses an Arc agent RPM
+> packaged at tag `v0.0.2-alpha-rpm`. Despite the tag name, this is the
+> validated and tested version (`azcmagent 1.54.03131`) for NX-OS switches.
+> The "alpha" label reflects the packaging process, not the agent stability —
+> the agent itself is the standard Microsoft Azure Arc release. NX-OS requires
+> a repackaged RPM because the standard installer (`install_linux_azcmagent.sh`)
+> depends on `systemd` and `apt`/`dnf`, which are not available on NX-OS.
+
+**Platform requirements**:
+- NX-OS 9.3(x) or later
+- `feature grpc` enabled on the switch
+- `grpc use-vrf default` configured (for single-VRF deployment)
+
+#### Step 1: Enable gNMI on the Switch
+
+```
+! On the NX-OS CLI (not bash)
+configure terminal
+feature grpc
+grpc use-vrf default
+end
+```
+
+#### Step 2: Edit the Setup Script
+
+Open `Arcnet_Cisco_gNMI_Setup` and fill in the configuration variables at the top:
 
 ```bash
 # Azure Configuration
-REGION="eastus"                                    # Your Azure region
-RESOURCE_GROUP="ARCNET"                           # Your resource group name
-SUBSCRIPTION_ID="<YOUR_SUBSCRIPTION_ID>"          # From Azure Portal
-MACHINE_NAME="<SWITCH_HOSTNAME>"                  # Unique identifier for switch
-TENANT_ID="<YOUR_TENANT_ID>"                      # From Azure Portal
+REGION="eastus"
+RESOURCE_GROUP="ARCNET"
+SUBSCRIPTION_ID="<YOUR_SUBSCRIPTION_ID>"
+MACHINE_NAME="<YOUR_SWITCH_HOSTNAME>"
+TENANT_ID="<YOUR_TENANT_ID>"
 
-# Log Analytics Workspace Configuration
-WORKSPACE_ID="<FROM_STEP_1.2>"                   # Workspace ID from Step 1.2
-PRIMARY_KEY="<FROM_STEP_1.2>"                    # Primary key from Step 1.2
-SECONDARY_KEY="<FROM_STEP_1.2>"                  # Secondary key from Step 1.2
+# Log Analytics Workspace
+WORKSPACE_ID="<FROM_PREREQUISITES>"
+PRIMARY_KEY="<FROM_PREREQUISITES>"
+SECONDARY_KEY="<FROM_PREREQUISITES>"
+
+# gNMI Credentials (the switch login credentials)
+GNMI_USER="<NX-OS_USERNAME>"
+GNMI_PASS="<NX-OS_PASSWORD>"
 ```
 
-### Step 3: Execute the Setup Script on the Switch
-
-#### 3.1 Access the Switch
-
-SSH into your Cisco Nexus switch:
+#### Step 3: Run the Script
 
 ```bash
-ssh admin@<switch-ip-address>
-```
+# SSH into the switch
+ssh admin@<switch-ip>
 
-#### 3.2 Enter Bash and Become Root
-
-```bash
-# Enter bash shell
+# Enter bash and become root
 run bash
-
-# Become root
 sudo su -
+
+# Paste the entire script contents
 ```
 
-#### 3.3 Run the Setup Script
+The script will:
+- Install the Arc agent RPM (with NX-OS relocation handling)
+- Configure Arc services (HIMDS, ArcProxy, EXTD, GCAD) as init.d daemons
+- Download and install the gNMI collector
+- Create the collector configuration and environment file
+- Install the collector as an init.d service
 
-Copy the entire contents of the cisco-arc-setup.sh script and paste it directly into the bash shell on the switch (where you are logged in as root).
+#### Step 4: Connect to Azure Arc
 
-The script will execute and perform the following:
-- Install and configure Arc agent binaries
-- Set up systemd shim services
-- Configure environment variables
-- Create init scripts for all services
-- Download and install the Cisco parser
-- Set up Azure logging infrastructure
-- Configure cron job for telemetry collection
-
-Expected output:
-```
-Stopping services...
-Starting services...
-HIMDS is running (PID 12345)
-ArcProxy is running (PID 12346)
-EXTD is running (PID 12347)
-GCAD is running (PID 12348)
-Setup complete. Check service status:
-...
-Azure Arc Setup Script Completed Successfully!
-
-NEXT STEPS:
-1. Connect the Arc agent to Azure (see README.md for instructions)"
-2. Verify Arc agent connection with: azcmagent show"
-3. Check service status with: /etc/init.d/himdsd status"
-4. View logs in /var/log/arc/"
-```
-
-### Step 4: Connect Arc Agent to Azure
-
-After the setup script completes, you need to connect the agent to Azure.
-
-#### 4.1 Get the Connection Script from Azure Portal
-
-1. Go to Azure Portal → Azure Arc → Machines
-2. Click + Add/Create → Add a machine
-3. Select Add a single server
-4. Choose your subscription and resource group
-5. Select region and operating system: Linux
-6. Under "Connectivity method", choose Public endpoint
-7. Deselect "Enable Azure SQL extension deployment"
-8. Click Generate script
-
-The portal will generate a script similar to this:
+After the script completes, run the `azcmagent connect` command displayed by the script:
 
 ```bash
-export subscriptionId="<YOUR_SUBSCRIPTION_ID>";
-export resourceGroup="ARCNET";
-export tenantId="<YOUR_TENANT_ID>";
-export location="eastus";
-export authType="token";
-export correlationId="<GENERATED_CORRELATION_ID>";
-export cloud="AzureCloud";
-
-LINUX_INSTALL_SCRIPT="/tmp/install_linux_azcmagent.sh"
-if [ -f "$LINUX_INSTALL_SCRIPT" ]; then rm -f "$LINUX_INSTALL_SCRIPT"; fi;
-output=$(wget https://gbl.his.arc.azure.com/azcmagent-linux -O "$LINUX_INSTALL_SCRIPT" 2>&1);
-if [ $? != 0 ]; then 
-    wget -qO- --method=PUT --body-data="{\"subscriptionId\":\"$subscriptionId\",\"resourceGroup\":\"$resourceGroup\",\"tenantId\":\"$tenantId\",\"location\":\"$location\",\"correlationId\":\"$correlationId\",\"authType\":\"$authType\",\"operation\":\"onboarding\",\"messageType\":\"DownloadScriptFailed\",\"message\":\"$output\"}" "https://gbl.his.arc.azure.com/log" &> /dev/null || true;
-fi;
-echo "$output";
-bash "$LINUX_INSTALL_SCRIPT";
-sleep 5;
-sudo azcmagent connect --resource-group "$resourceGroup" --tenant-id "$tenantId" --location "$location" --subscription-id "$subscriptionId" --cloud "$cloud" --tags 'ArcSQLServerExtensionDeployment=Disabled' --correlation-id "$correlationId";
+azcmagent connect \
+  --resource-group "ARCNET" \
+  --tenant-id "<YOUR_TENANT_ID>" \
+  --location "eastus" \
+  --subscription-id "<YOUR_SUBSCRIPTION_ID>" \
+  --cloud "AzureCloud"
 ```
 
-#### 4.2 Run the Connection Script
+This will display a URL and code for Device Code Flow authentication:
+1. Open the URL in a browser on another device
+2. Enter the code when prompted
+3. Sign in with your Azure credentials
+4. Return to the switch terminal
 
-On the switch (still as root in bash):
+#### Step 5: Verify
 
 ```bash
-# Copy the entire script from Azure Portal and paste it
-# The script will download and run the Arc agent installer
+# Arc agent
+azcmagent show         # Should show "Agent Status: Connected"
+
+# Arc services
+for svc in himdsd arcproxyd extd gcad; do /etc/init.d/$svc status; done
+
+# gNMI collector
+/etc/init.d/gnmi-collectord status
+# Or: ps aux | grep gnmi-collector
+
+# Dry-run test (prints telemetry to stdout instead of sending)
+/opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
 ```
 
-Note: The script may prompt for authentication. Follow the device code authentication flow:
-1. The script will display a URL and code
-2. Open the URL in a browser on another device
-3. Enter the code when prompted
-4. Sign in with your Azure credentials
-5. Return to the switch terminal
+**Telemetry paths collected** (20 paths): Interface counters, interface status, interface Ethernet, interface errors, BGP neighbors, BGP summary, LLDP, transceiver DOM, environment temperature, environment power, environment fan, system resources, system uptime, system version, ARP, MAC addresses, IP routes, route summary, inventory, platform components.
 
-#### 4.3 Verify Connection
+---
 
-Once connected, verify the agent status:
+### Cisco NX-OS — CLI (Legacy)
+
+**Script**: [`Arcnet_Cisco_Arc_Setup`](Arcnet_Cisco_Arc_Setup)
+
+> ⚠️ **Deprecated**: This path uses CLI text scraping and is being phased out.
+> Use the gNMI path above for all new deployments.
+
+**What it installs**: Azure Arc agent (via RPM) + Cisco CLI parser + cron job + Azure logger shell script
+
+#### Step 1: Edit the Setup Script
+
+Open `Arcnet_Cisco_Arc_Setup` and fill in the configuration variables:
 
 ```bash
-# Check if agent is connected
+REGION="eastus"
+RESOURCE_GROUP="ARCNET"
+SUBSCRIPTION_ID="<YOUR_SUBSCRIPTION_ID>"
+MACHINE_NAME="<YOUR_SWITCH_HOSTNAME>"
+TENANT_ID="<YOUR_TENANT_ID>"
+WORKSPACE_ID="<FROM_PREREQUISITES>"
+PRIMARY_KEY="<FROM_PREREQUISITES>"
+SECONDARY_KEY="<FROM_PREREQUISITES>"
+```
+
+#### Step 2: Run the Script
+
+Same as gNMI — SSH in, become root, paste the script.
+
+#### Step 3: Connect to Azure Arc
+
+Same Device Code Flow process as described above.
+
+#### Step 4: Verify
+
+```bash
+# Arc agent
 azcmagent show
 
-# Check connection status
-azcmagent check
-
-# List agent configuration
-azcmagent config list
-```
-
-Expected output from azcmagent show:
-```
-Resource Name     : <MACHINE_NAME>
-Resource Group    : ARCNET
-Tenant ID         : <YOUR_TENANT_ID>
-Subscription ID   : <YOUR_SUBSCRIPTION_ID>
-Cloud             : AzureCloud
-Location          : eastus
-Agent Version     : 1.x.x
-Agent Status      : Connected
-```
-
-### Step 4.4 Cleanup Steps If needed after lab completion
-
-## Step 4.4.1
-```bash
-service himdsd stop
-service arcproxyd stop
-service extd stop
-service gcad stop
-killall himds 2>/dev/null
-killall arcproxy 2>/dev/null
-sudo rpm -e azcmagent
-```
-
-## Step 4.4.2
-
-Also remove all files related to ArcNet from /opt folder
-rm -f cisco-azure-logger-v2.sh
-rm -f cisco-parser
-.......
-
-Then delete the resource from the portal
-
-### Step 5: Verify Telemetry Collection
-
-#### 5.1 Check Collector is Running
-
-```bash
-# Check if cron job is configured
+# Cron job
 crontab -l | grep cisco-parser-collector
 
-# Manually run collector to test
+# Manual test
 /opt/cisco-parser-collector.sh
 
-# Check collector logs
+# Check logs
 tail -f /var/log/cisco-parser-collector.log
 ```
 
-#### 5.2 Test Manual Data Collection
+---
 
-Test the complete flow for one command:
+### Dell Enterprise SONiC — gNMI
+
+**Script**: [`Arcnet_Sonic_gNMI_Setup`](Arcnet_Sonic_gNMI_Setup)
+
+**What it installs**: Azure Arc agent (via standard installer) + gNMI telemetry collector + systemd service
+
+**Platform requirements**:
+- Dell Enterprise SONiC with `sonic-gnmi` container running
+- gNMI server listening on port 8080
+
+#### Step 1: Verify gNMI is Available
 
 ```bash
-# Step 1: Run a show command
-vsh -c "show class-map" > /tmp/test-output.txt
-
-# Step 2: Parse the output
-/opt/cisco-parser -p class-map -i /tmp/test-output.txt -o /tmp/test-parsed.json
-
-# Step 3: View parsed JSON
-cat /tmp/test-parsed.json
-
-# Step 4: Send to Azure
-/opt/cisco-azure-logger-v2.sh send CiscoClassMapTest /tmp/test-parsed.json
-
-# Step 5: Clean up
-rm /tmp/test-output.txt /tmp/test-parsed.json
+# Check that the sonic-gnmi container is running
+docker ps | grep gnmi
 ```
 
-#### 5.3 Verify Data in Log Analytics
+#### Step 2: Edit the Setup Script
 
-Wait 5-10 minutes for data to appear in Azure, then query your workspace:
+Open `Arcnet_Sonic_gNMI_Setup` and fill in the configuration variables:
 
-1. Go to Azure Portal → Log Analytics workspaces → CiscoSwitchLogs
-2. Click on Logs in the left menu
+```bash
+# Azure Configuration
+REGION="eastus"
+RESOURCE_GROUP="ARCNET"
+SUBSCRIPTION_ID="<YOUR_SUBSCRIPTION_ID>"
+MACHINE_NAME="<YOUR_SWITCH_HOSTNAME>"
+TENANT_ID="<YOUR_TENANT_ID>"
+
+# Log Analytics Workspace
+WORKSPACE_ID="<FROM_PREREQUISITES>"
+PRIMARY_KEY="<FROM_PREREQUISITES>"
+SECONDARY_KEY="<FROM_PREREQUISITES>"
+
+# gNMI Credentials (the SONiC admin credentials)
+GNMI_USER="admin"
+GNMI_PASS="<SONIC_ADMIN_PASSWORD>"
+```
+
+#### Step 3: Run the Script
+
+```bash
+# SSH into the switch
+ssh admin@<switch-ip>
+
+# Become root
+sudo su -
+
+# Paste the entire script contents
+```
+
+The script will:
+- Install the Arc agent via the standard Linux installer
+- Download and install the gNMI collector
+- Create a systemd service for the collector
+- Validate gNMI connectivity
+
+#### Step 4: Connect to Azure Arc
+
+```bash
+azcmagent connect \
+  --resource-group "ARCNET" \
+  --tenant-id "<YOUR_TENANT_ID>" \
+  --location "eastus" \
+  --subscription-id "<YOUR_SUBSCRIPTION_ID>" \
+  --cloud "AzureCloud"
+```
+
+Complete Device Code Flow authentication as described above.
+
+#### Step 5: Verify
+
+```bash
+# Arc agent
+azcmagent show
+
+# gNMI collector (systemd)
+systemctl status gnmi-collector
+
+# Dry-run test
+/opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
+```
+
+**Telemetry paths collected** (14 paths): Interface counters, interface status, interface Ethernet, BGP neighbors, BGP summary, LLDP, environment (platform inventory: temperature, PSU, fans), system resources, system uptime, ARP, MAC addresses, IP routes.
+
+---
+
+### Dell OS10 — CLI
+
+**Script**: [`Arcnet_Dell_Setup`](Arcnet_Dell_Setup)
+
+**What it installs**: Dell CLI parser + cron job + Azure logger
+
+> **Note**: Dell OS10 does not include Azure Arc onboarding. The setup script
+> installs only the telemetry parser and logging pipeline. gNMI is not
+> available on Dell OS10 in production mode (requires SmartFabric Director mode).
+
+#### Step 1: Edit the Setup Script
+
+Open `Arcnet_Dell_Setup` and fill in:
+
+```bash
+WORKSPACE_ID="<FROM_PREREQUISITES>"
+PRIMARY_KEY="<FROM_PREREQUISITES>"
+SECONDARY_KEY="<FROM_PREREQUISITES>"
+```
+
+#### Step 2: Run the Script
+
+```bash
+# SSH into the switch
+ssh admin@<switch-ip>
+
+# Become root
+sudo su -
+
+# Paste the entire script contents
+```
+
+#### Step 3: Verify
+
+```bash
+# Check cron job
+crontab -l | grep dell-parser
+
+# Manual test
+/opt/dell-parser-collector.sh
+
+# Check logs
+tail -f /var/log/dell-parser-collector.log
+```
+
+---
+
+## Verify Data in Log Analytics
+
+After installation, wait 5–10 minutes for data to appear. Then query your workspace:
+
+1. Go to **Azure Portal** → **Log Analytics workspaces** → your workspace
+2. Click **Logs** in the left menu
 3. Run a test query:
 
 ```kusto
-// Check for any custom tables
-search "*" 
+// List all custom tables from switches
+search "*"
 | where TimeGenerated > ago(1h)
 | distinct Type
+| where Type endswith "_CL"
 
-// Query specific table (after "_CL" suffix is added automatically)
-CiscoClassMap_CL
+// Example: Query interface counters
+CiscoInterfaceCounter_CL
+| where TimeGenerated > ago(1h)
 | take 10
 
-// Check all switch data
-union CiscoClassMap_CL, CiscoInterfaceCounter_CL, CiscoInventory_CL
+// Example: Check all switch data by hostname
+search "*"
 | where TimeGenerated > ago(1h)
+| where Type endswith "_CL"
 | summarize count() by Type, hostname_s
 ```
 
-## Telemetry Tables
+### Telemetry Tables
 
-The following custom tables will be created in your Log Analytics workspace:
+The following custom tables are created in your Log Analytics workspace (Azure automatically appends `_CL` suffix):
 
-| Table Name | Description | Update Frequency |
-|------------|-------------|------------------|
-| `CiscoClassMap_CL` | QoS class maps configuration | Every minute |
-| `CiscoInterfaceCounter_CL` | Interface traffic statistics | Every minute |
-| `CiscoInventory_CL` | Hardware inventory | Every minute |
-| `CiscoIpArp_CL` | ARP table entries | Every minute |
-| `CiscoIpRoute_CL` | Routing table | Every minute |
-| `CiscoLldpNeighbor_CL` | LLDP neighbor information | Every minute |
-| `CiscoMacAddress_CL` | MAC address table | Every minute |
-| `CiscoTransceiver_CL` | SFP/QSFP module details | Every minute |
-| `CiscoEnvTemp_CL` | Temperature sensors | Every minute |
-| `CiscoInterfaceErrors_CL` | Interface error counters | Every minute |
-| `CiscoEnvPower_CL` | Power supply status | Every minute |
-| `CiscoSystemResources_CL` | CPU, memory utilization | Every minute |
-| `CiscoSystemUptime_CL` | System uptime | Every minute |
-| `CiscoBgpSummary_CL` | BGP neighbor summary | Every minute |
+| Table Name | Description | Platforms |
+|------------|-------------|-----------|
+| `CiscoInterfaceCounter_CL` | Interface traffic statistics | Cisco, SONiC |
+| `CiscoInterfaceStatus_CL` | Interface admin/oper state | Cisco, SONiC |
+| `CiscoInterfaceEthernet_CL` | Ethernet-specific counters | Cisco, SONiC |
+| `CiscoInterfaceErrors_CL` | Interface error counters | Cisco |
+| `CiscoBgpSummary_CL` | BGP neighbor summary | Cisco, SONiC |
+| `CiscoLldpNeighbor_CL` | LLDP neighbor information | Cisco, SONiC |
+| `CiscoTransceiver_CL` | SFP/QSFP module details | Cisco |
+| `CiscoEnvTemp_CL` | Temperature sensors | Cisco, SONiC |
+| `CiscoEnvPower_CL` | Power supply status | Cisco, SONiC |
+| `CiscoEnvFan_CL` | Fan status | Cisco, SONiC |
+| `CiscoSystemResources_CL` | CPU, memory utilization | Cisco, SONiC |
+| `CiscoSystemUptime_CL` | System uptime | Cisco, SONiC |
+| `CiscoIpArp_CL` | ARP table entries | Cisco, SONiC |
+| `CiscoMacAddress_CL` | MAC address table | Cisco, SONiC |
+| `CiscoIpRoute_CL` | Routing table | Cisco, SONiC |
+| `CiscoRouteSummary_CL` | Route count summary | Cisco |
+| `CiscoInventory_CL` | Hardware inventory | Cisco |
+| `CiscoVersion_CL` | Software version info | Cisco |
+| `CiscoClassMap_CL` | QoS class maps | Cisco (CLI only) |
 
-Note: Azure automatically appends _CL suffix to custom log table names.
+---
+
+See [telemetry tables](./../telemetry-improvement-plan/telemetry-tables.md) for a more detailed view of the table inventory.
+
+## Architecture
+
+### Data Flow — gNMI (Cisco + SONiC)
+
+```
+Network Switch (Cisco NX-OS or Dell SONiC)
+    ├─> gNMI Get/Subscribe (gRPC, structured YANG data)
+    ├─> gnmi-collector (transforms + ships in one binary)
+    └─> Azure Log Analytics Workspace
+```
+
+### Data Flow — Legacy CLI (Cisco + Dell OS10)
+
+```
+Network Switch (Cisco NX-OS or Dell OS10)
+    ├─> CLI commands (vsh/clish show commands)
+    ├─> Parser binary (converts text output to JSON)
+    ├─> Azure Logger script (adds metadata, signs requests)
+    └─> Azure Log Analytics Workspace
+```
+
+### Platform Comparison
+
+| | Cisco NX-OS (gNMI) | Cisco NX-OS (CLI) | SONiC (gNMI) | Dell OS10 (CLI) |
+|---|---|---|---|---|
+| **Collection** | gNMI Get over gRPC | `vsh -c "show ..."` | gNMI Get over gRPC | `clish -c "show ..."` |
+| **Parsing** | YANG models (structured) | Go regex parser | YANG models (structured) | Go regex parser |
+| **Shipping** | Built into collector | Bash `curl` script | Built into collector | Bash `curl` script |
+| **Scheduling** | init.d daemon (long-running) | Cron every 5 min | systemd service | Cron every 5 min |
+| **Port** | 50051 | N/A | 8080 | N/A |
+| **Encoding** | JSON | N/A | JSON_IETF | N/A |
+| **Arc Agent** | Yes (RPM + init.d) | Yes (RPM + init.d) | Yes (standard installer) | No |
+| **Resilience** | YANG model versioned | Breaks on format changes | YANG model versioned | Breaks on format changes |
+
+---
+
+## Automated Onboarding (Copilot Skill)
+
+For quick onboarding, use the **arc-onboarding** Copilot skill. Tell
+Copilot something like:
+
+> "Onboard the switch at 10.0.0.1"
+
+The skill will:
+1. SSH into the switch and auto-detect the vendor (Cisco NX-OS or SONiC)
+2. Resolve Azure parameters from `az CLI` and environment variables
+3. Fill in the setup script template with all configuration values
+4. Upload and execute the script on the switch
+5. **Pause** — display the `azcmagent connect` command for you to run
+6. You complete Device Code Flow (DCF) in your browser
+7. Tell the skill to continue — it validates Arc connection + collector
+
+### Prerequisites
+
+```powershell
+az login
+$env:WORKSPACE_ID = "<your-workspace-id>"
+$env:PRIMARY_KEY   = "<your-primary-key>"
+```
+
+### Usage
+
+```powershell
+# Auto-detect vendor
+.\.github\skills\arc-onboarding\onboard-switch.ps1 -SwitchIP "10.0.0.1"
+
+# Specify vendor and credentials
+.\.github\skills\arc-onboarding\onboard-switch.ps1 -SwitchIP "10.0.0.1" `
+  -Vendor cisco -SshUser admin -SshPassword "secret"
+
+# Dry-run: generate filled-in script without executing
+.\.github\skills\arc-onboarding\onboard-switch.ps1 -SwitchIP "10.0.0.1" -DryRun
+```
+
+> [!NOTE]
+> The `azcmagent connect` step requires interactive browser authentication
+> (Device Code Flow). The skill pauses and shows you exactly what to run.
+> In the future, this will be replaced with service principal auth to make
+> the entire flow fully automated.
+
+---
 
 ## Service Management
 
-### Check Service Status
+> **⚠️ Config changes require a full service restart.** The gNMI collector does
+> not support hot-reload. After editing `config.yaml` (e.g., enabling new paths,
+> changing intervals), you must restart the collector service. This will cause a
+> brief telemetry gap while the service restarts and re-establishes gNMI
+> subscriptions. Plan config changes during low-traffic windows when possible.
+
+### Cisco NX-OS (init.d)
 
 ```bash
-# Check individual services
-/etc/init.d/himdsd status      # HIMDS (metadata service)
-/etc/init.d/arcproxyd status   # Arc Proxy (extension handler)
-/etc/init.d/extd status        # Extension service
-/etc/init.d/gcad status        # Guest configuration service
-
-# Check all services at once
-for svc in himdsd arcproxyd extd gcad; do
-    echo "=== $svc ==="
-    /etc/init.d/$svc status
-done
-```
-
-### Start/Stop Services
-
-```bash
-# Start a service
-/etc/init.d/himdsd start
-
-# Stop a service
-/etc/init.d/himdsd stop
-
-# Restart a service
-/etc/init.d/himdsd restart
+# Check status
+for svc in himdsd arcproxyd extd gcad; do /etc/init.d/$svc status; done
+/etc/init.d/gnmi-collectord status
 
 # Restart all Arc services
-for svc in gcad extd arcproxyd himdsd; do
-    /etc/init.d/$svc restart
-    sleep 5
-done
-```
+for svc in gcad extd arcproxyd himdsd; do /etc/init.d/$svc restart; sleep 5; done
 
-### View Service Logs
+# Restart gNMI collector
+/etc/init.d/gnmi-collectord restart
 
-```bash
-# Arc agent logs
+# View logs
 tail -f /var/opt/azcmagent/log/himds.log
-tail -f /var/opt/azcmagent/log/arcproxy.log
-
-# Guest configuration logs
-tail -f /var/lib/GuestConfig/gc_agent_logs/gc_agent.log
-
 ```
 
-## Diagnostics & Troubleshooting
+### SONiC (systemd)
 
-### Common Issues
-
-#### Issue: Arc Agent Not Connected
-
-Symptoms:
 ```bash
-azcmagent show
-# Error: The machine is not connected to Azure
+# Check status
+systemctl status gnmi-collector
+
+# Restart
+systemctl restart gnmi-collector
+
+# View logs
+journalctl -u gnmi-collector -f
 ```
 
-Solution:
-1. Check network connectivity to Azure endpoints
-2. Verify DNS resolution
-3. Re-run the connection script from Azure Portal
-4. Check himds service is running: `/etc/init.d/himdsd status`
+---
 
-#### Issue: Services Keep Stopping
+## Uninstalling a Collector
 
-Symptoms:
-Services show as stopped when checked
+If you need to switch between CLI parser and gNMI collector on a **Cisco NX-OS**
+switch (or remove a collector entirely), follow the instructions below.
 
-Solution:
+> **Note**: These steps only remove the telemetry collector. Azure Arc agent
+> services (himdsd, arcproxyd, extd, gcad) are shared and are **not** removed.
+
+### Cisco NX-OS — Uninstall gNMI Collector
+
 ```bash
-# Check for port conflicts
-netstat -tulpn | grep -E '40342|40343|40344'
+# Stop and remove the gNMI collector service
+/etc/init.d/gnmi-collectord stop 2>/dev/null
+rm -f /etc/init.d/gnmi-collectord
 
-# Kill any conflicting processes
-fuser -k 40342/tcp
-fuser -k 40343/tcp
-fuser -k 40344/tcp
+# Remove the gNMI collector installation
+rm -rf /opt/gnmi-collector
 
-# Restart services
-/etc/init.d/himdsd restart
-sleep 5
-/etc/init.d/arcproxyd restart
+# Remove log and PID files
+rm -f /var/log/gnmi-collector.log /var/run/gnmi-collector.pid
+
+# Remove from autostart (if present)
+sed -i '/gnmi-collectord/d' /bootflash/.rpmstore/config/etc/init.d/arcnet-autostart 2>/dev/null
 ```
 
-#### Issue: No Data in Log Analytics
+### Cisco NX-OS — Uninstall CLI Parser
 
-Symptoms:
-Queries return no results after 15+ minutes
-
-Solution:
 ```bash
-# Test the logger manually
-/opt/cisco-azure-logger-v2.sh test
+# Remove the cron job
+crontab -l 2>/dev/null | grep -v 'cisco-parser-collector' | crontab -
+
+# Remove parser and helper scripts
+rm -rf /opt/cisco-parser
+rm -f /opt/cisco-parser-collector.sh
+rm -f /opt/cisco-azure-logger-v2.sh
+rm -f /opt/azure-signature-generator.sh
+
+# Remove temporary files and logs
+rm -rf /tmp/cisco-parser-output /tmp/azure-logger
+rm -f /var/log/cisco-parser-collector.log
+```
+
+---
+
+## Troubleshooting
+
+### Arc Agent Not Connected
+
+```bash
+azcmagent show    # Check status
+azcmagent check   # Test connectivity
+```
+
+If disconnected:
+1. Check network connectivity: `curl -I https://gbl.his.arc.azure.com`
+2. Check DNS resolution
+3. Verify services are running (see Service Management above)
+4. Re-run `azcmagent connect` if needed
+
+### No Data in Log Analytics
+
+```bash
+# Test gNMI collector manually
+/opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
 
 # Check collector is running
-ps aux | grep cisco-parser-collector
+ps aux | grep gnmi-collector
 
-# Check cron job
-crontab -l
-
-# Review collector logs for errors
-tail -100 /var/log/cisco-parser-collector.log
-
-# Verify workspace credentials
-grep -E "WORKSPACE_ID|PRIMARY_KEY" /opt/cisco-azure-logger-v2.sh
+# Check environment variables are set
+cat /opt/gnmi-collector/gnmi-collector.env
 ```
 
-### Diagnostic Commands
+### NX-OS Specific Issues
 
-```bash
-# Complete health check
-echo "=== Arc Agent Status ==="
-azcmagent show
-azcmagent check
+- **RPM relocation**: NX-OS installs RPM contents to `/bootflash/rpm_test/opt/` instead of `/opt/`. The setup script handles this automatically. If you installed manually, copy files from `/bootflash/rpm_test/opt/` to `/opt/`.
+- **Missing azcmagent directories**: `azcmagent connect` fails with "no such file or directory" if `/var/opt/azcmagent/certs/` doesn't exist. Run: `mkdir -p /var/opt/azcmagent/{certs,log,tokens,socks,arcproxy}`
+- **wget not available**: NX-OS doesn't include `wget`. Use `curl` instead for any downloads.
 
-echo "=== Service Status ==="
-for svc in himdsd arcproxyd extd gcad; do
-    /etc/init.d/$svc status
-done
+### SONiC Specific Issues
 
-echo "=== Network Connectivity ==="
-curl -I https://gbl.his.arc.azure.com
-curl -I https://${WORKSPACE_ID}.ods.opinsights.azure.com
+- **Minimum subscribe interval**: SONiC enforces a 30-second minimum for gNMI Subscribe mode.
+- **JSON_IETF encoding**: SONiC requires `JSON_IETF` encoding (not `JSON`). Ensure the config file uses the correct encoding.
 
-echo "=== Disk Space ==="
-df -h
+---
 
-echo "=== Recent Collector Activity ==="
-tail -20 /var/log/cisco-parser-collector.log
-
-echo "=== Cron Status ==="
-crontab -l | grep cisco
-```
-
-### Debug Mode
-
-Enable verbose logging for troubleshooting:
-
-```bash
-# Enable debug logging for Arc agent
-azcmagent config set guestconfiguration.enabledebuglogging true
-
-# Restart services to apply
-/etc/init.d/extd restart
-/etc/init.d/gcad restart
-
-# View debug logs
-tail -f /var/lib/GuestConfig/gc_agent_logs/gc_agent.log
-```
+## Demo
+See a [demo](./../../media/videos/gnmi-demo.mp4) explaining the high level overview of the project, the configuration file of the collector and the resulting data a of bgp flap event.
 
 ## Grafana Dashboard Setup
 
-### Overview
+To visualize telemetry data, use Grafana with the Azure Monitor data source.
 
-To visualize the Cisco switch telemetry data collected in Azure Log Analytics, you can use Grafana with the Azure Monitor data source. This provides real-time dashboards with comprehensive metrics for device health, interface performance, routing, and error tracking.
+### Prerequisites
 
-### Prerequisites for Grafana
+- Grafana 8.0+
+- Azure Monitor data source plugin
+- Service principal with "Log Analytics Reader" role
 
-- Grafana instance (version 8.0 or higher)
-- Azure Monitor data source plugin installed
-- Azure service principal or managed identity with read access to Log Analytics workspace
-
-### Step 1: Configure Azure Monitor Data Source in Grafana
-
-1. Log in to your Grafana instance
-2. Navigate to Configuration → Data Sources
-3. Click "Add data source"
-4. Search for and select "Azure Monitor"
-5. Configure the data source:
-
-   Connection Details:
-   - Name: Give it a descriptive name (e.g., "CiscoSwitchLogs")
-   - Authentication: Choose your method (Managed Identity, App Registration, or Azure CLI)
-
-   For App Registration (Service Principal):
-   - Directory (Tenant) ID: Your Azure AD tenant ID
-   - Application (Client) ID: Your service principal client ID
-   - Client Secret: Your service principal secret
-
-   Azure Monitor Details:
-   - Subscription: Select your Azure subscription
-   - Default Workspace: Select your Log Analytics workspace (CiscoSwitchLogs)
-
-6. Click "Save & Test" to verify the connection
-
-### Step 2: Create Service Principal (if using App Registration)
-
-If you don't have a service principal, create one:
+### Quick Setup
 
 ```bash
-# Create service principal
-az ad sp create-for-rbac --name "GrafanaCiscoMonitoring" --role "Log Analytics Reader" \
-  --scopes /subscriptions//resourceGroups/ARCNET/providers/Microsoft.OperationalInsights/workspaces/CiscoSwitchLogs
-
-# Output will include:
-# - appId (Client ID)
-# - password (Client Secret)
-# - tenant (Tenant ID)
-```
-
-Grant the service principal access to the workspace:
-
-```bash
-az role assignment create \
-  --assignee  \
+# Create service principal for Grafana
+az ad sp create-for-rbac --name "GrafanaSwitchMonitoring" \
   --role "Log Analytics Reader" \
-  --scope /subscriptions//resourceGroups/ARCNET/providers/Microsoft.OperationalInsights/workspaces/CiscoSwitchLogs
+  --scopes "/subscriptions/<SUB_ID>/resourceGroups/ARCNET/providers/Microsoft.OperationalInsights/workspaces/SwitchTelemetry"
 ```
 
-### Step 3: Dashboard Details
+In Grafana: Configuration → Data Sources → Add "Azure Monitor" → enter tenant ID, client ID, and secret → select your workspace.
 
-Create new dashboards using Kusto query and format them.
+### Available Dashboard Panels
 
-Here are some existing panels we have:
+- **Device Health**: CPU, memory, temperature, power supply
+- **Interface Performance**: Traffic (bps/pps), packet distribution
+- **Routing Metrics**: Route counts, BGP neighbor status
+- **Error Metrics**: Interface errors, discards
+- **ARP & MAC Tracking**: Table size trends
+- **LLDP & Inventory**: Neighbor discovery, transceiver monitoring
 
-- Device Health: CPU, Memory, Temperature, Power Supply monitoring
-- Interface Performance: Traffic (bps/pps), Packet distribution
-- Routing Metrics: Route counts, BGP neighbor status and routes learned
-- Error Metrics: Interface errors, discards, error rate distribution
-- ARP & MAC Tracking: Table size trends
-- LLDP & Inventory: Neighbor discovery, transceiver monitoring
+---
 
+## Adding a New Vendor
 
+See [adding_new_vendor.md](adding_new_vendor.md) for instructions on adding
+support for a new switch vendor (e.g., Arista).

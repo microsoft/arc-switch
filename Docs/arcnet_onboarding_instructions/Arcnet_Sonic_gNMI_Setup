@@ -1,0 +1,251 @@
+#!/bin/bash
+
+# =============================================================================
+# ArcNet SONiC gNMI Setup Script
+# =============================================================================
+# Onboards a Dell Enterprise SONiC switch to Azure Arc with gNMI telemetry.
+#
+# This script:
+#   1. Installs and configures the Azure Arc agent (azcmagent)
+#   2. Downloads and installs the gNMI telemetry collector
+#   3. Creates a systemd service for the collector
+#   4. Validates gNMI connectivity and starts the collector
+#
+# Usage:
+#   1. Edit the configuration variables below
+#   2. SSH into the switch as admin, then sudo su -
+#   3. Paste this entire script into the bash shell
+# =============================================================================
+
+# Configuration Variables - EDIT THESE
+REGION="<YOUR_AZURE_REGION>"
+RESOURCE_GROUP="<YOUR_RESOURCE_GROUP>"
+SUBSCRIPTION_ID="<YOUR_SUBSCRIPTION_ID>"
+MACHINE_NAME="<YOUR_SWITCH_HOSTNAME>"
+TENANT_ID="<YOUR_TENANT_ID>"
+
+# Log Analytics Workspace Configuration
+WORKSPACE_ID="<LOG_ANALYTICS_WORKSPACE_ID>"
+PRIMARY_KEY="<LOG_ANALYTICS_PRIMARY_KEY>"
+SECONDARY_KEY="<LOG_ANALYTICS_SECONDARY_KEY>"
+
+# gNMI Collector Configuration
+GNMI_USER="<SONIC_ADMIN_USERNAME>"
+GNMI_PASS="<SONIC_ADMIN_PASSWORD>"
+COLLECTOR_URL="https://github.com/microsoft/arc-switch/releases/download/gnmi-1.2603.1/gnmi-collector-1.2603.1-linux-amd64.tar.gz"
+GNMI_INSTALL_DIR="/opt/gnmi-collector"
+
+echo "============================================================================"
+echo "ArcNet SONiC — Azure Arc + gNMI Telemetry Setup"
+echo "============================================================================"
+
+# =============================================================================
+# PART 1: INSTALL AZURE ARC AGENT
+# =============================================================================
+
+echo "--- Installing Azure Arc Agent ---"
+
+# SONiC is Debian-based — use the standard installer
+curl -sSL https://aka.ms/azcmagent -o /tmp/install_linux_azcmagent.sh
+if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to download Arc agent installer"
+    exit 1
+fi
+
+bash /tmp/install_linux_azcmagent.sh
+if [ $? -ne 0 ]; then
+    echo "WARNING: Arc agent installation failed — may already be installed"
+    echo "Checking existing installation..."
+fi
+
+rm -f /tmp/install_linux_azcmagent.sh
+
+# Verify installation
+if command -v azcmagent &>/dev/null; then
+    echo "Arc agent installed: $(azcmagent version 2>/dev/null || echo 'version unknown')"
+else
+    echo "WARNING: azcmagent not found in PATH. Manual installation may be required."
+fi
+
+# =============================================================================
+# PART 2: CONFIGURE SYSTEM ENVIRONMENT
+# =============================================================================
+
+cat > /etc/profile.d/arc-environment.sh << 'PROFEOF'
+#!/bin/bash
+export IMDS_ENDPOINT="http://localhost:40342"
+export IDENTITY_ENDPOINT="http://localhost:40342/metadata/identity/oauth2/token"
+PROFEOF
+
+chmod +x /etc/profile.d/arc-environment.sh
+source /etc/profile.d/arc-environment.sh
+
+mkdir -p /var/opt/azcmagent/{log,tokens}
+mkdir -p /var/log/arc
+chmod 700 /var/opt/azcmagent/tokens
+
+# =============================================================================
+# PART 3: DOWNLOAD AND INSTALL gNMI COLLECTOR
+# =============================================================================
+
+echo ""
+echo "--- Installing gNMI Telemetry Collector ---"
+
+mkdir -p "$GNMI_INSTALL_DIR"
+GNMI_TEMP_DIR="/tmp/gnmi-collector-install"
+mkdir -p "$GNMI_TEMP_DIR"
+
+cd "$GNMI_TEMP_DIR" || exit 1
+
+curl -sSL "$COLLECTOR_URL" -o gnmi-collector.tar.gz
+if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to download gNMI collector from ${COLLECTOR_URL}"
+    exit 1
+fi
+
+tar -xzf gnmi-collector.tar.gz
+if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to extract gNMI collector archive"
+    exit 1
+fi
+
+cp gnmi-collector "$GNMI_INSTALL_DIR/gnmi-collector"
+chmod +x "$GNMI_INSTALL_DIR/gnmi-collector"
+
+# Install SONiC config (not the Cisco config.cisco.yaml)
+if [ ! -f "$GNMI_INSTALL_DIR/config.yaml" ]; then
+    cp config.sonic.yaml "$GNMI_INSTALL_DIR/config.yaml"
+    echo "Installed config.sonic.yaml as config.yaml"
+else
+    echo "Existing config.yaml preserved (not overwritten)"
+fi
+
+rm -rf "$GNMI_TEMP_DIR"
+cd /opt
+
+echo "gNMI collector installed to ${GNMI_INSTALL_DIR}"
+"$GNMI_INSTALL_DIR/gnmi-collector" --version
+
+# =============================================================================
+# PART 4: CREATE gNMI COLLECTOR CREDENTIALS FILE
+# =============================================================================
+
+cat > "${GNMI_INSTALL_DIR}/env" << GNMIENV_EOF
+# gNMI Collector credentials — sourced by the systemd service.
+# Values are quoted to handle special characters in passwords/keys.
+GNMI_USER="${GNMI_USER}"
+GNMI_PASS="${GNMI_PASS}"
+WORKSPACE_ID="${WORKSPACE_ID}"
+PRIMARY_KEY="${PRIMARY_KEY}"
+SECONDARY_KEY="${SECONDARY_KEY}"
+GNMIENV_EOF
+
+chmod 600 "${GNMI_INSTALL_DIR}/env"
+echo "Credentials file created at ${GNMI_INSTALL_DIR}/env (permissions: 600)"
+
+# =============================================================================
+# PART 5: CREATE gNMI COLLECTOR SYSTEMD SERVICE
+# =============================================================================
+
+cat > /etc/systemd/system/gnmi-collector.service << 'SYSTEMD_EOF'
+[Unit]
+Description=gNMI Telemetry Collector
+Documentation=https://github.com/microsoft/arc-switch
+After=network-online.target sonic-gnmi.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/opt/gnmi-collector/env
+ExecStart=/opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml
+Restart=on-failure
+RestartSec=30
+StandardOutput=journal+console
+StandardError=journal+console
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/gnmi-collector /var/log
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
+SYSTEMD_EOF
+
+systemctl daemon-reload
+systemctl enable gnmi-collector.service
+echo "systemd service installed and enabled at /etc/systemd/system/gnmi-collector.service"
+
+# =============================================================================
+# PART 6: VALIDATE gNMI CONNECTIVITY AND START COLLECTOR
+# =============================================================================
+
+echo ""
+echo "--- Validating gNMI connectivity ---"
+
+# Source credentials for the dry-run test
+export GNMI_USER="${GNMI_USER}"
+export GNMI_PASS="${GNMI_PASS}"
+export WORKSPACE_ID="${WORKSPACE_ID}"
+export PRIMARY_KEY="${PRIMARY_KEY}"
+
+echo "Running dry-run connectivity test..."
+"$GNMI_INSTALL_DIR/gnmi-collector" --config "$GNMI_INSTALL_DIR/config.yaml" --once --dry-run > /tmp/gnmi-test-output.txt 2>&1
+TEST_RESULT=$?
+
+if [ $TEST_RESULT -eq 0 ]; then
+    echo "gNMI connectivity test PASSED"
+    LINES=$(wc -l < /tmp/gnmi-test-output.txt)
+    echo "  Collected ${LINES} lines of output"
+else
+    echo "WARNING: gNMI connectivity test failed (exit code ${TEST_RESULT})"
+    echo "  Check /tmp/gnmi-test-output.txt for details"
+    echo "  Common causes:"
+    echo "    - sonic-gnmi container not running: check 'docker ps | grep gnmi'"
+    echo "    - Invalid GNMI_USER / GNMI_PASS credentials"
+    echo "    - gNMI server not listening on localhost:8080"
+    echo "    - TLS certificate issue"
+fi
+
+rm -f /tmp/gnmi-test-output.txt
+
+echo ""
+echo "Starting gNMI collector service..."
+systemctl start gnmi-collector
+sleep 3
+systemctl status gnmi-collector --no-pager
+
+echo ""
+echo "============================================================================"
+echo "Azure Arc + gNMI Telemetry Setup Complete!"
+echo "============================================================================"
+echo ""
+echo "NEXT STEPS:"
+echo "1. Connect the Arc agent to Azure:"
+echo "   sudo azcmagent connect \\"
+echo "     --resource-group \"${RESOURCE_GROUP}\" \\"
+echo "     --tenant-id \"${TENANT_ID}\" \\"
+echo "     --location \"${REGION}\" \\"
+echo "     --subscription-id \"${SUBSCRIPTION_ID}\""
+echo ""
+echo "2. Verify Arc agent connection:"
+echo "   azcmagent show"
+echo ""
+echo "gNMI TELEMETRY COLLECTOR:"
+echo "  Binary:      ${GNMI_INSTALL_DIR}/gnmi-collector"
+echo "  Config:      ${GNMI_INSTALL_DIR}/config.yaml"
+echo "  Credentials: ${GNMI_INSTALL_DIR}/env"
+echo "  Service:     gnmi-collector.service (systemd)"
+echo "  Logs:        journalctl -u gnmi-collector -f"
+echo ""
+echo "Service management:"
+echo "  systemctl status gnmi-collector     Check if running"
+echo "  systemctl restart gnmi-collector    Restart the collector"
+echo "  systemctl stop gnmi-collector       Stop the collector"
+echo "  journalctl -u gnmi-collector -f     Follow logs"
+echo ""
+echo "Manual testing:"
+echo "  ${GNMI_INSTALL_DIR}/gnmi-collector --config ${GNMI_INSTALL_DIR}/config.yaml --once --dry-run"
+echo ""
+echo "============================================================================"
