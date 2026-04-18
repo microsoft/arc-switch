@@ -40,8 +40,8 @@ func TestInterfaceCountersTransformer(t *testing.T) {
 
 	// Check first result has required fields
 	entry := results[0]
-	if entry.DataType != "cisco_nexus_interface_counters" {
-		t.Errorf("data_type = %q, want cisco_nexus_interface_counters", entry.DataType)
+	if entry.DataType != "interface_counters" {
+		t.Errorf("data_type = %q, want interface_counters", entry.DataType)
 	}
 	if entry.Timestamp == "" {
 		t.Error("timestamp should not be empty")
@@ -80,7 +80,7 @@ func TestInterfaceStatusTransformer(t *testing.T) {
 	}
 
 	entry := results[0]
-	if entry.DataType != "cisco_nexus_interface_status" {
+	if entry.DataType != "interface_status" {
 		t.Errorf("data_type = %q", entry.DataType)
 	}
 
@@ -240,49 +240,35 @@ func TestEnvironmentTempTransformer(t *testing.T) {
 }
 
 func TestEnvironmentPowerTransformer(t *testing.T) {
-	notifications := loadTestData(t, "power-supply.json")
-	tr := &EnvironmentPowerTransformer{}
+notifications := loadTestData(t, "power-supply.json")
+tr := &EnvironmentPowerTransformer{}
 
-	results, err := tr.Transform(notifications)
-	if err != nil {
-		t.Fatalf("transform error: %v", err)
-	}
-
-	if len(results) != 1 {
-		t.Fatalf("expected 1 result, got %d", len(results))
-	}
-
-	msg, ok := results[0].Message.(map[string]interface{})
-	if !ok {
-		t.Fatal("message not a map")
-	}
-
-	supplies, ok := msg["power_supplies"]
-	if !ok {
-		t.Fatal("missing power_supplies")
-	}
-
-	psList, ok := supplies.([]map[string]interface{})
-	if !ok {
-		t.Fatalf("power_supplies is not []map, got %T", supplies)
-	}
-
-	if len(psList) != 2 {
-		t.Errorf("expected 2 PSUs, got %d", len(psList))
-	}
-
-	// Check base64 decode worked — capacity should be a numeric string, not base64
-	for _, ps := range psList {
-		if cap, ok := ps["total_capacity"].(string); ok {
-			if cap == "RIl9cQ==" {
-				t.Error("capacity was not decoded from base64")
-			}
-		}
-	}
-
-	t.Logf("Produced %d PSU entries", len(psList))
+results, err := tr.Transform(notifications)
+if err != nil {
+t.Fatalf("transform error: %v", err)
 }
 
+if len(results) < 2 {
+t.Fatalf("expected at least 2 PSU results (one per PSU), got %d", len(results))
+}
+
+// Each result is now a flat PSU entry
+for _, entry := range results {
+msg, ok := entry.Message.(map[string]interface{})
+if !ok {
+t.Fatal("message not a map")
+}
+
+// Check base64 decode worked - capacity should be a numeric string, not base64
+if cap, ok := msg["total_capacity"].(string); ok {
+if cap == "RIl9cQ==" {
+t.Error("capacity was not decoded from base64")
+}
+}
+}
+
+t.Logf("Produced %d PSU entries", len(results))
+}
 func TestInventoryTransformer(t *testing.T) {
 	notifications := loadTestData(t, "platform-inventory.json")
 	tr := &InventoryTransformer{}

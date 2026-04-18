@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeVersion = "cisco_nexus_version"
+const dataTypeVersion = "version"
 
 // NativeVersionTransformer handles native Cisco NX-OS YANG version data
 // from /System/showversion-items.

@@ -8,7 +8,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeSystemResources = "cisco_nexus_system_resources"
+const dataTypeSystemResources = "system_resources"
 
 func init() {
 	Register("system-cpus", func() Transformer { return &SystemResourcesTransformer{} })
@@ -155,7 +155,7 @@ func toFloat(v interface{}) float64 {
 	}
 }
 
-const dataTypeSystemUptime = "cisco_nexus_system_uptime"
+const dataTypeSystemUptime = "system_uptime"
 
 // SystemUptimeTransformer converts gNMI system state data to the schema
 // matching the current system-uptime parser.

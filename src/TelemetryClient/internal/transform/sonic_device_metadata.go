@@ -2,7 +2,7 @@ package transform
 
 import "gnmi-collector/internal/gnmi"
 
-const dataTypeSonicDeviceMetadata = "sonic_device_metadata"
+const dataTypeSonicDeviceMetadata = "device_metadata"
 
 func init() {
 	Register("sonic-device-metadata", func() Transformer { return &SonicDeviceMetadataTransformer{} })

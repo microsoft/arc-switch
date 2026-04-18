@@ -6,7 +6,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeInterfaceEthernet = "cisco_nexus_interface_ethernet"
+const dataTypeInterfaceEthernet = "interface_ethernet"
 
 func init() {
 	Register("if-ethernet", func() Transformer { return &InterfaceEthernetTransformer{} })
