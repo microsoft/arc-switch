@@ -173,7 +173,7 @@ paths:
 
   - name: sonic-psu
     yang_path: /sonic-platform:sonic-platform
-    table: SonicEnvPower_CL
+    table: EnvPower_CL
     enabled: true
     mode: sample
     sample_interval: 300s

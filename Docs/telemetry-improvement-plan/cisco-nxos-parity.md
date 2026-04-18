@@ -310,8 +310,8 @@ Global join), CLI-only power aggregations, and `vmalloc` (not in any YANG model)
 |-------|:---:|:----:|
 | `module` / `sensor` | ✅ | ✅ |
 | `current_temp` | ✅ | ✅ |
-| `major_threshold` | ✅ | ✅ |
-| `minor_threshold` | ✅ | ✅ |
+| `high_threshold` | ✅ | ✅ |
+| `low_threshold` | ✅ | ✅ |
 | `status` | ✅ | ✅ |
 
 > Uses native YANG (`nx-env-sensor`).
@@ -325,16 +325,16 @@ Global join), CLI-only power aggregations, and `vmalloc` (not in any YANG model)
 
 | Field | CLI | gNMI |
 |-------|:---:|:----:|
-| `name` / `ps_number` | ✅ | ✅ |
+| `ps_name` | ✅ | ✅ |
 | `model` | ✅ | ✅ |
 | `serial` | ✅ | ✅ |
 | `status` | ✅ | ✅ |
 | `total_capacity` | ✅ | ✅ |
-| `input_voltage` (`vin`) | ✅ | ✅ |
-| `input_current` (`iin`) | ✅ | ✅ |
-| `output_voltage` (`vout`) | ✅ | ✅ |
-| `output_current` (`iout`) | ✅ | ✅ |
-| `output_power` (`pout`) | ✅ | ✅ |
+| `input_voltage` | ✅ | ✅ |
+| `input_current` | ✅ | ✅ |
+| `output_voltage` | ✅ | ✅ |
+| `output_current` | ✅ | ✅ |
+| `output_power` | ✅ | ✅ |
 | `vendor` | — | ✅ |
 | `fan_direction` / `fan_status` | ✅ | ✅ |
 | `cord_status` | ✅ | ✅ |

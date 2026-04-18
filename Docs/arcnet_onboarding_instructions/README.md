@@ -444,25 +444,23 @@ The following custom tables are created in your Log Analytics workspace (Azure a
 
 | Table Name | Description | Platforms |
 |------------|-------------|-----------|
-| `CiscoInterfaceCounter_CL` | Interface traffic statistics | Cisco, SONiC |
-| `CiscoInterfaceStatus_CL` | Interface admin/oper state | Cisco, SONiC |
-| `CiscoInterfaceEthernet_CL` | Ethernet-specific counters | Cisco, SONiC |
+| `InterfaceCounter_CL` | Interface traffic statistics | Cisco, SONiC |
+| `InterfaceStatus_CL` | Interface admin/oper state | Cisco, SONiC |
+| `InterfaceEthernet_CL` | Ethernet-specific counters | Cisco, SONiC |
 | `CiscoInterfaceErrors_CL` | Interface error counters | Cisco |
-| `CiscoBgpSummary_CL` | BGP neighbor summary | Cisco, SONiC |
-| `CiscoLldpNeighbor_CL` | LLDP neighbor information | Cisco, SONiC |
-| `CiscoTransceiver_CL` | SFP/QSFP module details | Cisco |
-| `CiscoEnvTemp_CL` | Temperature sensors | Cisco, SONiC |
-| `CiscoEnvPower_CL` | Power supply status | Cisco, SONiC |
-| `CiscoEnvFan_CL` | Fan status | Cisco, SONiC |
-| `CiscoSystemResources_CL` | CPU, memory utilization | Cisco, SONiC |
-| `CiscoSystemUptime_CL` | System uptime | Cisco, SONiC |
-| `CiscoIpArp_CL` | ARP table entries | Cisco, SONiC |
-| `CiscoMacAddress_CL` | MAC address table | Cisco, SONiC |
-| `CiscoIpRoute_CL` | Routing table | Cisco, SONiC |
+| `BgpNeighbor_CL` | BGP neighbor summary | Cisco, SONiC |
+| `LldpNeighbor_CL` | LLDP neighbor information | Cisco, SONiC |
+| `Transceiver_CL` | SFP/QSFP module details | Cisco |
+| `EnvTemperature_CL` | Temperature sensors | Cisco, SONiC |
+| `EnvPower_CL` | Power supply status | Cisco, SONiC |
+| `SonicFan_CL` | Fan status | SONiC |
+| `SystemResources_CL` | CPU, memory utilization | Cisco, SONiC |
+| `SystemUptime_CL` | System uptime | Cisco, SONiC |
+| `ArpEntry_CL` | ARP table entries | Cisco, SONiC |
+| `MacTable_CL` | MAC address table | Cisco, SONiC |
 | `CiscoRouteSummary_CL` | Route count summary | Cisco |
-| `CiscoInventory_CL` | Hardware inventory | Cisco |
+| `Inventory_CL` | Hardware inventory | Cisco, SONiC |
 | `CiscoVersion_CL` | Software version info | Cisco |
-| `CiscoClassMap_CL` | QoS class maps | Cisco (CLI only) |
 
 ---
 

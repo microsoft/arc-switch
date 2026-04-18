@@ -120,7 +120,7 @@ paths:
 
   - name: nx-env-psu
     yang_path: /System/ch-items/psuslot-items/PsuSlot-list
-    table: CiscoEnvPower_CL
+    table: EnvPower_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -202,7 +202,7 @@ paths:
 
   - name: power-supply
     yang_path: /openconfig-platform:components/component/power-supply
-    table: CiscoEnvPower_CL
+    table: EnvPower_CL
     enabled: false
 
   - name: system-cpus

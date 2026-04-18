@@ -1,6 +1,6 @@
 # Unified Telemetry Schema
 
-> **Last updated**: 2026-07-14  
+> **Last updated**: 2026-04-18  
 > **Branch**: `users/camilose/unified-telemetry-schema`  
 > **Purpose**: Document the unified table schema that consolidates Cisco and SONiC telemetry into shared tables.
 
@@ -30,9 +30,9 @@ discriminator when needed.
    (e.g., `hold_interval`, `connection_drops`). SONiC rows simply lack those
    columns. Kusto handles sparse data natively.
 
-5. **Incompatible row shapes stay separate** — `EnvPower` has different grain
-   (Cisco: one row with PSU array; SONiC: one row per PSU). These remain in
-   vendor-specific tables until row shape is normalized.
+5. **Row shapes normalized where possible** — `EnvPower` was originally split
+   (Cisco: one row with PSU array; SONiC: one row per PSU). Both now emit flat
+   per-PSU rows, enabling a unified `EnvPower_CL` table.
 
 ---
 
@@ -55,19 +55,19 @@ discriminator when needed.
 | `Inventory_CL` | `inventory` | inventory.go | same | Identical schema |
 | `Transceiver_CL` | `transceiver` | native_transceiver.go (superset) | transceiver.go | Cisco adds connector_type, ethernet_pmd |
 | `TransceiverDom_CL` | `transceiver_dom` | transceiver_dom | transceiver_channel.go | same |
-| `EnvTemperature_CL` | `environment_temperature` | native_environment.go | sonic_platform.go (split) | Cisco: major/minor thresholds; SONiC: high/critical_high/low |
+| `EnvTemperature_CL` | `environment_temperature` | native_environment.go | sonic_platform.go | All platforms use high_threshold, low_threshold, critical_high_threshold |
+| `EnvPower_CL` | `environment_power` | native_environment.go | sonic_platform.go | Cisco adds vendor, cord_status, fan fields |
 
 ### Vendor-Specific Tables (no cross-vendor equivalent)
 
 | Table | data_type | Vendor | Reason |
 |---|---|---|---|
-| `CiscoEnvPower_CL` | `environment_power` | Cisco | One row with PSU array — incompatible with SONiC grain |
 | `CiscoVersion_CL` | `version` | Cisco | NX-OS-specific version model |
 | `CiscoInterfaceErrors_CL` | `interface_error_counters` | Cisco | No SONiC YANG model |
 | `CiscoRouteSummary_CL` | `route_summary` | Cisco | No SONiC YANG model |
 | `SonicDeviceMetadata_CL` | `device_metadata` | SONiC | SONiC-specific metadata |
 | `SonicFan_CL` | `fan` | SONiC | SONiC-specific fan model |
-| `SonicEnvPower_CL` | `psu` | SONiC | Per-PSU rows — incompatible with Cisco grain |
+
 
 ---
 
@@ -93,6 +93,7 @@ If you have dashboards or alerts querying the old table names, update them:
 | `CiscoTransceiver_CL` | — | `Transceiver_CL` |
 | `CiscoTransceiverDom_CL` | — | `TransceiverDom_CL` |
 | `CiscoEnvTemperature_CL` | `SonicEnvTemperature_CL` | `EnvTemperature_CL` |
+| `CiscoEnvPower_CL` | `SonicEnvPower_CL` | `EnvPower_CL` |
 
 > **Note**: Historical data in Kusto remains under old table names. New data flows
 > to the unified names after deployment.
@@ -150,7 +151,7 @@ single response. Since the collector routes all entries from one path to one tab
 the transformer was split into three:
 
 - `SonicTemperatureTransformer` → registers as `sonic-temperature` → `EnvTemperature_CL`
-- `SonicPsuTransformer` → registers as `sonic-psu` → `SonicEnvPower_CL`
+- `SonicPsuTransformer` → registers as `sonic-psu` → `EnvPower_CL`
 - `SonicFanTransformer` → registers as `sonic-fan` → `SonicFan_CL`
 
 All three query the same gNMI path (`/sonic-platform:sonic-platform`) but extract
