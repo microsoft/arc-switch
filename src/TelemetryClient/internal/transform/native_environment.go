@@ -11,6 +11,7 @@ type NativeEnvTempTransformer struct{}
 func init() {
 Register("nx-env-sensor", func() Transformer { return &NativeEnvTempTransformer{} })
 Register("nx-env-psu", func() Transformer { return &NativeEnvPowerTransformer{} })
+Register("nx-fan", func() Transformer { return &NativeEnvFanTransformer{} })
 }
 
 func (t *NativeEnvTempTransformer) DataType() string { return dataTypeEnvTemp }
@@ -67,6 +68,76 @@ return map[string]interface{}{
 // NativeEnvPowerTransformer handles native Cisco NX-OS YANG PSU data
 // from /System/ch-items/psuslot-items/PsuSlot-list.
 type NativeEnvPowerTransformer struct{}
+
+// NativeEnvFanTransformer handles native Cisco NX-OS YANG fan data
+// from /System/ch-items/ftslot-items/FtSlot-list.
+type NativeEnvFanTransformer struct{}
+
+func (t *NativeEnvFanTransformer) DataType() string { return "fan" }
+
+func (t *NativeEnvFanTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
+var results []CommonFields
+
+for _, n := range notifications {
+for _, u := range n.Updates {
+entries := AsMapSlice(u.Value)
+if entries == nil {
+continue
+}
+
+for _, vals := range entries {
+id := GetString(vals, "id")
+if id == "" {
+id = extractKey(u.Path, "id")
+}
+
+// NX-OS structure: FtSlot-list -> ft-items -> fan-items -> Fan-list
+ft := GetMap(vals, "ft-items")
+if ft == nil {
+// Try direct fan-items at slot level
+ft = vals
+}
+
+fanList := GetSlice(ft, "Fan-list")
+if fanList == nil {
+// Flat structure: extract from ft-items directly
+msg := map[string]interface{}{
+"name":      id,
+"model":     GetString(ft, "model"),
+"direction": GetString(ft, "dir"),
+"status":    GetString(ft, "operSt"),
+"serial":    GetString(ft, "ser"),
+}
+results = append(results, NewCommonFields("fan", msg, n.Timestamp))
+continue
+}
+
+// Nested structure: iterate over Fan-list entries
+for _, raw := range fanList {
+fan, ok := raw.(map[string]interface{})
+if !ok {
+continue
+}
+fanID := GetString(fan, "id")
+name := id
+if fanID != "" {
+name = id + "/" + fanID
+}
+msg := map[string]interface{}{
+"name":      name,
+"model":     GetString(ft, "model"),
+"direction": GetString(fan, "dir"),
+"status":    GetString(fan, "operSt"),
+"serial":    GetString(ft, "ser"),
+}
+results = append(results, NewCommonFields("fan", msg, n.Timestamp))
+}
+}
+}
+}
+
+return results, nil
+}
 
 func (t *NativeEnvPowerTransformer) DataType() string { return dataTypeEnvPower }
 

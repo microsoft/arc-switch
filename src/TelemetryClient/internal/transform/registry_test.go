@@ -33,6 +33,7 @@ func TestRegistryHasAllTransformers(t *testing.T) {
 		"nx-bgp-peers",
 		"nx-env-sensor",
 		"nx-env-psu",
+		"nx-fan",
 		"nx-sys-cpu",
 		"nx-sys-memory",
 		"nx-mac-table",

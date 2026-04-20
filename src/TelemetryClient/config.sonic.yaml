@@ -180,7 +180,7 @@ paths:
 
   - name: sonic-fan
     yang_path: /sonic-platform:sonic-platform
-    table: SonicFan_CL
+    table: EnvFan_CL
     enabled: true
     mode: sample
     sample_interval: 300s

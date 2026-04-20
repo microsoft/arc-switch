@@ -125,6 +125,13 @@ paths:
     mode: sample
     sample_interval: 300s
 
+  - name: nx-fan
+    yang_path: /System/ch-items/ftslot-items/FtSlot-list
+    table: EnvFan_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
   - name: nx-sys-cpu
     yang_path: /System/procsys-items/syscpusummary-items
     table: SystemResources_CL
