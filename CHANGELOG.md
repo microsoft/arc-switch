@@ -10,16 +10,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **gNMI Telemetry Collector** — single Go binary that collects structured YANG
   data via gNMI and ships it to Azure Log Analytics. Replaces the cron-based CLI
   text scraping pipeline.
-  - Cisco NX-OS support: 20 YANG paths (OpenConfig + Cisco native), ~97% parity
+  - Cisco NX-OS support: 21 YANG paths (OpenConfig + Cisco native), ~97% parity
     with legacy CLI parser.
-  - Dell Enterprise SONiC support: 14 YANG paths (OpenConfig), ~76% coverage vs
-    Cisco baseline.
+  - Dell Enterprise SONiC support: 16 YANG paths (OpenConfig + SONiC native),
+    full environment coverage (temperature, PSU, fan).
   - Poll mode (periodic gNMI Get) — production-ready.
   - Subscribe mode (persistent gNMI stream) — supports both `sample` and
     `on_change` per-path modes. Validated on Cisco NX-OS and SONiC.
   - CLI flags: `--once`, `--dry-run`, `--output`, `--dump`, `--verbose`, `--version`.
-- **Per-vendor configuration files**: `config.cisco.yaml` (20 paths) and
-  `config.sonic.yaml` (14 paths) ship in the release tarball.
+- **Per-vendor configuration files**: `config.cisco.yaml` (21 paths) and
+  `config.sonic.yaml` (16 paths) ship in the release tarball.
 - **init.d service script** (`gnmi-collectord`) for Cisco NX-OS daemon management.
 - **Automated onboarding Copilot skill** (`.github/skills/arc-onboarding/`) —
   SSH into a switch, auto-detect vendor, fill setup script, and execute.
@@ -37,7 +37,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 - Renamed `config.example.yaml` → `config.cisco.yaml` for clarity.
-- Cisco table names changed from `GnmiTest*` (debug) to `Cisco*_CL` (production).
+- **Unified telemetry schema** — vendor-prefixed table names (`CiscoBgp*`, `SonicBgp*`)
+  replaced with shared tables (`BgpNeighbor_CL`, `EnvTemperature_CL`, etc.). Both
+  platforms write to the same tables; `device_type` distinguishes rows.
+- **Normalized environment fields** — temperature, power supply, and fan transformers
+  now emit consistent field names across Cisco and SONiC (e.g., `high_threshold`,
+  `input_voltage`, `ps_name`).
+- **Added Cisco fan transformer** (`nx-fan`) — Cisco NX-OS now reports fan health
+  to `EnvFan_CL` alongside SONiC, closing the last environment parity gap.
 - Root `README.md` rewritten to lead with Azure Arc + gNMI capabilities.
 - Onboarding README restructured with per-platform installation sections.
 

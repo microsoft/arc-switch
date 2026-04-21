@@ -1,6 +1,6 @@
 # Telemetry Data Parity — Overview
 
-> **Last updated**: 2026-04-10  
+> **Last updated**: 2026-04-20  
 > **Purpose**: Cross-vendor summary of gNMI telemetry data collection parity
 
 This directory contains per-vendor data parity reports for the `gnmi-collector`.
@@ -36,7 +36,7 @@ exists, compares field-by-field coverage.
 | MAC Table | ✅ 7 | ✅ 12 | ⚠️ 0* | *L3-only switch, not a code issue |
 | Env Temperature | ✅ 6 | ✅ 6 | ✅ 6 | **Parity achieved** |
 | Env Power Supply | ✅ 20 | ⚠️ 14 | ⚠️ 10 | CLI aggregations missing |
-| Env Fan | ✅ 3 | — | ✅ 7 | SONiC-only via sonic-platform |
+| Env Fan | ✅ 3 | ✅ 5 | ✅ 7 | **Parity achieved** — unified to EnvFan_CL |
 | Transceiver | ✅ 16 | ✅ 14 | ❌ 0 | SONiC: disabled (needs per-intf keys) |
 | Transceiver DOM | ✅ 5 | ✅ 5 | ❌ 0 | SONiC: disabled |
 | Route Summary | ✅ 3 | ✅ 4 | ❌ 0 | SONiC: no YANG model |

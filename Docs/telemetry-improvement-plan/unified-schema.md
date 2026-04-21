@@ -1,6 +1,6 @@
 # Unified Telemetry Schema
 
-> **Last updated**: 2026-04-18  
+> **Last updated**: 2026-04-20  
 > **Branch**: `users/camilose/unified-telemetry-schema`  
 > **Purpose**: Document the unified table schema that consolidates Cisco and SONiC telemetry into shared tables.
 
@@ -57,6 +57,7 @@ discriminator when needed.
 | `TransceiverDom_CL` | `transceiver_dom` | transceiver_dom | transceiver_channel.go | same |
 | `EnvTemperature_CL` | `environment_temperature` | native_environment.go | sonic_platform.go | All platforms use high_threshold, low_threshold, critical_high_threshold |
 | `EnvPower_CL` | `environment_power` | native_environment.go | sonic_platform.go | Cisco adds vendor, cord_status, fan fields |
+| `EnvFan_CL` | `fan` | native_environment.go | sonic_platform.go | Cisco: name, model, direction, status, serial; SONiC adds speed, drawer_name |
 
 ### Vendor-Specific Tables (no cross-vendor equivalent)
 
@@ -66,7 +67,6 @@ discriminator when needed.
 | `CiscoInterfaceErrors_CL` | `interface_error_counters` | Cisco | No SONiC YANG model |
 | `CiscoRouteSummary_CL` | `route_summary` | Cisco | No SONiC YANG model |
 | `SonicDeviceMetadata_CL` | `device_metadata` | SONiC | SONiC-specific metadata |
-| `SonicFan_CL` | `fan` | SONiC | SONiC-specific fan model |
 
 
 ---
@@ -94,6 +94,7 @@ If you have dashboards or alerts querying the old table names, update them:
 | `CiscoTransceiverDom_CL` | — | `TransceiverDom_CL` |
 | `CiscoEnvTemperature_CL` | `SonicEnvTemperature_CL` | `EnvTemperature_CL` |
 | `CiscoEnvPower_CL` | `SonicEnvPower_CL` | `EnvPower_CL` |
+| — | `SonicFan_CL` | `EnvFan_CL` |
 
 > **Note**: Historical data in Kusto remains under old table names. New data flows
 > to the unified names after deployment.
@@ -152,7 +153,7 @@ the transformer was split into three:
 
 - `SonicTemperatureTransformer` → registers as `sonic-temperature` → `EnvTemperature_CL`
 - `SonicPsuTransformer` → registers as `sonic-psu` → `EnvPower_CL`
-- `SonicFanTransformer` → registers as `sonic-fan` → `SonicFan_CL`
+- `SonicFanTransformer` → registers as `sonic-fan` → `EnvFan_CL`
 
 All three query the same gNMI path (`/sonic-platform:sonic-platform`) but extract
 only their relevant data type from the response.

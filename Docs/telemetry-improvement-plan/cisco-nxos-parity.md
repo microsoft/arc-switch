@@ -2,8 +2,8 @@
 
 > **Last updated**: 2026-04-10  
 > **Test switch**: rr1-n42-r07-9336hl-13-1a (100.71.34.149) — NX-OS 1.2407.41 (x86_64)  
-> **Collector config**: 20 gNMI paths, all validated  
-> **Dry-run result**: 20 success, 0 failures in 11.7s  
+> **Collector config**: 21 gNMI paths, all validated  
+> **Dry-run result**: 21 success, 0 failures in 11.7s  
 > **Coverage vs CLI**: **~97%**
 
 Cisco gNMI **exceeds** CLI in several categories (BGP detail, interface errors,
@@ -425,6 +425,24 @@ Global join), CLI-only power aggregations, and `vmalloc` (not in any YANG model)
 
 ---
 
+### 19. Environment — Fan
+
+| Field | CLI | gNMI |
+|-------|:---:|:----:|
+| `name` | ✅ | ✅ |
+| `model` | ✅ | ✅ |
+| `serial` | — | ✅ |
+| `fan_direction` | ✅ | ✅ |
+| `fan_status` | ✅ | ✅ |
+
+> Uses native YANG (`/System/ch-items/ftslot-items/FtSlot-list`).
+> NX-OS has 3 fan trays × 4 fans per tray = 12 system fans + 2 PSU-embedded fans.
+
+**Records**: 14 fans  
+**Parity**: ✅ **100%** — gNMI adds serial number
+
+---
+
 ## Record Counts (from validated dry-run, 2026-04-09)
 
 | Table | Records |
@@ -443,6 +461,7 @@ Global join), CLI-only power aggregations, and `vmalloc` (not in any YANG model)
 | MacTable | 1,224 |
 | EnvTemperature | 4 |
 | EnvPower | 1 (2 PSUs) |
+| EnvFan | 14 |
 | Transceiver | 63 (20 with optics) |
 | TransceiverDom | 20 |
 | RouteSummary | 2 |
@@ -463,8 +482,8 @@ domain-level attributes like `asn`. Both approaches were attempted:
 (value: `64781`). A KQL join on `vrf_name` provides the same data:
 
 ```kql
-CiscoBgpSummary_CL
-| join kind=leftouter (CiscoBgpGlobal_CL | project vrf_name, vrf_local_as=local_as) on vrf_name
+BgpNeighbor_CL
+| join kind=leftouter (BgpGlobal_CL | project vrf_name, vrf_local_as=local_as) on vrf_name
 ```
 
 ---

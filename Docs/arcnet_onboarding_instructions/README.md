@@ -223,7 +223,7 @@ for svc in himdsd arcproxyd extd gcad; do /etc/init.d/$svc status; done
 /opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
 ```
 
-**Telemetry paths collected** (20 paths): Interface counters, interface status, interface Ethernet, interface errors, BGP neighbors, BGP summary, LLDP, transceiver DOM, environment temperature, environment power, environment fan, system resources, system uptime, system version, ARP, MAC addresses, IP routes, route summary, inventory, platform components.
+**Telemetry paths collected** (21 paths): Interface counters, interface status, interface Ethernet, interface errors, BGP neighbors, BGP global, LLDP, transceiver, transceiver DOM, environment temperature, environment power, environment fan, system resources, system uptime, system version, ARP, MAC addresses, route summary, inventory.
 
 ---
 
@@ -360,7 +360,7 @@ systemctl status gnmi-collector
 /opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
 ```
 
-**Telemetry paths collected** (14 paths): Interface counters, interface status, interface Ethernet, BGP neighbors, BGP summary, LLDP, environment (platform inventory: temperature, PSU, fans), system resources, system uptime, ARP, MAC addresses, IP routes.
+**Telemetry paths collected** (16 paths): Interface counters, interface status, interface Ethernet, BGP neighbors, BGP global, LLDP, environment temperature, environment power, environment fan, system resources, system uptime, ARP, MAC addresses, inventory, platform components, device metadata.
 
 ---
 
@@ -427,7 +427,7 @@ search "*"
 | where Type endswith "_CL"
 
 // Example: Query interface counters
-CiscoInterfaceCounter_CL
+InterfaceCounter_CL
 | where TimeGenerated > ago(1h)
 | take 10
 
@@ -449,11 +449,13 @@ The following custom tables are created in your Log Analytics workspace (Azure a
 | `InterfaceEthernet_CL` | Ethernet-specific counters | Cisco, SONiC |
 | `CiscoInterfaceErrors_CL` | Interface error counters | Cisco |
 | `BgpNeighbor_CL` | BGP neighbor summary | Cisco, SONiC |
+| `BgpGlobal_CL` | BGP global state | Cisco, SONiC |
 | `LldpNeighbor_CL` | LLDP neighbor information | Cisco, SONiC |
 | `Transceiver_CL` | SFP/QSFP module details | Cisco |
+| `TransceiverDom_CL` | Transceiver DOM (Tx/Rx power) | Cisco |
 | `EnvTemperature_CL` | Temperature sensors | Cisco, SONiC |
 | `EnvPower_CL` | Power supply status | Cisco, SONiC |
-| `SonicFan_CL` | Fan status | SONiC |
+| `EnvFan_CL` | Fan health and status | Cisco, SONiC |
 | `SystemResources_CL` | CPU, memory utilization | Cisco, SONiC |
 | `SystemUptime_CL` | System uptime | Cisco, SONiC |
 | `ArpEntry_CL` | ARP table entries | Cisco, SONiC |
@@ -461,6 +463,7 @@ The following custom tables are created in your Log Analytics workspace (Azure a
 | `CiscoRouteSummary_CL` | Route count summary | Cisco |
 | `Inventory_CL` | Hardware inventory | Cisco, SONiC |
 | `CiscoVersion_CL` | Software version info | Cisco |
+| `SonicDeviceMetadata_CL` | Device metadata | SONiC |
 
 ---
 

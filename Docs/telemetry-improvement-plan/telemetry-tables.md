@@ -16,25 +16,26 @@ of tables, distinguished by the `device_type` column.
 
 | # | Table Name | Category | Cisco | SONiC | Description |
 |---|-----------|----------|:-----:|:-----:|-------------|
-| 1 | `InterfaceCounter_v2_CL` | Interfaces | ✅ | ✅ | Per-interface traffic counters (bytes, packets, unicast, multicast, broadcast, errors, discards) |
-| 2 | `InterfaceStatus_v2_CL` | Interfaces | ✅ | ✅ | Interface operational and admin state (up/down, speed, MTU, description) |
-| 3 | `InterfaceEthernet_v2_CL` | Interfaces | ✅ | ✅ | Ethernet-specific state (speed, duplex, auto-negotiate, CRC/fragment/jabber counters) |
-| 4 | `InterfaceErrors_v2_CL` | Interfaces | ✅ | — | Detailed L1/L2 error counters (CRC, collisions, runts, jabbers, overruns) via Cisco-native YANG |
-| 5 | `SystemUptime_v2_CL` | System | ✅ | ✅ | System hostname, boot time, uptime, and current date/time |
-| 6 | `SystemResources_v2_CL` | System | ✅ | ✅ | CPU utilization (per-core), memory usage, and load averages |
-| 7 | `Inventory_v2_CL` | Platform | ✅ | ✅ | Hardware inventory — chassis, line cards, fans, PSUs, CPUs, transceivers with serial numbers and descriptions |
-| 8 | `BgpSummary_v2_CL` | Routing | ✅ | ✅ | Per-neighbor BGP session state, AS numbers, message counts, prefix counts, and uptime |
-| 9 | `BgpGlobal_v2_CL` | Routing | ✅ | ✅ | BGP global state — router ID, local AS, total paths and prefixes |
-| 10 | `RouteSummary_v2_CL` | Routing | ✅ | — | IPv4 route summary per VRF — total routes, paths, and multipath counts (Cisco-native YANG) |
-| 11 | `LldpNeighbor_v2_CL` | Discovery | ✅ | ✅ | LLDP neighbor table — local port, remote system name, remote port, chassis ID, capabilities |
-| 12 | `ArpEntry_v2_CL` | Discovery | ✅ | ✅ | ARP/neighbor table — IP address, MAC address, interface, entry type |
-| 13 | `MacTable_v2_CL` | Discovery | ✅ | ✅ | MAC address table — MAC, VLAN, port, type (static/dynamic) |
-| 14 | `EnvTemp_v2_CL` | Environment | ✅ | — | Temperature sensor readings with thresholds and alert status (Cisco-native YANG) |
-| 15 | `EnvPower_v2_CL` | Environment | ✅ | — | Power supply status, voltage, current, and wattage per PSU (Cisco-native YANG) |
-| 16 | `Transceiver_v2_CL` | Optics | ✅ | ✅ | Transceiver presence, type, manufacturer, part/serial numbers |
-| 17 | `TransceiverDom_v2_CL` | Optics | ✅ | ✅ | Transceiver DOM — optical Tx/Rx power, laser bias current per channel |
-| 18 | `Version_v2_CL` | System | ✅ | — | NX-OS version, system image, system name, serial number (Cisco-native YANG) |
-| 19 | `DeviceMetadata_v2_CL` | System | — | ✅ | SONiC device metadata — hostname, hardware SKU, platform, MAC address |
+| 1 | `InterfaceCounter_CL` | Interfaces | ✅ | ✅ | Per-interface traffic counters (bytes, packets, unicast, multicast, broadcast, errors, discards) |
+| 2 | `InterfaceStatus_CL` | Interfaces | ✅ | ✅ | Interface operational and admin state (up/down, speed, MTU, description) |
+| 3 | `InterfaceEthernet_CL` | Interfaces | ✅ | ✅ | Ethernet-specific state (speed, duplex, auto-negotiate, CRC/fragment/jabber counters) |
+| 4 | `CiscoInterfaceErrors_CL` | Interfaces | ✅ | — | Detailed L1/L2 error counters (CRC, collisions, runts, jabbers, overruns) via Cisco-native YANG |
+| 5 | `SystemUptime_CL` | System | ✅ | ✅ | System hostname, boot time, uptime, and current date/time |
+| 6 | `SystemResources_CL` | System | ✅ | ✅ | CPU utilization (per-core), memory usage, and load averages |
+| 7 | `Inventory_CL` | Platform | ✅ | ✅ | Hardware inventory — chassis, line cards, fans, PSUs, CPUs, transceivers with serial numbers and descriptions |
+| 8 | `BgpNeighbor_CL` | Routing | ✅ | ✅ | Per-neighbor BGP session state, AS numbers, message counts, prefix counts, and uptime |
+| 9 | `BgpGlobal_CL` | Routing | ✅ | ✅ | BGP global state — router ID, local AS, total paths and prefixes |
+| 10 | `CiscoRouteSummary_CL` | Routing | ✅ | — | IPv4 route summary per VRF — total routes, paths, and multipath counts (Cisco-native YANG) |
+| 11 | `LldpNeighbor_CL` | Discovery | ✅ | ✅ | LLDP neighbor table — local port, remote system name, remote port, chassis ID, capabilities |
+| 12 | `ArpEntry_CL` | Discovery | ✅ | ✅ | ARP/neighbor table — IP address, MAC address, interface, entry type |
+| 13 | `MacTable_CL` | Discovery | ✅ | ✅ | MAC address table — MAC, VLAN, port, type (static/dynamic) |
+| 14 | `EnvTemperature_CL` | Environment | ✅ | ✅ | Temperature sensor readings with thresholds and alert status |
+| 15 | `EnvPower_CL` | Environment | ✅ | ✅ | Power supply status, voltage, current, and wattage per PSU |
+| 16 | `EnvFan_CL` | Environment | ✅ | ✅ | Fan health — name, model, direction, status, serial number |
+| 17 | `Transceiver_CL` | Optics | ✅ | — | Transceiver presence, type, manufacturer, part/serial numbers |
+| 18 | `TransceiverDom_CL` | Optics | ✅ | — | Transceiver DOM — optical Tx/Rx power, laser bias current per channel |
+| 19 | `CiscoVersion_CL` | System | ✅ | — | NX-OS version, system image, system name, serial number (Cisco-native YANG) |
+| 20 | `SonicDeviceMetadata_CL` | System | — | ✅ | SONiC device metadata — hostname, hardware SKU, platform, MAC address |
 
 ---
 
@@ -47,15 +48,15 @@ System / Resources        ██████████████████
 Platform Inventory        ████████████████████
 BGP Routing               ████████████████████
 LLDP / ARP / MAC          ████████████████████
-Environment (Temp/PSU)    ██████████
-Optics (Transceiver/DOM)  ████████████████████
+Environment (Temp/PSU/Fan)████████████████████
+Optics (Transceiver/DOM)  ██████████
 Route Summary             ██████████
 Version / Metadata        ████████████████████
 ```
 
-Cisco NX-OS has full coverage across all 18 table categories. SONiC covers
-13 of 18 — the gaps are Cisco-native YANG paths (interface errors, route
-summary, environment sensors) that have no OpenConfig equivalent on SONiC.
+Cisco NX-OS has full coverage across all 20 table categories. SONiC covers
+16 of 20 — the gaps are transceiver/DOM (disabled, needs per-interface keys),
+route summary (no YANG model), and interface errors (no YANG model).
 
 ---
 
@@ -149,7 +150,7 @@ Common columns across all tables:
 
 ```kql
 // Show latest BGP peer state across all switches
-BgpSummary_v2_CL
+BgpNeighbor_CL
 | where TimeGenerated > ago(1h)
 | summarize arg_max(TimeGenerated, *) by device_type_s, hostname_s, message_neighbor_address_s
 | project TimeGenerated, device_type_s, hostname_s, message_neighbor_address_s, message_neighbor_as_s, message_msg_recvd_d, message_msg_sent_d
