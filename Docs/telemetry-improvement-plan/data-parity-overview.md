@@ -1,6 +1,6 @@
 # Telemetry Data Parity — Overview
 
-> **Last updated**: 2026-04-10  
+> **Last updated**: 2026-04-20  
 > **Purpose**: Cross-vendor summary of gNMI telemetry data collection parity
 
 This directory contains per-vendor data parity reports for the `gnmi-collector`.
@@ -36,7 +36,7 @@ exists, compares field-by-field coverage.
 | MAC Table | ✅ 7 | ✅ 12 | ⚠️ 0* | *L3-only switch, not a code issue |
 | Env Temperature | ✅ 6 | ✅ 6 | ✅ 6 | **Parity achieved** |
 | Env Power Supply | ✅ 20 | ⚠️ 14 | ⚠️ 10 | CLI aggregations missing |
-| Env Fan | ✅ 3 | — | ✅ 7 | SONiC-only via sonic-platform |
+| Env Fan | ✅ 3 | ✅ 5 | ✅ 7 | **Parity achieved** — unified to EnvFan_CL |
 | Transceiver | ✅ 16 | ✅ 14 | ❌ 0 | SONiC: disabled (needs per-intf keys) |
 | Transceiver DOM | ✅ 5 | ✅ 5 | ❌ 0 | SONiC: disabled |
 | Route Summary | ✅ 3 | ✅ 4 | ❌ 0 | SONiC: no YANG model |
@@ -55,7 +55,7 @@ exists, compares field-by-field coverage.
 | **QoS / Class Map** | OpenConfig QoS models exist but no vendor implements them via gNMI |
 | **Power aggregations** (total_grid_*, total_power_*) | CLI-only computed values, not raw device data |
 | **vmalloc** | Linux kernel metric, not exposed via any YANG model |
-| **Table naming** — `Cisco*_CL` prefix (Cisco), `Sonic*_CL` prefix (SONiC) | Production naming convention matching Azure Log Analytics `_CL` suffix |
+| **Table naming** — Unified tables for shared data types (e.g., `BgpNeighbor_CL`), vendor-prefixed only for vendor-specific tables | See [unified-schema.md](unified-schema.md) for full mapping |
 
 ---
 
@@ -66,3 +66,5 @@ exists, compares field-by-field coverage.
 - **Both poll and subscribe modes** are validated with 100% data parity between modes.
 - **Zero config changes to switches** — read-only gNMI subscriptions only.
 - **Arc-integrated** — runs as init.d (NX-OS) or systemd (SONiC/Linux) service.
+- **Unified schema** — Shared data types land in the same Kusto tables across vendors.
+  See [unified-schema.md](unified-schema.md) for the full mapping and migration guide.

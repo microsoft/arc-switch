@@ -2,7 +2,7 @@ package transform
 
 import "gnmi-collector/internal/gnmi"
 
-const dataTypeRouteSummary = "cisco_nexus_route_summary"
+const dataTypeRouteSummary = "route_summary"
 
 // NativeRouteSummaryTransformer handles native Cisco NX-OS YANG route summary data
 // from /System/urib-items/table4-items/Table4-list/sum-items.

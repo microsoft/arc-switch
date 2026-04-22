@@ -49,7 +49,7 @@ paths:
   # ============================================================
   - name: interface-counters
     yang_path: /openconfig-interfaces:interfaces/interface/state/counters
-    table: SonicInterfaceCounter_CL
+    table: InterfaceCounter_CL
     enabled: true
     mode: sample
     sample_interval: 60s
@@ -57,7 +57,7 @@ paths:
 
   - name: interface-status
     yang_path: /openconfig-interfaces:interfaces/interface/state
-    table: SonicInterfaceStatus_CL
+    table: InterfaceStatus_CL
     enabled: true
     mode: sample
     sample_interval: 60s
@@ -65,7 +65,7 @@ paths:
 
   - name: if-ethernet
     yang_path: /openconfig-if-ethernet:interfaces/interface/ethernet/state
-    table: SonicInterfaceEthernet_CL
+    table: InterfaceEthernet_CL
     enabled: true
     mode: sample
     sample_interval: 60s
@@ -75,7 +75,7 @@ paths:
   # ============================================================
   - name: system-state
     yang_path: /openconfig-system:system/state
-    table: SonicSystemUptime_CL
+    table: SystemUptime_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -83,14 +83,14 @@ paths:
 
   - name: system-cpus
     yang_path: /openconfig-system:system/cpus
-    table: SonicSystemResources_CL
+    table: SystemResources_CL
     enabled: true
     mode: sample
     sample_interval: 300s
 
   - name: system-memory
     yang_path: /openconfig-system:system/memory
-    table: SonicSystemResources_CL
+    table: SystemResources_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -102,7 +102,7 @@ paths:
   # ============================================================
   - name: platform-inventory
     yang_path: /openconfig-platform:components/component
-    table: SonicInventory_CL
+    table: Inventory_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -116,14 +116,14 @@ paths:
   # ============================================================
   - name: bgp-neighbors
     yang_path: /openconfig-network-instance:network-instances/network-instance[name={network_instance}]/protocols/protocol[identifier=BGP][name=bgp]/bgp/neighbors
-    table: SonicBgpSummary_CL
+    table: BgpNeighbor_CL
     enabled: true
     mode: sample
     sample_interval: 300s
 
   - name: bgp-global
     yang_path: /openconfig-network-instance:network-instances/network-instance[name={network_instance}]/protocols/protocol[identifier=BGP][name=bgp]/bgp/global
-    table: SonicBgpGlobal_CL
+    table: BgpGlobal_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -135,7 +135,7 @@ paths:
   # ============================================================
   - name: lldp-neighbors
     yang_path: /openconfig-lldp:lldp/interfaces/interface/neighbors
-    table: SonicLldpNeighbor_CL
+    table: LldpNeighbor_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -145,7 +145,7 @@ paths:
   # ============================================================
   - name: arp-table
     yang_path: /openconfig-if-ip:interfaces/interface/subinterfaces/subinterface/ipv4/neighbors
-    table: SonicArpEntry_CL
+    table: ArpEntry_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -155,18 +155,32 @@ paths:
   # ============================================================
   - name: mac-table
     yang_path: /openconfig-network-instance:network-instances/network-instance[name={network_instance}]/fdb/mac-table
-    table: SonicMacTable_CL
+    table: MacTable_CL
     enabled: true
     mode: sample
     sample_interval: 300s
 
   # ============================================================
-  # SONiC native YANG — sonic-platform returns ALL temperature,
-  # PSU, and fan data in a single query. No component keys needed.
+  # SONiC native YANG — sonic-platform contains temperature,
+  # PSU, and fan data. Split into 3 paths for separate tables.
   # ============================================================
-  - name: sonic-platform
+  - name: sonic-temperature
     yang_path: /sonic-platform:sonic-platform
-    table: SonicPlatform_CL
+    table: EnvTemperature_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: sonic-psu
+    yang_path: /sonic-platform:sonic-platform
+    table: EnvPower_CL
+    enabled: true
+    mode: sample
+    sample_interval: 300s
+
+  - name: sonic-fan
+    yang_path: /sonic-platform:sonic-platform
+    table: EnvFan_CL
     enabled: true
     mode: sample
     sample_interval: 300s
@@ -189,7 +203,7 @@ paths:
   # ============================================================
   - name: temperature
     yang_path: /openconfig-platform:components/component[name=TEMP 1]/state/temperature
-    table: SonicEnvironmentTemperature_CL
+    table: EnvTemperature_CL
     enabled: false
     mode: sample
     sample_interval: 300s
@@ -201,7 +215,7 @@ paths:
   # ============================================================
   - name: power-supply
     yang_path: /openconfig-platform:components/component[name=PSU 1]/power-supply
-    table: SonicEnvironmentPower_CL
+    table: EnvPower_CL
     enabled: false
     mode: sample
     sample_interval: 300s
@@ -213,14 +227,14 @@ paths:
   # ============================================================
   - name: transceiver
     yang_path: /openconfig-platform:components/component/transceiver
-    table: SonicTransceiver_CL
+    table: Transceiver_CL
     enabled: false
     mode: sample
     sample_interval: 60s
 
   - name: transceiver-channel
     yang_path: /openconfig-platform:components/component/transceiver/physical-channels
-    table: SonicTransceiverDom_CL
+    table: TransceiverDom_CL
     enabled: false
     mode: sample
     sample_interval: 60s

@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"gnmi-collector/internal/azure"
@@ -126,13 +125,7 @@ func (c *Collector) RunOnce() error {
 		if c.logger != nil {
 			batch := make([]map[string]interface{}, 0, len(te.entries))
 			for _, e := range te.entries {
-				raw, _ := json.Marshal(e)
-				var m map[string]interface{}
-				if err := json.Unmarshal(raw, &m); err != nil {
-					log.Printf("WARN: unmarshal entry for %s: %v", te.table, err)
-					continue
-				}
-				batch = append(batch, m)
+				batch = append(batch, flattenEntry(e))
 			}
 			if err := c.logger.Send(te.table, batch); err != nil {
 				log.Printf("ERROR: send %s: %v", te.table, err)
@@ -316,11 +309,6 @@ func (c *Collector) fetchAndTransform(pathCfg config.PathConfig) ([]transform.Co
 		return nil, nil
 	}
 
-	// Apply vendor-specific data_type prefix from config.
-	// Transformers always produce "cisco_nexus_*" data types internally;
-	// this replaces the prefix for other vendors (e.g., "sonic_*").
-	applyDataTypePrefix(entries, c.cfg.DataTypePrefix())
-
 	return entries, nil
 }
 
@@ -346,13 +334,7 @@ func (c *Collector) writeTransformed(table string, entries []transform.CommonFie
 
 	batch := make([]map[string]interface{}, 0, len(entries))
 	for _, e := range entries {
-		raw, _ := json.Marshal(e)
-		var m map[string]interface{}
-		if err := json.Unmarshal(raw, &m); err != nil {
-			log.Printf("WARN: unmarshal entry for %s: %v", table, err)
-			continue
-		}
-		batch = append(batch, m)
+		batch = append(batch, flattenEntry(e))
 	}
 
 	data, err := json.Marshal(batch)
@@ -364,20 +346,22 @@ func (c *Collector) writeTransformed(table string, entries []transform.CommonFie
 	return os.WriteFile(path, data, 0644)
 }
 
-// applyDataTypePrefix replaces the default "cisco_nexus_" prefix in data_type
-// fields with the configured vendor prefix. This allows the same transformer
-// code to produce vendor-appropriate output (e.g., "sonic_interface_counters").
-// If the configured prefix is already "cisco_nexus", this is a no-op.
-func applyDataTypePrefix(entries []transform.CommonFields, prefix string) {
-	const defaultPrefix = "cisco_nexus"
-	if prefix == defaultPrefix {
-		return
+// flattenEntry converts a CommonFields into a flat map suitable for
+// Azure Log Analytics ingestion. The Message map fields are promoted
+// to the top level so that LA does not prefix them with "message_".
+func flattenEntry(e transform.CommonFields) map[string]interface{} {
+	flat := map[string]interface{}{
+		"data_type": e.DataType,
+		"timestamp": e.Timestamp,
+		"date":      e.Date,
 	}
-	for i := range entries {
-		dt := entries[i].DataType
-		if strings.HasPrefix(dt, defaultPrefix+"_") {
-			category := dt[len(defaultPrefix)+1:]
-			entries[i].DataType = prefix + "_" + category
+	if msg, ok := e.Message.(map[string]interface{}); ok {
+		for k, v := range msg {
+			flat[k] = v
 		}
+	} else if e.Message != nil {
+		flat["message"] = e.Message
 	}
+	return flat
 }
+

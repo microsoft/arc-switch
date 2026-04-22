@@ -7,7 +7,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeBgpSummary = "cisco_nexus_bgp_summary"
+const dataTypeBgpSummary = "bgp_summary"
 
 func init() {
 	Register("bgp-neighbors", func() Transformer { return &BgpSummaryTransformer{} })

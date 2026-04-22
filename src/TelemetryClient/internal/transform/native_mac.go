@@ -6,8 +6,6 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeNativeMac = "cisco_nexus_mac_table"
-
 func init() {
 	Register("nx-mac-table", func() Transformer { return &NativeMacTransformer{} })
 }
@@ -15,7 +13,7 @@ func init() {
 type NativeMacTransformer struct{}
 
 func (t *NativeMacTransformer) DataType() string {
-	return dataTypeNativeMac
+	return dataTypeMacTable
 }
 
 func (t *NativeMacTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
@@ -67,7 +65,7 @@ func (t *NativeMacTransformer) Transform(notifications []gnmi.Notification) ([]C
 					"routed_mac":    GetBool(entry, "routed"),
 				}
 
-				results = append(results, NewCommonFields(dataTypeNativeMac, msg, n.Timestamp))
+				results = append(results, NewCommonFields(dataTypeMacTable, msg, n.Timestamp))
 			}
 		}
 	}

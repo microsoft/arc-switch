@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeLldpNeighbor = "cisco_nexus_lldp_neighbor"
+const dataTypeLldpNeighbor = "lldp_neighbor"
 
 func init() {
 	Register("lldp-neighbors", func() Transformer { return &LldpNeighborTransformer{} })

@@ -2,7 +2,7 @@
 
 > **Last updated**: 2026-04-10  
 > **Test switch**: b88-c01-5248l-7-1a (100.100.81.129) — Dell Enterprise SONiC 4.5.1 (x86_64)  
-> **Collector config**: 14 gNMI paths, all validated  
+> **Collector config**: 16 gNMI paths, all validated  
 > **Dry-run result**: 14 success, 0 failures in 7.4s  
 > **Coverage vs Cisco CLI baseline**: **~76%**
 

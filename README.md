@@ -8,9 +8,9 @@ Arc-Switch enables you to onboard network switches to [Azure Arc](https://learn.
 
 | Platform | Telemetry | Method | Status |
 |----------|-----------|--------|--------|
-| **Cisco NX-OS** | gNMI *(recommended)* | 20 YANG paths via gRPC | ✅ Production |
+| **Cisco NX-OS** | gNMI *(recommended)* | 21 YANG paths via gRPC | ✅ Production |
 | **Cisco NX-OS** | CLI parser *(legacy)* | `vsh` text scraping + cron | ⚠️ Deprecated |
-| **Dell Enterprise SONiC** | gNMI | 14 YANG paths via gRPC | ✅ Production |
+| **Dell Enterprise SONiC** | gNMI | 16 YANG paths via gRPC | ✅ Production |
 | **Dell OS10** | CLI parser | `clish` text scraping + cron | ✅ Production |
 
 ## Quick Start
@@ -31,8 +31,8 @@ arc-switch/
 │   ├── TelemetryClient/              # gNMI telemetry collector (Go)
 │   │   ├── cmd/gnmi-collector/       # Main binary entry point
 │   │   ├── internal/                 # Collector, transformers, Azure logger
-│   │   ├── config.cisco.yaml         # Cisco NX-OS config (20 paths)
-│   │   └── config.sonic.yaml         # SONiC config (14 paths)
+│   │   ├── config.cisco.yaml         # Cisco NX-OS config (21 paths)
+│   │   └── config.sonic.yaml         # SONiC config (16 paths)
 │   └── SwitchOutput/                 # Legacy CLI parsers
 │       ├── Cisco/Nexus/10/           # Cisco unified parser (Go)
 │       └── DellOS/10/               # Dell OS10 unified parser (Go)

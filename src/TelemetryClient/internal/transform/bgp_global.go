@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeBgpGlobal = "cisco_nexus_bgp_global"
+const dataTypeBgpGlobal = "bgp_global"
 
 func init() {
 	Register("bgp-global", func() Transformer { return &BgpGlobalTransformer{} })

@@ -4,7 +4,7 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeInterfaceCounters = "cisco_nexus_interface_counters"
+const dataTypeInterfaceCounters = "interface_counters"
 
 func init() {
 	Register("interface-counters", func() Transformer { return &InterfaceCountersTransformer{} })

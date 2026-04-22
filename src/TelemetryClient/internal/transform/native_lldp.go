@@ -7,8 +7,6 @@ import (
 	"gnmi-collector/internal/gnmi"
 )
 
-const dataTypeNativeLldp = "cisco_nexus_lldp_neighbor"
-
 func init() {
 	Register("nx-lldp", func() Transformer { return &NativeLldpTransformer{} })
 }
@@ -16,7 +14,7 @@ func init() {
 type NativeLldpTransformer struct{}
 
 func (t *NativeLldpTransformer) DataType() string {
-	return dataTypeNativeLldp
+	return dataTypeLldpNeighbor
 }
 
 func (t *NativeLldpTransformer) Transform(notifications []gnmi.Notification) ([]CommonFields, error) {
@@ -90,7 +88,7 @@ func (t *NativeLldpTransformer) Transform(notifications []gnmi.Notification) ([]
 						"enabled_capabilities":        enCaps,
 					}
 
-					results = append(results, NewCommonFields(dataTypeNativeLldp, msg, n.Timestamp))
+					results = append(results, NewCommonFields(dataTypeLldpNeighbor, msg, n.Timestamp))
 				}
 			}
 		}

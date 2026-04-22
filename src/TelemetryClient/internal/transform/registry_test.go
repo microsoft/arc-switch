@@ -33,6 +33,7 @@ func TestRegistryHasAllTransformers(t *testing.T) {
 		"nx-bgp-peers",
 		"nx-env-sensor",
 		"nx-env-psu",
+		"nx-fan",
 		"nx-sys-cpu",
 		"nx-sys-memory",
 		"nx-mac-table",
@@ -42,7 +43,9 @@ func TestRegistryHasAllTransformers(t *testing.T) {
 		"nx-route-summary",
 		"nx-sys-load",
 		// SONiC native YANG transformers
-		"sonic-platform",
+		"sonic-temperature",
+		"sonic-psu",
+		"sonic-fan",
 		"sonic-device-metadata",
 	}
 	sort.Strings(expected)

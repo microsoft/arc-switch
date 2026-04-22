@@ -223,7 +223,7 @@ for svc in himdsd arcproxyd extd gcad; do /etc/init.d/$svc status; done
 /opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
 ```
 
-**Telemetry paths collected** (20 paths): Interface counters, interface status, interface Ethernet, interface errors, BGP neighbors, BGP summary, LLDP, transceiver DOM, environment temperature, environment power, environment fan, system resources, system uptime, system version, ARP, MAC addresses, IP routes, route summary, inventory, platform components.
+**Telemetry paths collected** (21 paths): Interface counters, interface status, interface Ethernet, interface errors, BGP neighbors, BGP global, LLDP, transceiver, transceiver DOM, environment temperature, environment power, environment fan, system resources, system uptime, system version, ARP, MAC addresses, route summary, inventory.
 
 ---
 
@@ -360,7 +360,7 @@ systemctl status gnmi-collector
 /opt/gnmi-collector/gnmi-collector --config /opt/gnmi-collector/config.yaml --once --dry-run
 ```
 
-**Telemetry paths collected** (14 paths): Interface counters, interface status, interface Ethernet, BGP neighbors, BGP summary, LLDP, environment (platform inventory: temperature, PSU, fans), system resources, system uptime, ARP, MAC addresses, IP routes.
+**Telemetry paths collected** (16 paths): Interface counters, interface status, interface Ethernet, BGP neighbors, BGP global, LLDP, environment temperature, environment power, environment fan, system resources, system uptime, ARP, MAC addresses, inventory, platform components, device metadata.
 
 ---
 
@@ -427,7 +427,7 @@ search "*"
 | where Type endswith "_CL"
 
 // Example: Query interface counters
-CiscoInterfaceCounter_CL
+InterfaceCounter_CL
 | where TimeGenerated > ago(1h)
 | take 10
 
@@ -444,25 +444,26 @@ The following custom tables are created in your Log Analytics workspace (Azure a
 
 | Table Name | Description | Platforms |
 |------------|-------------|-----------|
-| `CiscoInterfaceCounter_CL` | Interface traffic statistics | Cisco, SONiC |
-| `CiscoInterfaceStatus_CL` | Interface admin/oper state | Cisco, SONiC |
-| `CiscoInterfaceEthernet_CL` | Ethernet-specific counters | Cisco, SONiC |
+| `InterfaceCounter_CL` | Interface traffic statistics | Cisco, SONiC |
+| `InterfaceStatus_CL` | Interface admin/oper state | Cisco, SONiC |
+| `InterfaceEthernet_CL` | Ethernet-specific counters | Cisco, SONiC |
 | `CiscoInterfaceErrors_CL` | Interface error counters | Cisco |
-| `CiscoBgpSummary_CL` | BGP neighbor summary | Cisco, SONiC |
-| `CiscoLldpNeighbor_CL` | LLDP neighbor information | Cisco, SONiC |
-| `CiscoTransceiver_CL` | SFP/QSFP module details | Cisco |
-| `CiscoEnvTemp_CL` | Temperature sensors | Cisco, SONiC |
-| `CiscoEnvPower_CL` | Power supply status | Cisco, SONiC |
-| `CiscoEnvFan_CL` | Fan status | Cisco, SONiC |
-| `CiscoSystemResources_CL` | CPU, memory utilization | Cisco, SONiC |
-| `CiscoSystemUptime_CL` | System uptime | Cisco, SONiC |
-| `CiscoIpArp_CL` | ARP table entries | Cisco, SONiC |
-| `CiscoMacAddress_CL` | MAC address table | Cisco, SONiC |
-| `CiscoIpRoute_CL` | Routing table | Cisco, SONiC |
+| `BgpNeighbor_CL` | BGP neighbor summary | Cisco, SONiC |
+| `BgpGlobal_CL` | BGP global state | Cisco, SONiC |
+| `LldpNeighbor_CL` | LLDP neighbor information | Cisco, SONiC |
+| `Transceiver_CL` | SFP/QSFP module details | Cisco |
+| `TransceiverDom_CL` | Transceiver DOM (Tx/Rx power) | Cisco |
+| `EnvTemperature_CL` | Temperature sensors | Cisco, SONiC |
+| `EnvPower_CL` | Power supply status | Cisco, SONiC |
+| `EnvFan_CL` | Fan health and status | Cisco, SONiC |
+| `SystemResources_CL` | CPU, memory utilization | Cisco, SONiC |
+| `SystemUptime_CL` | System uptime | Cisco, SONiC |
+| `ArpEntry_CL` | ARP table entries | Cisco, SONiC |
+| `MacTable_CL` | MAC address table | Cisco, SONiC |
 | `CiscoRouteSummary_CL` | Route count summary | Cisco |
-| `CiscoInventory_CL` | Hardware inventory | Cisco |
+| `Inventory_CL` | Hardware inventory | Cisco, SONiC |
 | `CiscoVersion_CL` | Software version info | Cisco |
-| `CiscoClassMap_CL` | QoS class maps | Cisco (CLI only) |
+| `SonicDeviceMetadata_CL` | Device metadata | SONiC |
 
 ---
 
