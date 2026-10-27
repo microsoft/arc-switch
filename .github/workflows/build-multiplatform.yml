@@ -36,7 +36,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       
     - name: Generate version
       id: version
@@ -47,7 +47,7 @@ jobs:
         echo "Generated version: ${VERSION}"
       
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4.3.0
       with:
         go-version: '1.21'
         
@@ -66,7 +66,7 @@ jobs:
           mac_address_parser README.md mac-address-table-sample.json
         
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: mac_address_parser-${{ matrix.name }}
         path: release-assets/
@@ -86,7 +86,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       
     - name: Generate version
       id: version
@@ -97,7 +97,7 @@ jobs:
         echo "Generated version: ${VERSION}"
       
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4.3.0
       with:
         go-version: '1.21'
         
@@ -115,7 +115,7 @@ jobs:
           show_interface README.md example_show_interface.txt example_show_interface.json
         
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: dell_interface-${{ matrix.name }}
         path: release-assets/
@@ -135,7 +135,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       
     - name: Generate version
       id: version
@@ -146,7 +146,7 @@ jobs:
         echo "Generated version: ${VERSION}"
       
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4.3.0
       with:
         go-version: '1.21'
         
@@ -182,7 +182,7 @@ jobs:
           interface_phyeth README.md build_interface_phyeth_deb.sh show_interface_phy-eth.txt show_interface_phy-eth.json test-output.json
         
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: dell_interface_phyeth-${{ matrix.name }}
         path: release-assets/
@@ -202,7 +202,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       
     - name: Generate version
       id: version
@@ -213,7 +213,7 @@ jobs:
         echo "Generated version: ${VERSION}"
       
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4.3.0
       with:
         go-version: '1.21'
         
@@ -249,7 +249,7 @@ jobs:
           lldpsyslog README.md build_lldp_syslog_deb.sh show-lldp-neighbors-detail.txt example-lldp-data.json lldp-kql-query.kql
         
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: dell_lldp_syslog-${{ matrix.name }}
         path: release-assets/
@@ -269,7 +269,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       
     - name: Generate version
       id: version
@@ -280,7 +280,7 @@ jobs:
         echo "Generated version: ${VERSION}"
       
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4.3.0
       with:
         go-version: '1.21'
         
@@ -316,7 +316,7 @@ jobs:
           interface-syslog README.md build_interface_syslog_deb.sh example_show_interface.txt example_show_interface.json
         
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: dell_interface_syslog-${{ matrix.name }}
         path: release-assets/
@@ -336,7 +336,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       
     - name: Generate version
       id: version
@@ -347,7 +347,7 @@ jobs:
         echo "Generated version: ${VERSION}"
       
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4 # v4.3.0
       with:
         go-version: '1.21'
         
@@ -365,7 +365,7 @@ jobs:
           show_version README.md show_version.txt show_version.json
         
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: dell_version-${{ matrix.name }}
         path: release-assets/
@@ -376,7 +376,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       with:
         fetch-depth: 0
         
@@ -389,7 +389,7 @@ jobs:
         echo "Generated version: ${VERSION}"
         
     - name: Download all artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
       with:
         path: artifacts
         
@@ -426,7 +426,7 @@ jobs:
         git push origin "v${{ steps.version.outputs.version }}"
         
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v0.1.15
       with:
         tag_name: v${{ steps.version.outputs.version }}
         name: Release v${{ steps.version.outputs.version }}
